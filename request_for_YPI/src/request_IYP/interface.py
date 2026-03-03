@@ -17,8 +17,9 @@ def generate_response_with_IYP(query_intent: str, logger_active: bool = False) -
             'results': str|None
         }
     """
-    if logger_active :logger.section("IYP INTERFACE")
-    if logger_active :logger.info(f"Processing intent: {query_intent}")
+    if logger_active :
+        logger.section("IYP INTERFACE")
+        logger.info(f"Processing intent: {query_intent}")
     
     pipeline_result = process_user_request_with_retry(query_intent, logger_active=logger_active)
     
@@ -52,10 +53,9 @@ def generate_response_with_IYP(query_intent: str, logger_active: bool = False) -
 def _interpret_results(intent: str, data: list, logger_active: bool = False) -> str:
     llm = get_llm("smart")
     
-    current_dir = Path(__file__).parent.parent.parent
-    # Correction : Utiliser interpret_results.txt au lieu de cypher_request_research_generation.txt
+    current_dir        = Path(__file__).parent.parent.parent
     system_prompt_path = os.path.join(current_dir, "prompt", "IYP", "interpret_results.txt")
-    system_prompt = load_text_file(system_prompt_path)
+    system_prompt      = load_text_file(system_prompt_path)
 
     human_prompt = """User Intent: {intent}
 Extracted Data:

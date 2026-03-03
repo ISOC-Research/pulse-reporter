@@ -8,9 +8,10 @@ import multiprocessing
 from datetime import datetime
 from dotenv import load_dotenv
 from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError, wait
-
+import threading
 # Charger les variables d'environnement
 load_dotenv()
+token_lock = threading.Lock()
 
 # Import des modules existants du dépôt
 from src.utils.llm import get_llm
@@ -109,10 +110,15 @@ def run_llm_step(prompt_text, mode="smart"):
             p_tokens = usage.get("prompt_tokens") or usage.get("input_tokens") or 0
             c_tokens = usage.get("completion_tokens") or usage.get("output_tokens") or 0
             t_tokens = usage.get("total_tokens") or (p_tokens + c_tokens)
-            TOKEN_USAGE["prompt_tokens"] += p_tokens
-            TOKEN_USAGE["completion_tokens"] += c_tokens
-            TOKEN_USAGE["total_tokens"] += t_tokens
-            TOKEN_USAGE["calls"] += 1
+            
+            # --- DÉBUT DE LA MODIFICATION ---
+            with token_lock: # Protège la mise à jour contre les collisions de threads
+                TOKEN_USAGE["prompt_tokens"] += p_tokens
+                TOKEN_USAGE["completion_tokens"] += c_tokens
+                TOKEN_USAGE["total_tokens"] += t_tokens
+                TOKEN_USAGE["calls"] += 1
+            # --- FIN DE LA MODIFICATION ---
+            
     except Exception as e:
         logger.warning(f"⚠️ Erreur comptage tokens : {e}")
 
@@ -191,6 +197,9 @@ def perform_google_search_investigation(clean_q):
 # --- LOGIQUE IYP DANS UN PROCESSUS ISOLÉ ---
 
 def _worker_iyp_logic(q, country_name, system_prompt_dir, return_dict):
+    # On importe la variable globale de ce processus pour lire ses tokens
+    global TOKEN_USAGE 
+    
     try:
         clean_q = q.split(']:')[-1].strip() if ']:' in q else q
         
@@ -204,6 +213,8 @@ def _worker_iyp_logic(q, country_name, system_prompt_dir, return_dict):
             if not isinstance(technical_intents, list): technical_intents = [raw_intents]
         except:
             return_dict['error'] = "Failed to parse intents"
+            # NOUVEAU : Sauvegarde des tokens même en cas d'erreur de parsing
+            return_dict['worker_tokens'] = dict(TOKEN_USAGE) 
             return
 
         combined_iyp_data = []
@@ -220,15 +231,21 @@ def _worker_iyp_logic(q, country_name, system_prompt_dir, return_dict):
 
         if not combined_iyp_data:
             return_dict['result'] = "No data found via Graph."
+            # NOUVEAU : Sauvegarde des tokens si aucune donnée n'est trouvée
+            return_dict['worker_tokens'] = dict(TOKEN_USAGE)
             return
 
         synth_prompt = load_text_file(os.path.join(system_prompt_dir, "IYP/result_synthesizer.md"))
         final_answer = run_llm_step(synth_prompt.replace("{{INVESTIGATIVE_QUESTION}}", q).replace("{{RAW_RESULTS_DATA}}", json.dumps(combined_iyp_data)), mode="smart")
         
+        # NOUVEAU : Succès complet, on sauvegarde les tokens et le résultat
+        return_dict['worker_tokens'] = dict(TOKEN_USAGE)
         return_dict['result'] = final_answer
 
     except Exception as e:
         return_dict['error'] = str(e)
+        # NOUVEAU : On sauve les tokens même si le processus crashe violemment
+        return_dict['worker_tokens'] = dict(TOKEN_USAGE)
 
 
 def process_single_question(q, country_name):
@@ -258,7 +275,11 @@ def process_single_question(q, country_name):
             logger.info("Basculement Google immédiat post-kill...")
             answer, sources = perform_google_search_investigation(clean_q)
             return {"question": q, "answer": f"(Timeout Graph) {answer}", "sources": sources}
-        
+        # Récupération et ajout des tokens du processus isolé
+        if 'worker_tokens' in return_dict:
+            with token_lock:
+                for k in ["prompt_tokens", "completion_tokens", "total_tokens", "calls"]:
+                    TOKEN_USAGE[k] += return_dict['worker_tokens'].get(k, 0)
         if 'error' in return_dict:
             return {"question": q, "answer": f"Error: {return_dict['error']}", "sources": []}
             
@@ -498,6 +519,6 @@ def generate_full_report(country_name):
 
 if __name__ == "__main__":
     start_time = time.time()
-    liste_pays = ["Denmark","Norway","Finland","Austria","Belgium","Philippines","Malaysia"]
+    liste_pays = ["France"]
     for pays in liste_pays:
         generate_full_report(pays)

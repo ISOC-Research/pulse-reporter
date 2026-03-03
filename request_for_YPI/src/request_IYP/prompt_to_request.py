@@ -5,18 +5,14 @@ from src.request_IYP.analyse_results_request import analyse_research_result, ana
 from src.request_IYP.probes_execution import execute_multiple_probes
 from src.utils.logger import logger
 from typing import Dict, Any
+from langfuse.decorators import observe, langfuse_context
 
+@observe()
 def process_user_request_with_retry(user_intent: str, max_retries: int = 3, logger_active: bool = False) -> Dict[str, Any]:
-    """
-    Pipeline principal avec gestion du mode RESEARCH.
-    
-    Args:
-        user_intent: Requête utilisateur en langage naturel
-        max_retries: Nombre maximum de tentatives de correction
-    
-    Returns:
-        Dictionnaire avec le statut final et les données
-    """
+    langfuse_context.update_current_trace(
+        name="Pipeline_Resolution_Requete",
+        tags=["pipeline_v3"]
+    )
     if logger_active :logger.section(f"Pipeline de traitement")
     if logger_active :logger.info(f"📝 Intent: '{user_intent}'")
     
@@ -85,6 +81,7 @@ def process_user_request_with_retry(user_intent: str, max_retries: int = 3, logg
         if status == "VALID":
             if logger_active :logger.success("✅ [Pipeline] Requête VALIDÉE !")
             final_data = exec_res.get("data", [])
+            langfuse_context.update_current_trace(output=final_data)
             return {
                 "status": "SUCCESS", 
                 "final_query": current_query, 

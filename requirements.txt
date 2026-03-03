@@ -17,3 +17,4 @@ trafilatura
 PyMuPDF
 pymupdf
 langchain-text-splitters
+langfuse

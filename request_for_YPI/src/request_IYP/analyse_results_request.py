@@ -9,6 +9,7 @@ from src.utils.llm import get_llm
 from src.utils.loaders import load_text_file
 from src.utils.country_utils import load_country_mapping, apply_country_mapping
 from src.utils.logger import logger
+from langfuse import observe
 
 def clean_json_string(content: str) -> str:
     """Nettoie la chaîne de caractères pour ne garder que le JSON."""
@@ -16,6 +17,7 @@ def clean_json_string(content: str) -> str:
     content = re.sub(r'```', '', content)
     return content.strip()
 
+@observe(name="Analyse_et_Correction")
 def analyze_and_correct_query(execution_report: Dict[str, Any], mode: str = "smart", max_llm_retries: int = 2) -> Dict[str, Any]:
     """
     Analyse l'historique d'exécution et décide de la prochaine action.

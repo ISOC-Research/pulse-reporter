@@ -3,11 +3,16 @@ import re
 import os
 from typing import Dict, Any
 from langchain_core.prompts import ChatPromptTemplate
-from src.utils.llm import get_llm
 from pathlib import Path
+
+# --- IMPORTS LANGFUSE ---
+from langfuse import observe
+from langfuse.langchain import CallbackHandler 
+
+from src.utils.llm import get_llm
 from src.utils.loaders import load_text_file
 from src.utils.country_utils import load_country_mapping, apply_country_mapping
-from src.utils.logger import logger # Correction de l'import logger
+from src.utils.logger import logger
 
 def clean_and_parse_json(content: str) -> Dict[str, Any]:
     """Nettoie et répare le JSON du LLM de manière robuste."""
@@ -34,8 +39,12 @@ def clean_and_parse_json(content: str) -> Dict[str, Any]:
             "queries": []
         }
 
+@observe(name="generate_cypher_query", as_type="generation")
 def generate_cypher_for_request(user_intent: str, mode: str = "smart", research: bool = False, additional_context: str = "") -> Dict[str, Any]:
     llm = get_llm(mode)
+    
+    # Initialisation du Handler Langfuse pour intercepter Langchain
+    langfuse_handler = CallbackHandler()
     
     current_dir = Path(__file__).parent.parent.parent
     iy_schema_content = load_text_file(os.path.join(current_dir, "prompt", "IYP", "IYP_documentation.txt")) 
@@ -50,12 +59,16 @@ def generate_cypher_for_request(user_intent: str, mode: str = "smart", research:
 
     chain = prompt | llm
 
-    response_msg = chain.invoke({
-        "input": user_intent,
-        "schema": iy_schema_content,
-        "country_code": "KZ",
-        "additional_context": additional_context
-    })
+    # Exécution avec le callback Langfuse
+    response_msg = chain.invoke(
+        {
+            "input": user_intent,
+            "schema": iy_schema_content,
+            "country_code": "KZ",
+            "additional_context": additional_context
+        },
+        config={"callbacks": [langfuse_handler]} 
+    )
     
     result = clean_and_parse_json(response_msg.content)
     result["user_intent"] = user_intent
