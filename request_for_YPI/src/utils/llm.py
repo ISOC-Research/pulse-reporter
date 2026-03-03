@@ -1,6 +1,34 @@
-# src/utils/llm.py
 import os
 from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_core.prompts import ChatPromptTemplate
+from src.utils.loaders import load_text_file
+from src.utils.logger import logger
+from langfuse.langchain import CallbackHandler 
+
+def call_llm_chain(llm, system_prompt_path: str, human_prompt_template: str, variables: dict, callbacks: list = None) -> str:
+    try:
+        system_prompt = load_text_file(system_prompt_path)
+        human_prompt  = load_text_file(human_prompt_template)
+        prompt = ChatPromptTemplate.from_messages([
+            ("system", system_prompt),
+            ("human", human_prompt)
+        ])
+        
+        chain = prompt | llm
+        
+        langfuse_handler = CallbackHandler()
+        
+        if callbacks is None:
+            callbacks = [langfuse_handler]
+        else:
+            callbacks.append(langfuse_handler)
+
+        response = chain.invoke(variables, config={"callbacks": callbacks})
+        
+        return response.content.strip()
+    except Exception as e:
+        logger.error(f"Error in the calling of the LLM (chain) : {e}")
+        raise
 
 def get_llm(mode_or_model: str = "smart", temperature: float = 0.2): 
     if mode_or_model == "fast":
