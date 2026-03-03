@@ -7,7 +7,9 @@ from src.utils.llm import get_llm
 from src.utils.logger import logger
 from langchain_core.prompts import ChatPromptTemplate
 from src.utils.loaders import load_text_file
+from langfuse import observe
 
+@observe(name="Interface_Utilisateur")
 def generate_response_with_IYP(query_intent: str, logger_active: bool = False) -> dict:
     """Generates a response for a given user intent using the IYP system.
     Returns:
