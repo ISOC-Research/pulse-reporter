@@ -9,49 +9,47 @@ from langchain_core.prompts import ChatPromptTemplate
 from src.utils.loaders import load_text_file
 from langfuse import observe
 
+
+
 @observe(name="Interface_Utilisateur")
 def generate_response_with_IYP(query_intent: str, logger_active: bool = False) -> dict:
     """Generates a response for a given user intent using the IYP system.
     Returns:
         dict: {
             'status': 'valide'|'invalide',
-            'request': str|None,
-            'results': str|None
+            'cypher_query': str|None,
+            'raw_results': list|None,
+            'interpretation': str|None,
+            'error_message': str|None
         }
     """
-    if logger_active :
+    if logger_active:
         logger.section("IYP INTERFACE")
         logger.info(f"Processing intent: {query_intent}")
     
     pipeline_result = process_user_request_with_retry(query_intent, logger_active=logger_active)
     
     if pipeline_result.get("status") == "SUCCESS":
-        final_query = pipeline_result.get("final_query")
-        raw_data = pipeline_result.get("data")
-        
-        interpretation = _interpret_results(query_intent, raw_data, logger_active=logger_active)
-        
-        formatted_output = f"""### RAW DATABASE FINDINGS
-    {json.dumps(raw_data, indent=2, ensure_ascii=False)}
-    ### ANALYSIS AND ANSWER
-    {interpretation}"""
-        
         return {
             'status': 'valide',
-            'request': final_query,
-            'results': formatted_output
+            'cypher_query': pipeline_result.get("final_query"),
+            'raw_results': pipeline_result.get("data"),
+            'interpretation': _interpret_results(query_intent, pipeline_result.get("data"), logger_active=logger_active),
+            'error_message': None
         }
     else:
-        # Handle failure cases
         error_msg = pipeline_result.get("message") or pipeline_result.get("reason", "Unknown pipeline error")
-        if logger_active :logger.error(f"Interface failed to retrieve valid data: {error_msg}")
-        
+        if logger_active:    logger.error(f"Interface failed to retrieve valid data: {error_msg}")
         return {
             'status': 'invalide',
-            'request': None,
-            'results': None
+            'cypher_query': None,
+            'raw_results': None,
+            'interpretation': None,
+            'error_message': error_msg
         }
+    
 
+    
 def _interpret_results(intent: str, data: list, logger_active: bool = False) -> str:
     llm = get_llm("smart")
     

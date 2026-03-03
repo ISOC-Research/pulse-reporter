@@ -59,7 +59,6 @@ def generate_cypher_for_request(user_intent: str, mode: str = "smart", research:
 
     chain = prompt | llm
 
-    # Exécution avec le callback Langfuse
     response_msg = chain.invoke(
         {
             "input": user_intent,
