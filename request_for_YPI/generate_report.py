@@ -53,7 +53,7 @@ def save_report(content, indicator_path: Path, params: dict):
         text_to_save = "\n".join(extracted_parts)
     # ---------------------------------------------------
 
-    # Sécurité supplémentaire : s'assurer que c'est bien une string à la fin
+    # Additional security: ensure that it is indeed a string at the end.
     if not isinstance(text_to_save, str):
         text_to_save = str(text_to_save)
 
@@ -126,7 +126,7 @@ def main():
 
     writer_prompt = ChatPromptTemplate.from_messages([
         ("system", system_prompt_content), # Your Expert File injected here
-        MessagesPlaceholder(variable_name="history"), # Reçoit notre contexte synthétique
+        MessagesPlaceholder(variable_name="history"), # “Receives our synthetic context.”
         ("human", f"""
         FINAL REPORTING MISSION:
         

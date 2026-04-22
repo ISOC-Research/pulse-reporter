@@ -6,7 +6,8 @@ if __name__ == "__main__":
     load_dotenv()
     
     print(generate_response_with_IYP(
-        "quelles sont les parts de marché en angleterre du plus gros internet provider français ?", 
+        "What is the market share in England of the largest French internet service provider?"
+, 
         logger_active=True
     ))
     langfuse = get_client()
