@@ -15,22 +15,22 @@ queries:
       {% if results %}
       **Analysis Results:**
       
-      - Country: **{{ results[0].pays }}**
+      - Country: **{{ results[0].country }}**
       - Total number of BGP prefixes announced: **{{ results[0].totalPrefixes }}**
       - IPv4 prefixes: **{{ results[0].ipv4Prefixes }}**
       - IPv6 prefixes: **{{ results[0].ipv6Prefixes }}**
-      - IPv6 adoption rate: **{{ "%.2f"|format(results[0].pourcentagePrefixesIPv6) }}%**
+      - IPv6 adoption rate: **{{ "%.2f"|format(results[0].ipv6PrefixesPercentage) }}%**
       
       **Interpretation:**
       
-      An IPv6 adoption rate of **{{ "%.2f"|format(results[0].pourcentagePrefixesIPv6) }}%** indicates that approximately {{ "%.0f"|format(results[0].pourcentagePrefixesIPv6 / 100 * results[0].totalPrefixes) }} out of {{ results[0].totalPrefixes }} BGP prefixes announced from the country's ASes are IPv6. This reflects the readiness of the country's internet infrastructure for next-generation protocols.
+      An IPv6 adoption rate of **{{ "%.2f"|format(results[0].ipv6PrefixesPercentage) }}%** indicates that approximately {{ "%.0f"|format(results[0].ipv6PrefixesPercentage / 100 * results[0].totalPrefixes) }} out of {{ results[0].totalPrefixes }} BGP prefixes announced from the country's ASes are IPv6. This reflects the readiness of the country's internet infrastructure for next-generation protocols.
       
       {% else %}
       No BGP prefix data available for this country.
       {% endif %}
     
     fields:
-      pays:
+      country:
         type: "string"
         label: "Country Name"
       totalPrefixes:
@@ -42,12 +42,12 @@ queries:
       ipv6Prefixes:
         type: "integer"
         label: "IPv6 Prefixes"
-      pourcentagePrefixesIPv6:
+      ipv6PrefixesPercentage:
         type: "float"
         label: "IPv6 Adoption Rate (%)"
         format: "float_2"
     
-    sort_by: "pourcentagePrefixesIPv6"
+    sort_by: "ipv6PrefixesPercentage"
     sort_order: "desc"
 
   "2.cypher":

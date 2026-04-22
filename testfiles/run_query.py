@@ -1,9 +1,17 @@
 import sys
+import os
 import argparse
 from neo4j import GraphDatabase, exceptions
 
-from formating import format_results_for_llm 
+# 1. Get the main project folder
+root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(root_dir)
 
+# 2. Add the request_for_YPI folder so Python can find "src" globally
+request_for_ypi_dir = os.path.join(root_dir, 'request_for_YPI')
+sys.path.append(request_for_ypi_dir)
+
+from request_for_YPI.src.utils.formatting import format_neo4j_results
 # ==========================================================
 #  CONFIGURATION DE LA CONNEXION NEO4J
 # ==========================================================
@@ -77,10 +85,10 @@ def main():
             print("="*50)
             
 
-            formatted_text = format_results_for_llm(
+            formatted_text = format_neo4j_results(
                 query_path=args.file_path,
                 records=records,
-                query_params=params
+                params=params
             )
     
             print(formatted_text)
