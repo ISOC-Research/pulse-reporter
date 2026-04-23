@@ -106,13 +106,13 @@ def main():
     print(f"\n PHASE 1: OSINT Investigation (Mode: {args.mode})...\n")
     start  = time.time()
     web_context = run_deterministic_investigation(internal_data, args.country, indicator_input, mode=args.mode)
-    print(f"   ⏱️  Phase 1 completed in {time.time() - start:.2f} seconds.")
+    print(f" Phase 1 completed in {time.time() - start:.2f} seconds.")
 
 
     # ---------------------------------------------------------
-    # PHASE 2: STRATEGIC WRITING (Reasoning Mode / Magistral)
+    # PHASE 2: STRATEGIC WRITING (Reasoning Mode)
     # ---------------------------------------------------------
-    print("\n🧠 PHASE 2: Strategic Synthesis & Writing (Mode Magistral)...")
+    print("\n PHASE 2: Strategic Synthesis & Writing (Mode Magistral)...")
     start = time.time()
     # 1. Load Reasoning Model
     llm_writer = get_llm("report_redaction")
@@ -154,7 +154,7 @@ def main():
     conversation_history = [HumanMessage(content=investigation_summary)]
     
 
-    print("   ↳ ✍️  Writing in progress (Reasoning model may take time)...")
+    print("   ↳ Writing in progress (Reasoning model may take time)...")
     chain = writer_prompt | llm_writer
     
     final_response_msg = chain.invoke({"history": conversation_history})
