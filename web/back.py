@@ -1,3 +1,8 @@
+from request_for_YPI.pulse_service import (
+    get_country_list,
+    extract_all_countries_ipv6,
+    find_similar_countries
+)
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import subprocess
@@ -114,6 +119,48 @@ def get_markdown():
 
     return jsonify({"path": str(target_file.relative_to(PROJECT_ROOT)), "content": content})
 
+@app.route('/countries', methods=['GET'])
+def countries():
+    year = request.args.get("year", default=2024, type=int)
+    try:
+        countries = get_country_list(year)
+        return jsonify({"countries": countries})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/indicator/ipv6', methods=['GET'])
+def ipv6_indicator():
+    year = request.args.get("year", default=2024, type=int)
+    try:
+        data = extract_all_countries_ipv6(year)
+        return jsonify(data)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+@app.route('/similar', methods=['GET'])
+def similar():
+    country = request.args.get("country")
+
+    # 🔥 Fix: normalize input
+    if country:
+        country = country.upper()
+
+    year = request.args.get("year", default=2024, type=int)
+
+    if not country:
+        return jsonify({"error": "Missing country"}), 400
+
+    try:
+        result = find_similar_countries(country, year)
+
+        # 🔥 Fix: handle invalid country
+        if not result:
+            return jsonify({"error": "Country not found"}), 404
+
+        return jsonify(result)
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
     # run from project root venv

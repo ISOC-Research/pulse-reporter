@@ -31,7 +31,7 @@ def search_google(query: str, include_pdfs: bool = True,nub_site : int = 5) -> l
     cx_id = os.getenv("GOOGLE_CX_ID")
     
     if not api_key or not cx_id:
-        print("❌ Erreur : GOOGLE_API_KEY ou GOOGLE_CX_ID manquant dans .env")
+        print("❌ Error: GOOGLE_API_KEY or GOOGLE_CX_ID missing in .env")
         return [{"error": "Missing Google API keys"}]
     
     endpoint = "https://www.googleapis.com/customsearch/v1"
@@ -47,7 +47,7 @@ def search_google(query: str, include_pdfs: bool = True,nub_site : int = 5) -> l
     data = resp.json()
     
     if 'error' in data:
-        error_msg = data['error'].get('message', 'Erreur inconnue')
+        error_msg = data['error'].get('message', 'Unknown error')
         print(f"🔴 GOOGLE API ERROR: {error_msg}")
         return [{"error": error_msg}]
     
@@ -102,7 +102,7 @@ def process_single_link(res, country, indicator_name, resilience_index):
             input_in_rag(raw_text_content, link, source_type)
             
         except Exception as e:
-            logger.error(f"      ⚠️ Erreur insertion RAG: {e}")
+            logger.error(f"      ⚠️ Error inserting into RAG: {e}")
 
 
         return f"SOURCE: {title}\nLINK: {link}\nSNIPPET: {snippet}\n\nCONTENU DÉTAILLÉ:\n{page_content[:300000]}..."
@@ -117,7 +117,7 @@ def run_deterministic_investigation(internal_data: str, country: str, indicator_
     llm = get_llm("smart")
     resilience_index = get_definition(indicator_name)
     
-    print(f"\n🔧 [Phase 1] Planification & Recherche pour {country}...")
+    print(f"\n🔧 [Phase 1] Planning & Research for {country}...")
 
     prompt = ChatPromptTemplate.from_template(load_text_file(os.path.join("prompt", "search_planning.txt")))
     response = (prompt | llm).invoke({

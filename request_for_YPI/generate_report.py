@@ -53,7 +53,7 @@ def save_report(content, indicator_path: Path, params: dict):
         text_to_save = "\n".join(extracted_parts)
     # ---------------------------------------------------
 
-    # Sécurité supplémentaire : s'assurer que c'est bien une string à la fin
+    # Additional security: ensure that it is indeed a string at the end.
     if not isinstance(text_to_save, str):
         text_to_save = str(text_to_save)
 
@@ -106,13 +106,13 @@ def main():
     print(f"\n PHASE 1: OSINT Investigation (Mode: {args.mode})...\n")
     start  = time.time()
     web_context = run_deterministic_investigation(internal_data, args.country, indicator_input, mode=args.mode)
-    print(f"   ⏱️  Phase 1 completed in {time.time() - start:.2f} seconds.")
+    print(f" Phase 1 completed in {time.time() - start:.2f} seconds.")
 
 
     # ---------------------------------------------------------
-    # PHASE 2: STRATEGIC WRITING (Reasoning Mode / Magistral)
+    # PHASE 2: STRATEGIC WRITING (Reasoning Mode)
     # ---------------------------------------------------------
-    print("\n🧠 PHASE 2: Strategic Synthesis & Writing (Mode Magistral)...")
+    print("\n PHASE 2: Strategic Synthesis & Writing (Mode Magistral)...")
     start = time.time()
     # 1. Load Reasoning Model
     llm_writer = get_llm("report_redaction")
@@ -126,7 +126,7 @@ def main():
 
     writer_prompt = ChatPromptTemplate.from_messages([
         ("system", system_prompt_content), # Your Expert File injected here
-        MessagesPlaceholder(variable_name="history"), # Reçoit notre contexte synthétique
+        MessagesPlaceholder(variable_name="history"), # “Receives our synthetic context.”
         ("human", f"""
         FINAL REPORTING MISSION:
         
@@ -154,7 +154,7 @@ def main():
     conversation_history = [HumanMessage(content=investigation_summary)]
     
 
-    print("   ↳ ✍️  Writing in progress (Reasoning model may take time)...")
+    print("   ↳ Writing in progress (Reasoning model may take time)...")
     chain = writer_prompt | llm_writer
     
     final_response_msg = chain.invoke({"history": conversation_history})
