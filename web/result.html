@@ -1,116 +1,187 @@
-<!-- ...existing code... -->
 <!doctype html>
-<html lang="fr">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Index Selector</title>
-  <style>
-    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial; padding: 2rem; }
-    label, input, select, button { font-size: 1rem; }
-    select, input[type="text"] { margin: .25rem 0 .75rem 0; padding: .4rem; min-width: 320px; display:block; }
-    .row { display:flex; gap:1rem; align-items:center; flex-wrap:wrap; }
-    .info { margin-top: 1rem; white-space: pre-wrap; background:#f7f7f7; padding: .8rem; border-radius:6px; }
-    .controls { margin-top:1rem; }
-  </style>
-</head>
-<body>
-  <h1>Select an index </h1>
-  <label for="index">Index:</label>
-  <select id="index"></select>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>IPv6 Analytics</title>
 
-  <div class="controls">
-    <label for="country_code">Country Codes</label>
-    <input type="text" id="country_code" placeholder="Enter country codes (comma separated)">
-
-    <label for="domain">Domain</label>
-    <input type="text" id="domain" placeholder="Enter domain">
-
-    <label for="asn">ASN</label>
-    <input type="text" id="asn" placeholder="Enter ASN">
-
-    <div class="row">
-      <label><input type="checkbox" id="thinking"> Thinking</label>
-      <label><input type="checkbox" id="IYP_source"> IYP source</label>
-    </div>
-
-    <div style="margin-top:.5rem;">
-      <button id="validateBtn">Valider</button>
-    </div>
-  </div>
-
-  <div class="info" id="resultArea">No result yet.</div>
-
-  <script>
-    const paths = [
-      "request_for_YPI/infrastructure/enabling_infrastructure/data_center_coverage",
-      "request_for_YPI/infrastructure/enabling_infrastructure/ixp_coverage",
-      "request_for_YPI/infrastructure/fiber_ecosystem/fiber_10km_reach",
-      "request_for_YPI/infrastructure/mobile_connectivity/network_coverage",
-      "request_for_YPI/infrastructure/mobile_connectivity/spectrum_allocation",
-      "request_for_YPI/market_readiness/market_structure/market_competition",
-      "request_for_YPI/market_readiness/market_structure/upstream_provider_diversity",
-      "request_for_YPI/market_readiness/traffic_localization/domain_count",
-      "request_for_YPI/market_readiness/traffic_localization/egov_index_score",
-      "request_for_YPI/market_readiness/traffic_localization/peering_efficiency",
-      "request_for_YPI/security/dns_security/dnssec_adoption",
-      "request_for_YPI/security/dns_security/dnssec_validation",
-      "request_for_YPI/security/enabling_technologies/https_adoption",
-      "request_for_YPI/security/enabling_technologies/ipv6_adoption",
-      "request_for_YPI/security/routing_hygiene/manrs_score",
-      "request_for_YPI/security/routing_hygiene/upstream_connections",
-      "request_for_YPI/security/security_threat/cybersecurity_index_score",
-      "request_for_YPI/security/security_threat/ddos_protection",
-      "request_for_YPI/security/security_threat/secure_internet_servers"
-    ];
-
-    const select = document.getElementById("index");
-    const resultArea = document.getElementById("resultArea");
-    const validateBtn = document.getElementById("validateBtn");
-
-    // populate select: visible text = last folder, value = full path
-    paths.forEach(p => {
-      const name = p.split("/").pop();
-      const opt = document.createElement("option");
-      opt.value = p;
-      opt.textContent = name;
-      select.appendChild(opt);
-    });
-
-    function collectForm() {
-      return {
-        indicator: select.value,
-        country: document.getElementById("country_code").value.trim(),
-        domain: document.getElementById("domain").value.trim(),
-        asn: document.getElementById("asn").value.trim(),
-        thinking: document.getElementById("thinking").checked,
-        iyp_source: document.getElementById("IYP_source").checked
-      };
-    }
-
-    validateBtn.addEventListener("click", async (ev) => {
-      ev.preventDefault();
-      const payload = collectForm();
-      resultArea.textContent = "Running...";
-
-      try {
-        const resp = await fetch("/run", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        });
-        if (!resp.ok) {
-          const t = await resp.text();
-          resultArea.textContent = `Error (${resp.status}): ${t}`;
-          return;
-        }
-        const data = await resp.json();
-        // show stdout/stderr
-        resultArea.textContent = `Exit code: ${data.returncode}\n\nSTDOUT:\n${data.stdout || '(none)'}\n\nSTDERR:\n${data.stderr || '(none)'}`;
-      } catch (e) {
-        resultArea.textContent = `Request failed: ${e}`;
+    <style>
+      body {
+        font-family: system-ui;
+        background: #f5f7fb;
+        padding: 2rem;
       }
+
+      .card {
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        max-width: 600px;
+        margin: auto;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+      }
+
+      h1 {
+        margin-bottom: 1rem;
+      }
+
+      select,
+      button {
+        padding: 10px;
+        margin-top: 10px;
+        width: 100%;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+      }
+
+      button {
+        background: #4f46e5;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background: #4338ca;
+      }
+
+      table {
+        width: 100%;
+        margin-top: 20px;
+        border-collapse: collapse;
+      }
+
+      th,
+      td {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+      }
+
+      th {
+        background: #eef2ff;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="card">
+      <h1>IPv6 Analytics Dashboard</h1>
+
+      <label>Select Indicator:</label>
+      <select id="indicatorDropdown">
+        <option value="ipv6">IPv6</option>
+        <option value="https">HTTPS</option>
+        <option value="dnssec">DNSSEC</option>
+      </select>
+
+      <label>Select Country:</label>
+      <select id="countryDropdown"></select>
+
+      <button onclick="getSimilar()">Find Similar Countries</button>
+
+      <div id="output"></div>
+    </div>
+
+    <script>
+      // Load countries
+      fetch("/countries")
+        .then((res) => res.json())
+        .then((data) => {
+          const dropdown = document.getElementById("countryDropdown");
+
+          data.countries.forEach((c) => {
+            const option = document.createElement("option");
+            option.value = c;
+            option.textContent = c;
+            dropdown.appendChild(option);
+          });
+        });
+
+      // Fetch similar countries
+      function getSimilar() {
+  const country = document.getElementById("countryDropdown").value;
+  const indicator = document.getElementById("indicatorDropdown").value;
+  const output = document.getElementById("output");
+
+  output.innerHTML = "Loading...";
+
+  fetch(`/similar?country=${country}&indicator=${indicator}`)
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.error) {
+        output.innerHTML = `<p style="color:red;">${data.error}</p>`;
+        return;
+      }
+
+      // 🔥 Reference section
+      let html = `
+        <h3>Selected Country: ${data.reference.country}</h3>
+      `;
+
+      // =========================
+      // 🔥 BINARY MODE (DNSSEC)
+      // =========================
+      if (data.type === "binary") {
+
+        html += `
+          <p><strong>${indicator.toUpperCase()}:</strong> 
+            ${data.reference.average === 1 ? "Enabled ✅" : "Disabled ❌"}
+          </p>
+
+          <h4>🌍 Same Status</h4>
+          <ul>
+        `;
+
+        data.same_group.slice(0, 10).forEach((c) => {
+          html += `<li>${c.country}</li>`;
+        });
+
+        html += `</ul><h4>🌍 Different Status</h4><ul>`;
+
+        data.different_group.slice(0, 10).forEach((c) => {
+          html += `<li>${c.country}</li>`;
+        });
+
+        html += `</ul>`;
+
+      }
+
+      // =========================
+      // 🔥 CONTINUOUS MODE (IPv6, HTTPS)
+      // =========================
+      else {
+
+        html += `
+          <p><strong>${indicator.toUpperCase()}:</strong> ${(data.reference.average * 100).toFixed(2)}%</p>
+        `;
+
+        html += `
+          <table>
+            <tr>
+              <th>Country</th>
+              <th>${indicator.toUpperCase()} (%)</th>
+              <th>Difference</th>
+            </tr>
+        `;
+
+        data.similar.forEach((c) => {
+          html += `
+            <tr>
+              <td>${c.country}</td>
+              <td>${(c.average * 100).toFixed(2)}%</td>
+              <td>${(c.distance * 100).toFixed(2)}%</td>
+            </tr>
+          `;
+        });
+
+        html += "</table>";
+      }
+
+      output.innerHTML = html;
+    })
+    .catch((err) => {
+      output.innerHTML = `<p style="color:red;">Error: ${err}</p>`;
     });
-  </script>
-</body>
+}
+    </script>
+  </body>
 </html>
