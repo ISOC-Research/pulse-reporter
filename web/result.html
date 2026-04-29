@@ -1,440 +1,117 @@
 <!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <title>IPv6 Analytics</title>
-
-    <!-- Chart.js -->
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Intelligence Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
     <style>
-      body {
-        font-family: system-ui;
-        background: #f5f7fb;
-        padding: 2rem;
-      }
-
-      .card {
-        background: white;
-        padding: 2rem;
-        border-radius: 12px;
-        max-width: 700px;
-        margin: auto;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
-      }
-
-      h1 {
-        margin-bottom: 1rem;
-      }
-
-      select,
-      button {
-        padding: 10px;
-        margin-top: 10px;
-        width: 100%;
-        border-radius: 6px;
-        border: 1px solid #ccc;
-      }
-
-      button {
-        background: #4f46e5;
-        color: white;
-        border: none;
-        cursor: pointer;
-      }
-
-      button:hover {
-        background: #4338ca;
-      }
-
-      table {
-        width: 100%;
-        margin-top: 20px;
-        border-collapse: collapse;
-      }
-
-      th,
-      td {
-        padding: 10px;
-        border-bottom: 1px solid #ddd;
-      }
-
-      th {
-        background: #eef2ff;
-      }
-
-      canvas {
-        margin-top: 25px;
-      }
+        :root { --primary: #4f46e5; --bg: #f8fafc; --text: #1e293b; --muted: #64748b; }
+        body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); padding: 2rem; }
+        .container { background: white; padding: 2rem; border-radius: 12px; max-width: 900px; margin: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .controls { display: grid; grid-template-columns: 1fr 1fr auto; gap: 1rem; align-items: end; margin-bottom: 2rem; }
+        select, button { padding: 0.75rem; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 0.9rem; }
+        button { background: var(--primary); color: white; border: none; font-weight: 600; cursor: pointer; }
+        .stats-grid { display: flex; gap: 1.5rem; margin-bottom: 2rem; }
+        .stat-card { flex: 1; padding: 1.25rem; border-radius: 10px; background: #f1f5f9; }
+        .stat-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; font-weight: 700; }
+        .stat-value { font-size: 1.5rem; font-weight: 800; color: var(--primary); }
+        table { width: 100%; border-collapse: collapse; margin-top: 1.5rem; font-size: 0.9rem; }
+        th { text-align: left; padding: 0.75rem; border-bottom: 2px solid #e2e8f0; color: var(--muted); }
+        td { padding: 0.75rem; border-bottom: 1px solid #e2e8f0; }
+        .spinner { border: 3px solid #f3f3f3; border-top: 3px solid var(--primary); border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block; margin-right: 10px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
-  </head>
-
-  <body>
-    <div class="card">
-      <h1>IPv6 Analytics Dashboard</h1>
-
-      <label>Select Indicator:</label>
-      <select id="indicatorDropdown">
-        <option value="ipv6">IPv6</option>
-        <option value="https">HTTPS</option>
-        <option value="dnssec">DNSSEC</option>
-      </select>
-
-      <label>Select Country:</label>
-      <select id="countryDropdown"></select>
-
-      <button onclick="getSimilar()">Find Similar Countries</button>
-
-      <div id="output"></div>
-
-      <h3 id="chartTitle" style="display: none">Visual Comparison</h3>
-      <canvas id="chartCanvas"></canvas>
+</head>
+<body>
+    <div class="container">
+        <header style="margin-bottom: 2rem;"><h1>Network Intelligence</h1></header>
+        <div class="controls">
+            <div><label>Indicator</label><select id="i"><option value="ipv6">IPv6 Adoption</option><option value="https">HTTPS Usage</option><option value="dnssec">DNSSEC Security</option></select></div>
+            <div><label>Region</label><select id="c"></select></div>
+            <button onclick="run()">Analyze</button>
+        </div>
+        <div id="out"></div>
+        <div id="chartWrap" style="height: 350px; margin-top: 2rem; display:none;"><canvas id="chart"></canvas></div>
     </div>
 
     <script>
-      let chartInstance = null;
+        let chart = null;
+        const MAP = { AD: "Andorra", AE: "UAE", AF: "Afghanistan", AG: "Antigua", AL: "Albania", AM: "Armenia", AO: "Angola", AR: "Argentina", AT: "Austria", AU: "Australia", AZ: "Azerbaijan", BA: "Bosnia", BB: "Barbados", BD: "Bangladesh", BE: "Belgium", BF: "Burkina Faso", BG: "Bulgaria", BH: "Bahrain", BI: "Burundi", BJ: "Benin", BN: "Brunei", BO: "Bolivia", BR: "Brazil", BS: "Bahamas", BT: "Bhutan", BW: "Botswana", BY: "Belarus", BZ: "Belize", CA: "Canada", CD: "Congo", CF: "CAR", CG: "Congo", CH: "Switzerland", CI: "Ivory Coast", CL: "Chile", CM: "Cameroon", CN: "China", CO: "Colombia", CR: "Costa Rica", CV: "Cape Verde", CY: "Cyprus", CZ: "Czech Republic", DE: "Germany", DJ: "Djibouti", DK: "Denmark", DM: "Dominica", DO: "Dominican Republic", DZ: "Algeria", EC: "Ecuador", EE: "Estonia", EG: "Egypt", ES: "Spain", ET: "Ethiopia", FI: "Finland", FJ: "Fiji", FR: "France", GA: "Gabon", GB: "UK", GD: "Grenada", GE: "Georgia", GH: "Ghana", GM: "Gambia", GN: "Guinea", GR: "Greece", GT: "Guatemala", GW: "Guinea-Bissau", GY: "Guyana", HN: "Honduras", HR: "Croatia", HT: "Haiti", HU: "Hungary", ID: "Indonesia", IE: "Ireland", IL: "Israel", IN: "India", IQ: "Iraq", IR: "Iran", IS: "Iceland", IT: "Italy", JM: "Jamaica", JO: "Jordan", JP: "Japan", KE: "Kenya", KG: "Kyrgyzstan", KH: "Cambodia", KM: "Comoros", KN: "St Kitts", KR: "South Korea", KW: "Kuwait", KZ: "Kazakhstan", LA: "Laos", LB: "Lebanon", LC: "St Lucia", LK: "Sri Lanka", LR: "Liberia", LS: "Lesotho", LT: "Lithuania", LU: "Luxembourg", LV: "Latvia", LY: "Libya", MA: "Morocco", MD: "Moldova", ME: "Montenegro", MG: "Madagascar", MK: "North Macedonia", ML: "Mali", MM: "Myanmar", MN: "Mongolia", MR: "Mauritania", MT: "Malta", MU: "Mauritius", MV: "Maldives", MW: "Malawi", MX: "Mexico", MY: "Malaysia", MZ: "Mozambique", NA: "Namibia", NE: "Niger", NG: "Nigeria", NI: "Nicaragua", NL: "Netherlands", NO: "Norway", NP: "Nepal", NZ: "New Zealand", OM: "Oman", PA: "Panama", PE: "Peru", PG: "PNG", PH: "Philippines", PK: "Pakistan", PL: "Poland", PT: "Portugal", PY: "Paraguay", QA: "Qatar", RO: "Romania", RS: "Serbia", RU: "Russia", RW: "Rwanda", SA: "Saudi Arabia", SC: "Seychelles", SD: "Sudan", SE: "Sweden", SG: "Singapore", SI: "Slovenia", SK: "Slovakia", SL: "Sierra Leone", SM: "San Marino", SN: "Senegal", SO: "Somalia", SR: "Suriname", SS: "South Sudan", ST: "Sao Tome", SV: "El Salvador", SY: "Syria", SZ: "Eswatini", TD: "Chad", TG: "Togo", TH: "Thailand", TJ: "Tajikistan", TL: "Timor", TN: "Tunisia", TO: "Tonga", TR: "Turkey", TT: "Trinidad", TZ: "Tanzania", UA: "Ukraine", UG: "Uganda", US: "USA", UY: "Uruguay", UZ: "Uzbekistan", VC: "St Vincent", VE: "Venezuela", VN: "Vietnam", VU: "Vanuatu", WS: "Samoa", YE: "Yemen", ZA: "South Africa", ZM: "Zambia", ZW: "Zimbabwe" };
 
-      // 🌍 Country Mapping
-      const COUNTRY_MAP = {
-        AD: "Andorra",
-        AE: "United Arab Emirates",
-        AF: "Afghanistan",
-        AG: "Antigua and Barbuda",
-        AL: "Albania",
-        AM: "Armenia",
-        AO: "Angola",
-        AR: "Argentina",
-        AT: "Austria",
-        AU: "Australia",
-        AZ: "Azerbaijan",
-        BA: "Bosnia and Herzegovina",
-        BB: "Barbados",
-        BD: "Bangladesh",
-        BE: "Belgium",
-        BF: "Burkina Faso",
-        BG: "Bulgaria",
-        BH: "Bahrain",
-        BI: "Burundi",
-        BJ: "Benin",
-        BN: "Brunei",
-        BO: "Bolivia",
-        BR: "Brazil",
-        BS: "Bahamas",
-        BT: "Bhutan",
-        BW: "Botswana",
-        BY: "Belarus",
-        BZ: "Belize",
-        CA: "Canada",
-        CD: "DR Congo",
-        CF: "Central African Republic",
-        CG: "Republic of the Congo",
-        CH: "Switzerland",
-        CI: "Ivory Coast",
-        CL: "Chile",
-        CM: "Cameroon",
-        CN: "China",
-        CO: "Colombia",
-        CR: "Costa Rica",
-        CV: "Cape Verde",
-        CY: "Cyprus",
-        CZ: "Czech Republic",
-        DE: "Germany",
-        DJ: "Djibouti",
-        DK: "Denmark",
-        DM: "Dominica",
-        DO: "Dominican Republic",
-        DZ: "Algeria",
-        EC: "Ecuador",
-        EE: "Estonia",
-        EG: "Egypt",
-        ES: "Spain",
-        ET: "Ethiopia",
-        FI: "Finland",
-        FJ: "Fiji",
-        FR: "France",
-        GA: "Gabon",
-        GB: "United Kingdom",
-        GD: "Grenada",
-        GE: "Georgia",
-        GH: "Ghana",
-        GM: "Gambia",
-        GN: "Guinea",
-        GR: "Greece",
-        GT: "Guatemala",
-        GW: "Guinea-Bissau",
-        GY: "Guyana",
-        HN: "Honduras",
-        HR: "Croatia",
-        HT: "Haiti",
-        HU: "Hungary",
-        ID: "Indonesia",
-        IE: "Ireland",
-        IL: "Israel",
-        IN: "India",
-        IQ: "Iraq",
-        IR: "Iran",
-        IS: "Iceland",
-        IT: "Italy",
-        JM: "Jamaica",
-        JO: "Jordan",
-        JP: "Japan",
-        KE: "Kenya",
-        KG: "Kyrgyzstan",
-        KH: "Cambodia",
-        KM: "Comoros",
-        KN: "Saint Kitts and Nevis",
-        KR: "South Korea",
-        KW: "Kuwait",
-        KZ: "Kazakhstan",
-        LA: "Laos",
-        LB: "Lebanon",
-        LC: "Saint Lucia",
-        LK: "Sri Lanka",
-        LR: "Liberia",
-        LS: "Lesotho",
-        LT: "Lithuania",
-        LU: "Luxembourg",
-        LV: "Latvia",
-        LY: "Libya",
-        MA: "Morocco",
-        MD: "Moldova",
-        ME: "Montenegro",
-        MG: "Madagascar",
-        MK: "North Macedonia",
-        ML: "Mali",
-        MM: "Myanmar",
-        MN: "Mongolia",
-        MR: "Mauritania",
-        MT: "Malta",
-        MU: "Mauritius",
-        MV: "Maldives",
-        MW: "Malawi",
-        MX: "Mexico",
-        MY: "Malaysia",
-        MZ: "Mozambique",
-        NA: "Namibia",
-        NE: "Niger",
-        NG: "Nigeria",
-        NI: "Nicaragua",
-        NL: "Netherlands",
-        NO: "Norway",
-        NP: "Nepal",
-        NZ: "New Zealand",
-        OM: "Oman",
-        PA: "Panama",
-        PE: "Peru",
-        PG: "Papua New Guinea",
-        PH: "Philippines",
-        PK: "Pakistan",
-        PL: "Poland",
-        PT: "Portugal",
-        PY: "Paraguay",
-        QA: "Qatar",
-        RO: "Romania",
-        RS: "Serbia",
-        RU: "Russia",
-        RW: "Rwanda",
-        SA: "Saudi Arabia",
-        SC: "Seychelles",
-        SD: "Sudan",
-        SE: "Sweden",
-        SG: "Singapore",
-        SI: "Slovenia",
-        SK: "Slovakia",
-        SL: "Sierra Leone",
-        SM: "San Marino",
-        SN: "Senegal",
-        SO: "Somalia",
-        SR: "Suriname",
-        SS: "South Sudan",
-        ST: "Sao Tome and Principe",
-        SV: "El Salvador",
-        SY: "Syria",
-        SZ: "Eswatini",
-        TD: "Chad",
-        TG: "Togo",
-        TH: "Thailand",
-        TJ: "Tajikistan",
-        TL: "Timor-Leste",
-        TN: "Tunisia",
-        TO: "Tonga",
-        TR: "Turkey",
-        TT: "Trinidad and Tobago",
-        TZ: "Tanzania",
-        UA: "Ukraine",
-        UG: "Uganda",
-        US: "United States",
-        UY: "Uruguay",
-        UZ: "Uzbekistan",
-        VC: "Saint Vincent and the Grenadines",
-        VE: "Venezuela",
-        VN: "Vietnam",
-        VU: "Vanuatu",
-        WS: "Samoa",
-        YE: "Yemen",
-        ZA: "South Africa",
-        ZM: "Zambia",
-        ZW: "Zimbabwe",
-      };
-
-      function formatCountry(code) {
-        return COUNTRY_MAP[code] ? `${code} (${COUNTRY_MAP[code]})` : code;
-      }
-
-      // Load countries
-      fetch("/countries")
-        .then((res) => res.json())
-        .then((data) => {
-          const dropdown = document.getElementById("countryDropdown");
-
-          data.countries.forEach((c) => {
-            const option = document.createElement("option");
-            option.value = c;
-            option.textContent = formatCountry(c);
-            dropdown.appendChild(option);
-          });
+        fetch("/countries").then(r => r.json()).then(d => {
+            const el = document.getElementById("c");
+            d.countries.forEach(code => { const o = document.createElement("option"); o.value = code; o.textContent = MAP[code] || code; el.appendChild(o); });
         });
 
-      // Chart functions
-      function renderBarChart(reference, similar) {
-        const labels = [
-          formatCountry(reference.country),
-          ...similar.map((c) => formatCountry(c.country)),
-        ];
+        function run() {
+            const country = document.getElementById("c").value;
+            const indicator = document.getElementById("i").value;
+            const out = document.getElementById("out");
+            const wrap = document.getElementById("chartWrap");
+            
+            out.innerHTML = '<div style="text-align:center; padding: 2rem;"><div class="spinner"></div><p>Fetching Pulse Data...</p></div>';
+            wrap.style.display = 'none';
+            if (chart) chart.destroy();
 
-        const data = [
-          reference.average * 100,
-          ...similar.map((c) => c.average * 100),
-        ];
+            fetch(`/similar?country=${country}&indicator=${indicator}`).then(r => r.json()).then(data => {
+                if (data.error) { out.innerHTML = `<p style="color:red;">${data.error}</p>`; return; }
+                
+                const isIPv6 = indicator === 'ipv6';
+                const isBinary = data.type === 'binary';
+                
+                const pulseVal = isBinary ? (data.reference.average === 1 ? 'Enabled' : 'Disabled') : (data.reference.average * 100).toFixed(1) + '%';
+                
+                // 1. DYNAMIC STATS GRID
+                let html = `<div class="stats-grid"><div class="stat-card"><div class="stat-label">Pulse Status</div><div class="stat-value">${pulseVal}</div></div>`;
+                if (isIPv6) {
+                    const infraVal = data.reference.neo4j_average !== null ? (data.reference.neo4j_average * 100).toFixed(1) + '%' : 'N/A';
+                    html += `<div class="stat-card"><div class="stat-label">Core Infrastructure</div><div class="stat-value">${infraVal}</div></div>`;
+                }
+                html += `</div>`;
 
-        const ctx = document.getElementById("chartCanvas").getContext("2d");
+                // 2. DYNAMIC TABLE (Capped at 10)
+                html += `<table><thead><tr><th>Regional Peer (Sample)</th><th>Pulse Status</th>`;
+                if (isIPv6) html += `<th>Infrastructure</th>`;
+                html += `</tr></thead><tbody>`;
+                
+                data.peers_fused.forEach(p => {
+                    html += `<tr><td>${MAP[p.country] || p.country}</td><td>${isBinary ? (p.average === 1 ? 'Enabled' : 'Disabled') : (p.average * 100).toFixed(1) + '%'}</td>`;
+                    if (isIPv6) {
+                        html += `<td>${p.neo4j_average !== null ? (p.neo4j_average * 100).toFixed(1) + '%' : 'N/A'}</td>`;
+                    }
+                    html += `</tr>`;
+                });
+                out.innerHTML = html + '</tbody></table>';
 
-        if (chartInstance) chartInstance.destroy();
-
-        chartInstance = new Chart(ctx, {
-          type: "bar",
-          data: {
-            labels: labels,
-            datasets: [
-              {
-                label: "Adoption %",
-                data: data,
-              },
-            ],
-          },
-          options: {
-            responsive: true,
-            animation: {
-              duration: 1000,
-            },
-            scales: {
-              y: {
-                beginAtZero: true,
-              },
-            },
-          },
-        });
-      }
-
-      function renderPieChart(sameGroup, differentGroup) {
-        const ctx = document.getElementById("chartCanvas").getContext("2d");
-
-        if (chartInstance) chartInstance.destroy();
-
-        chartInstance = new Chart(ctx, {
-          type: "pie",
-          data: {
-            labels: ["Same Status", "Different Status"],
-            datasets: [
-              {
-                data: [sameGroup.length, differentGroup.length],
-              },
-            ],
-          },
-        });
-      }
-
-      // Fetch similar countries
-      function getSimilar() {
-        const country = document.getElementById("countryDropdown").value;
-        const indicator = document.getElementById("indicatorDropdown").value;
-        const output = document.getElementById("output");
-        const chartTitle = document.getElementById("chartTitle");
-
-        output.innerHTML = "Loading...";
-        chartTitle.style.display = "none";
-
-        fetch(`/similar?country=${country}&indicator=${indicator}`)
-          .then((res) => res.json())
-          .then((data) => {
-            if (data.error) {
-              output.innerHTML = `<p style="color:red;">${data.error}</p>`;
-              return;
-            }
-
-            let html = `
-              <h3>Selected Country: ${formatCountry(data.reference.country)}</h3>
-            `;
-
-            if (data.type === "binary") {
-              html += `
-                <p><strong>${indicator.toUpperCase()}:</strong> 
-                  ${data.reference.average === 1 ? "Enabled ✅" : "Disabled ❌"}
-                </p>
-
-                <h4>🌍 Same Status</h4>
-                <ul>
-              `;
-
-              data.same_group.slice(0, 10).forEach((c) => {
-                html += `<li>${formatCountry(c.country)}</li>`;
-              });
-
-              html += `</ul><h4>🌍 Different Status</h4><ul>`;
-
-              data.different_group.slice(0, 10).forEach((c) => {
-                html += `<li>${formatCountry(c.country)}</li>`;
-              });
-
-              html += `</ul>`;
-
-              renderPieChart(data.same_group, data.different_group);
-            } else {
-              html += `
-                <p><strong>${indicator.toUpperCase()}:</strong> ${(data.reference.average * 100).toFixed(2)}%</p>
-              `;
-
-              html += `
-                <table>
-                  <tr>
-                    <th>Country</th>
-                    <th>${indicator.toUpperCase()} (%)</th>
-                    <th>Difference</th>
-                  </tr>
-              `;
-
-              data.similar.forEach((c) => {
-                html += `
-                  <tr>
-                    <td>${formatCountry(c.country)}</td>
-                    <td>${(c.average * 100).toFixed(2)}%</td>
-                    <td>${(c.distance * 100).toFixed(2)}%</td>
-                  </tr>
-                `;
-              });
-
-              html += "</table>";
-
-              renderBarChart(data.reference, data.similar);
-            }
-
-            chartTitle.style.display = "block";
-            output.innerHTML = html;
-          })
-          .catch((err) => {
-            output.innerHTML = `<p style="color:red;">Error: ${err}</p>`;
-          });
-      }
+                // 3. DYNAMIC CHARTS
+                wrap.style.display = 'block';
+                const ctx = document.getElementById("chart").getContext("2d");
+                
+                if (isBinary && !isIPv6) {
+                    chart = new Chart(ctx, {
+                        type: 'pie',
+                        data: {
+                            labels: ["Same Status as Target", "Different Status"],
+                            datasets: [{ backgroundColor: ["#4f46e5", "#e2e8f0"], data: [data.same_group.length, data.different_group.length] }]
+                        },
+                        options: { responsive: true, maintainAspectRatio: false }
+                    });
+                } else {
+                    let datasets = [{ label: "Pulse %", backgroundColor: "#4f46e5", data: [data.reference.average * 100, ...data.peers_fused.map(p => p.average * 100)] }];
+                    if (isIPv6) {
+                        datasets.push({ label: "Infrastructure %", backgroundColor: "#e11d48", data: [data.reference.neo4j_average * 100 || 0, ...data.peers_fused.map(p => (p.neo4j_average || 0) * 100)] });
+                    }
+                    chart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: [MAP[data.reference.country] || data.reference.country, ...data.peers_fused.map(p => MAP[p.country] || p.country)],
+                            datasets: datasets
+                        },
+                        options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 100 } } }
+                    });
+                }
+            });
+        }
     </script>
-  </body>
+</body>
 </html>
