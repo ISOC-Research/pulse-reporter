@@ -4,6 +4,9 @@
     <meta charset="utf-8" />
     <title>IPv6 Analytics</title>
 
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
       body {
         font-family: system-ui;
@@ -15,7 +18,7 @@
         background: white;
         padding: 2rem;
         border-radius: 12px;
-        max-width: 600px;
+        max-width: 700px;
         margin: auto;
         box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
       }
@@ -59,6 +62,10 @@
       th {
         background: #eef2ff;
       }
+
+      canvas {
+        margin-top: 25px;
+      }
     </style>
   </head>
 
@@ -79,9 +86,201 @@
       <button onclick="getSimilar()">Find Similar Countries</button>
 
       <div id="output"></div>
+
+      <h3 id="chartTitle" style="display: none">Visual Comparison</h3>
+      <canvas id="chartCanvas"></canvas>
     </div>
 
     <script>
+      let chartInstance = null;
+
+      // 🌍 Country Mapping
+      const COUNTRY_MAP = {
+        AD: "Andorra",
+        AE: "United Arab Emirates",
+        AF: "Afghanistan",
+        AG: "Antigua and Barbuda",
+        AL: "Albania",
+        AM: "Armenia",
+        AO: "Angola",
+        AR: "Argentina",
+        AT: "Austria",
+        AU: "Australia",
+        AZ: "Azerbaijan",
+        BA: "Bosnia and Herzegovina",
+        BB: "Barbados",
+        BD: "Bangladesh",
+        BE: "Belgium",
+        BF: "Burkina Faso",
+        BG: "Bulgaria",
+        BH: "Bahrain",
+        BI: "Burundi",
+        BJ: "Benin",
+        BN: "Brunei",
+        BO: "Bolivia",
+        BR: "Brazil",
+        BS: "Bahamas",
+        BT: "Bhutan",
+        BW: "Botswana",
+        BY: "Belarus",
+        BZ: "Belize",
+        CA: "Canada",
+        CD: "DR Congo",
+        CF: "Central African Republic",
+        CG: "Republic of the Congo",
+        CH: "Switzerland",
+        CI: "Ivory Coast",
+        CL: "Chile",
+        CM: "Cameroon",
+        CN: "China",
+        CO: "Colombia",
+        CR: "Costa Rica",
+        CV: "Cape Verde",
+        CY: "Cyprus",
+        CZ: "Czech Republic",
+        DE: "Germany",
+        DJ: "Djibouti",
+        DK: "Denmark",
+        DM: "Dominica",
+        DO: "Dominican Republic",
+        DZ: "Algeria",
+        EC: "Ecuador",
+        EE: "Estonia",
+        EG: "Egypt",
+        ES: "Spain",
+        ET: "Ethiopia",
+        FI: "Finland",
+        FJ: "Fiji",
+        FR: "France",
+        GA: "Gabon",
+        GB: "United Kingdom",
+        GD: "Grenada",
+        GE: "Georgia",
+        GH: "Ghana",
+        GM: "Gambia",
+        GN: "Guinea",
+        GR: "Greece",
+        GT: "Guatemala",
+        GW: "Guinea-Bissau",
+        GY: "Guyana",
+        HN: "Honduras",
+        HR: "Croatia",
+        HT: "Haiti",
+        HU: "Hungary",
+        ID: "Indonesia",
+        IE: "Ireland",
+        IL: "Israel",
+        IN: "India",
+        IQ: "Iraq",
+        IR: "Iran",
+        IS: "Iceland",
+        IT: "Italy",
+        JM: "Jamaica",
+        JO: "Jordan",
+        JP: "Japan",
+        KE: "Kenya",
+        KG: "Kyrgyzstan",
+        KH: "Cambodia",
+        KM: "Comoros",
+        KN: "Saint Kitts and Nevis",
+        KR: "South Korea",
+        KW: "Kuwait",
+        KZ: "Kazakhstan",
+        LA: "Laos",
+        LB: "Lebanon",
+        LC: "Saint Lucia",
+        LK: "Sri Lanka",
+        LR: "Liberia",
+        LS: "Lesotho",
+        LT: "Lithuania",
+        LU: "Luxembourg",
+        LV: "Latvia",
+        LY: "Libya",
+        MA: "Morocco",
+        MD: "Moldova",
+        ME: "Montenegro",
+        MG: "Madagascar",
+        MK: "North Macedonia",
+        ML: "Mali",
+        MM: "Myanmar",
+        MN: "Mongolia",
+        MR: "Mauritania",
+        MT: "Malta",
+        MU: "Mauritius",
+        MV: "Maldives",
+        MW: "Malawi",
+        MX: "Mexico",
+        MY: "Malaysia",
+        MZ: "Mozambique",
+        NA: "Namibia",
+        NE: "Niger",
+        NG: "Nigeria",
+        NI: "Nicaragua",
+        NL: "Netherlands",
+        NO: "Norway",
+        NP: "Nepal",
+        NZ: "New Zealand",
+        OM: "Oman",
+        PA: "Panama",
+        PE: "Peru",
+        PG: "Papua New Guinea",
+        PH: "Philippines",
+        PK: "Pakistan",
+        PL: "Poland",
+        PT: "Portugal",
+        PY: "Paraguay",
+        QA: "Qatar",
+        RO: "Romania",
+        RS: "Serbia",
+        RU: "Russia",
+        RW: "Rwanda",
+        SA: "Saudi Arabia",
+        SC: "Seychelles",
+        SD: "Sudan",
+        SE: "Sweden",
+        SG: "Singapore",
+        SI: "Slovenia",
+        SK: "Slovakia",
+        SL: "Sierra Leone",
+        SM: "San Marino",
+        SN: "Senegal",
+        SO: "Somalia",
+        SR: "Suriname",
+        SS: "South Sudan",
+        ST: "Sao Tome and Principe",
+        SV: "El Salvador",
+        SY: "Syria",
+        SZ: "Eswatini",
+        TD: "Chad",
+        TG: "Togo",
+        TH: "Thailand",
+        TJ: "Tajikistan",
+        TL: "Timor-Leste",
+        TN: "Tunisia",
+        TO: "Tonga",
+        TR: "Turkey",
+        TT: "Trinidad and Tobago",
+        TZ: "Tanzania",
+        UA: "Ukraine",
+        UG: "Uganda",
+        US: "United States",
+        UY: "Uruguay",
+        UZ: "Uzbekistan",
+        VC: "Saint Vincent and the Grenadines",
+        VE: "Venezuela",
+        VN: "Vietnam",
+        VU: "Vanuatu",
+        WS: "Samoa",
+        YE: "Yemen",
+        ZA: "South Africa",
+        ZM: "Zambia",
+        ZW: "Zimbabwe",
+      };
+
+      function formatCountry(code) {
+        return COUNTRY_MAP[code] ? `${code} (${COUNTRY_MAP[code]})` : code;
+      }
+
       // Load countries
       fetch("/countries")
         .then((res) => res.json())
@@ -91,97 +290,151 @@
           data.countries.forEach((c) => {
             const option = document.createElement("option");
             option.value = c;
-            option.textContent = c;
+            option.textContent = formatCountry(c);
             dropdown.appendChild(option);
           });
         });
 
+      // Chart functions
+      function renderBarChart(reference, similar) {
+        const labels = [
+          formatCountry(reference.country),
+          ...similar.map((c) => formatCountry(c.country)),
+        ];
+
+        const data = [
+          reference.average * 100,
+          ...similar.map((c) => c.average * 100),
+        ];
+
+        const ctx = document.getElementById("chartCanvas").getContext("2d");
+
+        if (chartInstance) chartInstance.destroy();
+
+        chartInstance = new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: "Adoption %",
+                data: data,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            animation: {
+              duration: 1000,
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+              },
+            },
+          },
+        });
+      }
+
+      function renderPieChart(sameGroup, differentGroup) {
+        const ctx = document.getElementById("chartCanvas").getContext("2d");
+
+        if (chartInstance) chartInstance.destroy();
+
+        chartInstance = new Chart(ctx, {
+          type: "pie",
+          data: {
+            labels: ["Same Status", "Different Status"],
+            datasets: [
+              {
+                data: [sameGroup.length, differentGroup.length],
+              },
+            ],
+          },
+        });
+      }
+
       // Fetch similar countries
       function getSimilar() {
-  const country = document.getElementById("countryDropdown").value;
-  const indicator = document.getElementById("indicatorDropdown").value;
-  const output = document.getElementById("output");
+        const country = document.getElementById("countryDropdown").value;
+        const indicator = document.getElementById("indicatorDropdown").value;
+        const output = document.getElementById("output");
+        const chartTitle = document.getElementById("chartTitle");
 
-  output.innerHTML = "Loading...";
+        output.innerHTML = "Loading...";
+        chartTitle.style.display = "none";
 
-  fetch(`/similar?country=${country}&indicator=${indicator}`)
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.error) {
-        output.innerHTML = `<p style="color:red;">${data.error}</p>`;
-        return;
+        fetch(`/similar?country=${country}&indicator=${indicator}`)
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.error) {
+              output.innerHTML = `<p style="color:red;">${data.error}</p>`;
+              return;
+            }
+
+            let html = `
+              <h3>Selected Country: ${formatCountry(data.reference.country)}</h3>
+            `;
+
+            if (data.type === "binary") {
+              html += `
+                <p><strong>${indicator.toUpperCase()}:</strong> 
+                  ${data.reference.average === 1 ? "Enabled ✅" : "Disabled ❌"}
+                </p>
+
+                <h4>🌍 Same Status</h4>
+                <ul>
+              `;
+
+              data.same_group.slice(0, 10).forEach((c) => {
+                html += `<li>${formatCountry(c.country)}</li>`;
+              });
+
+              html += `</ul><h4>🌍 Different Status</h4><ul>`;
+
+              data.different_group.slice(0, 10).forEach((c) => {
+                html += `<li>${formatCountry(c.country)}</li>`;
+              });
+
+              html += `</ul>`;
+
+              renderPieChart(data.same_group, data.different_group);
+            } else {
+              html += `
+                <p><strong>${indicator.toUpperCase()}:</strong> ${(data.reference.average * 100).toFixed(2)}%</p>
+              `;
+
+              html += `
+                <table>
+                  <tr>
+                    <th>Country</th>
+                    <th>${indicator.toUpperCase()} (%)</th>
+                    <th>Difference</th>
+                  </tr>
+              `;
+
+              data.similar.forEach((c) => {
+                html += `
+                  <tr>
+                    <td>${formatCountry(c.country)}</td>
+                    <td>${(c.average * 100).toFixed(2)}%</td>
+                    <td>${(c.distance * 100).toFixed(2)}%</td>
+                  </tr>
+                `;
+              });
+
+              html += "</table>";
+
+              renderBarChart(data.reference, data.similar);
+            }
+
+            chartTitle.style.display = "block";
+            output.innerHTML = html;
+          })
+          .catch((err) => {
+            output.innerHTML = `<p style="color:red;">Error: ${err}</p>`;
+          });
       }
-
-      // 🔥 Reference section
-      let html = `
-        <h3>Selected Country: ${data.reference.country}</h3>
-      `;
-
-      // =========================
-      // 🔥 BINARY MODE (DNSSEC)
-      // =========================
-      if (data.type === "binary") {
-
-        html += `
-          <p><strong>${indicator.toUpperCase()}:</strong> 
-            ${data.reference.average === 1 ? "Enabled ✅" : "Disabled ❌"}
-          </p>
-
-          <h4>🌍 Same Status</h4>
-          <ul>
-        `;
-
-        data.same_group.slice(0, 10).forEach((c) => {
-          html += `<li>${c.country}</li>`;
-        });
-
-        html += `</ul><h4>🌍 Different Status</h4><ul>`;
-
-        data.different_group.slice(0, 10).forEach((c) => {
-          html += `<li>${c.country}</li>`;
-        });
-
-        html += `</ul>`;
-
-      }
-
-      // =========================
-      // 🔥 CONTINUOUS MODE (IPv6, HTTPS)
-      // =========================
-      else {
-
-        html += `
-          <p><strong>${indicator.toUpperCase()}:</strong> ${(data.reference.average * 100).toFixed(2)}%</p>
-        `;
-
-        html += `
-          <table>
-            <tr>
-              <th>Country</th>
-              <th>${indicator.toUpperCase()} (%)</th>
-              <th>Difference</th>
-            </tr>
-        `;
-
-        data.similar.forEach((c) => {
-          html += `
-            <tr>
-              <td>${c.country}</td>
-              <td>${(c.average * 100).toFixed(2)}%</td>
-              <td>${(c.distance * 100).toFixed(2)}%</td>
-            </tr>
-          `;
-        });
-
-        html += "</table>";
-      }
-
-      output.innerHTML = html;
-    })
-    .catch((err) => {
-      output.innerHTML = `<p style="color:red;">Error: ${err}</p>`;
-    });
-}
     </script>
   </body>
 </html>
