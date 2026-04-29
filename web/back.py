@@ -19,7 +19,8 @@ def get_ipv6_infrastructure(country_code):
         with GraphDatabase.driver(NEO4J_URI, auth=NEO4J_AUTH) as driver:
             records, _, _ = driver.execute_query(query, {"countryCode": country_code.upper()}, database_="neo4j")
             if records:
-                val = records[0].get("percentage", 0.0)
+                # 🚀 CHANGED THIS LINE: We grab the original variable name
+                val = records[0].get("ipv6PrefixesPercentage", 0.0)
                 return val / 100.0 if val > 1.0 else val
     except Exception as e:
         print(f"Neo4j Error ({country_code}): {e}")
