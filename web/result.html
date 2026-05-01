@@ -1,116 +1,117 @@
-<!-- ...existing code... -->
 <!doctype html>
-<html lang="fr">
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Index Selector</title>
-  <style>
-    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial; padding: 2rem; }
-    label, input, select, button { font-size: 1rem; }
-    select, input[type="text"] { margin: .25rem 0 .75rem 0; padding: .4rem; min-width: 320px; display:block; }
-    .row { display:flex; gap:1rem; align-items:center; flex-wrap:wrap; }
-    .info { margin-top: 1rem; white-space: pre-wrap; background:#f7f7f7; padding: .8rem; border-radius:6px; }
-    .controls { margin-top:1rem; }
-  </style>
+    <meta charset="utf-8">
+    <title>Intelligence Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root { --primary: #4f46e5; --bg: #f8fafc; --text: #1e293b; --muted: #64748b; }
+        body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); padding: 2rem; }
+        .container { background: white; padding: 2rem; border-radius: 12px; max-width: 900px; margin: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .controls { display: grid; grid-template-columns: 1fr 1fr auto; gap: 1rem; align-items: end; margin-bottom: 2rem; }
+        select, button { padding: 0.75rem; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 0.9rem; }
+        button { background: var(--primary); color: white; border: none; font-weight: 600; cursor: pointer; }
+        .stats-grid { display: flex; gap: 1.5rem; margin-bottom: 2rem; }
+        .stat-card { flex: 1; padding: 1.25rem; border-radius: 10px; background: #f1f5f9; }
+        .stat-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; font-weight: 700; }
+        .stat-value { font-size: 1.5rem; font-weight: 800; color: var(--primary); }
+        table { width: 100%; border-collapse: collapse; margin-top: 1.5rem; font-size: 0.9rem; }
+        th { text-align: left; padding: 0.75rem; border-bottom: 2px solid #e2e8f0; color: var(--muted); }
+        td { padding: 0.75rem; border-bottom: 1px solid #e2e8f0; }
+        .spinner { border: 3px solid #f3f3f3; border-top: 3px solid var(--primary); border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block; margin-right: 10px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
 </head>
 <body>
-  <h1>Select an index </h1>
-  <label for="index">Index:</label>
-  <select id="index"></select>
-
-  <div class="controls">
-    <label for="country_code">Country Codes</label>
-    <input type="text" id="country_code" placeholder="Enter country codes (comma separated)">
-
-    <label for="domain">Domain</label>
-    <input type="text" id="domain" placeholder="Enter domain">
-
-    <label for="asn">ASN</label>
-    <input type="text" id="asn" placeholder="Enter ASN">
-
-    <div class="row">
-      <label><input type="checkbox" id="thinking"> Thinking</label>
-      <label><input type="checkbox" id="IYP_source"> IYP source</label>
+    <div class="container">
+        <header style="margin-bottom: 2rem;"><h1>Network Intelligence</h1></header>
+        <div class="controls">
+            <div><label>Indicator</label><select id="i"><option value="ipv6">IPv6 Adoption</option><option value="https">HTTPS Usage</option><option value="dnssec">DNSSEC Security</option></select></div>
+            <div><label>Region</label><select id="c"></select></div>
+            <button onclick="run()">Analyze</button>
+        </div>
+        <div id="out"></div>
+        <div id="chartWrap" style="height: 350px; margin-top: 2rem; display:none;"><canvas id="chart"></canvas></div>
     </div>
 
-    <div style="margin-top:.5rem;">
-      <button id="validateBtn">Valider</button>
-    </div>
-  </div>
+    <script>
+        let chart = null;
+        const MAP = { AD: "Andorra", AE: "UAE", AF: "Afghanistan", AG: "Antigua", AL: "Albania", AM: "Armenia", AO: "Angola", AR: "Argentina", AT: "Austria", AU: "Australia", AZ: "Azerbaijan", BA: "Bosnia", BB: "Barbados", BD: "Bangladesh", BE: "Belgium", BF: "Burkina Faso", BG: "Bulgaria", BH: "Bahrain", BI: "Burundi", BJ: "Benin", BN: "Brunei", BO: "Bolivia", BR: "Brazil", BS: "Bahamas", BT: "Bhutan", BW: "Botswana", BY: "Belarus", BZ: "Belize", CA: "Canada", CD: "Congo", CF: "CAR", CG: "Congo", CH: "Switzerland", CI: "Ivory Coast", CL: "Chile", CM: "Cameroon", CN: "China", CO: "Colombia", CR: "Costa Rica", CV: "Cape Verde", CY: "Cyprus", CZ: "Czech Republic", DE: "Germany", DJ: "Djibouti", DK: "Denmark", DM: "Dominica", DO: "Dominican Republic", DZ: "Algeria", EC: "Ecuador", EE: "Estonia", EG: "Egypt", ES: "Spain", ET: "Ethiopia", FI: "Finland", FJ: "Fiji", FR: "France", GA: "Gabon", GB: "UK", GD: "Grenada", GE: "Georgia", GH: "Ghana", GM: "Gambia", GN: "Guinea", GR: "Greece", GT: "Guatemala", GW: "Guinea-Bissau", GY: "Guyana", HN: "Honduras", HR: "Croatia", HT: "Haiti", HU: "Hungary", ID: "Indonesia", IE: "Ireland", IL: "Israel", IN: "India", IQ: "Iraq", IR: "Iran", IS: "Iceland", IT: "Italy", JM: "Jamaica", JO: "Jordan", JP: "Japan", KE: "Kenya", KG: "Kyrgyzstan", KH: "Cambodia", KM: "Comoros", KN: "St Kitts", KR: "South Korea", KW: "Kuwait", KZ: "Kazakhstan", LA: "Laos", LB: "Lebanon", LC: "St Lucia", LK: "Sri Lanka", LR: "Liberia", LS: "Lesotho", LT: "Lithuania", LU: "Luxembourg", LV: "Latvia", LY: "Libya", MA: "Morocco", MD: "Moldova", ME: "Montenegro", MG: "Madagascar", MK: "North Macedonia", ML: "Mali", MM: "Myanmar", MN: "Mongolia", MR: "Mauritania", MT: "Malta", MU: "Mauritius", MV: "Maldives", MW: "Malawi", MX: "Mexico", MY: "Malaysia", MZ: "Mozambique", NA: "Namibia", NE: "Niger", NG: "Nigeria", NI: "Nicaragua", NL: "Netherlands", NO: "Norway", NP: "Nepal", NZ: "New Zealand", OM: "Oman", PA: "Panama", PE: "Peru", PG: "PNG", PH: "Philippines", PK: "Pakistan", PL: "Poland", PT: "Portugal", PY: "Paraguay", QA: "Qatar", RO: "Romania", RS: "Serbia", RU: "Russia", RW: "Rwanda", SA: "Saudi Arabia", SC: "Seychelles", SD: "Sudan", SE: "Sweden", SG: "Singapore", SI: "Slovenia", SK: "Slovakia", SL: "Sierra Leone", SM: "San Marino", SN: "Senegal", SO: "Somalia", SR: "Suriname", SS: "South Sudan", ST: "Sao Tome", SV: "El Salvador", SY: "Syria", SZ: "Eswatini", TD: "Chad", TG: "Togo", TH: "Thailand", TJ: "Tajikistan", TL: "Timor", TN: "Tunisia", TO: "Tonga", TR: "Turkey", TT: "Trinidad", TZ: "Tanzania", UA: "Ukraine", UG: "Uganda", US: "USA", UY: "Uruguay", UZ: "Uzbekistan", VC: "St Vincent", VE: "Venezuela", VN: "Vietnam", VU: "Vanuatu", WS: "Samoa", YE: "Yemen", ZA: "South Africa", ZM: "Zambia", ZW: "Zimbabwe" };
 
-  <div class="info" id="resultArea">No result yet.</div>
-
-  <script>
-    const paths = [
-      "request_for_YPI/infrastructure/enabling_infrastructure/data_center_coverage",
-      "request_for_YPI/infrastructure/enabling_infrastructure/ixp_coverage",
-      "request_for_YPI/infrastructure/fiber_ecosystem/fiber_10km_reach",
-      "request_for_YPI/infrastructure/mobile_connectivity/network_coverage",
-      "request_for_YPI/infrastructure/mobile_connectivity/spectrum_allocation",
-      "request_for_YPI/market_readiness/market_structure/market_competition",
-      "request_for_YPI/market_readiness/market_structure/upstream_provider_diversity",
-      "request_for_YPI/market_readiness/traffic_localization/domain_count",
-      "request_for_YPI/market_readiness/traffic_localization/egov_index_score",
-      "request_for_YPI/market_readiness/traffic_localization/peering_efficiency",
-      "request_for_YPI/security/dns_security/dnssec_adoption",
-      "request_for_YPI/security/dns_security/dnssec_validation",
-      "request_for_YPI/security/enabling_technologies/https_adoption",
-      "request_for_YPI/security/enabling_technologies/ipv6_adoption",
-      "request_for_YPI/security/routing_hygiene/manrs_score",
-      "request_for_YPI/security/routing_hygiene/upstream_connections",
-      "request_for_YPI/security/security_threat/cybersecurity_index_score",
-      "request_for_YPI/security/security_threat/ddos_protection",
-      "request_for_YPI/security/security_threat/secure_internet_servers"
-    ];
-
-    const select = document.getElementById("index");
-    const resultArea = document.getElementById("resultArea");
-    const validateBtn = document.getElementById("validateBtn");
-
-    // populate select: visible text = last folder, value = full path
-    paths.forEach(p => {
-      const name = p.split("/").pop();
-      const opt = document.createElement("option");
-      opt.value = p;
-      opt.textContent = name;
-      select.appendChild(opt);
-    });
-
-    function collectForm() {
-      return {
-        indicator: select.value,
-        country: document.getElementById("country_code").value.trim(),
-        domain: document.getElementById("domain").value.trim(),
-        asn: document.getElementById("asn").value.trim(),
-        thinking: document.getElementById("thinking").checked,
-        iyp_source: document.getElementById("IYP_source").checked
-      };
-    }
-
-    validateBtn.addEventListener("click", async (ev) => {
-      ev.preventDefault();
-      const payload = collectForm();
-      resultArea.textContent = "Running...";
-
-      try {
-        const resp = await fetch("/run", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
+        fetch("/countries").then(r => r.json()).then(d => {
+            const el = document.getElementById("c");
+            d.countries.forEach(code => { const o = document.createElement("option"); o.value = code; o.textContent = MAP[code] || code; el.appendChild(o); });
         });
-        if (!resp.ok) {
-          const t = await resp.text();
-          resultArea.textContent = `Error (${resp.status}): ${t}`;
-          return;
+
+        function run() {
+            const country = document.getElementById("c").value;
+            const indicator = document.getElementById("i").value;
+            const out = document.getElementById("out");
+            const wrap = document.getElementById("chartWrap");
+            
+            out.innerHTML = '<div style="text-align:center; padding: 2rem;"><div class="spinner"></div><p>Fetching Pulse Data...</p></div>';
+            wrap.style.display = 'none';
+            if (chart) chart.destroy();
+
+            fetch(`/similar?country=${country}&indicator=${indicator}`).then(r => r.json()).then(data => {
+                if (data.error) { out.innerHTML = `<p style="color:red;">${data.error}</p>`; return; }
+                
+                const isIPv6 = indicator === 'ipv6';
+                const isBinary = data.type === 'binary';
+                
+                const pulseVal = isBinary ? (data.reference.average === 1 ? 'Enabled' : 'Disabled') : (data.reference.average * 100).toFixed(1) + '%';
+                
+                // 1. DYNAMIC STATS GRID
+                let html = `<div class="stats-grid"><div class="stat-card"><div class="stat-label">Pulse Status</div><div class="stat-value">${pulseVal}</div></div>`;
+                if (isIPv6) {
+                    const infraVal = data.reference.neo4j_average !== null ? (data.reference.neo4j_average * 100).toFixed(1) + '%' : 'N/A';
+                    html += `<div class="stat-card"><div class="stat-label">Core Infrastructure</div><div class="stat-value">${infraVal}</div></div>`;
+                }
+                html += `</div>`;
+
+                // 2. DYNAMIC TABLE (Capped at 10)
+                html += `<table><thead><tr><th>Regional Peer (Sample)</th><th>Pulse Status</th>`;
+                if (isIPv6) html += `<th>Infrastructure</th>`;
+                html += `</tr></thead><tbody>`;
+                
+                data.peers_fused.forEach(p => {
+                    html += `<tr><td>${MAP[p.country] || p.country}</td><td>${isBinary ? (p.average === 1 ? 'Enabled' : 'Disabled') : (p.average * 100).toFixed(1) + '%'}</td>`;
+                    if (isIPv6) {
+                        html += `<td>${p.neo4j_average !== null ? (p.neo4j_average * 100).toFixed(1) + '%' : 'N/A'}</td>`;
+                    }
+                    html += `</tr>`;
+                });
+                out.innerHTML = html + '</tbody></table>';
+
+                // 3. DYNAMIC CHARTS
+                wrap.style.display = 'block';
+                const ctx = document.getElementById("chart").getContext("2d");
+                
+                if (isBinary && !isIPv6) {
+                    chart = new Chart(ctx, {
+                        type: 'pie',
+                        data: {
+                            labels: ["Same Status as Target", "Different Status"],
+                            datasets: [{ backgroundColor: ["#4f46e5", "#e2e8f0"], data: [data.same_group.length, data.different_group.length] }]
+                        },
+                        options: { responsive: true, maintainAspectRatio: false }
+                    });
+                } else {
+                    let datasets = [{ label: "Pulse %", backgroundColor: "#4f46e5", data: [data.reference.average * 100, ...data.peers_fused.map(p => p.average * 100)] }];
+                    if (isIPv6) {
+                        datasets.push({ label: "Infrastructure %", backgroundColor: "#e11d48", data: [data.reference.neo4j_average * 100 || 0, ...data.peers_fused.map(p => (p.neo4j_average || 0) * 100)] });
+                    }
+                    chart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: [MAP[data.reference.country] || data.reference.country, ...data.peers_fused.map(p => MAP[p.country] || p.country)],
+                            datasets: datasets
+                        },
+                        options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 100 } } }
+                    });
+                }
+            });
         }
-        const data = await resp.json();
-        // show stdout/stderr
-        resultArea.textContent = `Exit code: ${data.returncode}\n\nSTDOUT:\n${data.stdout || '(none)'}\n\nSTDERR:\n${data.stderr || '(none)'}`;
-      } catch (e) {
-        resultArea.textContent = `Request failed: ${e}`;
-      }
-    });
-  </script>
+    </script>
 </body>
 </html>
