@@ -5,7 +5,7 @@ from datetime import datetime
 class ConsoleLogger:
     _lock = threading.Lock()
     
-    # Codes couleurs ANSI
+    # ANSI color codes
     HEADER = '\033[95m'
     BLUE = '\033[94m'
     CYAN = '\033[96m'
@@ -15,45 +15,45 @@ class ConsoleLogger:
     ENDC = '\033[0m'
     BOLD = '\033[1m'
 
-    # Mettre à False pour masquer les détails techniques (LLM load, paths, etc.)
+    # Set to False to hide technical details (LLM load, paths, etc.)
     VERBOSE = False 
 
     @staticmethod
     def _print(text):
-        """Impression thread-safe pour éviter le mélange des lignes"""
+        """Thread-safe print to avoid line mixing"""
         with ConsoleLogger._lock:
             print(text)
 
     @staticmethod
     def info(msg):
-        """Information générale (ex: Étape en cours)"""
+        """General information (e.g., Current step)"""
         ConsoleLogger._print(f"{ConsoleLogger.CYAN}ℹ️  {msg}{ConsoleLogger.ENDC}")
 
     @staticmethod
     def success(msg):
-        """Succès (ex: Document trouvé)"""
+        """Success (e.g., Document found)"""
         ConsoleLogger._print(f"{ConsoleLogger.GREEN}✅ {msg}{ConsoleLogger.ENDC}")
 
     @staticmethod
     def warning(msg):
-        """Attention (ex: PDF vide, rejeté)"""
+        """Warning (e.g., Empty PDF, rejected)"""
         ConsoleLogger._print(f"{ConsoleLogger.WARNING}⚠️  {msg}{ConsoleLogger.ENDC}")
 
     @staticmethod
     def error(msg):
-        """Erreur critique"""
+        """Critical error"""
         ConsoleLogger._print(f"{ConsoleLogger.FAIL}❌ {msg}{ConsoleLogger.ENDC}")
 
     @staticmethod
     def section(msg):
-        """Grands titres de sections"""
+        """Major section headers"""
         ConsoleLogger._print(f"\n{ConsoleLogger.HEADER}{ConsoleLogger.BOLD}=== {msg.upper()} ==={ConsoleLogger.ENDC}")
 
     @staticmethod
     def debug(msg):
-        """Détails techniques (affichés seulement si VERBOSE = True)"""
+        """Technical details (displayed only if VERBOSE = True)"""
         if ConsoleLogger.VERBOSE:
             ConsoleLogger._print(f"\033[90m⚙️  [DEBUG] {msg}{ConsoleLogger.ENDC}")
 
-# Instance globale facile à importer
+# Global instance easy to import
 logger = ConsoleLogger()

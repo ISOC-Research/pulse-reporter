@@ -1,11 +1,11 @@
-### Analyse de l'Indicateur IRI
+### IRI Indicator Analysis
 
-Cet indicateur, issu du pilier "PERFORMANCE", mesure la vitesse moyenne à laquelle les utilisateurs d'un pays peuvent envoyer des données vers Internet. Une vitesse d'upload élevée est essentielle pour des activités telles que la vidéoconférence, le cloud computing, la création de contenu et les services en ligne interactifs. Elle reflète la qualité et la capacité des réseaux d'accès ("dernier kilomètre") ainsi que l'efficacité de l'interconnexion nationale. Les entités techniques impliquées ne sont pas des objets discrets comme des AS ou des IXP, mais plutôt la performance agrégée des chemins réseau entre les utilisateurs finaux et les points de mesure.
+This indicator, attached to the PERFORMANCE pillar, measures the performance of the Internet service for networks. The source of this data is Ookla.
 
-### Pertinence YPI et Plan d'Analyse Technique
+### YPI Relevance and Technical Analysis Plan
 
-* **Évaluation de pertinence :** Cas B (Non-Pertinent).
+* **Relevance Assessment:** Case B (Not Relevant).
 
-L'analyse directe de cet indicateur de performance n'est pas possible avec le schéma YPI fourni. Le graphe de connaissances YPI est conçu pour modéliser la **topologie** d'Internet (qui est connecté à qui), les **relations structurelles** (peering, transit, dépendance) et les **politiques de routage** (RPKI, MANRS). Il ne contient pas de données de mesure de performance en temps réel ou agrégées, telles que les vitesses de connexion, la latence ou la gigue.
+The YPI schema is a knowledge graph of the topology, infrastructure, and structural relationships of the Internet (BGP peering relationships, IXP membership, RPKI records, etc.). It does not contain real-time or aggregated performance measurement data such as latency, jitter, speeds, or consistency scores from platforms like Ookla.
 
-La source de données pour cet indicateur IRI est explicitement mentionnée comme étant **Ookla**, une source externe dont les données ne sont pas intégrées dans le modèle YPI que vous m'avez présenté. Par conséquent, il n'existe aucune requête Cypher qui pourrait extraire ou calculer les vitesses d'upload à partir du graphe YPI.
+Therefore, it is impossible to directly query the YPI to analyze or validate this specific indicator. Any attempt at correlation would be indirect and speculative.

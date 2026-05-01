@@ -7,7 +7,7 @@ def get_embedding_model(task_type: str = "retrieval_document"):
 
     api_key = os.getenv("GOOGLE_API_KEY")
     if not api_key:
-        logger.error("GOOGLE_API_KEY manquante pour les embeddings.")
+        logger.error("GOOGLE_API_KEY missing for embeddings.")
         return None
 
     return GoogleGenerativeAIEmbeddings(
@@ -22,5 +22,5 @@ def get_text_embedding(text: str) -> list:
     try:
         return model.embed_query(text)
     except Exception as e:
-        logger.error(f"Erreur embedding : {e}")
+        logger.error(f"Embedding error: {e}")
         return []

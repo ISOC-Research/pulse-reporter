@@ -6,7 +6,7 @@ from src.utils.logger import logger
 
 def split_cypher_statements(query_text: str) -> List[str]:
     if not query_text or not isinstance(query_text, str):
-        logger.warning(f"⚠️ [Splitting] Input invalide: {type(query_text)}")
+        logger.warning(f"⚠️ [Splitting] Invalid input: {type(query_text)}")
         return []
     
     regex = r';(?=(?:[^\'"]*[\'"][^\'"]*[\'"])*[^\'"]*$)'

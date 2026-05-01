@@ -1,5 +1,5 @@
-// Approximation de la portée fibre : densité de points géographiques des AS
-// $countryCode = code du pays (ex: 'FR', 'SN', 'JP')
+// Fiber reach approximation: density of geographic points of ASes
+// $countryCode = country code (e.g., 'FR', 'SN', 'JP')
 
 MATCH (a:AS)-[:COUNTRY]->(c:Country {country_code: $countryCode})
 MATCH (a)-[:LOCATED_IN]->(p:Point)

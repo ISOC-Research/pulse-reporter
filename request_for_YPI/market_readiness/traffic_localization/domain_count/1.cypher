@@ -1,5 +1,5 @@
 // Identifie les domaines du ccTLD les plus requêtés depuis l'intérieur du pays.
-// Le paramètre $countryCode doit être fourni lors de l'exécution (ex: 'SN', 'FR', 'JP').
+// The $countryCode parameter must be provided during execution (e.g., 'SN', 'FR', 'JP').
 MATCH (c:Country {country_code: $countryCode})
 // Filtre les domaines qui se terminent par le ccTLD du pays (ex: .sn)
 MATCH (d:DomainName)

@@ -1,4 +1,4 @@
-// Couverture réseau : nombre d'AS enregistrés dans le pays.
+// Network coverage: number of ASes registered in the country.
 
 MATCH (a:AS)-[:COUNTRY]->(c:Country {country_code: $countryCode})
 RETURN c.name AS Country,

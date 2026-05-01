@@ -26,7 +26,7 @@ def clean_and_parse_json(content: str) -> Dict[str, Any]:
     try:
         return json.loads(json_str)
     except json.JSONDecodeError as e:
-        logger.error(f"❌ JSON malformé détecté : {e}")
+        logger.error(f"❌ Malformed JSON detected: {e}")
         last_brace = json_str.rfind('}')
         if last_brace != -1:
             try:

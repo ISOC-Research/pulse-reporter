@@ -1,5 +1,5 @@
 // Mesure la dépendance moyenne des AS d'un pays envers leurs fournisseurs de transit.
-// Le paramètre $countryCode doit être fourni lors de l'exécution (ex: 'SN', 'FR', 'JP').
+// The $countryCode parameter must be provided during execution (e.g., 'SN', 'FR', 'JP').
 MATCH (c:Country {country_code: $countryCode})<-[:COUNTRY]-(as:AS)
 // Utilise la relation de dépendance et la métrique d'hégémonie de l'IHR.
 MATCH (as)-[d:DEPENDS_ON]->(provider:AS)

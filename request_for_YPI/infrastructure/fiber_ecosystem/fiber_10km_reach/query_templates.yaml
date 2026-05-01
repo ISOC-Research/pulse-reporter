@@ -1,0 +1,42 @@
+# ============================================================================
+# Query Configuration - Fiber 10km Reach
+# Pillar: Infrastructure / Fiber Ecosystem / Fiber 10km Reach
+# ============================================================================
+
+queries:
+  "1.cypher":
+    description: "Geographic coverage of the fiber ecosystem in the country"
+    
+    template: |
+      Title: Fiber Ecosystem Geographic Coverage in {{ params.countryCode | upper }}
+      
+      This analysis provides an approximation of the fiber network's reach by measuring the density of geographic coverage points (hubs/nodes) operated by Autonomous Systems within the country. A higher number of points indicates a more robust and expansive fiber infrastructure.
+      
+      {% if results %}
+      **Analysis Results:**
+      
+      - Country: **{{ results[0].Country }}**
+      - Geographic Coverage Points: **{{ results[0].GeoCoveragePoints }}**
+      - Network Operators (AS): **{{ results[0].Operators }}**
+      
+      **Interpretation:**
+      
+      In {{ results[0].Country }}, there are **{{ results[0].Operators }}** network operators supporting **{{ results[0].GeoCoveragePoints }}** geographic coverage points. This metric helps us understand the physical footprint of the fiber ecosystem. A dense network of coverage points suggests that internet infrastructure is well-distributed, reducing the reliance on a single point of failure and increasing overall internet resilience.
+      
+      {% else %}
+      No geographic coverage data available for this country's fiber ecosystem.
+      {% endif %}
+    
+    fields:
+      Country:
+        type: "string"
+        label: "Country Name"
+      GeoCoveragePoints:
+        type: "integer"
+        label: "Number of Geographic Coverage Points"
+      Operators:
+        type: "integer"
+        label: "Number of Operators"
+    
+    sort_by: "GeoCoveragePoints"
+    sort_order: "desc"

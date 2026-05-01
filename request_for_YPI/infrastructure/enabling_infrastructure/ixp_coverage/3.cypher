@@ -1,5 +1,5 @@
-// Trouve les réseaux internationaux les mieux classés présents sur les IXP d'un pays.
-// Le paramètre $countryCode doit être fourni lors de l'exécution (ex: 'SN', 'FR', 'JP').
+// Finds the highest-ranked international networks present on the IXPs of a country.
+// The $countryCode parameter must be provided during execution (e.g., 'SN', 'FR', 'JP').
 MATCH (i:IXP)<-[:MEMBER_OF]-(a:AS)-[:COUNTRY]->(c:Country)
 WHERE c.country_code <> $countryCode
 AND EXISTS {

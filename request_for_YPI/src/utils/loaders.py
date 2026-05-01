@@ -20,16 +20,16 @@ def get_smart_prompt(file_path: str) -> str:
         langfuse = get_client()
         lf_prompt = langfuse.get_prompt(prompt_name)
         
-        logger.info(f"☁️ Prompt '{prompt_name}' chargé depuis Langfuse.")
+        logger.info(f"☁️ Prompt '{prompt_name}' loaded from Langfuse.")
         return lf_prompt.compile()
         
     except Exception as e:
-        logger.warning(f"⚠️ Impossible de charger le prompt '{prompt_name}' depuis Langfuse: {e}")
+        logger.warning(f"⚠️ Unable to load prompt '{prompt_name}' from Langfuse: {e}")
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
             return f.read()
     except FileNotFoundError:
-        logger.error(f"❌ Erreur critique : Le fichier prompt {file_path} est introuvable.")
+        logger.error(f"❌ Critical error: Prompt file {file_path} not found.")
         return ""
 
 def load_yaml_file(path: str) -> dict:

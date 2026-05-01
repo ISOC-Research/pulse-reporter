@@ -42,17 +42,17 @@ def clean_content_with_llm(raw_text: str) -> str:
         chain = prompt | llm
         
         truncated_text = raw_text[:300000] 
-        logger.info("🧹 Nettoyage intelligent du contenu en cours...")
+        logger.info("🧹 Smart content cleaning in progress...")
         try:
             result = chain.invoke({"text": truncated_text})
-            logger.info("✅ Nettoyage terminé.")
+            logger.info("✅ Cleaning completed.")
         except Exception as e:
-            logger.warning(f"⚠️ Échec du nettoyage LLM ({e}), utilisation du texte brut.")
+            logger.warning(f"⚠️ LLM cleaning failed ({e}), using raw text.")
             return raw_text
         return result.content
         
     except Exception as e:
-        logger.warning(f"⚠️ Échec du nettoyage LLM ({e}), utilisation du texte brut.")
+        logger.warning(f"⚠️ LLM cleaning failed ({e}), using raw text.")
         return raw_text 
 
 
@@ -77,7 +77,7 @@ def read_web_page(url: str) -> str:
         response = requests.get(url, headers=HEADERS, timeout=20, verify=False)
         
         if response.status_code != 200:
-             logger.error(f"Erreur HTTP {response.status_code} pour {url}")
+             logger.error(f"HTTP error {response.status_code} for {url}")
              return f"Error: Status Code {response.status_code}"
 
         content_type = response.headers.get('Content-Type', '').lower()
@@ -93,7 +93,7 @@ def read_web_page(url: str) -> str:
             source_type = "PDF"
             text = extract_text_from_pdf_bytes(response.content)
             if not text:
-                logger.warning("PDF extraction vide.")
+                logger.warning("PDF extraction empty.")
         else:
             text = trafilatura.extract(response.text, include_comments=False, include_tables=True)
             if not text:

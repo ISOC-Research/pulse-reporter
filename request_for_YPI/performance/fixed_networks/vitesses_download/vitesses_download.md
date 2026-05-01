@@ -1,11 +1,11 @@
-### Analyse de l'Indicateur IRI
+### IRI Indicator Analysis
 
-Cet indicateur, rattaché au pilier **PERFORMANCE**, mesure directement la qualité de l'expérience utilisateur en quantifiant le débit descendant (download) disponible sur les réseaux fixes et mobiles d'un pays. Un score élevé signifie que les utilisateurs bénéficient de connexions rapides et fluides, essentielles pour les usages modernes (streaming, télétravail, etc.). Les entités techniques sous-jacentes sont les réseaux des fournisseurs d'accès (`:AS`), mais l'indicateur lui-même est une métrique de performance qui n'est pas une entité de topologie.
+This indicator, attached to the PERFORMANCE pillar, measures the performance of the Internet service for networks. The source of this data is Ookla.
 
-### Pertinence YPI et Plan d'Analyse Technique
+### YPI Relevance and Technical Analysis Plan
 
-* **Évaluation de pertinence :** Cas B (Non-Pertinent).
+* **Relevance Assessment:** Case B (Not Relevant).
 
-L'indicateur "Vitesses d'upload/download" ne peut pas être analysé directement avec le schéma YPI. La source de données spécifiée par l'IRI est **Ookla**, une entité externe qui collecte des données de performance via des tests de vitesse effectués par les utilisateurs.
+The YPI schema is a knowledge graph of the topology, infrastructure, and structural relationships of the Internet (BGP peering relationships, IXP membership, RPKI records, etc.). It does not contain real-time or aggregated performance measurement data such as latency, jitter, speeds, or consistency scores from platforms like Ookla.
 
-Le graphe YPI est un modèle de la **topologie** et des **relations structurelles** de l'Internet (qui est connecté à qui, quelles ressources sont allouées, etc.). Il ne contient pas de données de **performance en temps réel** ou de **mesures de qualité d'expérience** telles que les débits montants ou descendants. Par conséquent, il n'existe aucune requête Cypher permettant d'extraire ou d'analyser cette information depuis YPI.
+Therefore, it is impossible to directly query the YPI to analyze or validate this specific indicator. Any attempt at correlation would be indirect and speculative.

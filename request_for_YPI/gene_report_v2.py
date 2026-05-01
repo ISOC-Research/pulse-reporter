@@ -9,11 +9,11 @@ from datetime import datetime
 from dotenv import load_dotenv
 from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError, wait
 import threading
-# Charger les variables d'environnement
+# Load environment variables
 load_dotenv()
 token_lock = threading.Lock()
 
-# Import des modules existants du dépôt
+# Import existing modules from the repository
 from src.utils.llm import get_llm
 from src.utils.loaders import load_text_file
 from src.tools.google import search_google
@@ -21,7 +21,7 @@ from src.tools.scraper import read_web_page
 from src.request_IYP.prompt_to_request import process_user_request_with_retry
 from src.utils.logger import logger
 
-# Configuration des chemins
+# Path configuration
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PROMPT_DIR = os.path.join(BASE_DIR, "prompt", "report_generation")
 SYSTEM_PROMPT_DIR = os.path.join(BASE_DIR, "prompt")
@@ -42,11 +42,11 @@ TOKEN_USAGE = {
     "calls": 0
 }
 
-# --- FONCTIONS UTILITAIRES ---
+# --- UTILITY FUNCTIONS ---
 
 def clean_markdown_content(text):
     """
-    Nettoie les artefacts de l'IA avant l'assemblage du rapport.
+    Cleans AI artifacts before assembling the report.
     """
     if not text: return ""
 
@@ -59,10 +59,10 @@ def clean_markdown_content(text):
 
 def convert_to_pdf(md_filepath):
     """
-    Convertit le fichier Markdown en PDF via LaTeX avec gestion des URL longues.
+    Converts the Markdown file to PDF via LaTeX handling long URLs.
     """
     pdf_filepath = md_filepath.replace(".md", ".pdf")
-    logger.info(f"⏳ Conversion en PDF Design lancée : {pdf_filepath}")
+    logger.info(f"⏳ PDF Design conversion started: {pdf_filepath}")
     
     try:
         cmd = [
@@ -85,12 +85,12 @@ def convert_to_pdf(md_filepath):
         ]
 
         subprocess.run(cmd, check=True)
-        logger.success(f"✅ PDF Professionnel (URLs corrigées) : {pdf_filepath}")
+        logger.success(f"✅ Professional PDF (URLs fixed): {pdf_filepath}")
         return pdf_filepath
     except FileNotFoundError:
-        logger.error("❌ Pandoc n'est pas installé.")
+        logger.error("❌ Pandoc is not installed.")
     except subprocess.CalledProcessError as e:
-        logger.error(f"❌ Erreur Pandoc : {e}")
+        logger.error(f"❌ Pandoc Error: {e}")
     return None
 
 def run_llm_step(prompt_text, mode="smart"):
@@ -111,16 +111,16 @@ def run_llm_step(prompt_text, mode="smart"):
             c_tokens = usage.get("completion_tokens") or usage.get("output_tokens") or 0
             t_tokens = usage.get("total_tokens") or (p_tokens + c_tokens)
             
-            # --- DÉBUT DE LA MODIFICATION ---
-            with token_lock: # Protège la mise à jour contre les collisions de threads
+            # --- BEGIN MODIFICATION ---
+            with token_lock: # Protects the update from thread collisions
                 TOKEN_USAGE["prompt_tokens"] += p_tokens
                 TOKEN_USAGE["completion_tokens"] += c_tokens
                 TOKEN_USAGE["total_tokens"] += t_tokens
                 TOKEN_USAGE["calls"] += 1
-            # --- FIN DE LA MODIFICATION ---
+            # --- END MODIFICATION ---
             
     except Exception as e:
-        logger.warning(f"⚠️ Erreur comptage tokens : {e}")
+        logger.warning(f"⚠️ Token counting error: {e}")
 
     if hasattr(response, 'content'):
         return response.content
@@ -194,10 +194,10 @@ def perform_google_search_investigation(clean_q):
         logger.error(f"❌ Google Error: {e}")
         return "Error during web investigation.", []
 
-# --- LOGIQUE IYP DANS UN PROCESSUS ISOLÉ ---
+# --- IYP LOGIC IN AN ISOLATED PROCESS ---
 
 def _worker_iyp_logic(q, country_name, system_prompt_dir, return_dict):
-    # On importe la variable globale de ce processus pour lire ses tokens
+    # Import the global variable of this process to read its tokens
     global TOKEN_USAGE 
     
     try:
@@ -213,7 +213,7 @@ def _worker_iyp_logic(q, country_name, system_prompt_dir, return_dict):
             if not isinstance(technical_intents, list): technical_intents = [raw_intents]
         except:
             return_dict['error'] = "Failed to parse intents"
-            # NOUVEAU : Sauvegarde des tokens même en cas d'erreur de parsing
+            # NEW: Save tokens even in case of parsing error
             return_dict['worker_tokens'] = dict(TOKEN_USAGE) 
             return
 
@@ -231,29 +231,29 @@ def _worker_iyp_logic(q, country_name, system_prompt_dir, return_dict):
 
         if not combined_iyp_data:
             return_dict['result'] = "No data found via Graph."
-            # NOUVEAU : Sauvegarde des tokens si aucune donnée n'est trouvée
+            # NEW: Save tokens if no data is found
             return_dict['worker_tokens'] = dict(TOKEN_USAGE)
             return
 
         synth_prompt = load_text_file(os.path.join(system_prompt_dir, "IYP/result_synthesizer.md"))
         final_answer = run_llm_step(synth_prompt.replace("{{INVESTIGATIVE_QUESTION}}", q).replace("{{RAW_RESULTS_DATA}}", json.dumps(combined_iyp_data)), mode="smart")
         
-        # NOUVEAU : Succès complet, on sauvegarde les tokens et le résultat
+        # NEW: Full success, save tokens and result
         return_dict['worker_tokens'] = dict(TOKEN_USAGE)
         return_dict['result'] = final_answer
 
     except Exception as e:
         return_dict['error'] = str(e)
-        # NOUVEAU : On sauve les tokens même si le processus crashe violemment
+        # NEW: Save tokens even if the process crashes violently
         return_dict['worker_tokens'] = dict(TOKEN_USAGE)
 
 
 def process_single_question(q, country_name):
     clean_q = q.split(']:')[-1].strip() if ']:' in q else q
-    logger.info(f"🚀 Traitement Question : {clean_q[:50]}...")
+    logger.info(f"🚀 Processing Question: {clean_q[:50]}...")
     
     if "[GOOGLE-SEARCH]" in q:
-        logger.info(f"🌐 Lancement recherche Google DIRECTE pour : {clean_q[:30]}")
+        logger.info(f"🌐 Launching DIRECT Google search for: {clean_q[:30]}")
         answer, sources = perform_google_search_investigation(clean_q)
         return {"question": q, "answer": answer, "sources": sources}
 
@@ -269,13 +269,13 @@ def process_single_question(q, country_name):
         p.join(timeout=160)
         
         if p.is_alive():
-            logger.warning(f"KILL PROCESS pour : {clean_q[:30]}...")
+            logger.warning(f"KILL PROCESS for: {clean_q[:30]}...")
             p.terminate()
             p.join()
-            logger.info("Basculement Google immédiat post-kill...")
+            logger.info("Immediate Google fallback post-kill...")
             answer, sources = perform_google_search_investigation(clean_q)
             return {"question": q, "answer": f"(Timeout Graph) {answer}", "sources": sources}
-        # Récupération et ajout des tokens du processus isolé
+        # Retrieve and add tokens from isolated process
         if 'worker_tokens' in return_dict:
             with token_lock:
                 for k in ["prompt_tokens", "completion_tokens", "total_tokens", "calls"]:
@@ -285,34 +285,34 @@ def process_single_question(q, country_name):
             
         return {"question": q, "answer": return_dict.get('result', "No Data"), "sources": ["Internal Graph"]}
 
-    return {"question": q, "answer": "Format non supporté", "sources": []}
+    return {"question": q, "answer": "Format not supported", "sources": []}
 
 
 def process_section_workflow(country_name, section):
     """
-    Exécute le workflow pour UNE section de manière ISOLÉE (Stateless).
-    Modifié pour permettre l'exécution parallèle sans dépendance au contexte précédent.
+    Executes the workflow for ONE section in an ISOLATED (Stateless) manner.
+    Modified to allow parallel execution without dependence on previous context.
     """
-    logger.section(f"🚀 DÉMARRAGE THREAD SECTION : {section['name']}")
+    logger.section(f"🚀 STARTING THREAD SECTION: {section['name']}")
     
     try:
-        # 1. Génération des questions
-        # On charge le prompt spécifique de la section
+        # 1. Question generation
+        # Load the specific prompt for the section
         section_strategy = load_text_file(os.path.join(PROMPT_DIR, section['file']))
         arch_template = load_text_file(os.path.join(SYSTEM_PROMPT_DIR, "question_generator_agent.md"))
         
-        # On injecte uniquement la stratégie de la section, sans historique contextuel
+        # Inject only the section strategy, without contextual history
         prompt_text = arch_template.replace("{{SECTION_INVESTIGATION_PROMPT}}", section_strategy).replace("[COUNTRY_NAME]", country_name)
         
         raw_questions_response = run_llm_step(prompt_text)
         raw_questions = clean_llm_output(raw_questions_response)
         
         questions = [line.strip() for line in raw_questions.split('\n') if '[' in line and ']' in line]
-        logger.info(f"📋 {section['name']} : {len(questions)} questions générées.")
+        logger.info(f"📋 {section['name']}: {len(questions)} questions generated.")
 
-        # 2. Investigation (Recherche Google / Graph)
+        # 2. Investigation (Google Search / Graph)
         findings = []
-        # On utilise un ThreadPool interne pour les questions de cette section
+        # Use an internal ThreadPool for questions in this section
         with ThreadPoolExecutor(max_workers=4) as executor:
             future_to_question = {
                 executor.submit(process_single_question, q, country_name): q 
@@ -324,27 +324,27 @@ def process_section_workflow(country_name, section):
                     result = future.result(timeout=600)
                     findings.append(result)
                 except Exception as e:
-                    logger.error(f"💥 Erreur question '{q}' dans {section['name']} : {e}")
+                    logger.error(f"💥 Question error '{q}' in {section['name']}: {e}")
                     findings.append({"question": q, "answer": f"Error: {e}", "sources": []})
 
-        # Sauvegarde intermédiaire des recherches (RAW)
+        # Intermediate save of searches (RAW)
         findings_text_block = ""
         for item in findings:
             entry = f"### Q: {item['question']}\nANSWER: {item['answer']}\nSOURCE: {item.get('sources', [])}\n\n"
             findings_text_block += entry
 
-        # 3. Rédaction du chapitre
-        # Note : On ne passe plus 'previous_context' car on veut de l'isolation pour le parallélisme
+        # 3. Chapter drafting
+        # Note: 'previous_context' is no longer passed for isolation and parallelism
         final_report_markdown = generate_report_section(country_name, section['id'], findings_text_block)
         
-        # SAUVEGARDE UNITAIRE (Toujours utile)
+        # UNIT SAVE (Always useful)
         if final_report_markdown:
             section_filename = f"CHAPTER_{section['id']}_{section['name']}_{country_name}.md"
             with open(section_filename, "w", encoding="utf-8") as f:
                 f.write(final_report_markdown)
-            logger.success(f"💾 Chapitre sauvegardé : {section['name']}")
+            logger.success(f"💾 Chapter saved: {section['name']}")
 
-        # On retourne un dictionnaire complet pour permettre le réassemblage ordonné plus tard
+        # Return a complete dictionary to allow ordered reassembly later
         return {
             "id": section['id'],
             "name": section['name'],
@@ -353,7 +353,7 @@ def process_section_workflow(country_name, section):
         }
         
     except Exception as e:
-        logger.error(f"🔥 Erreur majeure section {section['name']} : {e}")
+        logger.error(f"🔥 Major error in section {section['name']}: {e}")
         return {
             "id": section['id'],
             "name": section['name'],
@@ -366,13 +366,13 @@ def process_section_workflow(country_name, section):
 
 def generate_report_section(country_name, section_id, findings_text):
     """
-    Rédige une section spécifique.
-    Modifié : Suppression du bloc 'Contextual Memory' pour éviter les hallucinations croisées en parallèle.
+    Drafts a specific section.
+    Modified: Removed 'Contextual Memory' block to prevent cross-hallucinations in parallel.
     """
     section = next((s for s in REPORT_SECTIONS if s["id"] == section_id), None)
     if not section: return None
     
-    # Le prompt est simplifié pour se concentrer uniquement sur la tâche actuelle
+    # The prompt is simplified to focus solely on the current task
     writer_prompt = f"""
     You are a Senior Strategic Analyst for a National Intelligence Agency.
     Draft the Chapter '{section['name']}' for the Country Report: **{country_name}**.
@@ -415,7 +415,7 @@ def generate_report_section(country_name, section_id, findings_text):
 
 
 def generate_global_synthesis(country_name, full_report_content):
-    logger.info(f"🧠 DÉMARRAGE DE L'ANALYSE STRATÉGIQUE (Synthèse) pour : {country_name}")
+    logger.info(f"🧠 STARTING STRATEGIC ANALYSIS (Synthesis) for: {country_name}")
     prompt_path = os.path.join(PROMPT_DIR, "part_7_synthesis.md")
     synthesis_template = load_text_file(prompt_path)
     
@@ -434,9 +434,9 @@ def generate_global_synthesis(country_name, full_report_content):
     return clean_llm_output(response)
 
 def generate_full_report(country_name):
-    logger.info(f"🌍 DÉMARRAGE DU RAPPORT PARALLÈLE (BATCH 3x3) POUR : {country_name}")
+    logger.info(f"🌍 STARTING PARALLEL REPORT (3x3 BATCH) FOR: {country_name}")
     
-    # En-tête du fichier Markdown final
+    # Header of the final Markdown file
     full_report_md = "---\n"
     full_report_md += f'title: "STRATEGIC COUNTRY REPORT: {country_name.upper()}"\n'
     full_report_md += 'author: "Automated Strategic Analyst (v2.2 Parallel)"\n' 
@@ -445,15 +445,15 @@ def generate_full_report(country_name):
 
     all_results = []
 
-    # DÉFINITION DES BATCHS (3 par 3)
+    # DEFINITION OF BATCHES (3 by 3)
     batch_1_sections = REPORT_SECTIONS[:3] # Sections 1, 2, 3
     batch_2_sections = REPORT_SECTIONS[3:] # Sections 4, 5, 6
 
     def run_batch(sections_batch, batch_name):
-        """Lance un groupe de sections en parallèle et attend la fin."""
-        logger.info(f"🏁 Lancement du {batch_name} ({len(sections_batch)} sections en parallèle)...")
+        """Launches a group of sections in parallel and waits for completion."""
+        logger.info(f"🏁 Launching {batch_name} ({len(sections_batch)} sections in parallel)...")
         results = []
-        # Max workers = 3 pour traiter le batch entier d'un coup
+        # Max workers = 3 to process the entire batch at once
         with ThreadPoolExecutor(max_workers=3) as executor:
             future_to_section = {
                 executor.submit(process_section_workflow, country_name, sec): sec 
@@ -464,22 +464,22 @@ def generate_full_report(country_name):
                 results.append(res)
         return results
 
-    # --- EXÉCUTION BATCH 1 ---
-    logger.info("⚡ Démarrage Batch 1 (Géopolitique, Infra, Marché)...")
+    # --- BATCH 1 EXECUTION ---
+    logger.info("⚡ Starting Batch 1 (Geopolitics, Infra, Market)...")
     results_b1 = run_batch(batch_1_sections, "BATCH 1")
     all_results.extend(results_b1)
-    logger.success("✅ BATCH 1 TERMINÉ")
+    logger.success("✅ BATCH 1 COMPLETED")
 
-    # --- EXÉCUTION BATCH 2 ---
-    logger.info("⚡ Démarrage Batch 2 (Localisation, Sécurité, Gouvernance)...")
+    # --- BATCH 2 EXECUTION ---
+    logger.info("⚡ Starting Batch 2 (Localization, Security, Governance)...")
     results_b2 = run_batch(batch_2_sections, "BATCH 2")
     all_results.extend(results_b2)
-    logger.success("✅ BATCH 2 TERMINÉ")
+    logger.success("✅ BATCH 2 COMPLETED")
 
-    # --- ASSEMBLAGE DU RAPPORT ---
-    logger.info("🧩 Assemblage et Tri des sections...")
+    # --- REPORT ASSEMBLY ---
+    logger.info("🧩 Assembling and Sorting sections...")
     
-    # IMPORTANT : On trie les résultats par ID (1, 2, 3...) car le parallélisme les a mélangés
+    # IMPORTANT: Sort results by ID (1, 2, 3...) because parallelism mixed them up
     all_results.sort(key=lambda x: x['id'])
 
     raw_text_for_synthesis = ""
@@ -489,14 +489,14 @@ def generate_full_report(country_name):
             full_report_md += f"# {res['name']}\n\n"
             full_report_md += res['content'] + "\n\n\\newpage\n\n"
             
-            # On stocke le texte pour la synthèse finale
+            # Store text for final synthesis
             raw_text_for_synthesis += f"\n\n--- CHAPTER: {res['name']} ---\n{res['content']}"
         else:
-            logger.warning(f"⚠️ Contenu vide ou erreur pour la section {res['name']}")
+            logger.warning(f"⚠️ Empty content or error for section {res['name']}")
 
-    # --- GÉNÉRATION DE LA SYNTHÈSE FINALE ---
-    # La synthèse se fait toujours à la fin car elle a besoin de tout le contenu
-    logger.info("⏳ Génération de la synthèse finale (Strategic Roadmap)...")
+    # --- FINAL SYNTHESIS GENERATION ---
+    # Synthesis always happens at the end because it needs all content
+    logger.info("⏳ Generating final synthesis (Strategic Roadmap)...")
     try:
         if len(raw_text_for_synthesis) > 150000:
              raw_text_for_synthesis = raw_text_for_synthesis[:150000] + "\n[TRUNCATED]"
@@ -505,14 +505,14 @@ def generate_full_report(country_name):
         full_report_md += "# Strategic Synthesis & Roadmap\n\n" + synthesis_content + "\n\n"
         
     except Exception as e:
-        logger.error(f"🔥 Erreur synthèse : {e}")
+        logger.error(f"🔥 Synthesis error: {e}")
 
-    # --- SAUVEGARDE ET CONVERSION ---
+    # --- SAVE AND CONVERSION ---
     final_filename = f"FULL_REPORT_{country_name}_{datetime.now().strftime('%Y%m%d')}.md"
     with open(final_filename, "w", encoding="utf-8") as f:
         f.write(full_report_md)
     
-    logger.success(f"🏆 RAPPORT TERMINÉ : {final_filename}")
+    logger.success(f"🏆 REPORT COMPLETED: {final_filename}")
     convert_to_pdf(final_filename)
 
 

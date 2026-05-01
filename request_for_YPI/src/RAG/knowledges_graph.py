@@ -20,7 +20,7 @@ def get_local_driver():
         driver.verify_connectivity()
         return driver
     except Exception as e:
-        logger.error(f"Impossible de se connecter à Neo4j Local: {e}")
+        logger.error(f"Unable to connect to Local Neo4j: {e}")
         raise e
 
 def setup_local_graph():
@@ -35,7 +35,7 @@ def setup_local_graph():
         result = session.run(check_index_query, name="chunk_vector_index").data()
         
         if not result:
-            logger.info("Création de l'index vectoriel 'chunk_vector_index'...")
+            logger.info("Creating vector index 'chunk_vector_index'...")
             create_index_query = f"""
             CREATE VECTOR INDEX chunk_vector_index IF NOT EXISTS
             FOR (c:Chunk) ON (c.embedding)
@@ -46,9 +46,9 @@ def setup_local_graph():
             """
             try:
                 session.run(create_index_query)
-                logger.info("Index vectoriel créé avec succès.")
+                logger.info("Vector index successfully created.")
             except Exception as e:
-                logger.error(f"Erreur création index vectoriel: {e}")
+                logger.error(f"Error creating vector index: {e}")
         else:
             logger.debug("L'index vectoriel existe déjà.")
     
@@ -86,9 +86,9 @@ def store_document_with_chunks(doc_data: dict, chunks: list):
     try:
         with driver.session() as session:
             session.run(query, doc=doc_data, chunks=chunks)
-            logger.info(f"Document stocké : {doc_data['url']} avec {len(chunks)} chunks.")
+            logger.info(f"Document stored: {doc_data['url']} with {len(chunks)} chunks.")
     except Exception as e:
-        logger.error(f"Erreur lors du stockage dans Neo4j Local: {e}")
+        logger.error(f"Error during storage in Local Neo4j: {e}")
         raise e
     finally:
         driver.close()
@@ -104,7 +104,7 @@ def is_source_in_rag(url: str) -> bool:
             result = session.run(query, url=url).single()
             return result is not None
     except Exception as e:
-        logger.error(f"Erreur lors de la vérification de la source dans Neo4j Local: {e}")
+        logger.error(f"Error checking source in Local Neo4j: {e}")
         return False
     finally:
         driver.close()

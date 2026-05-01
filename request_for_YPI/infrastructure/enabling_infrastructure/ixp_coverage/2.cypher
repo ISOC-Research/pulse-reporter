@@ -1,5 +1,5 @@
-// Compte les membres locaux et internationaux pour chaque IXP d'un pays.
-// Le paramètre $countryCode doit être fourni lors de l'exécution (ex: 'SN', 'FR', 'JP').
+// Counts the local and international members for each IXP in a country.
+// The $countryCode parameter must be provided during execution (e.g., 'SN', 'FR', 'JP').
 MATCH (i:IXP)<-[:MEMBER_OF]-(a:AS)-[:COUNTRY]->(c:Country)
 WITH i, c, a, (CASE WHEN c.country_code = $countryCode THEN 1 ELSE 0 END) AS local
 WHERE c.country_code IS NOT NULL

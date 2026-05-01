@@ -1,5 +1,5 @@
 // Identifie les fournisseurs de transit pour un pays donné et compte leurs clients locaux.
-// Le paramètre $countryCode doit être fourni lors de l'exécution (ex: 'SN', 'FR', 'JP').
+// The $countryCode parameter must be provided during execution (e.g., 'SN', 'FR', 'JP').
 MATCH (c:Country {country_code: $countryCode})<-[:COUNTRY]-(as:AS)
 // Utilise BGPKIT (r.rel=1) pour trouver les relations Provider-to-Customer.
 MATCH (as)-[r:PEERS_WITH {rel: 1}]->(provider:AS)

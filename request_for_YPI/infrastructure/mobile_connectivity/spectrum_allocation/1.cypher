@@ -1,4 +1,4 @@
-// Allocation du spectre : préfixes originés par les AS du pays.
+// Spectrum allocation: prefixes originated by ASes in the country.
 
 MATCH (a:AS)-[:COUNTRY]->(c:Country {country_code: $countryCode})
 MATCH (a)-[:ORIGINATE]->(p:BGPPrefix)

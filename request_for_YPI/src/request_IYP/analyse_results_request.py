@@ -36,7 +36,7 @@ def analyze_and_correct_query(execution_report: Dict[str, Any], mode: str = "sma
     additional_context = execution_report.get("additional_context", "")
     
     if not history:
-        logger.error("❌ [Analyse] Aucun historique à analyser")
+        logger.error("❌ [Analysis] No history to analyze")
         return {"status": "ERROR", "message": "Aucun historique à analyser"}
 
     history_str = ""
@@ -95,7 +95,7 @@ If status is RESEARCH, the correction field MUST contain a specific task like:
     
     chain = prompt | llm
     
-    # logger.info("🧠 [Analyse] Appel au LLM pour décision...")
+    # logger.info("🧠 [Analysis] Calling LLM for decision...")
     
     # 🔧 FIX: Retry loop si le JSON est invalide
     for attempt in range(max_llm_retries):
@@ -143,11 +143,11 @@ If status is RESEARCH, the correction field MUST contain a specific task like:
             break
             
         except (json.JSONDecodeError, ValueError) as e:
-            # logger.warning(f"⚠️ [Analyse] Erreur validation JSON (tentative {attempt + 1}/{max_llm_retries}): {e}")
+            # logger.warning(f"⚠️ [Analysis] JSON validation error (tentative {attempt + 1}/{max_llm_retries}): {e}")
             
             if attempt == max_llm_retries - 1:
                 # Dernière tentative échouée
-                # logger.error(f"❌ [Analyse] JSON invalide après {max_llm_retries} tentatives")
+                # logger.error(f"❌ [Analysis] Invalid JSON after {max_llm_retries} tentatives")
                 # logger.debug(f"Contenu brut final: {response.content[:800]}")
                 return {
                     "status": "ERROR",
@@ -167,8 +167,8 @@ If status is RESEARCH, the correction field MUST contain a specific task like:
     
     # 🔧 FIX: Vérifier que le champ correction n'est pas None/vide pour RESEARCH
     if status == "RESEARCH" and (not final_query or final_query.strip() == ""):
-        # logger.warning("⚠️ [Analyse] Status=RESEARCH mais correction vide/null!")
-        # logger.warning("   Le LLM n'a pas fourni d'intent de recherche exploitable")
+        # logger.warning("⚠️ [Analysis] Status=RESEARCH but correction empty/null!")
+        # logger.warning("   The LLM did not provide an exploitable research intent")
         # logger.debug(f"   JSON complet reçu: {json.dumps(res_json, indent=2)}")
         
         # On force un passage en mode CORRECTED pour éviter la boucle
@@ -185,7 +185,7 @@ If status is RESEARCH, the correction field MUST contain a specific task like:
         processed_queries = apply_country_mapping([final_query], mapping)
         final_query = processed_queries[0]
     
-    # logger.success(f"✅ [Analyse] Décision: {status}")
+    # logger.success(f"✅ [Analysis] Decision: {status}")
     
     return {
         "status": status,
@@ -196,7 +196,7 @@ If status is RESEARCH, the correction field MUST contain a specific task like:
 
 def analyse_research_result(research_results: List[Dict[str, Any]], mode: str = "smart") -> str:
     if not research_results:
-        # logger.warning("⚠️ [Research Analysis] Aucun résultat à analyser")
+        # logger.warning("⚠️ [Research Analysis] No results to analyze")
         return "Aucun résultat de recherche à analyser."
 
     llm = get_llm(mode)
@@ -249,16 +249,16 @@ Extract the key facts discovered or missing information identified."""
 
     chain = prompt | llm
 
-    # logger.info("🔬 [Research Analysis] Extraction des connaissances...")
+    # logger.info("🔬 [Research Analysis] Knowledge extraction...")
     
     try:
         response = chain.invoke({"results": raw_data_summary})
         analysis_text = response.content.strip()
         
-        logger.success(f"✅ [Research Analysis] Analyse terminée ({len(analysis_text)} chars)")
+        logger.success(f"✅ [Research Analysis] Analysis complete ({len(analysis_text)} chars)")
         
         return f"\n{analysis_text}\n"
     
     except Exception as e:
-        # logger.error(f"❌ [Research Analysis] Erreur LLM: {e}")
+        # logger.error(f"❌ [Research Analysis] LLM error: {e}")
         return f"\n⚠️ Research analysis failed: {str(e)}\n"

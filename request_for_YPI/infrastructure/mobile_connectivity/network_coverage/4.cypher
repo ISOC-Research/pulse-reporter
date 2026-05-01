@@ -1,4 +1,4 @@
-// Mesure la couverture réseau via le peering entre AS locaux.
+// Measures network coverage via peering between local ASes.
 
 MATCH (a:AS)-[:COUNTRY]->(c:Country {country_code: $countryCode})
 MATCH (a)-[:PEERS_WITH]-(b:AS)

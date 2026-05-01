@@ -32,8 +32,8 @@ class Colors:
 
 def find_cypher_files(base_path: str = ".") -> Dict[str, List[Path]]:
     """
-    Parcourt l'arborescence et regroupe les fichiers .cypher par indicateur.
-    Retourne un dictionnaire: {chemin_indicateur: [fichiers_cypher]}
+    Traverses the directory tree and groups .cypher files by indicator.
+    Returns a dictionary: {indicator_path: [cypher_files]}
     """
     base = Path(base_path)
     indicators = {}
@@ -49,19 +49,19 @@ def find_cypher_files(base_path: str = ".") -> Dict[str, List[Path]]:
     return indicators
 
 def load_cypher_query(file_path: Path) -> str:
-    """Charge le contenu d'un fichier .cypher"""
+    """Loads the content of a .cypher file"""
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read().strip()
             return content if content else None
     except Exception as e:
-        logging.error(f"Erreur lors de la lecture de {file_path}: {e}")
+        logging.error(f"Error reading {file_path}: {e}")
         return None
 
 def test_query(driver, query: str, query_file: str) -> Tuple[bool, str, int, float]:
     """
-    Teste une requête Cypher.
-    Retourne (succès, message, nombre_résultats, temps_execution)
+    Tests a Cypher query.
+    Returns (success, message, result_count, execution_time)
     """
     try:
         params = {}
@@ -87,13 +87,13 @@ def test_query(driver, query: str, query_file: str) -> Tuple[bool, str, int, flo
         return True, "OK", result_count, elapsed_time
         
     except exceptions.CypherSyntaxError as e:
-        return False, "Erreur de syntaxe Cypher", 0, 0.0
+        return False, "Cypher syntax error", 0, 0.0
     except Exception as e:
         error_msg = str(e)[:150]
-        return False, f"Erreur: {error_msg}", 0, 0.0
+        return False, f"Error: {error_msg}", 0, 0.0
 
 def format_indicator_path(path: str) -> Tuple[str, str, str]:
-    """Sépare le chemin en pilier / catégorie / indicateur."""
+    """Separates the path into pillar / category / indicator."""
     parts = path.split(os.sep)
     pilier = parts[0] if parts else ""
     categorie = parts[1] if len(parts) > 1 else ""
@@ -101,19 +101,19 @@ def format_indicator_path(path: str) -> Tuple[str, str, str]:
     return pilier, categorie, indicateur
 
 def main():
-    print(f"{Colors.BOLD}{'='*80}\nTest des requêtes Cypher - YPI\n{'='*80}{Colors.RESET}")
-    print(f"Paramètres de test: country='{TEST_COUNTRY_CODE}', domain='{TEST_DOMAIN_NAME}', asn={TEST_HOSTING_ASN}\n")
+    print(f"{Colors.BOLD}{'='*80}\nCypher Queries Test - YPI\n{'='*80}{Colors.RESET}")
+    print(f"Test parameters: country='{TEST_COUNTRY_CODE}', domain='{TEST_DOMAIN_NAME}', asn={TEST_HOSTING_ASN}\n")
     
     indicators = find_cypher_files()
-    print(f"Trouvé {len(indicators)} indicateur(s) avec des requêtes.\n")
+    print(f"Found {len(indicators)} indicator(s) with queries.\n")
     
     total_queries, passed_queries, failed_queries, skipped_queries = 0, 0, 0, 0
     
-    print(f"{Colors.YELLOW}Connexion à Neo4j...{Colors.RESET}")
+    print(f"{Colors.YELLOW}Connecting to Neo4j...{Colors.RESET}")
     try:
         with GraphDatabase.driver(URI, auth=AUTH) as driver:
             driver.verify_connectivity()
-            print(f"{Colors.GREEN}✓ Connexion réussie{Colors.RESET}\n")
+            print(f"{Colors.GREEN}✓ Connection successful{Colors.RESET}\n")
             
             for indicator_path in sorted(indicators.keys()):
                 cypher_files = indicators[indicator_path]
@@ -121,8 +121,8 @@ def main():
                 
                 print(f"{Colors.BOLD}{Colors.BLUE}{pilier}{Colors.RESET} / {Colors.BOLD}{categorie}{Colors.RESET} / {Colors.BOLD}{indicateur}{Colors.RESET}:")
                 
-                # Boucle pour tester 1.cypher, 2.cypher, etc.
-                for i in range(1, 7):  # On suppose qu'on a au max 6 requêtes par indicateur
+                # Loop to test 1.cypher, 2.cypher, etc.
+                for i in range(1, 7):  # Assuming max 6 queries per indicator
                     expected_file = next((f for f in cypher_files if f.name == f"{i}.cypher"), None)
                     
                     if expected_file and expected_file.exists():
@@ -130,7 +130,7 @@ def main():
                         query_content = load_cypher_query(expected_file)
                         
                         if not query_content:
-                            print(f"  cypher{i}: {Colors.YELLOW}SKIP{Colors.RESET} (fichier vide)")
+                            print(f"  cypher{i}: {Colors.YELLOW}SKIP{Colors.RESET} (empty file)")
                             skipped_queries += 1
                             continue
                         
@@ -138,31 +138,31 @@ def main():
                         
                         if success:
                             time_str = f"{exec_time*1000:.0f}ms" if exec_time < 1 else f"{exec_time:.2f}s"
-                            print(f"  cypher{i}: {Colors.GREEN}✓ VALIDATED{Colors.RESET} ({count} résultats en {time_str})")
+                            print(f"  cypher{i}: {Colors.GREEN}✓ VALIDATED{Colors.RESET} ({count} results in {time_str})")
                             passed_queries += 1
                         else:
                             print(f"  cypher{i}: {Colors.RED}✗ FAILED{Colors.RESET} - {message}")
                             failed_queries += 1
 
-            print(f"{Colors.BOLD}{'='*80}\n{Colors.BOLD}RÉSUMÉ DES TESTS\n{'='*80}{Colors.RESET}")
-            print(f"Total de requêtes testées:  {total_queries}")
-            print(f"{Colors.GREEN}✓ Validées:                 {passed_queries}{Colors.RESET}")
-            print(f"{Colors.RED}✗ Échouées:                 {failed_queries}{Colors.RESET}")
-            print(f"{Colors.YELLOW}⊘ Ignorées (vides):         {skipped_queries}{Colors.RESET}")
+            print(f"{Colors.BOLD}{'='*80}\n{Colors.BOLD}TEST SUMMARY\n{'='*80}{Colors.RESET}")
+            print(f"Total queries tested:       {total_queries}")
+            print(f"{Colors.GREEN}✓ Passed:                   {passed_queries}{Colors.RESET}")
+            print(f"{Colors.RED}✗ Failed:                   {failed_queries}{Colors.RESET}")
+            print(f"{Colors.YELLOW}⊘ Skipped (empty):          {skipped_queries}{Colors.RESET}")
             
             tests_executed = passed_queries + failed_queries
             if tests_executed > 0:
                 success_rate = (passed_queries / tests_executed) * 100
-                print(f"\n{Colors.BOLD}Taux de réussite: {success_rate:.1f}%{Colors.RESET} ({passed_queries}/{tests_executed} requêtes)")
+                print(f"\n{Colors.BOLD}Success rate: {success_rate:.1f}%{Colors.RESET} ({passed_queries}/{tests_executed} queries)")
             else:
-                print(f"\n{Colors.YELLOW}Aucune requête testée{Colors.RESET}")
+                print(f"\n{Colors.YELLOW}No queries tested{Colors.RESET}")
             
     except exceptions.ServiceUnavailable:
-        print(f"{Colors.RED}✗ Erreur: Impossible de se connecter à Neo4j{Colors.RESET}")
+        print(f"{Colors.RED}✗ Error: Unable to connect to Neo4j{Colors.RESET}")
     except exceptions.AuthError:
-        print(f"{Colors.RED}✗ Erreur d'authentification{Colors.RESET}")
+        print(f"{Colors.RED}✗ Authentication error{Colors.RESET}")
     except Exception as e:
-        print(f"{Colors.RED}✗ Erreur inattendue: {e}{Colors.RESET}")
+        print(f"{Colors.RED}✗ Unexpected error: {e}{Colors.RESET}")
 
 if __name__ == "__main__":
     logging.getLogger("neo4j").setLevel(logging.ERROR)

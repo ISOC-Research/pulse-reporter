@@ -1,5 +1,5 @@
 // Analyse la distribution géographique de l'hébergement des 100 domaines ccTLD les plus populaires.
-// Le paramètre $countryCode doit être fourni lors de l'exécution (ex: 'SN', 'FR', 'JP').
+// The $countryCode parameter must be provided during execution (e.g., 'SN', 'FR', 'JP').
 MATCH (d:DomainName)
 WHERE d.name ENDS WITH '.' + toLower($countryCode)
 

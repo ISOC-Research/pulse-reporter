@@ -12,7 +12,7 @@ def input_in_rag(text: str, url: str, source_type: str):
     Gère le nettoyage, le découpage, la vectorisation et le stockage.
     """
     try:
-        logger.info(f"💾 Traitement RAG pour : {url}")
+        logger.info(f"💾 RAG processing for: {url}")
 
         text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=1000,
@@ -22,12 +22,12 @@ def input_in_rag(text: str, url: str, source_type: str):
         chunks_text = text_splitter.split_text(text)
         
         if not chunks_text:
-            logger.warning("❌ RAG: Aucun chunk généré (texte vide ?)")
+            logger.warning("❌ RAG: No chunks generated (empty text?)")
             return
 
         embedding_model = get_embedding_model(task_type="retrieval_document")
         if not embedding_model:
-            logger.error("❌ RAG Skip: Modèle d'embedding non chargé (Vérifiez la clé API).")
+            logger.error("❌ RAG Skip: Embedding model not loaded (Check API key).")
             return
 
         vectors = embedding_model.embed_documents(chunks_text)
@@ -52,7 +52,7 @@ def input_in_rag(text: str, url: str, source_type: str):
         }
 
         store_document_with_chunks(doc_data, chunks_data)
-        logger.info(f"✅ Succès RAG : {len(chunks_data)} chunks vectorisés et stockés.")
+        logger.info(f"✅ RAG Success: {len(chunks_data)} chunks vectorized and stored.")
 
     except Exception as e:
-        logger.error(f"⚠️ Erreur critique dans input_in_rag : {e}")
+        logger.error(f"⚠️ Critical error in input_in_rag: {e}")

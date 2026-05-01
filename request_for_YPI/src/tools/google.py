@@ -167,7 +167,7 @@ def run_deterministic_investigation(internal_data: str, country: str, indicator_
                 if result:
                     final_findings.append(result)
             except Exception as exc:
-                logger.error(f"      💥 Erreur sur un lien : {exc}")
+                logger.error(f"      💥 Error on a link: {exc}")
 
-    logger.info(f"   ✅ Fin. {len(final_findings)} documents retenus.")
+    logger.info(f"   ✅ Done. {len(final_findings)} documents kept.")
     return "\n\n".join(final_findings)

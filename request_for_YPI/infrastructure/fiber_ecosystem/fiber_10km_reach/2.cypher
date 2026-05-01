@@ -1,5 +1,5 @@
-// Approxime la proximité fibre : nombre de voisins réseau locaux.
-// Plus un AS a de connexions PEERS_WITH, plus il a une "portée" courte.
+// Approximates fiber proximity: number of local network neighbors.
+// The more PEERS_WITH connections an AS has, the shorter its "reach".
 
 MATCH (a:AS)-[:COUNTRY]->(c:Country {country_code: $countryCode})
 MATCH (a)-[:PEERS_WITH]-(b:AS)
