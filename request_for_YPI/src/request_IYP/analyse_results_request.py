@@ -12,7 +12,7 @@ from src.utils.logger import logger
 from langfuse import observe
 
 def clean_json_string(content: str) -> str:
-    """Nettoie la chaîne de caractères pour ne garder que le JSON."""
+    """"Cleans the string to keep only the JSON."""
     content = re.sub(r'```json\s*', '', content)
     content = re.sub(r'```', '', content)
     return content.strip()
@@ -20,15 +20,17 @@ def clean_json_string(content: str) -> str:
 @observe(name="Analyse_et_Correction")
 def analyze_and_correct_query(execution_report: Dict[str, Any], mode: str = "smart", max_llm_retries: int = 2) -> Dict[str, Any]:
     """
-    Analyse l'historique d'exécution et décide de la prochaine action.
+    
+Analyzes the execution history and decides on the next action.
     
     Args:
-        execution_report: Dict contenant user_intent, history, additional_context
-        mode: Mode LLM à utiliser
-        max_llm_retries: Nombre de tentatives si le LLM ne fournit pas un JSON valide
+        execution_report: Dictionary containing user_intent, history, additional_context
+        mode: LLM mode to use
+
+        max_llm_retries: Number of attempts if the LLM does not provide a valid JSON
     
     Returns:
-        Dict avec status (VALID/CORRECTED/RESEARCH), message, et correction
+        Dictionary with status (VALID/CORRECTED/RESEARCH), message, and correction
     """
     llm = get_llm(mode)
     user_intent = execution_report.get("user_intent", "")
@@ -37,7 +39,7 @@ def analyze_and_correct_query(execution_report: Dict[str, Any], mode: str = "sma
     
     if not history:
         logger.error("❌ [Analysis] No history to analyze")
-        return {"status": "ERROR", "message": "Aucun historique à analyser"}
+        return {"status": "ERROR", "message": "No history to analyze"}
 
     history_str = ""
     for h in history:
@@ -52,19 +54,19 @@ TOTAL ROWS: {rows}
 ---"""
         else:
             history_str += f"""
-[Tentative {h['attempt']}] QUERY: {h['query']}
-RESULTAT: {status_label} ({rows} lignes)
-{f"ERREUR: {h['error']}" if h.get('error') else f"DATA SAMPLE: {json.dumps(h.get('data_sample', []), indent=2)}"}
+[Attempt {h['attempt']}] QUERY: {h['query']}
+RESULT: {status_label} ({rows} lines)
+{f"ERROR: {h['error']}" if h.get('error') else f"DATA SAMPLE: {json.dumps(h.get('data_sample', []), indent=2)}"}
 ---"""
 
-    # Chargement du schéma et du prompt
+    # Loading the diagram and prompt
     current_dir = Path(__file__).parent.parent.parent
     schema_path = os.path.join(current_dir, "prompt", "IYP", "IYP_documentation.txt")
     schema_content = load_text_file(schema_path)
 
     system_prompt = load_text_file(os.path.join(current_dir, "prompt", "IYP", "analyse_cypher_request_results.txt"))
 
-    # Prompt humain amélioré avec contexte de recherche visible
+    # Improved human prompt with visible search context
     human_prompt = """
 User Intent: {intent}
 
@@ -97,10 +99,10 @@ If status is RESEARCH, the correction field MUST contain a specific task like:
     
     # logger.info("🧠 [Analysis] Calling LLM for decision...")
     
-    # 🔧 FIX: Retry loop si le JSON est invalide
+    # 🔧 FIX: Retry loop if the JSON is invalid
     for attempt in range(max_llm_retries):
         try:
-            # Appel au LLM
+            # Call to LLM
             response = chain.invoke({
                 "intent": user_intent,
                 "history_text": history_str,
@@ -113,14 +115,14 @@ If status is RESEARCH, the correction field MUST contain a specific task like:
             
 
             cleaned_content = clean_json_string(response.content)
-            # logger.debug(f"📄 [Analyse] Contenu JSON nettoyé: {cleaned_content[:300]}...")
+            # logger.debug(f"📄 [Analysis] Cleaned JSON content: {cleaned_content[:300]}...")
             res_json = json.loads(cleaned_content)
             
-            # Validation du JSON
+            # JSON validation
             if "status" not in res_json:
                 raise ValueError("Missing 'status' field in JSON")
             
-            # 🔧 FIX: Le champ correction peut être absent ou explicitement null
+            # 🔧 FIX: The correction field can be absent or explicitly null
             status = res_json.get("status")
             correction = res_json.get("correction", None)
             
@@ -138,49 +140,49 @@ If status is RESEARCH, the correction field MUST contain a specific task like:
                 if isinstance(correction, str) and correction.strip() == "":
                     raise ValueError("Status is RESEARCH but correction field is empty string")
             
-            # Si on arrive ici, le JSON est valide
-            # print("   ✅ JSON validé avec succès\n")
+            # If we get here, the JSON is valid
+            # print("   ✅ JSON validated successfully\n")
             break
             
         except (json.JSONDecodeError, ValueError) as e:
-            # logger.warning(f"⚠️ [Analysis] JSON validation error (tentative {attempt + 1}/{max_llm_retries}): {e}")
+            # logger.warning(f"⚠️ [Analysis] JSON validation error (attempt {attempt + 1}/{max_llm_retries}): {e}")
             
             if attempt == max_llm_retries - 1:
-                # Dernière tentative échouée
-                # logger.error(f"❌ [Analysis] Invalid JSON after {max_llm_retries} tentatives")
-                # logger.debug(f"Contenu brut final: {response.content[:800]}")
+                # Last attempt failed
+                # logger.error(f"❌ [Analysis] Invalid JSON after {max_llm_retries} attempts")
+                # logger.debug(f"Final raw content: {response.content[:800]}")
                 return {
                     "status": "ERROR",
                     "message": f"LLM failed to provide valid JSON after {max_llm_retries} attempts: {str(e)}",
                     "corrected_query": None
                 }
             
-            # On continue le retry
+            # We continue the retry
             continue
     
     status = res_json.get("status", "CORRECTED")
     final_query = res_json.get("correction")
     
-    # 🔧 DEBUG: Afficher ce qui a été extrait
-    # logger.debug(f"📊 [Analyse] Status extrait: {status}")
-    # logger.debug(f"📊 [Analyse] Correction extraite: {final_query[:200] if final_query else 'NULL/EMPTY'}")
+    # 🔧 DEBUG: Display what was extracted
+    # logger.debug(f"📊 [Analysis] Extracted status: {status}")
+    # logger.debug(f"📊 [Analysis] Extracted correction: {final_query[:200] if final_query else 'NULL/EMPTY'}")
     
-    # 🔧 FIX: Vérifier que le champ correction n'est pas None/vide pour RESEARCH
+    # 🔧 FIX: Verify that the correction field is not None/empty for RESEARCH
     if status == "RESEARCH" and (not final_query or final_query.strip() == ""):
         # logger.warning("⚠️ [Analysis] Status=RESEARCH but correction empty/null!")
         # logger.warning("   The LLM did not provide an exploitable research intent")
-        # logger.debug(f"   JSON complet reçu: {json.dumps(res_json, indent=2)}")
+        # logger.debug(f"   Complete JSON received: {json.dumps(res_json, indent=2)}")
         
-        # On force un passage en mode CORRECTED pour éviter la boucle
+        # We force a switch to CORRECTED mode to avoid the loop
         return {
             "status": "ERROR",
             "message": "RESEARCH status but no research intent provided by LLM",
             "corrected_query": None
         }
     
-    # 🔧 FIX: Application du mapping pays uniquement pour CORRECTED
+    # 🔧 FIX: Application of country mapping only for CORRECTED
     if final_query and status == "CORRECTED":
-        logger.debug("[Analyse] Application du mapping pays...")
+        logger.debug("[Analysis] Applying country mapping...")
         mapping = load_country_mapping()
         processed_queries = apply_country_mapping([final_query], mapping)
         final_query = processed_queries[0]
@@ -197,7 +199,7 @@ If status is RESEARCH, the correction field MUST contain a specific task like:
 def analyse_research_result(research_results: List[Dict[str, Any]], mode: str = "smart") -> str:
     if not research_results:
         # logger.warning("⚠️ [Research Analysis] No results to analyze")
-        return "Aucun résultat de recherche à analyser."
+        return "No research results to analyze."
 
     llm = get_llm(mode)
 
@@ -213,9 +215,9 @@ Sample Data: {json.dumps(res.get('data_sample', []), indent=2)}
 Error: {res.get('error', 'None')}
 ---"""
     
-    # logger.debug(f"📊 [Research Analysis] Données à analyser:\n{raw_data_summary[:500]}...")
+    # logger.debug(f"📊 [Research Analysis] Data to analyze:\n{raw_data_summary[:500]}...")
     
-    # 🔧 FIX: Prompt amélioré pour analyse technique
+    # 🔧 FIX: Improved prompt for technical analysis
     system_prompt = """You are a Technical Data Librarian specialized in graph databases.
 
 Your job is to summarize technical findings from database probes into a concise "Knowledge Note".
