@@ -2,6 +2,9 @@ import requests
 from dotenv import load_dotenv
 import os
 
+# 🔥 NEW: Neo4j execution import
+from request_for_YPI.src.request_IYP.request_testing import execute_cypher_test
+
 # Load environment variables
 load_dotenv()
 
@@ -63,7 +66,7 @@ def get_indicator_value(entry, indicator):
             indicators = dim.get("indicators", {})
 
             for key, val in indicators.items():
-                if indicator in key:   # match "dnssec"
+                if indicator in key:
                     return val.get("value")
 
         return None
@@ -176,3 +179,71 @@ def find_similar_countries(country_code, year, indicator="ipv6"):
             },
             "similar": distances[:5]
         }
+
+
+# =========================
+# 🧠 ASN + ISP DATA (ENHANCED)
+# =========================
+def get_asn_by_country(country_code):
+    # 1. Get country IPv6 baseline
+    ipv6_data = extract_all_countries_indicator(2024, "ipv6")
+    country_ipv6 = next(
+        (x["average"] for x in ipv6_data if x["country"] == country_code),
+        None
+    )
+
+    if country_ipv6 is None:
+        return {"error": "No IPv6 data found for country"}
+
+    # 2. ASN query (fixed + deduplicated)
+    query = f"""
+    MATCH (a:AS)-[r:POPULATION]->(c:Country {{country_code: '{country_code}'}})
+    OPTIONAL MATCH (a)-[:NAME]->(n:Name)
+    WITH 
+        a.asn AS asn,
+        collect(DISTINCT n.name)[0] AS isp,
+        r.percent AS market_share
+    RETURN asn, isp, market_share
+    ORDER BY market_share DESC
+    LIMIT 20
+    """
+
+    result = execute_cypher_test(query)
+
+    if not result["success"]:
+        return {"error": result["error"]}
+
+    # 3. 🔥 Smarter IPv6 estimation + classification
+    enriched = []
+
+    for row in result["data"]:
+        share = row["market_share"]
+
+        # Normalize share (0–1 scale)
+        normalized = share / 100  
+
+        # Center around 0 (range: -0.5 to +0.5)
+        centered = normalized - 0.5  
+
+        # Scale influence
+        adjustment = centered * 0.4   # +/- 40%
+
+        ipv6_estimate = max(0.0, min(1.0, country_ipv6 * (1 + adjustment)))
+
+        # 🔥 Classification
+        if ipv6_estimate >= 0.7:
+            category = "High"
+        elif ipv6_estimate >= 0.4:
+            category = "Medium"
+        else:
+            category = "Low"
+
+        enriched.append({
+            "asn": row["asn"],
+            "isp": row["isp"],
+            "market_share": share,
+            "ipv6_estimate": round(ipv6_estimate, 4),
+            "category": category
+        })
+
+    return enriched
