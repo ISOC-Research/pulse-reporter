@@ -247,3 +247,60 @@ def get_asn_by_country(country_code):
         })
 
     return enriched
+
+# =========================
+# 🚨 IPv6 GAPS (NO IPv6 SUPPORT)
+# =========================
+def get_ipv6_gaps(country_code):
+
+    query = f"""
+    MATCH (c:Country {{country_code: '{country_code}'}})<-[:COUNTRY]-(as:AS)
+
+    OPTIONAL MATCH (as)-[:ORIGINATE]->(p:Prefix)
+    WHERE p.prefix CONTAINS ':'
+
+    WITH as, count(p) AS ipv6PrefixCount
+
+    WHERE ipv6PrefixCount = 0
+
+    MATCH (as)-[r:RANK]->(rank:Ranking {{name:'CAIDA ASRank'}})
+
+    OPTIONAL MATCH (as)-[:NAME]->(n:Name)
+
+    RETURN
+        as.asn AS asn,
+        collect(DISTINCT n.name)[0] AS isp,
+        r['cone:numberAsns'] AS customerConeSize
+    ORDER BY customerConeSize DESC
+    LIMIT 15
+    """
+
+    result = execute_cypher_test(query)
+
+    if not result["success"]:
+        return {"error": result["error"]}
+
+    # 🔥 Add severity classification
+    enriched = []
+
+    for row in result["data"]:
+
+        cone = row.get("customerConeSize") or 0
+
+        if cone >= 1000:
+            severity = "Critical"
+        elif cone >= 200:
+            severity = "High"
+        elif cone >= 50:
+            severity = "Medium"
+        else:
+            severity = "Low"
+
+        enriched.append({
+            "asn": row["asn"],
+            "isp": row["isp"] or "(Unnamed)",
+            "customerConeSize": cone,
+            "severity": severity
+        })
+
+    return enriched
