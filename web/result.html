@@ -80,10 +80,11 @@
 
         <button onclick="run()">Analyze</button>
         <button onclick="loadASN()">ISP IPv6</button>
+        <button onclick="loadIPv6Gaps()">IPv6 Gaps</button>
       </div>
 
       <div id="out"></div>
-      <div id="chartWrap" style="display: none; height: 300px">
+      <div id="chartWrap" style="display: none; height: 400px">
         <canvas id="chart"></canvas>
       </div>
     </div>
@@ -366,6 +367,140 @@
                 scales: { y: { beginAtZero: true, max: 100 } },
               },
             });
+          });
+      }
+      function loadIPv6Gaps() {
+        const country = document.getElementById("c").value;
+
+        if (!country) {
+          alert("Select country first");
+          return;
+        }
+
+        const out = document.getElementById("out");
+        const wrap = document.getElementById("chartWrap");
+
+        out.innerHTML = "Loading IPv6 gaps...";
+        wrap.style.display = "none";
+
+        if (chart) {
+          chart.destroy();
+        }
+
+        fetch(`/ipv6-gaps?country=${country}`)
+          .then((r) => r.json())
+          .then((data) => {
+            if (!data.gaps) {
+              out.innerHTML = `<p>${data.error || "No data"}</p>`;
+              return;
+            }
+
+            const gaps = data.gaps;
+
+            // =========================
+            // 🚨 TABLE
+            // =========================
+            let html = `
+        <h3>IPv6 Deployment Gaps</h3>
+
+        <table>
+            <tr>
+                <th>ISP</th>
+                <th>Cone Size</th>
+                <th>Severity</th>
+            </tr>
+        `;
+
+            gaps.forEach((g) => {
+              let color = "#374151";
+
+              if (g.severity === "Critical") {
+                color = "#dc2626";
+              } else if (g.severity === "High") {
+                color = "#ea580c";
+              } else if (g.severity === "Medium") {
+                color = "#ca8a04";
+              } else if (g.severity === "Low") {
+                color = "#374151";
+              }
+
+              html += `
+            <tr>
+                <td>${g.isp}</td>
+                <td>${g.customerConeSize}</td>
+                <td>
+                    <span style="
+                        padding:4px 8px;
+                        border-radius:6px;
+                        background:${color};
+                        color:white;
+                        font-weight:bold;
+                    ">
+                        ${g.severity}
+                    </span>
+                </td>
+            </tr>
+            `;
+            });
+
+            html += "</table>";
+
+            out.innerHTML = html;
+
+            // =========================
+            // 📊 CHART
+            // =========================
+            wrap.style.display = "block";
+
+            const ctx = document.getElementById("chart").getContext("2d");
+
+            chart = new Chart(ctx, {
+              type: "bar",
+
+              data: {
+                labels: gaps.map((g) => g.isp.slice(0, 18)),
+
+                datasets: [
+                  {
+                    label: "Customer Cone Size",
+
+                    data: gaps.map((g) => g.customerConeSize),
+
+                    backgroundColor: gaps.map((g) => {
+                      if (g.severity === "Critical") return "#dc2626";
+
+                      if (g.severity === "High") return "#ea580c";
+
+                      if (g.severity === "Medium") return "#ca8a04";
+
+                      return "#374151";
+                    }),
+                  },
+                ],
+              },
+
+              options: {
+                responsive: true,
+
+                plugins: {
+                  legend: {
+                    display: false,
+                  },
+                },
+
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                  },
+                },
+              },
+            });
+          })
+          .catch((err) => {
+            out.innerHTML = `
+        <p style="color:red;">
+            Error: ${err}
+        </p>`;
           });
       }
     </script>
