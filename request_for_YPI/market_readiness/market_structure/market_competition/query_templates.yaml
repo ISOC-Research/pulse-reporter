@@ -1,96 +1,88 @@
 # ============================================================================
-# Query Configuration - MARKET CONCENTRATION (HHI)
-# Pillar: Market Readiness / Market Structure
+# Query Configuration - Market Competition
+# Pillar: Market Readiness / Market Structure / Market Competition
 # ============================================================================
 
 queries:
-  # --------------------------------------------------------------------------
-  # Query 1: ISP Market Share Breakdown
-  # --------------------------------------------------------------------------
   "1.cypher":
-    description: "Breakdown of Internet Service Providers (AS) by market share (population served)"
+    description: "Market share distribution — AS population coverage percentages"
     
-    # Jinja2 Template for LLM context generation (English)
     template: |
-      Title: ISP Market Share Analysis for {{ params.countryCode | upper }}
+      Title: Internet Market Share Distribution in {{ params.countryCode | upper }}
       
-      This query analyzes the structure of the internet access market by identifying Autonomous Systems (AS) and their estimated market share based on population served. A market dominated by one or two large actors suggests high concentration and potential resilience risks (single points of failure).
+      This analysis maps the market share of each Autonomous System (internet operator) in the country, measured by the percentage of the population they serve. This directly reflects the competitive landscape of the country's internet access market.
       
       {% if results %}
-      **Market Share Ranking (Top Providers):**
+      **Market Share by Operator (Top 30):**
       
-      {% for item in results %}
-      - **Rank {{ loop.index }}:** {{ item.asName }} (AS{{ item.asn }})
-        Estimated Market Share: **{{ "%.2f"|format(item.marketSharePercent) }}%**
+      | ASN | Operator Name | Market Share (%) |
+      |-----|---------------|------------------|
+      {% for row in results %}
+      | AS{{ row.asn }} | {{ row.asName or "(unnamed)" }} | {{ "%.2f"|format(row.marketSharePercent) }} |
       {% endfor %}
       
-      {% if results|length > max_display %}
-      _({{ results|length - max_display }} other provider(s) omitted from this view)_
-      {% endif %}
+      **Interpretation:**
+      
+      A market where the top operator holds more than 50% indicates a dominant-player market with limited competition. A healthy market has multiple operators each below 30% market share.
       
       {% else %}
-      No market share data available for ASes in this country.
+      No market share data available for this country.
       {% endif %}
-
-    # Metadata for automatic formatting
+    
     fields:
       asn:
         type: "integer"
-        label: "AS Number"
+        label: "ASN"
       asName:
         type: "string"
-        label: "Provider Name"
+        label: "Operator Name"
       marketSharePercent:
         type: "float"
-        label: "Market Share"
-        format: "percentage"
-
-    # Display Configuration
-    max_display: 10
+        label: "Market Share (%)"
+        format: "float_2"
+    
     sort_by: "marketSharePercent"
     sort_order: "desc"
+    limit: 30
 
-  # --------------------------------------------------------------------------
-  # Query 2: Herfindahl-Hirschman Index (HHI) Calculation
-  # --------------------------------------------------------------------------
   "2.cypher":
-    description: "Calculation of the HHI index to measure market concentration"
+    description: "Herfindahl-Hirschman Index (HHI) — internet market concentration measure"
     
-    # Jinja2 Template for LLM context generation (English)
     template: |
-      Title: Market Concentration Index (HHI) for {{ params.countryCode | upper }}
+      Title: Internet Market Concentration (HHI) in {{ params.countryCode | upper }}
       
-      This metric calculates the Herfindahl-Hirschman Index (HHI), a standard measure of market competition. 
-      - **HHI < 1500:** Competitive Market (Good for resilience/pricing).
-      - **HHI > 2500:** Highly Concentrated (Monopoly/Oligopoly risks).
+      This analysis calculates the Herfindahl-Hirschman Index (HHI) — the standard economic measure of market concentration used by competition regulators worldwide. The HHI is the sum of the squares of each operator's market share. A higher HHI indicates a more concentrated, less competitive market.
       
       {% if results %}
-      **Analysis Results:**
+      **Market Concentration Results:**
       
-      - Calculated HHI Score: **{{ "%.0f"|format(results[0].hhi) }}**
-      - Market Classification: **{{ results[0].marketConcentration }}**
+      - Total operators in market: **{{ results[0].totalAS }}**
+      - HHI Score: **{{ "%.0f"|format(results[0].hhi) }}**
+      - Market Assessment: **{{ results[0].marketConcentration }}**
       
-      {% if results[0].hhi > 2500 %}
-      *Interpretation:* The market is highly concentrated. This indicates a significant reliance on dominant players, which may negatively impact network resilience and consumer choice.
-      {% elif results[0].hhi < 1500 %}
-      *Interpretation:* The market appears competitive with no single dominant player holding excessive power.
+      **HHI Reference Scale:**
+      
+      | HHI Range | Assessment |
+      |-----------|------------|
+      | < 1,500 | Competitive Market |
+      | 1,500 to 2,500 | Moderately Concentrated Market |
+      | > 2,500 | Highly Concentrated Market |
+      
       {% else %}
-      *Interpretation:* The market is moderately concentrated.
+      No market concentration data available for this country.
       {% endif %}
-      
-      {% else %}
-      Insufficient data to calculate HHI for this country.
-      {% endif %}
-
-    # Metadata for automatic formatting
+    
     fields:
       hhi:
         type: "float"
         label: "HHI Score"
-        format: "number"
+        format: "float_0"
+      totalAS:
+        type: "integer"
+        label: "Total Operators"
       marketConcentration:
         type: "string"
-        label: "Market Status"
-
-    # Display Configuration
-    max_display: 1
+        label: "Market Concentration Assessment"
+    
+    sort_by: "hhi"
+    sort_order: "desc"

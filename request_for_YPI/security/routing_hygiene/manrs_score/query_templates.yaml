@@ -124,3 +124,79 @@ queries:
     
     sort_by: "implementingASNs"
     sort_order: "desc"
+
+  "4.cypher":
+    description: "MANRS Action 1: Route Filtering — IRR Valid prefix registration rate"
+    
+    template: |
+      Title: MANRS Action 1 — Route Filtering (IRR Valid Rate) for {{ params.countryCode | upper }}
+      
+      This analysis measures the percentage of Autonomous Systems in the country that have their route announcements registered and validated in the Internet Routing Registry (IRR). IRR registration is the foundational prerequisite for MANRS Action 1 (Route Filtering): operators who register their routes enable peers to validate and filter BGP announcements, directly preventing route leaks and hijacks.
+      
+      {% if results %}
+      **Analysis Results:**
+      
+      - Total number of ASes: **{{ results[0].totalASNs }}**
+      - ASes with IRR-valid routes: **{{ results[0].irrValidCount }}**
+      - IRR Valid registration rate: **{{ results[0].irrValidRatePercentage }}%**
+      
+      **Interpretation:**
+      
+      An IRR Valid rate of **{{ results[0].irrValidRatePercentage }}%** means that approximately **{{ results[0].irrValidCount }}** operators have made their routing policy publicly verifiable. Peers of these operators can enforce route filters based on authoritative IRR data, which is the primary mechanism for preventing route leaks from spreading across the internet.
+      
+      {% else %}
+      No IRR registration data available for this country.
+      {% endif %}
+    
+    fields:
+      totalASNs:
+        type: "integer"
+        label: "Total Number of ASes"
+      irrValidCount:
+        type: "integer"
+        label: "ASes with IRR-Valid Routes"
+      irrValidRatePercentage:
+        type: "float"
+        label: "IRR Valid Rate (%)"
+        format: "float_2"
+    
+    sort_by: "irrValidRatePercentage"
+    sort_order: "desc"
+
+  "5.cypher":
+    description: "MANRS Action 3: Coordination — PeeringDB network registration rate"
+    
+    template: |
+      Title: MANRS Action 3 — Coordination (PeeringDB Presence Rate) for {{ params.countryCode | upper }}
+      
+      This analysis measures the percentage of Autonomous Systems in the country that are registered in PeeringDB — the internet's primary network information database. MANRS Action 3 (Coordination) requires operators to maintain accurate, up-to-date contact and routing policy information so that peers and incident responders can reach them quickly during routing events. PeeringDB registration is the most direct and verifiable evidence of this commitment.
+      
+      {% if results %}
+      **Analysis Results:**
+      
+      - Total number of ASes: **{{ results[0].totalASNs }}**
+      - ASes registered in PeeringDB: **{{ results[0].peeringdbCount }}**
+      - Coordination rate: **{{ results[0].coordinationRatePercentage }}%**
+      
+      **Interpretation:**
+      
+      A PeeringDB coordination rate of **{{ results[0].coordinationRatePercentage }}%** means that **{{ results[0].peeringdbCount }}** operators are publicly reachable and documented for interconnection coordination. Countries with high rates have a network operator community that is actively engaged in the global peering ecosystem and can respond to routing incidents quickly.
+      
+      {% else %}
+      No PeeringDB coordination data available for this country.
+      {% endif %}
+    
+    fields:
+      totalASNs:
+        type: "integer"
+        label: "Total Number of ASes"
+      peeringdbCount:
+        type: "integer"
+        label: "ASes Registered in PeeringDB"
+      coordinationRatePercentage:
+        type: "float"
+        label: "Coordination Rate (%)"
+        format: "float_2"
+    
+    sort_by: "coordinationRatePercentage"
+    sort_order: "desc"

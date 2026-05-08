@@ -41,3 +41,41 @@ queries:
     
     sort_by: "https_adoption_rate"
     sort_order: "desc"
+
+  "2.cypher":
+    description: "HTTPS adoption rate for locally queried domains — DNS query data based"
+    
+    template: |
+      Title: HTTPS Adoption for Locally Queried Domains in {{ params.countryCode | upper }}
+      
+      This analysis examines HTTPS adoption among the most queried domains in the country using local DNS query data. Unlike the Google CrUX-based metric, this reflects the actual browsing patterns of the country's internet users — domains that are heavily queried locally but not served over HTTPS represent a direct security risk to the local population.
+      
+      {% if results %}
+      **Analysis Results:**
+      
+      - Total locally queried domains: **{{ results[0].totalQueried }}**
+      - Domains resolvable to IPs (active): **{{ results[0].resolvedDomains }}**
+      - HTTPS-prefixed domains: **{{ results[0].httpsCount }}**
+      - Local HTTPS adoption rate: **{{ results[0].httpsAdoptionRate }}%**
+      
+      {% else %}
+      No locally-queried domain data available for this country.
+      {% endif %}
+    
+    fields:
+      totalQueried:
+        type: "integer"
+        label: "Total Locally Queried Domains"
+      resolvedDomains:
+        type: "integer"
+        label: "Resolvable Domains"
+      httpsCount:
+        type: "integer"
+        label: "HTTPS-Prefixed Domains"
+      httpsAdoptionRate:
+        type: "float"
+        label: "Local HTTPS Adoption Rate (%)"
+        format: "float_2"
+    
+    sort_by: "httpsAdoptionRate"
+    sort_order: "desc"

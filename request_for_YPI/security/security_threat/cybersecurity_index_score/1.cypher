@@ -1,25 +1,19 @@
-// 1. RPKI adoption rate by country (MANRS Indicator)
-
-// 1. Find all BGP prefixes for a country
-MATCH (c:Country {country_code: $countryCode})
-// ASSUMPTION: (AS)-[:COUNTRY]->(Country)
-MATCH (as:AS)-[:COUNTRY]->(c) 
-// ASSUMPTION: (AS)-[:ORIGINATE]->(BGPPrefix)
-MATCH (as)-[:ORIGINATE]->(p:BGPPrefix)
+// RPKI prefix coverage rate — measures what percentage of a country's BGP prefixes
+// have RPKI-valid Route Origin Authorizations (ROAs).
+// Uses the IYP CATEGORIZED → Tag pattern (confirmed working schema).
+// The parameter $countryCode must be provided during execution (e.g., 'FR', 'SN', 'JP').
+MATCH (c:Country {country_code: $countryCode})<-[:COUNTRY]-(as:AS)-[:ORIGINATE]->(p:BGPPrefix)
 WITH c, count(DISTINCT p) AS totalPrefixes
 
-// 2. Count those covered by RPKI
-MATCH (c)<-[:COUNTRY]-(as_covered:AS)-[:ORIGINATE]->(p_covered:BGPPrefix)
-// ASSUMPTION: (BGPPrefix)<-[:RESOLVES_TO]-(RPKIPrefix)
-MATCH (p_covered)<-[:PART_OF]-(:RPKIPrefix)
-WITH c, totalPrefixes, count(DISTINCT p_covered) AS totalCoveredPrefixes
+// Count prefixes that have an RPKI Valid tag (i.e., covered by a valid ROA).
+MATCH (c:Country {country_code: $countryCode})<-[:COUNTRY]-(as2:AS)-[:ORIGINATE]->(p2:BGPPrefix)-[:CATEGORIZED]->(t:Tag {label: "RPKI Valid"})
+WITH c, totalPrefixes, count(DISTINCT p2) AS rpkiValidPrefixes
 
-// 3. Calculate the percentage
 RETURN c.name AS country,
        totalPrefixes,
-       totalCoveredPrefixes,
-       CASE 
-           WHEN totalPrefixes = 0 THEN 0 
-           ELSE (toFloat(totalCoveredPrefixes) / totalPrefixes) * 100.0 
-       END AS rpkiAdoptionPercentage
-ORDER BY rpkiAdoptionPercentage DESC
+       rpkiValidPrefixes,
+       CASE
+           WHEN totalPrefixes = 0 THEN 0
+           ELSE round((toFloat(rpkiValidPrefixes) / totalPrefixes) * 100.0, 2)
+       END AS rpkiCoveragePercentage
+ORDER BY rpkiCoveragePercentage DESC

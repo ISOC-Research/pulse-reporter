@@ -91,3 +91,47 @@ queries:
     sort_by: "customerConeSize"
     sort_order: "desc"
     limit: 15
+
+  "3.cypher":
+    description: "IPv6 population coverage rate — percentage of population served by IPv6-capable operators"
+    
+    template: |
+      Title: IPv6 Population Coverage Rate for {{ params.countryCode | upper }}
+      
+      This analysis calculates the percentage of the country's population served by Autonomous Systems that announce at least one IPv6 prefix. This population-weighted metric aligns with the ITU's IPv6 adoption measurement methodology — it measures whether end-users actually have access to IPv6-capable infrastructure.
+      
+      {% if results %}
+      **Analysis Results:**
+      
+      - Country: **{{ results[0].country }}**
+      - Total population covered by measured operators: **{{ results[0].totalCoveredPopulationPct }}%**
+      - Population served by IPv6-capable operators: **{{ results[0].ipv6CoveredPopulationPct }}%**
+      - IPv6 population coverage rate: **{{ results[0].ipv6PopulationCoverageRate }}%**
+      
+      **Interpretation:**
+      
+      An IPv6 population coverage rate of **{{ results[0].ipv6PopulationCoverageRate }}%** means approximately that share of the country's residents are served by IPv6-capable operators. This is the most user-centric IPv6 metric — it reflects whether residents actually have access to IPv6 services, not just whether operators have declared prefixes.
+      
+      {% else %}
+      No IPv6 population coverage data available for this country.
+      {% endif %}
+    
+    fields:
+      country:
+        type: "string"
+        label: "Country Name"
+      totalCoveredPopulationPct:
+        type: "float"
+        label: "Total Population Coverage (%)"
+        format: "float_2"
+      ipv6CoveredPopulationPct:
+        type: "float"
+        label: "IPv6-Covered Population (%)"
+        format: "float_2"
+      ipv6PopulationCoverageRate:
+        type: "float"
+        label: "IPv6 Population Coverage Rate (%)"
+        format: "float_2"
+    
+    sort_by: "ipv6PopulationCoverageRate"
+    sort_order: "desc"

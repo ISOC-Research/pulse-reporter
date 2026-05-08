@@ -5,26 +5,26 @@
 
 queries:
   "1.cypher":
-    description: "Geographic coverage of the fiber ecosystem in the country"
+    description: "Geographic coverage points of active ASes — fiber infrastructure reach approximation"
     
     template: |
-      Title: Fiber Ecosystem Geographic Coverage in {{ params.countryCode | upper }}
+      Title: Fiber Infrastructure Geographic Reach in {{ params.countryCode | upper }}
       
-      This analysis provides an approximation of the fiber network's reach by measuring the density of geographic coverage points (hubs/nodes) operated by Autonomous Systems within the country. A higher number of points indicates a more robust and expansive fiber infrastructure.
+      This analysis approximates the physical fiber reach of internet infrastructure by counting the number of distinct geographic Points associated with active Autonomous Systems (operators that actually announce BGP routes). More geographic points spread across more operators indicates a broader physical network footprint and suggests wider fiber deployment reach.
       
       {% if results %}
       **Analysis Results:**
       
       - Country: **{{ results[0].Country }}**
-      - Geographic Coverage Points: **{{ results[0].GeoCoveragePoints }}**
-      - Network Operators (AS): **{{ results[0].Operators }}**
+      - Geographic coverage points: **{{ results[0].GeoCoveragePoints }}**
+      - Active network operators: **{{ results[0].ActiveOperators }}**
       
       **Interpretation:**
       
-      In {{ results[0].Country }}, there are **{{ results[0].Operators }}** network operators supporting **{{ results[0].GeoCoveragePoints }}** geographic coverage points. This metric helps us understand the physical footprint of the fiber ecosystem. A dense network of coverage points suggests that internet infrastructure is well-distributed, reducing the reliance on a single point of failure and increasing overall internet resilience.
+      **{{ results[0].GeoCoveragePoints }}** distinct geographic locations are registered by **{{ results[0].ActiveOperators }}** active network operators. A higher count indicates operators have declared infrastructure presence in more locations, which is a structural proxy for fiber or fixed network deployment breadth.
       
       {% else %}
-      No geographic coverage data available for this country's fiber ecosystem.
+      No geographic coverage data available for this country.
       {% endif %}
     
     fields:
@@ -33,10 +33,85 @@ queries:
         label: "Country Name"
       GeoCoveragePoints:
         type: "integer"
-        label: "Number of Geographic Coverage Points"
-      Operators:
+        label: "Geographic Coverage Points"
+      ActiveOperators:
         type: "integer"
-        label: "Number of Operators"
+        label: "Active Network Operators"
     
     sort_by: "GeoCoveragePoints"
+    sort_order: "desc"
+
+  "2.cypher":
+    description: "BGP prefix count per AS — network coverage depth indicator"
+    
+    template: |
+      Title: Network Coverage Depth by Operator in {{ params.countryCode | upper }}
+      
+      This analysis ranks the country's active network operators by the number of BGP prefixes they announce. Operators with more prefixes have finer-grained network segmentation, typically indicating a broader physical footprint — a proxy for the depth and quality of network deployment.
+      
+      {% if results %}
+      **Top Operators by Network Coverage Depth:**
+      
+      | ASN | Operator Name | BGP Prefixes Announced |
+      |-----|---------------|------------------------|
+      {% for row in results %}
+      | AS{{ row.ASN }} | {{ row.operatorName or "(unnamed)" }} | {{ row.announcedPrefixes }} |
+      {% endfor %}
+      
+      {% else %}
+      No BGP prefix data available for this country.
+      {% endif %}
+    
+    fields:
+      ASN:
+        type: "integer"
+        label: "ASN"
+      operatorName:
+        type: "string"
+        label: "Operator Name"
+      announcedPrefixes:
+        type: "integer"
+        label: "BGP Prefixes Announced"
+    
+    sort_by: "announcedPrefixes"
+    sort_order: "desc"
+    limit: 20
+
+  "3.cypher":
+    description: "Multi-location operators — ASes with declared presence in more than one geographic Point"
+    
+    template: |
+      Title: Multi-Location Network Operators in {{ params.countryCode | upper }}
+      
+      This analysis identifies network operators that have declared infrastructure presence in more than one geographic location. An AS registered in multiple geographic Points has physically distributed infrastructure — the strongest structural indicator of real fiber or fixed network deployment beyond a single city or data center.
+      
+      {% if results %}
+      **Multi-Location Operators:**
+      
+      | ASN | Operator Name | Number of Locations |
+      |-----|---------------|---------------------|
+      {% for row in results %}
+      | AS{{ row.ASN }} | {{ row.operatorName or "(unnamed)" }} | {{ row.numberOfLocations }} |
+      {% endfor %}
+      
+      **Interpretation:**
+      
+      Countries where many operators appear in this list have a more resilient, geographically dispersed fiber ecosystem.
+      
+      {% else %}
+      No multi-location operator data available for this country.
+      {% endif %}
+    
+    fields:
+      ASN:
+        type: "integer"
+        label: "ASN"
+      operatorName:
+        type: "string"
+        label: "Operator Name"
+      numberOfLocations:
+        type: "integer"
+        label: "Number of Geographic Locations"
+    
+    sort_by: "numberOfLocations"
     sort_order: "desc"

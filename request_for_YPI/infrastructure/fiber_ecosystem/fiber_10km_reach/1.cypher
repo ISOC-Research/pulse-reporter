@@ -1,9 +1,11 @@
-// Fiber reach approximation: density of geographic points of ASes
-// $countryCode = country code (e.g., 'FR', 'SN', 'JP')
-
-MATCH (a:AS)-[:COUNTRY]->(c:Country {country_code: $countryCode})
-MATCH (a)-[:LOCATED_IN]->(p:Point)
+// Fiber reach approximation: counts geographic coverage points of ASes that
+// actively originate BGP prefixes (i.e., are operating networks, not dormant registrations).
+// More geographic points across more active operators = broader physical infrastructure reach.
+// The parameter $countryCode must be provided during execution (e.g., 'FR', 'SN', 'JP').
+MATCH (c:Country {country_code: $countryCode})<-[:COUNTRY]-(a:AS)
+WHERE (a)-[:ORIGINATE]->(:BGPPrefix)
+OPTIONAL MATCH (a)-[:LOCATED_IN]->(p:Point)
 RETURN c.name AS Country,
-       COUNT(DISTINCT p) AS GeoCoveragePoints,
-       COUNT(DISTINCT a) AS Operators
+       count(DISTINCT p) AS GeoCoveragePoints,
+       count(DISTINCT a) AS ActiveOperators
 ORDER BY GeoCoveragePoints DESC;

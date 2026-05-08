@@ -1,0 +1,142 @@
+# ============================================================================
+# Query Configuration - Cybersecurity Index Score
+# Pillar: Security / Security Threat / Cybersecurity Index Score
+# ============================================================================
+
+queries:
+  "1.cypher":
+    description: "RPKI prefix coverage rate — percentage of BGP prefixes with valid ROAs"
+    
+    template: |
+      Title: RPKI Prefix Coverage Rate for {{ params.countryCode | upper }}
+      
+      This analysis calculates the percentage of BGP prefixes originated by the country's Autonomous Systems that are covered by a valid RPKI Route Origin Authorization (ROA). A prefix is RPKI-valid when a certificate authority has explicitly authorized the originating AS to announce it, making the announcement cryptographically verifiable and preventing route hijacking.
+      
+      {% if results %}
+      **Analysis Results:**
+      
+      - Country: **{{ results[0].country }}**
+      - Total BGP prefixes originated: **{{ results[0].totalPrefixes }}**
+      - RPKI-valid prefixes: **{{ results[0].rpkiValidPrefixes }}**
+      - RPKI coverage rate: **{{ results[0].rpkiCoveragePercentage }}%**
+      
+      **Interpretation:**
+      
+      An RPKI coverage rate of **{{ results[0].rpkiCoveragePercentage }}%** means that {{ results[0].rpkiValidPrefixes }} out of {{ results[0].totalPrefixes }} prefixes are protected against route origin hijacking. Unprotected prefixes (RPKI NotFound or RPKI Invalid) remain vulnerable to BGP hijacks — a significant cybersecurity risk for the country's internet infrastructure.
+      
+      {% else %}
+      No RPKI coverage data available for this country.
+      {% endif %}
+    
+    fields:
+      country:
+        type: "string"
+        label: "Country Name"
+      totalPrefixes:
+        type: "integer"
+        label: "Total BGP Prefixes"
+      rpkiValidPrefixes:
+        type: "integer"
+        label: "RPKI-Valid Prefixes"
+      rpkiCoveragePercentage:
+        type: "float"
+        label: "RPKI Coverage Rate (%)"
+        format: "float_2"
+    
+    sort_by: "rpkiCoveragePercentage"
+    sort_order: "desc"
+
+  "2.cypher":
+    description: "PeeringDB presence rate for ASes in a country (MANRS Indicator)"
+    
+    template: |
+      Title: PeeringDB Presence Rate for {{ params.countryCode | upper }}
+      
+      This analysis calculates the percentage of Autonomous Systems (ASes) in the country that have a presence in PeeringDB. PeeringDB is a key resource for interconnection coordination, and a high presence rate indicates strong participation in global peering ecosystems.
+      
+      {% if results %}
+      **Analysis Results:**
+      
+      - Country: **{{ results[0].country }}**
+      - Total ASes: **{{ results[0].totalAS }}**
+      - ASes with PeeringDB presence: **{{ results[0].asWithPeeringDB }}**
+      - PeeringDB presence rate: **{{ "%.2f"|format(results[0].coordinationPercentage) }}%**
+      
+      **Interpretation:**
+      
+      A PeeringDB presence rate of **{{ "%.2f"|format(results[0].coordinationPercentage) }}%** indicates that approximately {{ "%.0f"|format(results[0].coordinationPercentage / 100 * results[0].totalAS) }} out of {{ results[0].totalAS }} ASes in the country are listed in PeeringDB. This reflects the country's level of coordination and transparency in interconnection practices.
+      
+      {% else %}
+      No PeeringDB presence data available for this country.
+      {% endif %}
+    
+    fields:
+      country:
+        type: "string"
+        label: "Country Name"
+      totalAS:
+        type: "integer"
+        label: "Total ASes"
+      asWithPeeringDB:
+        type: "integer"
+        label: "ASes with PeeringDB Presence"
+      coordinationPercentage:
+        type: "float"
+        label: "PeeringDB Presence Rate (%)"
+        format: "float_2"
+    
+    sort_by: "coordinationPercentage"
+    sort_order: "desc"
+
+  "3.cypher":
+    description: "Internet hegemony concentration — upstream provider dependency risk"
+    
+    template: |
+      Title: Internet Hegemony Concentration for {{ params.countryCode | upper }}
+      
+      This analysis identifies which external upstream providers the country's Autonomous Systems are most dependent on, using the IHR (Internet Health Report) hegemony score. A hegemony score close to 1.0 for a single external provider means the country's internet traffic is critically dependent on that one AS — a major cybersecurity and resilience risk. Diverse, low-hegemony upstreams indicate a resilient internet topology.
+      
+      {% if results %}
+      **Top Upstream Providers by Hegemony Score:**
+      
+      | Provider ASN | Provider Name | Provider Country | Dependent Local ASes | Avg Hegemony | Max Hegemony |
+      |--------------|---------------|------------------|----------------------|--------------|--------------|
+      {% for row in results %}
+      | AS{{ row.providerASN }} | {{ row.providerName or "(unnamed)" }} | {{ row.providerCountry or "N/A" }} | {{ row.dependentLocalASes }} | {{ row.avgHegemonyScore }} | {{ row.maxHegemonyScore }} |
+      {% endfor %}
+      
+      **Interpretation:**
+      
+      - **Avg Hegemony > 0.3**: This upstream provider carries a critical share of the country's traffic. A disruption or attack targeting this AS would significantly impact the country's internet connectivity.
+      - **Avg Hegemony 0.1–0.3**: Significant dependency — warrants monitoring and diversification strategy.
+      - **Avg Hegemony < 0.1**: Healthy level — country has diverse enough routing to withstand loss of this provider.
+      
+      {% else %}
+      No hegemony dependency data available for this country.
+      {% endif %}
+    
+    fields:
+      providerASN:
+        type: "integer"
+        label: "Provider ASN"
+      providerName:
+        type: "string"
+        label: "Provider Name"
+      providerCountry:
+        type: "string"
+        label: "Provider Country"
+      dependentLocalASes:
+        type: "integer"
+        label: "Number of Dependent Local ASes"
+      avgHegemonyScore:
+        type: "float"
+        label: "Average Hegemony Score"
+        format: "float_4"
+      maxHegemonyScore:
+        type: "float"
+        label: "Max Hegemony Score"
+        format: "float_4"
+    
+    sort_by: "avgHegemonyScore"
+    sort_order: "desc"
+    limit: 10

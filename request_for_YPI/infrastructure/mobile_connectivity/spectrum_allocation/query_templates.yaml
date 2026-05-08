@@ -5,28 +5,26 @@
 
 queries:
   "1.cypher":
-    description: "Number of BGP prefixes originated by ASes in the country — a structural proxy for IP address space utilization"
+    description: "BGP prefix breakdown by address family — IP address space utilization with IPv4/IPv6 split"
     
     template: |
       Title: IP Address Space Utilization in {{ params.countryCode | upper }}
       
-      This analysis counts the number of distinct BGP prefixes originated by Autonomous Systems registered in the country. In the context of the IYP graph (which does not contain direct spectrum licensing data), the volume of originated prefixes serves as a structural proxy for network capacity and address space utilization — a key indicator of how well the country's network operators are provisioning connectivity for their users.
+      This analysis measures the total BGP prefix footprint of the country's network operators, broken down by address family (IPv4 vs IPv6). In the IYP graph, this serves as the best available proxy for network capacity and address space allocation — a structural correlate of spectrum/address utilization maturity.
       
       {% if results %}
       **Analysis Results:**
       
       - Country: **{{ results[0].Country }}**
-      - Total BGP Prefixes Originated: **{{ results[0].Originated_Prefixes }}**
+      - Total BGP prefixes originated: **{{ results[0].Originated_Prefixes }}**
+      - IPv4 prefixes: **{{ results[0].IPv4_Prefixes }}**
+      - IPv6 prefixes: **{{ results[0].IPv6_Prefixes }}**
+      - Active operators: **{{ results[0].ActiveOperators }}**
+      - IPv6 share of prefix table: **{{ results[0].IPv6_SharePercent }}%**
       
       **Interpretation:**
       
-      A higher number of originated BGP prefixes indicates that network operators in the country have been allocated and are actively announcing more IP address space. This correlates with:
-      
-      - **Greater network capacity**: More prefixes allow operators to serve more users and more diverse geographic areas.
-      - **Spectrum utilization maturity**: Operators with large address allocations typically have established relationships with Regional Internet Registries (RIRs), indicating a mature regulatory and technical environment.
-      - **Network coverage granularity**: A higher prefix count can indicate more granular geographic routing, meaning connectivity is available in more locations.
-      
-      Note: The IYP database does not store radio spectrum licensing data directly. This BGP prefix metric provides the closest available structural approximation within the graph.
+      A higher total prefix count indicates greater IP address space allocation and more granular network segmentation. An increasing IPv6 share reflects modernization of the address space — operators planning for long-term scalability beyond IPv4 exhaustion.
       
       {% else %}
       No BGP prefix data available for this country.
@@ -39,6 +37,65 @@ queries:
       Originated_Prefixes:
         type: "integer"
         label: "Total BGP Prefixes Originated"
+      IPv4_Prefixes:
+        type: "integer"
+        label: "IPv4 Prefixes"
+      IPv6_Prefixes:
+        type: "integer"
+        label: "IPv6 Prefixes"
+      ActiveOperators:
+        type: "integer"
+        label: "Active Operators"
+      IPv6_SharePercent:
+        type: "float"
+        label: "IPv6 Share (%)"
+        format: "float_2"
     
     sort_by: "Originated_Prefixes"
     sort_order: "desc"
+
+  "2.cypher":
+    description: "Top ASes by total prefix count — largest IP address space holders"
+    
+    template: |
+      Title: Largest IP Address Space Holders in {{ params.countryCode | upper }}
+      
+      This analysis identifies the top 10 network operators in the country by number of BGP prefixes announced, broken down by IPv4 and IPv6. Operators with the largest prefix counts hold the most IP address space, indicating their capacity as significant network infrastructure providers.
+      
+      {% if results %}
+      **Top Operators by Address Space:**
+      
+      | ASN | Operator Name | Total Prefixes | IPv4 | IPv6 |
+      |-----|---------------|----------------|------|------|
+      {% for row in results %}
+      | AS{{ row.ASN }} | {{ row.operatorName or "(unnamed)" }} | {{ row.totalPrefixes }} | {{ row.ipv4Prefixes }} | {{ row.ipv6Prefixes }} |
+      {% endfor %}
+      
+      **Interpretation:**
+      
+      Operators with large address space allocations are the backbone of the country's internet capacity. The IPv6 column reveals which large operators have modernized their address space — those with zero IPv6 prefixes are critical targets for IPv6 adoption programs.
+      
+      {% else %}
+      No address space data available for this country.
+      {% endif %}
+    
+    fields:
+      ASN:
+        type: "integer"
+        label: "ASN"
+      operatorName:
+        type: "string"
+        label: "Operator Name"
+      totalPrefixes:
+        type: "integer"
+        label: "Total Prefixes"
+      ipv4Prefixes:
+        type: "integer"
+        label: "IPv4 Prefixes"
+      ipv6Prefixes:
+        type: "integer"
+        label: "IPv6 Prefixes"
+    
+    sort_by: "totalPrefixes"
+    sort_order: "desc"
+    limit: 10

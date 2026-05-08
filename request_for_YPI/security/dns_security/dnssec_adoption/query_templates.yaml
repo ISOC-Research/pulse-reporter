@@ -82,3 +82,44 @@ queries:
     max_display: 25
     sort_by: "popularityRank"
     sort_order: "asc"
+
+  "3.cypher":
+    description: "DNSSEC signing status of the most locally queried domains"
+    
+    template: |
+      Title: DNSSEC Signing Status of Popular Domains in {{ params.countryCode | upper }}
+      
+      This analysis checks whether the most queried domains in the country have DNSSEC-signed zones. DNSSEC (DNS Security Extensions) adds cryptographic authentication to DNS responses, protecting users from DNS cache poisoning and man-in-the-middle attacks on DNS resolution. Domains with DNSSEC signing significantly reduce the risk of DNS-based attacks targeting local users.
+      
+      {% if results %}
+      **DNSSEC Status of Most Queried Domains:**
+      
+      | Domain Name | Query Percentage | DNSSEC Signed |
+      |-------------|-----------------|---------------|
+      {% for row in results %}
+      | {{ row.domainName }} | {{ "%.4f"|format(row.queryPercentage) }}% | {{ row.dnssecSigned if row.dnssecSigned is not none else "Unknown" }} |
+      {% endfor %}
+      
+      **Interpretation:**
+      
+      Domains marked with a truthy DNSSEC value have cryptographically authenticated DNS zones. Users resolving these domains through DNSSEC-validating resolvers are protected from DNS spoofing attacks. Widely queried domains without DNSSEC represent the highest-impact targets for DNSSEC deployment campaigns in the country.
+      
+      {% else %}
+      No DNSSEC signing data available for popular domains in this country. This may indicate that the DomainName nodes in the database do not yet have a 'dnssec' property populated for this country's queried domains.
+      {% endif %}
+    
+    fields:
+      domainName:
+        type: "string"
+        label: "Domain Name"
+      queryPercentage:
+        type: "float"
+        label: "Query Percentage"
+        format: "percentage_4"
+      dnssecSigned:
+        type: "string"
+        label: "DNSSEC Signed"
+    
+    max_display: 25
+    sort_by: "queryPercentage"
+    sort_order: "desc"
