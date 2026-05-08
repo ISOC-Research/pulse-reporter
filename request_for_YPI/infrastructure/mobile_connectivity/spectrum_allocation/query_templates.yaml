@@ -1,0 +1,44 @@
+# ============================================================================
+# Query Configuration - Spectrum Allocation
+# Pillar: Infrastructure / Mobile Connectivity / Spectrum Allocation
+# ============================================================================
+
+queries:
+  "1.cypher":
+    description: "Number of BGP prefixes originated by ASes in the country — a structural proxy for IP address space utilization"
+    
+    template: |
+      Title: IP Address Space Utilization in {{ params.countryCode | upper }}
+      
+      This analysis counts the number of distinct BGP prefixes originated by Autonomous Systems registered in the country. In the context of the IYP graph (which does not contain direct spectrum licensing data), the volume of originated prefixes serves as a structural proxy for network capacity and address space utilization — a key indicator of how well the country's network operators are provisioning connectivity for their users.
+      
+      {% if results %}
+      **Analysis Results:**
+      
+      - Country: **{{ results[0].Country }}**
+      - Total BGP Prefixes Originated: **{{ results[0].Originated_Prefixes }}**
+      
+      **Interpretation:**
+      
+      A higher number of originated BGP prefixes indicates that network operators in the country have been allocated and are actively announcing more IP address space. This correlates with:
+      
+      - **Greater network capacity**: More prefixes allow operators to serve more users and more diverse geographic areas.
+      - **Spectrum utilization maturity**: Operators with large address allocations typically have established relationships with Regional Internet Registries (RIRs), indicating a mature regulatory and technical environment.
+      - **Network coverage granularity**: A higher prefix count can indicate more granular geographic routing, meaning connectivity is available in more locations.
+      
+      Note: The IYP database does not store radio spectrum licensing data directly. This BGP prefix metric provides the closest available structural approximation within the graph.
+      
+      {% else %}
+      No BGP prefix data available for this country.
+      {% endif %}
+    
+    fields:
+      Country:
+        type: "string"
+        label: "Country Name"
+      Originated_Prefixes:
+        type: "integer"
+        label: "Total BGP Prefixes Originated"
+    
+    sort_by: "Originated_Prefixes"
+    sort_order: "desc"

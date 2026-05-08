@@ -1,7 +1,8 @@
-// Retrieves domains from the Tranco top 1M resolved to IPs hosted in the target country.
+// Retrieves popular domains hosted on infrastructure in the target country via BGP prefix ownership.
+// Uses the valid IYP path: AS (in country) -[:ORIGINATE]-> BGPPrefix <- [:PART_OF]- IP <- [:RESOLVES_TO]- DomainName
 // The parameter $countryCode must be provided during execution (e.g., 'SN', 'FR', 'JP').
-MATCH (c:Country {country_code: $countryCode})<-[:COUNTRY]-(as:AS)<-[:ORIGINATE]-(:Prefix)<-[:MEMBER_OF]-(:IP)<-[:RESOLVES_TO]-(d:DomainName)
-// Uses the Tranco ranking to filter by popularity
+MATCH (c:Country {country_code: $countryCode})<-[:COUNTRY]-(as:AS)-[:ORIGINATE]->(pfx:BGPPrefix)<-[:PART_OF]-(ip:IP)<-[:RESOLVES_TO]-(d:DomainName)
+// Filter by Tranco ranking for popular domains only.
 MATCH (d)-[r:RANK]->(rk:Ranking)
 WHERE rk.name CONTAINS 'Tranco'
 RETURN d.name AS domainName,

@@ -1,17 +1,19 @@
-// Calculates the percentage of MANRS member AS in a given country.
+// Calculates the RPKI Route Origin Validation (ROV) adoption rate as a routing hygiene proxy.
+// Used here to contextualize DNSSEC validation: networks that validate routing origins
+// are more likely to be operating secure, well-managed DNS infrastructure.
 // The parameter $countryCode must be provided during execution (e.g., 'KE', 'DE', 'BR').
 MATCH (c:Country {country_code: $countryCode})
-// Counts the total number of AS in the country.
+// Counts the total number of ASes in the country.
 OPTIONAL MATCH (as:AS)-[:COUNTRY]->(c)
 WITH c, count(DISTINCT as) AS totalASNs
-// Counts the number of MANRS member AS in the same country.
-OPTIONAL MATCH (manrs_as:AS)-[:COUNTRY]->(c)
-WHERE (manrs_as)-[:MEMBER_OF]->(:Organization {name:"MANRS"})
-WITH totalASNs, count(DISTINCT manrs_as) AS manrsASNs
+// Counts ASes that validate RPKI Route Origin (MANRS-equivalent proxy).
+OPTIONAL MATCH (rpki_as:AS)-[:COUNTRY]->(c)
+WHERE (rpki_as)-[:CATEGORIZED]->(:Tag {label: "Validating RPKI ROV"})
+WITH totalASNs, count(DISTINCT rpki_as) AS rpkiValidatingASNs
 RETURN
-    manrsASNs,
+    rpkiValidatingASNs,
     totalASNs,
     CASE
-        WHEN totalASNs > 0 THEN (toFloat(manrsASNs) / totalASNs) * 100
+        WHEN totalASNs > 0 THEN (toFloat(rpkiValidatingASNs) / totalASNs) * 100
         ELSE 0
-    END AS manrsAdoptionPercentage;
+    END AS rpkiValidationPercentage;

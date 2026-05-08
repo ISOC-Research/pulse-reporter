@@ -7,7 +7,7 @@ queries:
   # --------------------------------------------------------------------------
   # Query 1: Identification of Upstream Transit Providers (by Customer Count)
   # --------------------------------------------------------------------------
-  "market_readiness/upstream_diversity/1.cypher":
+  "1.cypher":
     description: "Ranking of external transit providers based on the number of local customer networks they serve"
     
     # Jinja2 Template for LLM context generation (English)
@@ -53,7 +53,7 @@ queries:
   # --------------------------------------------------------------------------
   # Query 2: Dependency Strength Analysis (Hegemony)
   # --------------------------------------------------------------------------
-  "market_readiness/upstream_diversity/2.cypher":
+  "2.cypher":
     description: "Analysis of the intensity of dependence on upstream providers using Hegemony scores"
     
     # Jinja2 Template for LLM context generation (English)

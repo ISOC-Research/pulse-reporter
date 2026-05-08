@@ -1,0 +1,120 @@
+# ============================================================================
+# Query Configuration - IXP Coverage
+# Pillar: Infrastructure / Enabling Infrastructure / IXP Coverage
+# ============================================================================
+
+queries:
+  "1.cypher":
+    description: "IXPs in the country and the data center facilities associated with them"
+    
+    template: |
+      Title: IXP Coverage and Facility Distribution in {{ params.countryCode | upper }}
+      
+      This analysis maps the Internet Exchange Points (IXPs) present in the country and the physical data center facilities where they are hosted. IXP coverage is a direct measure of how well the country's network infrastructure enables efficient, local traffic exchange — reducing latency and transit costs.
+      
+      {% if results %}
+      **IXP Facility Distribution:**
+      
+      | IXP Name | Hosting Facilities |
+      |----------|--------------------|
+      {% for row in results %}
+      | {{ row.IXP }} | {{ row.Facilities | join(", ") if row.Facilities else "(no facility data)" }} |
+      {% endfor %}
+      
+      **Interpretation:**
+      
+      IXPs present in more physical facilities are more resilient and accessible to a wider range of network operators. A country with multiple IXPs each hosted across diverse facilities has significantly better enabling infrastructure than one relying on a single facility or a single IXP.
+      
+      {% else %}
+      No IXP coverage data available for this country.
+      {% endif %}
+    
+    fields:
+      IXP:
+        type: "string"
+        label: "IXP Name"
+      Facilities:
+        type: "list"
+        label: "Hosting Data Center Facilities"
+    
+    sort_by: "IXP"
+    sort_order: "asc"
+
+  "2.cypher":
+    description: "Local vs. foreign AS member count for each IXP in the country"
+    
+    template: |
+      Title: Local vs. Foreign Membership at IXPs in {{ params.countryCode | upper }}
+      
+      This analysis compares the number of local (domestic) versus foreign (international) Autonomous System members at each IXP in the country. IXPs that attract international networks indicate that the country is a significant regional peering hub, while purely domestic IXPs serve local traffic exchange.
+      
+      {% if results %}
+      **IXP Membership Breakdown:**
+      
+      | IXP Name | Local Members | Foreign Members |
+      |----------|---------------|-----------------|
+      {% for row in results %}
+      | {{ row.IXP }} | {{ row.LocalMembers }} | {{ row.ForeignMembers }} |
+      {% endfor %}
+      
+      **Interpretation:**
+      
+      A healthy IXP ecosystem has a mix of local members (showing domestic traffic stays local) and foreign members (showing the country is a regional internet hub). IXPs with very few local members relative to foreign members may indicate that local ISPs are not fully leveraging the local peering infrastructure.
+      
+      {% else %}
+      No IXP membership data available for this country.
+      {% endif %}
+    
+    fields:
+      IXP:
+        type: "string"
+        label: "IXP Name"
+      LocalMembers:
+        type: "integer"
+        label: "Local AS Members"
+      ForeignMembers:
+        type: "integer"
+        label: "Foreign AS Members"
+    
+    sort_by: "LocalMembers"
+    sort_order: "desc"
+
+  "3.cypher":
+    description: "Top international networks present on the country's IXPs — regional hub indicator"
+    
+    template: |
+      Title: International Networks at {{ params.countryCode | upper }} IXPs
+      
+      This analysis identifies the highest-ranked international Autonomous Systems that are members of the country's IXPs. The presence of major global carriers and content networks at local IXPs is a strong indicator that the country is a recognized regional internet hub.
+      
+      {% if results %}
+      **Top International Networks Present:**
+      
+      | ASN | IXP | Ranking |
+      |-----|-----|---------|
+      {% for row in results %}
+      | AS{{ row.ASN }} | {{ row.IXP }} | {{ row.Rank or "N/A" }} |
+      {% endfor %}
+      
+      **Interpretation:**
+      
+      International tier-1 and major content networks (like Google, Meta, Cloudflare) appearing at local IXPs confirms that the country has sufficient market size and connectivity to attract global players. This drives down latency for local users accessing international content and validates the country's strategic position in regional internet topology.
+      
+      {% else %}
+      No international networks identified at this country's IXPs.
+      {% endif %}
+    
+    fields:
+      ASN:
+        type: "integer"
+        label: "ASN"
+      IXP:
+        type: "string"
+        label: "IXP Name"
+      Rank:
+        type: "string"
+        label: "Ranking"
+    
+    sort_by: "Rank"
+    sort_order: "asc"
+    limit: 10

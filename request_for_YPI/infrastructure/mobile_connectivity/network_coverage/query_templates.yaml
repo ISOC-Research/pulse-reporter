@@ -1,0 +1,137 @@
+# ============================================================================
+# Query Configuration - Network Coverage
+# Pillar: Infrastructure / Mobile Connectivity / Network Coverage
+# ============================================================================
+
+queries:
+  "1.cypher":
+    description: "Total number of Autonomous Systems registered in the country — network operator density"
+    
+    template: |
+      Title: Network Operator Count in {{ params.countryCode | upper }}
+      
+      This analysis counts the total number of distinct Autonomous Systems (ASes) registered in the country. In the IYP graph, the number of unique AS operators correlates with the breadth of the network coverage ecosystem — more operators typically indicate greater competition, geographic spread, and resilience.
+      
+      {% if results %}
+      **Analysis Results:**
+      
+      - Country: **{{ results[0].Country }}**
+      - Total Autonomous Systems (Network Operators): **{{ results[0].ASN_Count }}**
+      
+      **Interpretation:**
+      
+      A higher AS count indicates a more diverse network operator ecosystem. Countries with more registered ASes typically have broader geographic coverage, more competitive markets, and greater resilience against operator-level outages. This metric serves as a structural proxy for network coverage density within the IYP graph.
+      
+      {% else %}
+      No network operator data available for this country.
+      {% endif %}
+    
+    fields:
+      Country:
+        type: "string"
+        label: "Country Name"
+      ASN_Count:
+        type: "integer"
+        label: "Total Number of Network Operators (ASes)"
+    
+    sort_by: "ASN_Count"
+    sort_order: "desc"
+
+  "2.cypher":
+    description: "Number of physical infrastructure nodes (Facilities) used by ASes in the country"
+    
+    template: |
+      Title: Physical Infrastructure Footprint in {{ params.countryCode | upper }}
+      
+      This analysis counts the number of distinct physical facilities (data centers, colocation sites) where the country's Autonomous Systems are physically located. This represents the physical footprint of the network coverage infrastructure and is a proxy for geographic distribution of connectivity nodes.
+      
+      {% if results %}
+      **Analysis Results:**
+      
+      - Country: **{{ results[0].Country }}**
+      - Physical Infrastructure Nodes (Facilities): **{{ results[0].InfrastructureNodes }}**
+      
+      **Interpretation:**
+      
+      A higher number of physical facilities indicates a well-distributed network infrastructure. Countries where ASes operate across many geographically dispersed facilities are more resilient to localized outages and can provide more consistent network coverage across their territory.
+      
+      {% else %}
+      No physical infrastructure data available for this country.
+      {% endif %}
+    
+    fields:
+      Country:
+        type: "string"
+        label: "Country Name"
+      InfrastructureNodes:
+        type: "integer"
+        label: "Physical Infrastructure Nodes (Facilities)"
+    
+    sort_by: "InfrastructureNodes"
+    sort_order: "desc"
+
+  "3.cypher":
+    description: "Number of declared geographic coverage points (Points) for ASes in the country"
+    
+    template: |
+      Title: Geographic Coverage Points in {{ params.countryCode | upper }}
+      
+      This analysis counts the number of distinct geographic Points declared by the country's Autonomous Systems in the IYP database. Geographic points represent declared network presence locations and serve as a proxy for the physical reach of the country's network operators.
+      
+      {% if results %}
+      **Analysis Results:**
+      
+      - Country: **{{ results[0].Country }}**
+      - Geographic Coverage Points: **{{ results[0].GeoCoveragePoints }}**
+      
+      **Interpretation:**
+      
+      A higher number of geographic coverage points suggests broader territorial reach by network operators. Countries with many declared points of presence typically have better rural and suburban connectivity, meaning the internet infrastructure is more evenly distributed rather than concentrated in a single urban hub.
+      
+      {% else %}
+      No geographic coverage data available for this country.
+      {% endif %}
+    
+    fields:
+      Country:
+        type: "string"
+        label: "Country Name"
+      GeoCoveragePoints:
+        type: "integer"
+        label: "Geographic Coverage Points"
+    
+    sort_by: "GeoCoveragePoints"
+    sort_order: "desc"
+
+  "4.cypher":
+    description: "Total peering connections between local ASes and their peers — network interconnection density"
+    
+    template: |
+      Title: Network Interconnection Density in {{ params.countryCode | upper }}
+      
+      This analysis counts the total number of peering relationships between the country's Autonomous Systems and their peers (both domestic and international). A high number of peering connections indicates a well-interconnected network ecosystem, which is a foundational element of broad and resilient network coverage.
+      
+      {% if results %}
+      **Analysis Results:**
+      
+      - Country: **{{ results[0].Country }}**
+      - Total Peering Connections: **{{ results[0].TotalPeerings }}**
+      
+      **Interpretation:**
+      
+      The total number of peering connections reflects how interconnected the country's network operators are with the global and regional internet. A high peering count suggests diverse routing paths, reducing the risk of traffic bottlenecks and improving resilience — all prerequisites for comprehensive network coverage.
+      
+      {% else %}
+      No peering data available for this country.
+      {% endif %}
+    
+    fields:
+      Country:
+        type: "string"
+        label: "Country Name"
+      TotalPeerings:
+        type: "integer"
+        label: "Total Peering Connections"
+    
+    sort_by: "TotalPeerings"
+    sort_order: "desc"

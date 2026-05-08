@@ -4,7 +4,7 @@
 # ============================================================================
 
 queries:
-  "security/routing_hygiene/upstream_connections/1.cypher":
+  "1.cypher":
     description: "Transit providers serving a country, ranked by CAIDA ASRank"
     
     template: |
@@ -49,7 +49,7 @@ queries:
     sort_order: "asc"
     limit: 20
 
-  "security/routing_hygiene/upstream_connections/2.cypher":
+  "2.cypher":
     description: "Distribution of upstream providers by CAIDA rank tier"
     
     template: |
@@ -92,7 +92,7 @@ queries:
     sort_by: "providerTier"
     sort_order: "asc"
 
-  "security/routing_hygiene/upstream_connections/3.cypher":
+  "3.cypher":
     description: "Concentration analysis of upstream providers serving local ASes"
     
     template: |
@@ -140,7 +140,7 @@ queries:
     sort_order: "desc"
     limit: 10
 
-  "security/routing_hygiene/upstream_connections/4.cypher":
+  "4.cypher":
     description: "Diversity of external peer ASes connecting to the country"
     
     template: |
@@ -182,7 +182,7 @@ queries:
     sort_by: "uniqueExternalPeers"
     sort_order: "desc"
 
-  "security/routing_hygiene/upstream_connections/5.cypher":
+  "5.cypher":
     description: "Participation of local ASes in international Internet Exchange Points"
     
     template: |

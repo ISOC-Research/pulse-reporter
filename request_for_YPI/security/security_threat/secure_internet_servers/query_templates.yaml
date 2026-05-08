@@ -4,7 +4,7 @@
 # ============================================================================
 
 queries:
-  "security/security_threat/secure_internet_servers/1.cypher":
+  "1.cypher":
     description: "RPKI coverage rate of prefixes hosting servers in a country"
     
     template: |
@@ -47,26 +47,26 @@ queries:
     sort_by: "rpkiCoveragePercentage"
     sort_order: "desc"
 
-  "security/security_threat/secure_internet_servers/2.cypher":
-    description: "DNS infrastructure density in a country"
+  "2.cypher":
+    description: "DNS infrastructure density — HostName nodes and hosting operators in a country"
     
     template: |
-      Title: DNS Infrastructure Density for {{ params.countryCode | upper }}
+      Title: Internet Server Infrastructure Density for {{ params.countryCode | upper }}
       
-      This analysis measures the density of DNS infrastructure in the country by counting the number of authoritative name servers and resolvers. A higher density indicates better DNS redundancy and resilience.
+      This analysis measures the density of internet server infrastructure in the country by counting the number of distinct HostName nodes resolved to IPs within the country's BGP prefixes, and the number of distinct operators (Autonomous Systems) hosting them. This provides an approximation of the "Secure Internet Servers" indicator using the IYP graph topology.
       
       {% if results %}
       **Analysis Results:**
       
-      | Country | Total Authoritative Servers | Total Resolvers |
-      |---------|-----------------------------|-----------------|
+      | Country | DNS Infrastructure Nodes | Hosting Operators (ASes) |
+      |---------|--------------------------|--------------------------|
       {% for row in results %}
-      | {{ row.country }} | {{ row.totalAuthoritativeServers }} | {{ row.totalResolvers }} |
+      | {{ row.country }} | {{ row.dnsInfrastructureNodes }} | {{ row.numberOfHostingOperators }} |
       {% endfor %}
       
       **Interpretation:**
       
-      A higher number of authoritative servers and resolvers indicates a robust DNS infrastructure capable of handling high query loads and mitigating DNS-related attacks. Countries with lower densities may face challenges in DNS reliability and security.
+      A higher number of infrastructure nodes spread across many hosting operators indicates a resilient, distributed server ecosystem. Countries where most nodes are concentrated in a single operator face a single-point-of-failure risk. This metric complements the official "Secure Internet Servers per million inhabitants" score from the World Bank.
       
       {% else %}
       No DNS infrastructure data available for this country.
@@ -76,17 +76,17 @@ queries:
       country:
         type: "string"
         label: "Country Name"
-      totalAuthoritativeServers:
+      dnsInfrastructureNodes:
         type: "integer"
-        label: "Total Authoritative Servers"
-      totalResolvers:
+        label: "DNS Infrastructure Nodes (HostNames)"
+      numberOfHostingOperators:
         type: "integer"
-        label: "Total Resolvers"
+        label: "Number of Hosting Operators (ASes)"
     
-    sort_by: "totalAuthoritativeServers"
+    sort_by: "dnsInfrastructureNodes"
     sort_order: "desc"
 
-  "security/security_threat/secure_internet_servers/3.cypher":
+  "3.cypher":
     description: "Diversity of operators (AS) hosting servers in a country"
     
     template: |

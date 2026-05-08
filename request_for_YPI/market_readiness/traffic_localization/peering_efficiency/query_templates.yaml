@@ -128,42 +128,42 @@ queries:
     sort_order: "desc"
 
   # ----------------------------------------------------------------------------
-  # Query 4: Track the Growth Momentum of the Peering Ecosystem
+  # Query 4: IXP Membership Depth Distribution
   # ----------------------------------------------------------------------------
   "4.cypher":
-    description: "Suit l'évolution annuelle du nombre de nouveaux AS rejoignant un IXP local."
+    description: "Distribution of IXP membership depth — how many IXPs each local AS belongs to."
     
     template: |
-      Titre: Évolution des nouveaux entrants au peering local pour {{ params.countryCode | upper }}
+      Title: IXP Membership Depth Distribution for {{ params.countryCode | upper }}
       
-      Cette analyse temporelle mesure le dynamisme de l'écosystème de peering. Elle compte le nombre d'AS qui rejoignent un IXP national *pour la première fois* chaque année. Une tendance croissante indique un écosystème sain et en expansion, tandis qu'une stagnation peut signaler une saturation ou un besoin de nouvelles incitations.
+      This analysis shows how many local Autonomous Systems participate in multiple Internet Exchange Points simultaneously. ASes peering at more IXPs have greater redundancy and resilience. A country where many ASes join only one IXP has a more fragile peering ecosystem than one where ASes routinely multi-home across several IXPs.
       
       {% if results %}
-      **Dynamique de croissance de l'écosystème (nouveaux AS par an) :**
+      **IXP Membership Depth:**
       
-      {% for item in results %}
-      - **{{ item.joinYear }}** : **{{ item.newPeerAsnsCount }}** nouveau(x) réseau(x)
-        {% if loop.index > 1 %}
-        {% set prev_count = results[loop.index-2].newPeerAsnsCount %}
-        {% if prev_count > 0 %}
-        {% set change = ((item.newPeerAsnsCount - prev_count) / prev_count * 100)|round(1) %}
-        _(variation : {{ change }}%)_
-        {% endif %}
-        {% endif %}
+      | IXPs Joined | Number of ASes |
+      |-------------|----------------|
+      {% for row in results %}
+      | {{ row.numberOfIXPsMemberOf }} | {{ row.numberOfASes }} |
       {% endfor %}
       
+      **Interpretation:**
+      
+      Rows with `numberOfIXPsMemberOf > 1` represent ASes with redundant IXP presence — a sign of a mature peering ecosystem. If most ASes appear only in the `1` row, the ecosystem is functional but not yet resilient against a single IXP outage.
+      
       {% else %}
-      Données temporelles non disponibles pour suivre la croissance du peering pour ce pays. (Cette requête nécessite que la relation :MEMBER_OF ait une propriété 'timestamp').
+      No IXP membership depth data available for this country.
       {% endif %}
       
     fields:
-      joinYear:
+      numberOfIXPsMemberOf:
         type: "integer"
-        label: "Année"
-      newPeerAsnsCount:
+        label: "Number of IXPs Joined"
+        format: "number"
+      numberOfASes:
         type: "integer"
-        label: "Nouveaux AS"
+        label: "Number of ASes"
         format: "number"
     
-    sort_by: "joinYear"
-    sort_order: "asc"
+    sort_by: "numberOfIXPsMemberOf"
+    sort_order: "desc"

@@ -1,19 +1,20 @@
-// 2. DNS infrastructure density
+// 2. DNS infrastructure density — counts HostName nodes resolved to IPs in the country.
+// Uses the confirmed IYP path: HostName -[:RESOLVES_TO]-> IP -[:PART_OF]-> BGPPrefix -[:COUNTRY]-> Country.
+// The parameter $countryCode must be provided during execution (e.g., 'FR', 'SN', 'JP').
 MATCH (c:Country {country_code: $countryCode})
 
-// 1. Count authoritative servers
-MATCH (ans:AuthoritativeNameServer)-[:ALIAS_OF]->(h_ans:HostName)-[:RESOLVES_TO]->(ip_ans:IP)
-MATCH (ip_ans)-[:PART_OF]->(p_ans) // p_ans is a :Prefix, :GeoPrefix, etc.
-MATCH (p_ans)-[:COUNTRY]->(c)
-WITH c, count(DISTINCT ans) AS totalAuthoritativeServers
+// Count distinct HostNames (acting as server identities) resolving to IPs located in this country.
+MATCH (h:HostName)-[:RESOLVES_TO]->(ip:IP)-[:PART_OF]->(pfx:BGPPrefix)-[:COUNTRY]->(c)
 
-// 2. Count resolvers
-MATCH (res:Resolver)<-[:RESOLVES_TO]-(h_res:HostName)-[:RESOLVES_TO]->(ip_res:IP)
-MATCH (ip_res)-[:PART_OF]->(p_res) // p_res is a :Prefix, :GeoPrefix, etc.
-MATCH (p_res)-[:COUNTRY]->(c)
-WITH c, totalAuthoritativeServers, count(DISTINCT res) AS totalResolvers
+// Find the AS that originates the prefix (i.e., the hosting operator).
+MATCH (hostAS:AS)-[:ORIGINATE]->(pfx)
+OPTIONAL MATCH (hostAS)-[:NAME]->(n:Name)
 
-RETURN c.name AS country,
-       totalAuthoritativeServers,
-       totalResolvers
-ORDER BY totalAuthoritativeServers DESC, totalResolvers DESC
+WITH c,
+     count(DISTINCT h)      AS totalHostNames,
+     count(DISTINCT hostAS)  AS hostingOperators
+
+RETURN c.name          AS country,
+       totalHostNames   AS dnsInfrastructureNodes,
+       hostingOperators AS numberOfHostingOperators
+ORDER BY dnsInfrastructureNodes DESC

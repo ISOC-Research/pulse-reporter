@@ -1,0 +1,110 @@
+# ============================================================================
+# Query Configuration - Data Center Coverage
+# Pillar: Infrastructure / Enabling Infrastructure / Data Center Coverage
+# ============================================================================
+
+queries:
+  "1.cypher":
+    description: "IXPs in a country and the data center facilities where they are present"
+    
+    template: |
+      Title: IXP and Data Center Facility Presence in {{ params.countryCode | upper }}
+      
+      This analysis maps the Internet Exchange Points (IXPs) accessible by local networks in the country and the physical data center facilities where these ASes are co-located. Data centers co-located with IXPs are the physical backbone of the enabling infrastructure.
+      
+      {% if results %}
+      **IXPs and Associated Facilities:**
+      
+      | IXP Name | Facilities (Data Centers) |
+      |----------|---------------------------|
+      {% for row in results %}
+      | {{ row.IXP }} | {{ row.Cities | join(", ") if row.Cities else "(no facility data)" }} |
+      {% endfor %}
+      
+      **Interpretation:**
+      
+      IXPs with a higher number of associated data center facilities indicate a geographically distributed and resilient peering infrastructure. A country with IXPs concentrated in a single facility faces a higher risk of a single point of failure for internet traffic exchange.
+      
+      {% else %}
+      No IXP or data center facility data available for this country.
+      {% endif %}
+    
+    fields:
+      IXP:
+        type: "string"
+        label: "IXP Name"
+      Cities:
+        type: "list"
+        label: "Data Center Facilities"
+    
+    sort_by: "IXP"
+    sort_order: "asc"
+
+  "2.cypher":
+    description: "Number of local AS members for each IXP in the country"
+    
+    template: |
+      Title: IXP Membership by Local ASes in {{ params.countryCode | upper }}
+      
+      This analysis counts how many local Autonomous Systems are members of each Internet Exchange Point in the country. IXPs with more local members serve as more important hubs for domestic traffic exchange, reducing the need for traffic to leave the country unnecessarily.
+      
+      {% if results %}
+      **IXP Membership Counts:**
+      
+      | IXP Name | Local Members (ASes) |
+      |----------|----------------------|
+      {% for row in results %}
+      | {{ row.IXP }} | {{ row.LocalMembers }} |
+      {% endfor %}
+      
+      **Interpretation:**
+      
+      A high local membership count at an IXP indicates it is a critical hub for the country's internet traffic. Countries with IXPs attracting many local members have a well-developed enabling infrastructure that facilitates efficient, low-latency domestic traffic exchange.
+      
+      {% else %}
+      No IXP membership data available for this country.
+      {% endif %}
+    
+    fields:
+      IXP:
+        type: "string"
+        label: "IXP Name"
+      LocalMembers:
+        type: "integer"
+        label: "Number of Local AS Members"
+    
+    sort_by: "LocalMembers"
+    sort_order: "desc"
+
+  "3.cypher":
+    description: "Top ASes in the country not yet members of any IXP"
+    
+    template: |
+      Title: ASes Not Connected to Any IXP in {{ params.countryCode | upper }}
+      
+      This analysis identifies Autonomous Systems registered in the country that are not members of any Internet Exchange Point. These represent potential targets for outreach — if they joined an IXP, they would improve both their own connectivity costs and the country's overall peering efficiency.
+      
+      {% if results %}
+      **ASes Not Participating in Any IXP (Top 10 by ASN):**
+      
+      | ASN |
+      |-----|
+      {% for row in results %}
+      | AS{{ row.ASN }} |
+      {% endfor %}
+      
+      **Interpretation:**
+      
+      The presence of many ASes outside IXPs suggests underutilization of the local peering ecosystem. Encouraging these networks to join domestic IXPs is a key policy recommendation to improve internet resilience and reduce international transit dependency.
+      
+      {% else %}
+      All identified ASes in this country are members of at least one IXP — an excellent sign of a mature peering ecosystem.
+      {% endif %}
+    
+    fields:
+      ASN:
+        type: "integer"
+        label: "Autonomous System Number"
+    
+    sort_by: "ASN"
+    sort_order: "asc"

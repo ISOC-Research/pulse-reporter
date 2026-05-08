@@ -5,58 +5,58 @@
 
 queries:
   "1.cypher":
-    description: "MANRS adoption rate in a country"
+    description: "RPKI ROV adoption rate as a routing security baseline for DNSSEC validation context"
     
     template: |
-      Title: MANRS Adoption Rate for {{ params.countryCode | upper }}
+      Title: Routing Security Baseline (RPKI ROV) for {{ params.countryCode | upper }}
       
-      This analysis calculates the percentage of network operators (AS) in the country that are members of MANRS. A high rate indicates strong commitment to security best practices, which is a prerequisite for DNSSEC validation.
+      This analysis calculates the percentage of network operators (ASes) in the country that are validating RPKI Route Origin Authorizations (ROV). This is the primary routing security practice promoted by MANRS and serves as a key indicator of overall network security maturity, which is a prerequisite for reliable DNSSEC validation infrastructure.
       
       {% if results %}
       **Analysis Results:**
       
-      - Total number of AS: **{{ results[0].totalASNs }}**
-      - Number of MANRS member AS: **{{ results[0].manrsASNs }}**
-      - MANRS adoption percentage: **{{ "%.2f"|format(results[0].manrsAdoptionPercentage) }}%**
+      - Total number of ASes: **{{ results[0].totalASNs }}**
+      - Number of RPKI ROV-validating ASes: **{{ results[0].rpkiValidatingASNs }}**
+      - RPKI validation percentage: **{{ "%.2f"|format(results[0].rpkiValidationPercentage) }}%**
       
       {% else %}
-      No AS or MANRS data available for this country.
+      No AS or RPKI validation data available for this country.
       {% endif %}
     
     fields:
       totalASNs:
         type: "integer"
-        label: "Total number of AS"
-      manrsASNs:
+        label: "Total number of ASes"
+      rpkiValidatingASNs:
         type: "integer"
-        label: "Number of MANRS member AS"
-      manrsAdoptionPercentage:
+        label: "Number of RPKI ROV-validating ASes"
+      rpkiValidationPercentage:
         type: "float"
-        label: "MANRS adoption percentage"
+        label: "RPKI ROV validation percentage"
         format: "float_2"
     
-    sort_by: "manrsAdoptionPercentage"
+    sort_by: "rpkiValidationPercentage"
     sort_order: "desc"
 
   "2.cypher":
-    description: "MANRS status of major access networks"
+    description: "RPKI ROV validation status of major access networks"
     
     template: |
-      Title: MANRS Status of Major Access Networks for {{ params.countryCode | upper }}
+      Title: RPKI ROV Status of Major Access Networks for {{ params.countryCode | upper }}
       
-      This analysis identifies the most important access networks in the country (by population served) and checks their MANRS membership. This helps evaluate whether major ISPs adopt advanced security practices.
+      This analysis identifies the most important access networks in the country (by population served) and checks whether they are validating RPKI Route Origin Authorizations. Networks that perform RPKI ROV validation actively protect their customers from BGP route hijacking and misconfiguration, which is a foundational security practice.
       
       {% if results %}
-      **Major Access Networks and Their MANRS Status:**
+      **Major Access Networks and Their Routing Security Status:**
       
       {% for item in results %}
       - **Rank {{ loop.index }}:** {{ item.name }} (AS{{ item.asn }})
         Population served: **{{ "%.2f"|format(item.populationServedPercentage) }}%**
-        MANRS Member: **{{ "Yes" if item.isManrsMember else "No" }}**
+        Validating RPKI ROV: **{{ "Yes" if item.isRpkiValidating else "No" }}**
       {% endfor %}
       
       {% else %}
-      No access networks identified or MANRS data unavailable for this country.
+      No access networks identified or RPKI data unavailable for this country.
       {% endif %}
     
     fields:
@@ -70,9 +70,9 @@ queries:
         type: "float"
         label: "Population Served (%)"
         format: "float_2"
-      isManrsMember:
+      isRpkiValidating:
         type: "boolean"
-        label: "MANRS Member"
+        label: "Validating RPKI ROV"
     
     max_display: 10
     sort_by: "populationServedPercentage"

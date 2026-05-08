@@ -4,7 +4,7 @@
 # ============================================================================
 
 queries:
-  "security/security_threat/cybersecurity_index_score/1.cypher":
+  "1.cypher":
     description: "RPKI adoption rate by country (MANRS Indicator)"
     
     template: |
@@ -46,7 +46,7 @@ queries:
     sort_by: "rpkiAdoptionPercentage"
     sort_order: "desc"
 
-  "security/security_threat/cybersecurity_index_score/2.cypher":
+  "2.cypher":
     description: "PeeringDB presence rate for ASes in a country (MANRS Indicator)"
     
     template: |
@@ -88,7 +88,7 @@ queries:
     sort_by: "coordinationPercentage"
     sort_order: "desc"
 
-  "security/security_threat/cybersecurity_index_score/3.cypher":
+  "3.cypher":
     description: "Top external peers for a country's ASes"
     
     template: |

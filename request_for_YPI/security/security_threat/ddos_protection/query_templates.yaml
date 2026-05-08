@@ -4,7 +4,7 @@
 # ============================================================================
 
 queries:
-  "security/security_threat/ddos_protection/1.cypher":
+  "1.cypher":
     description: "List of AS categorized as CDN in a specific country"
     
     template: |
@@ -40,7 +40,7 @@ queries:
     sort_by: "cdnName"
     sort_order: "asc"
 
-  "security/security_threat/ddos_protection/2.cypher":
+  "2.cypher":
     description: "Percentage of the population served by CDN ASes"
     
     template: |
@@ -80,29 +80,29 @@ queries:
     sort_by: "populationServedPercentage"
     sort_order: "desc"
 
-  "security/security_threat/ddos_protection/3.cypher":
-    description: "Popular domains in a country hosted by CDNs"
+  "3.cypher":
+    description: "Popular domains in a country hosted by CDNs or DDoS mitigation providers"
     
     template: |
-      Title: Popular Domains Hosted by CDNs in {{ params.countryCode | upper }}
+      Title: Popular Domains Protected by CDN/DDoS Infrastructure in {{ params.countryCode | upper }}
       
-      This analysis identifies the most queried domains in the country and checks if they are hosted by Content Delivery Networks (CDNs). CDNs help ensure the availability and performance of these domains, especially during high traffic or DDoS attacks.
+      This analysis identifies the most queried domains in the country and checks if they are hosted by Content Delivery Networks (CDNs) or DDoS Mitigation providers. Both categories provide scrubbing capacity and traffic distribution that protect services during volumetric attacks.
       
       {% if results %}
       **Analysis Results:**
       
-      | Domain Name | Hosting CDN ASN | Hosting CDN Name | Query Percentage |
-      |-------------|-----------------|------------------|------------------|
+      | Domain Name | Hosting ASN | Hosting AS Name | Hosting Type | Query Percentage |
+      |-------------|-------------|-----------------|--------------|------------------|
       {% for row in results %}
-      | {{ row.popularDomain }} | {{ row.hostingCdnASN }} | {{ row.hostingCdnName or "(unnamed)" }} | {{ "%.2f"|format(row.queryPercentage) }} |
+      | {{ row.popularDomain }} | {{ row.hostingCdnASN }} | {{ row.hostingCdnName or "(unnamed)" }} | {{ row.hostingType or "CDN/DDoS" }} | {{ "%.2f"|format(row.queryPercentage) }} |
       {% endfor %}
       
       **Interpretation:**
       
-      The presence of popular domains hosted by CDNs indicates the reliance on CDN infrastructure for critical web services. Domains not hosted by CDNs may be more vulnerable to DDoS attacks.
+      Domains hosted by CDN or DDoS mitigation infrastructure benefit from traffic scrubbing and distributed caching, making them significantly more resilient to volumetric attacks. A country where most popular domains rely on such infrastructure has better baseline DDoS resistance for its critical services.
       
       {% else %}
-      No domain data available for this country.
+      No CDN- or DDoS-protected domain data found for this country.
       {% endif %}
     
     fields:
@@ -111,10 +111,13 @@ queries:
         label: "Domain Name"
       hostingCdnASN:
         type: "integer"
-        label: "Hosting CDN ASN"
+        label: "Hosting ASN"
       hostingCdnName:
         type: "string"
-        label: "Hosting CDN Name"
+        label: "Hosting AS Name"
+      hostingType:
+        type: "string"
+        label: "Hosting Type (CDN / DDoS Mitigation)"
       queryPercentage:
         type: "float"
         label: "Query Percentage"
@@ -123,7 +126,7 @@ queries:
     sort_by: "queryPercentage"
     sort_order: "desc"
 
-  "security/security_threat/ddos_protection/4.cypher":
+  "4.cypher":
     description: "Diversity of Internet Exchange Points (IXPs) in a country"
     
     template: |
@@ -162,7 +165,7 @@ queries:
     sort_by: "numberOfIXPs"
     sort_order: "desc"
 
-  "security/security_threat/ddos_protection/5.cypher":
+  "5.cypher":
     description: "Network monitoring density in a country"
     
     template: |
@@ -198,7 +201,7 @@ queries:
     sort_by: "numberOfAtlasProbes"
     sort_order: "desc"
 
-  "security/security_threat/ddos_protection/6.cypher":
+  "6.cypher":
     description: "RPKI coverage of prefixes in a country"
     
     template: |

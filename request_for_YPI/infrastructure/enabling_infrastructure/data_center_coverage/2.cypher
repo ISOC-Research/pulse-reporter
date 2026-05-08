@@ -2,4 +2,4 @@
 // The $countryCode parameter must be provided during execution (e.g., 'KE', 'BR', 'DE').
 MATCH (a:AS)-[:MEMBER_OF]->(i:IXP), (a)-[:COUNTRY]->(c:Country {country_code: $countryCode})
 RETURN i.name AS IXP, COUNT(DISTINCT a) AS LocalMembers
-ORDER BY LocalMembers DESC;MATCH (a:AS)-[:MEMBER_OF]->(i:IXP), (a)-[:COUNTRY]->(c:Country {country_code: $countryCode})
+ORDER BY LocalMembers DESC;

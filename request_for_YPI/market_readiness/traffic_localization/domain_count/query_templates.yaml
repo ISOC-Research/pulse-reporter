@@ -7,7 +7,7 @@ queries:
   # --------------------------------------------------------------------------
   # Query 1: Popularity of ccTLD Domains (Local Consumption)
   # --------------------------------------------------------------------------
-  "market_readiness/domain_registration/1.cypher":
+  "1.cypher":
     description: "List of local ccTLD domains ranked by their query volume from within the country"
     
     # Jinja2 Template for LLM context generation (English)
@@ -50,7 +50,7 @@ queries:
   # --------------------------------------------------------------------------
   # Query 2: Hosting Location of Popular ccTLD Domains
   # --------------------------------------------------------------------------
-  "market_readiness/domain_registration/2.cypher":
+  "2.cypher":
     description: "Geographic distribution of hosting locations for the top 100 popular ccTLD domains"
     
     # Jinja2 Template for LLM context generation (English)

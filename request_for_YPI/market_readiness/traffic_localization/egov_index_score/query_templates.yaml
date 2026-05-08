@@ -7,7 +7,7 @@ queries:
   # --------------------------------------------------------------------------
   # Query 1: Identification of Key Local Domains (Potential E-Gov Portals)
   # --------------------------------------------------------------------------
-  "market_readiness/e_government/1.cypher":
+  "1.cypher":
     description: "List of popular domains within the national ccTLD, ranked by local query intensity"
     
     # Jinja2 Template for LLM context generation (English)
@@ -57,7 +57,7 @@ queries:
   # --------------------------------------------------------------------------
   # Query 2: Hosting Infrastructure Analysis (Digital Sovereignty)
   # --------------------------------------------------------------------------
-  "market_readiness/e_government/2.cypher":
+  "2.cypher":
     description: "Analysis of the hosting location (AS and Country) for a specific target domain"
     
     # Jinja2 Template for LLM context generation (English)
@@ -107,7 +107,7 @@ queries:
   # --------------------------------------------------------------------------
   # Query 3: Routing Security (RPKI) Assessment
   # --------------------------------------------------------------------------
-  "market_readiness/e_government/3.cypher":
+  "3.cypher":
     description: "Assessment of RPKI adoption for the Autonomous System hosting the service"
     
     # Jinja2 Template for LLM context generation (English)

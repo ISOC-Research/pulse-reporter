@@ -1,11 +1,10 @@
-// Query 2: Hosting Analysis (Fix: relation IP->Prefix générique)
+// Query 2: Hosting Analysis — traces the AS and country hosting a given domain.
+// The $domainName and $countryCode parameters must be provided during execution.
 MATCH (d:DomainName {name: $domainName})
 MATCH (d)-[:RESOLVES_TO]->(ip:IP)
 
-// UTILISATION D'UNE RELATION ANONYME '-->' pour contourner l'erreur de nom
-MATCH (ip)-->(p:Prefix)
-
-MATCH (hostingAS:AS)-[:ORIGINATE]->(p)
+// Trace the hosting AS via the confirmed IYP path: IP -[:PART_OF]-> BGPPrefix <- [:ORIGINATE]- AS
+MATCH (ip)-[:PART_OF]->(pfx:BGPPrefix)<-[:ORIGINATE]-(hostingAS:AS)
 
 OPTIONAL MATCH (hostingAS)-[:NAME]->(n:Name)
 OPTIONAL MATCH (hostingAS)-[:COUNTRY]->(hostingCountry:Country)

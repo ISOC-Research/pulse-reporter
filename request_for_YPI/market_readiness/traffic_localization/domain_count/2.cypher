@@ -1,14 +1,14 @@
-// Analyse la distribution géographique de l'hébergement des 100 domaines ccTLD les plus populaires.
+// Analyses the geographic distribution of hosting for the top 100 ccTLD domains.
 // The $countryCode parameter must be provided during execution (e.g., 'SN', 'FR', 'JP').
 MATCH (d:DomainName)
 WHERE d.name ENDS WITH '.' + toLower($countryCode)
 
-// Se concentre sur les domaines populaires (source: Tranco) pour une analyse pertinente
+// Focus on popular domains (source: Tranco) for a relevant analysis.
 MATCH (d)-[r:RANK]->(:Ranking {name:"Tranco top 1M"})
 WITH d ORDER BY r.rank LIMIT 100
 
-// Trouve le pays de l'AS qui annonce le préfixe contenant l'IP du domaine
-MATCH (d)-[:RESOLVES_TO]->(:IP)<-[:ORIGINATE]-(hostingAS:AS)
+// Trace hosting country via: DomainName -> IP -[:PART_OF]-> BGPPrefix <- [:ORIGINATE]- AS -> Country
+MATCH (d)-[:RESOLVES_TO]->(ip:IP)-[:PART_OF]->(pfx:BGPPrefix)<-[:ORIGINATE]-(hostingAS:AS)
 MATCH (hostingAS)-[:COUNTRY]->(hostingCountry:Country)
 
 WITH hostingCountry, count(DISTINCT d) AS domainCount
