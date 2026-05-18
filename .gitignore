@@ -6,3 +6,11 @@ api_key_mistral
 /env
 /.env
 report_*.md
+# Local IPv6 test reports
+reports/
+
+# Local IPv6 test reports
+reports/
+
+# Local IPv6 test reports
+reports/
