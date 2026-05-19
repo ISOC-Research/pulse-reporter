@@ -47,6 +47,205 @@ SEVERITY_CRITICAL  = 1000         # Customer Cone Size thresholds
 SEVERITY_HIGH      = 200
 SEVERITY_MEDIUM    = 50
 
+# ═══════════════════════════════════════════════════════════════════════════
+# SECTION 1 — CORE INFRASTRUCTURE / RPKI ANALYTICS
+# ═══════════════════════════════════════════════════════════════════════════
+
+def get_rpki_coverage(country_code: str) -> dict:
+    """
+    Section 1.1.3 — Measure IPv6 RPKI coverage for a country.
+
+    Returns:
+    {
+        "country": str,
+        "total_ipv6_prefixes": int,
+        "rpki_covered_prefixes": int,
+        "coverage_pct": float,
+        "error": str | None
+    }
+    """
+
+    country_code = country_code.upper()
+
+    query = f"""
+    MATCH (c:Country {{country_code: '{country_code}'}})
+          <-[:POPULATION]-(a:AS)
+
+    MATCH (a)-[:ORIGINATE]->(b:BGPPrefix)
+    WHERE b.prefix CONTAINS ':'
+
+    OPTIONAL MATCH (b)-[:PART_OF]->(r:RPKIPrefix)
+
+    RETURN
+        COUNT(DISTINCT b) AS total_ipv6_prefixes,
+        COUNT(DISTINCT r) AS rpki_covered_prefixes
+    """
+
+    result = execute_cypher_test(query)
+
+    if not result["success"]:
+        return {
+            "error": f"IYP query failed: {result['error']}"
+        }
+
+    if not result["data"]:
+        return {
+            "error": f"No IPv6 prefix data found for {country_code}"
+        }
+
+    row = result["data"][0]
+
+    total = row.get("total_ipv6_prefixes", 0) or 0
+    covered = row.get("rpki_covered_prefixes", 0) or 0
+
+    coverage_pct = round((covered / total) * 100, 2) if total > 0 else 0.0
+
+    return {
+        "country": country_code,
+        "total_ipv6_prefixes": total,
+        "rpki_covered_prefixes": covered,
+        "coverage_pct": coverage_pct,
+        "error": None,
+    }
+
+def get_isp_rpki_coverage(country_code: str) -> dict:
+    """
+    Section 1.1.3.1 — ISP-level IPv6 RPKI coverage analysis.
+
+    Returns:
+    {
+        "country": str,
+        "isps": [
+            {
+                "asn": int,
+                "isp": str,
+                "total_ipv6_prefixes": int,
+                "rpki_covered_prefixes": int,
+                "coverage_pct": float
+            }
+        ]
+    }
+    """
+
+    country_code = country_code.upper()
+
+    query = f"""
+    MATCH (c:Country {{country_code: '{country_code}'}})
+          <-[:POPULATION]-(a:AS)
+
+    OPTIONAL MATCH (a)-[:NAME]->(n:Name)
+
+    MATCH (a)-[:ORIGINATE]->(b:BGPPrefix)
+    WHERE b.prefix CONTAINS ':'
+
+    OPTIONAL MATCH (b)-[:PART_OF]->(r:RPKIPrefix)
+
+    WITH
+        a,
+        collect(DISTINCT n.name)[0] AS isp_name,
+        COUNT(DISTINCT b) AS total_ipv6_prefixes,
+        COUNT(DISTINCT r) AS rpki_covered_prefixes
+
+    RETURN
+        a.asn AS asn,
+        COALESCE(isp_name, a.org_name, toString(a.asn)) AS isp,
+        total_ipv6_prefixes,
+        rpki_covered_prefixes
+        ORDER BY total_ipv6_prefixes DESC
+        LIMIT 25
+    """
+
+    result = execute_cypher_test(query)
+
+    if not result["success"]:
+        return {
+            "error": f"IYP query failed: {result['error']}"
+        }
+
+    isps = []
+
+    for row in result["data"]:
+        total = row.get("total_ipv6_prefixes", 0) or 0
+        covered = row.get("rpki_covered_prefixes", 0) or 0
+
+        coverage_pct = round((covered / total) * 100, 2) if total > 0 else 0.0
+
+        isps.append({
+            "asn": row.get("asn"),
+            "isp": row.get("isp"),
+            "total_ipv6_prefixes": total,
+            "rpki_covered_prefixes": covered,
+            "coverage_pct": coverage_pct,
+        })
+
+    return {
+        "country": country_code,
+        "isps": isps,
+        "error": None,
+    }
+
+def get_ipv6_upstream_connectivity(country_code: str) -> dict:
+    """
+    Section 1.2 — Measure IPv6-capable upstream connectivity.
+
+    Determines which ISPs depend on upstream ASNs
+    that originate IPv6 prefixes.
+    """
+
+    country_code = country_code.upper()
+
+    query = f"""
+    MATCH (c:Country {{country_code: '{country_code}'}})
+          <-[:POPULATION]-(a:AS)
+
+    OPTIONAL MATCH (a)-[:NAME]->(n:Name)
+
+    OPTIONAL MATCH (a)-[:DEPENDS_ON]->(upstream:AS)
+
+    OPTIONAL MATCH (upstream)-[:ORIGINATE]->(b:BGPPrefix)
+    WHERE b.prefix CONTAINS ':'
+
+    WITH
+        a,
+        collect(DISTINCT n.name)[0] AS isp_name,
+        COUNT(DISTINCT b) AS upstream_ipv6_prefixes
+
+    RETURN
+        a.asn AS asn,
+        COALESCE(isp_name, a.org_name, toString(a.asn)) AS isp,
+        upstream_ipv6_prefixes,
+        CASE
+            WHEN upstream_ipv6_prefixes > 0 THEN true
+            ELSE false
+        END AS has_ipv6_upstream
+    """
+
+    result = execute_cypher_test(query)
+
+    if not result["success"]:
+        return {
+            "error": f"IYP query failed: {result['error']}"
+        }
+
+    isps = result["data"]
+
+    total_isps = len(isps)
+
+    ipv6_ready = sum(
+        1 for isp in isps
+        if isp.get("has_ipv6_upstream")
+    )
+
+    pct = round((ipv6_ready / total_isps) * 100, 2) if total_isps > 0 else 0.0
+
+    return {
+        "country": country_code,
+        "total_isps": total_isps,
+        "ipv6_upstream_ready": ipv6_ready,
+        "percentage": pct,
+        "isps": isps,
+        "error": None,
+    }
 
 # ═══════════════════════════════════════════════════════════════════════════
 # SECTION 2 — ISP DEPLOYMENT SCORECARD
@@ -489,6 +688,9 @@ def export_policy_brief(
     summary_text: str,
     trend:       list,
     comparison:  dict,
+    rpki_data:   dict,
+    isp_rpki_data: dict,
+    upstream_data: dict,
     output_dir:  Optional[str] = None,
 ) -> str:
     """
@@ -521,6 +723,52 @@ def export_policy_brief(
         "## Executive Summary",
         "",
         summary_text,
+        "",
+        "---",
+        "",
+        "## Section 1 — Core Infrastructure / RPKI Security",
+        "",
+        f"**Total IPv6 Prefixes:** {rpki_data.get('total_ipv6_prefixes', 0):,}  ",
+        f"**RPKI-Covered Prefixes:** {rpki_data.get('rpki_covered_prefixes', 0):,}  ",
+        f"**RPKI Coverage:** {rpki_data.get('coverage_pct', 0):.2f}%  ",
+        "",
+        "> RPKI coverage measures the percentage of IPv6 routing prefixes",
+        "> protected using Route Origin Authorization (ROA) records for routing security.",
+        "",
+        "---",
+        "",
+                "### ISPs with Weak RPKI Coverage",
+        "",
+        "| ISP | IPv6 Prefixes | RPKI Coverage |",
+        "|-----|---------------|---------------|",
+
+        *[
+            f"| {isp['isp'][:40]} | "
+            f"{isp['total_ipv6_prefixes']} | "
+            f"{isp['coverage_pct']:.2f}% |"
+            for isp in sorted(
+                isp_rpki_data.get("isps", []),
+                key=lambda x: x["coverage_pct"]
+            )[:5]
+        ],
+
+        "",
+        "> Several major networks continue to exhibit weak RPKI",
+        "> adoption despite significant IPv6 routing presence.",
+        "",
+        "---",
+        "",
+                "### Preliminary IPv6 Upstream Connectivity",
+        "",
+        f"**ISPs Assessed:** {upstream_data.get('total_isps', 0)}  ",
+        f"**IPv6-Capable Upstream Reachability:** {upstream_data.get('percentage', 0):.2f}%  ",
+        "",
+        "> Preliminary graph-based analysis suggests that most assessed",
+        "> ISPs maintain upstream dependencies connected to IPv6-capable",
+        "> transit or peering networks.",
+        "",
+        "> NOTE: This metric is currently experimental and based on",
+        "> inferred AS dependency relationships within the IYP graph.",
         "",
         "---",
         "",

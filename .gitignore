@@ -5,6 +5,10 @@
 api_key_mistral
 /env
 /.env
+
+# Temporary testing files
+request_for_YPI/test_new.py
+
 report_*.md
 # Local IPv6 test reports
 reports/

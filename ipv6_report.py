@@ -27,8 +27,11 @@ from request_for_YPI.ipv6_engine import (
     build_scorecard,
     generate_executive_summary,
     get_adoption_trend,
+    get_isp_rpki_coverage,
     get_regional_comparison,
     export_policy_brief,
+    get_rpki_coverage,
+    get_ipv6_upstream_connectivity,
 )
 
 
@@ -276,11 +279,17 @@ def main():
     # ── Export ────────────────────────────────────────────────────────────────
     if not args.no_export:
         print()
+        rpki_data = get_rpki_coverage(args.country)
+        isp_rpki_data = get_isp_rpki_coverage(args.country)
+        upstream_data = get_ipv6_upstream_connectivity(args.country)
         filepath = export_policy_brief(
             scorecard    = scorecard,
             summary_text = summary_text,
             trend        = trend,
             comparison   = comparison,
+            rpki_data    = rpki_data,
+            isp_rpki_data  = isp_rpki_data,
+            upstream_data  = upstream_data,
         )
         print(_hr("─"))
         print(f"  [EXPORT] Policy brief saved →  {filepath}")
