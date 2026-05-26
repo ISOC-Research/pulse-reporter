@@ -247,6 +247,267 @@ def get_ipv6_upstream_connectivity(country_code: str) -> dict:
         "error": None,
     }
 
+def get_tld_ipv6_health(country_code: str) -> dict:
+    """
+    Section 5.1 — ccTLD IPv6 readiness analysis.
+
+    Measures how many country-code TLD domains
+    resolve to IPv6-enabled infrastructure.
+    """
+
+    country_code = country_code.upper()
+
+    tld = country_code.lower()
+
+    query = f"""
+    MATCH (d:DomainName)
+
+    WHERE d.name ENDS WITH '.{tld}'
+
+    WITH d
+    LIMIT 5000
+
+    OPTIONAL MATCH (d)-[:PART_OF]-(h:HostName)
+                    -[:RESOLVES_TO]->(ip:IP {{af: 6}})
+
+    WITH
+        d,
+        COUNT(ip) > 0 AS has_ipv6
+
+    RETURN
+        COUNT(d) AS total_domains,
+        SUM(CASE WHEN has_ipv6 THEN 1 ELSE 0 END) AS ipv6_enabled_domains
+    """
+
+    result = execute_cypher_test(query)
+
+    if not result["success"]:
+        return {
+            "error": f"IYP query failed: {result['error']}"
+        }
+
+    row = result["data"][0]
+
+    total = row.get("total_domains", 0) or 0
+    ipv6_enabled = row.get("ipv6_enabled_domains", 0) or 0
+
+    percentage = (
+        round((ipv6_enabled / total) * 100, 2)
+        if total > 0 else 0.0
+    )
+
+    return {
+        "country": country_code,
+        "tld": f".{tld}",
+        "total_domains": total,
+        "ipv6_enabled_domains": ipv6_enabled,
+        "percentage": percentage,
+        "error": None,
+    }
+
+def analyze_tld_ipv6_readiness(tld: str, sample_limit: int = 5000) -> dict:
+    """
+    Analyze IPv6 readiness for a given TLD.
+
+    Example:
+        .in
+        .fr
+        .com
+    """
+
+    tld = tld.lower().replace(".", "")
+
+    query = f"""
+    MATCH (d:DomainName)
+
+    WHERE d.name ENDS WITH '.{tld}'
+
+    WITH d
+    LIMIT {sample_limit}
+
+    OPTIONAL MATCH (d)-[:PART_OF]-(h:HostName)
+                    -[:RESOLVES_TO]->(ip:IP {{af: 6}})
+
+    WITH
+        d,
+        COUNT(ip) > 0 AS has_ipv6
+
+    RETURN
+        COUNT(d) AS total_domains,
+        SUM(CASE WHEN has_ipv6 THEN 1 ELSE 0 END) AS ipv6_enabled_domains
+    """
+
+    result = execute_cypher_test(query)
+
+    if not result["success"]:
+        return {
+            "error": result["error"]
+        }
+
+    row = result["data"][0]
+
+    total = row.get("total_domains", 0) or 0
+    enabled = row.get("ipv6_enabled_domains", 0) or 0
+
+    pct = round((enabled / total) * 100, 2) if total > 0 else 0.0
+
+    return {
+        "tld": f".{tld}",
+        "total_domains": total,
+        "ipv6_enabled_domains": enabled,
+        "percentage": pct,
+    }
+
+def compare_tld_ipv6_readiness(base_country: str) -> dict:
+    """
+    Section 5.1.1 — Compare ccTLD IPv6 readiness
+    against .com and peer TLDs.
+    """
+
+    base_country = base_country.upper()
+
+    tld_map = {
+        "IN": [".in", ".com", ".fr", ".de"],
+        "FR": [".fr", ".com", ".de", ".in"],
+        "DE": [".de", ".com", ".fr", ".in"],
+    }
+
+    comparison_tlds = tld_map.get(
+        base_country,
+        [f".{base_country.lower()}", ".com"]
+    )
+
+    results = []
+
+    for tld in comparison_tlds:
+        results.append(
+            analyze_tld_ipv6_readiness(tld)
+        )
+
+    return {
+        "country": base_country,
+        "comparisons": results,
+    }
+
+
+def get_nameserver_ipv6_health(country_code: str,
+                               sample_limit: int = 5000) -> dict:
+    """
+    Section 5.2 — Measure IPv6 reachability
+    of authoritative nameservers for a ccTLD.
+    """
+
+    tld = country_code.lower()
+
+    query = f"""
+    MATCH (d:DomainName)-[:MANAGED_BY]->(ns:AuthoritativeNameServer)
+
+    WHERE d.name ENDS WITH '.{tld}'
+
+    WITH DISTINCT d, ns
+    LIMIT {sample_limit}
+
+    OPTIONAL MATCH (ns)-[:RESOLVES_TO]->(ip:IP {{af: 6}})
+
+    WITH
+        ns,
+        COUNT(ip) > 0 AS has_ipv6
+
+    RETURN
+        COUNT(DISTINCT ns) AS total_nameservers,
+        SUM(CASE WHEN has_ipv6 THEN 1 ELSE 0 END)
+            AS ipv6_enabled_nameservers
+    """
+    
+    result = execute_cypher_test(query)
+
+    if not result["success"]:
+        return {
+            "error": result["error"]
+        }
+
+    row = result["data"][0]
+
+    total = row.get("total_nameservers", 0) or 0
+    enabled = row.get("ipv6_enabled_nameservers", 0) or 0
+
+    pct = round((enabled / total) * 100, 2) if total > 0 else 0.0
+
+    return {
+        "country": country_code.upper(),
+        "total_nameservers": total,
+        "ipv6_enabled_nameservers": enabled,
+        "percentage": pct,
+        "error": None
+    }
+
+def get_glue_record_ipv6_health(country_code: str,
+                                sample_limit: int = 5000) -> dict:
+    """
+    Section 5.2.1 — Approximate glue-record IPv6 readiness.
+
+    Detects in-zone authoritative nameservers
+    and checks whether they resolve to IPv6.
+    """
+
+    tld = country_code.lower()
+
+    query = f"""
+    MATCH (d:DomainName)-[:MANAGED_BY]->(ns:AuthoritativeNameServer)
+
+    WHERE d.name ENDS WITH '.{tld}'
+
+    WITH DISTINCT d, ns
+    LIMIT {sample_limit}
+
+    WITH
+        d,
+        ns,
+
+        CASE
+            WHEN ns.name ENDS WITH d.name
+            THEN true
+            ELSE false
+        END AS is_glue_candidate
+
+    WHERE is_glue_candidate = true
+
+    OPTIONAL MATCH (ns)-[:RESOLVES_TO]->(ip:IP {{af: 6}})
+
+    WITH
+        ns,
+        COUNT(ip) > 0 AS has_ipv6
+
+    RETURN
+        COUNT(DISTINCT ns) AS total_glue_nameservers,
+        SUM(CASE WHEN has_ipv6 THEN 1 ELSE 0 END)
+            AS ipv6_enabled_glue
+    """
+
+    result = execute_cypher_test(query)
+
+    if not result["success"]:
+        return {
+            "error": result["error"]
+        }
+
+    row = result["data"][0]
+
+    total = row.get("total_glue_nameservers", 0) or 0
+    enabled = row.get("ipv6_enabled_glue", 0) or 0
+
+    pct = round((enabled / total) * 100, 2) if total > 0 else 0.0
+
+    return {
+        "country": country_code.upper(),
+        "total_glue_nameservers": total,
+        "ipv6_enabled_glue": enabled,
+        "percentage": pct,
+        "error": None
+    }
+
+
+
 # ═══════════════════════════════════════════════════════════════════════════
 # SECTION 2 — ISP DEPLOYMENT SCORECARD
 # ═══════════════════════════════════════════════════════════════════════════
@@ -586,30 +847,43 @@ def get_adoption_trend(country_code: str,
                        end_year:   int = 2024) -> list:
     """
     Section 3.1.2 — IPv6 adoption trend over multiple years.
-
-    Returns a list of dicts, one per year:
-    [
-        {"year": 2020, "adoption": 0.23},
-        {"year": 2021, "adoption": 0.31},
-        ...
-    ]
-    Years with no data are included with adoption: None.
     """
+
     country_code = country_code.upper()
     trend = []
 
     for year in range(start_year, end_year + 1):
+
         try:
             entries = extract_all_countries_indicator(year, "ipv6")
-            entry   = next((x for x in entries if x["country"] == country_code), None)
-            adoption = round(entry["average"], 4) if entry else None
+
+            entry = next(
+                (x for x in entries if x["country"] == country_code),
+                None
+            )
+
+            if entry:
+                raw = entry["average"]
+
+                # Filter anomalous Pulse values (e.g. 1.0 / 100%)
+                # which likely indicate corrupted or placeholder data
+                if raw >= 0.98:
+                    adoption = None
+                else:
+                    adoption = round(raw, 4)
+
+            else:
+                adoption = None
+
         except Exception:
             adoption = None
 
-        trend.append({"year": year, "adoption": adoption})
+        trend.append({
+            "year": year,
+            "adoption": adoption
+        })
 
     return trend
-
 
 def get_regional_comparison(country_code: str,
                              year: int = 2024,
@@ -691,6 +965,10 @@ def export_policy_brief(
     rpki_data:   dict,
     isp_rpki_data: dict,
     upstream_data: dict,
+    tld_data: dict,
+    tld_comparison_data: dict,
+    nameserver_data: dict,
+    glue_data: dict,
     output_dir:  Optional[str] = None,
 ) -> str:
     """
@@ -861,6 +1139,79 @@ def export_policy_brief(
             )
 
     lines += [
+        "",
+        "---",
+        "",
+        "## Section 5 — Country TLD IPv6 Health",
+        "",
+
+        f"**Analyzed ccTLD:** {tld_data.get('tld', 'N/A')}  ",
+        f"**Domains Sampled:** {tld_data.get('total_domains', 0)}  ",
+        f"**IPv6-Enabled Domains:** {tld_data.get('ipv6_enabled_domains', 0)}  ",
+        f"**IPv6 / AAAA Readiness:** {tld_data.get('percentage', 0):.2f}%  ",
+        "",
+
+        "> Sample-based analysis of the national ccTLD ecosystem",
+        "> indicates the proportion of domains resolving to",
+        "> IPv6-capable infrastructure.",
+        "",
+
+        "> IPv6 capability was inferred through hostname resolution",
+        "> to IP nodes with address family AF=6 within the IYP graph.",
+        "",
+        "",
+
+        "### Comparative TLD IPv6 Readiness",
+        "",
+        "| TLD | IPv6 Readiness |",
+        "|------|----------------|",
+
+        *[
+            f"| {entry['tld']} | {entry['percentage']:.2f}% |"
+            for entry in tld_comparison_data.get("comparisons", [])
+        ],
+
+        "",
+        "> Comparative sampled analysis across major TLD ecosystems",
+        "> provides relative benchmarking of IPv6 DNS readiness.",
+        "---",
+        "",
+        "### Authoritative Nameserver IPv6 Reachability",
+        "",
+
+        f"**Nameservers Assessed:** {nameserver_data.get('total_nameservers', 0)}  ",
+        f"**IPv6-Reachable Nameservers:** {nameserver_data.get('ipv6_enabled_nameservers', 0)}  ",
+        f"**IPv6 NS Reachability:** {nameserver_data.get('percentage', 0):.2f}%  ",
+        "",
+
+        "> This metric measures whether authoritative DNS",
+        "> infrastructure supporting the ccTLD ecosystem",
+        "> is directly reachable over IPv6.",
+        "",
+
+        "> Nameserver IPv6 capability was inferred through",
+        "> RESOLVES_TO relationships toward AF=6 IP nodes",
+        "> within the IYP graph.",
+        "",
+        "---",
+        "",
+        "### Glue Record IPv6 Readiness",
+        "",
+
+        f"**Glue-style Nameservers Assessed:** {glue_data.get('total_glue_nameservers', 0)}  ",
+        f"**IPv6-Capable Glue Nameservers:** {glue_data.get('ipv6_enabled_glue', 0)}  ",
+        f"**Glue IPv6 Readiness:** {glue_data.get('percentage', 0):.2f}%  ",
+        "",
+
+        "> This approximation identifies in-zone authoritative",
+        "> nameservers whose hostnames fall within the same",
+        "> domain hierarchy as the delegated domain.",
+        "",
+
+        "> Results suggest that IPv6 adoption among self-hosted",
+        "> authoritative DNS infrastructure remains limited",
+        "> within the sampled ccTLD ecosystem.",
+
         "",
         "---",
         "",
