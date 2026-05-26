@@ -61,12 +61,13 @@ def get_indicator_value(entry, indicator):
     try:
         dims = entry["pillars"]["security"]["dimensions"]
 
-        # 🔥 Search ALL dimensions dynamically
         for dim in dims.values():
             indicators = dim.get("indicators", {})
 
             for key, val in indicators.items():
-                if indicator in key:
+
+                # Exact indicator match only
+                if indicator == key:
                     return val.get("value")
 
         return None
@@ -82,7 +83,7 @@ def extract_all_countries_indicator(year, indicator):
 
     for entry in data.get("data", []):
         country = entry.get("country")
-
+        
         if not country:
             continue
 
