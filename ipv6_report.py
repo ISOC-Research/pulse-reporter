@@ -32,10 +32,14 @@ from request_for_YPI.ipv6_engine import (
     export_policy_brief,
     get_rpki_coverage,
     get_ipv6_upstream_connectivity,
+    get_sector_ipv6_readiness,
     get_tld_ipv6_health,
     compare_tld_ipv6_readiness,
     get_nameserver_ipv6_health,
     get_glue_record_ipv6_health,
+    get_web_ipv6_readiness,
+    get_government_ipv6_readiness,
+    get_cdn_ipv6_correlation,
 )
 
 
@@ -290,6 +294,34 @@ def main():
         tld_comparison_data = compare_tld_ipv6_readiness(args.country)
         nameserver_data = get_nameserver_ipv6_health(args.country)
         glue_data = get_glue_record_ipv6_health(args.country)
+        web_data = get_web_ipv6_readiness(args.country)
+        gov_data = get_government_ipv6_readiness()
+        banking_data = get_sector_ipv6_readiness(
+            "Banking",
+            ["bank", "banking", "paytm", "upi"]
+        )
+
+        news_data = get_sector_ipv6_readiness(
+            "News",
+            ["news", "times", "media"]
+        )
+
+        education_data = get_sector_ipv6_readiness(
+            "Education",
+            ["edu", "college", "university"]
+        )
+
+        ecommerce_data = get_sector_ipv6_readiness(
+            "Ecommerce",
+            ["shop", "store"]
+        )
+        cdn_data = get_cdn_ipv6_correlation(args.country)
+        sector_data = [
+            banking_data,
+            news_data,
+            education_data,
+            ecommerce_data,
+        ]
         filepath = export_policy_brief(
             scorecard    = scorecard,
             summary_text = summary_text,
@@ -302,6 +334,10 @@ def main():
             tld_comparison_data  = tld_comparison_data,
             nameserver_data = nameserver_data,
             glue_data = glue_data,
+            web_data= web_data,
+            gov_data = gov_data,
+            sector_data= sector_data,
+            cdn_data = cdn_data,
         )
         print(_hr("─"))
         print(f"  [EXPORT] Policy brief saved →  {filepath}")

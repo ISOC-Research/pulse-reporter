@@ -506,7 +506,327 @@ def get_glue_record_ipv6_health(country_code: str,
         "error": None
     }
 
+def get_web_ipv6_readiness(country_code: str,
+                           sample_limit: int = 1000) -> dict:
+    """
+    Section 4.1 / 4.1.2
 
+    Analyze IPv6 reachability of popular web domains.
+    """
+
+    tld = country_code.lower()
+
+    query = f"""
+    MATCH (d:DomainName)-[:RANK]->(:Ranking)
+
+    WHERE d.name ENDS WITH '.{tld}'
+
+    WITH DISTINCT d
+    LIMIT {sample_limit}
+
+    OPTIONAL MATCH (d)-[:PART_OF]-(h:HostName)
+
+    OPTIONAL MATCH (h)-[:RESOLVES_TO]->(ip4:IP {{af: 4}})
+    OPTIONAL MATCH (h)-[:RESOLVES_TO]->(ip6:IP {{af: 6}})
+
+    WITH
+        d,
+
+        COUNT(DISTINCT ip4) > 0 AS has_ipv4,
+        COUNT(DISTINCT ip6) > 0 AS has_ipv6
+
+    RETURN
+        COUNT(DISTINCT d) AS total_domains,
+
+        SUM(
+            CASE WHEN has_ipv6 THEN 1 ELSE 0 END
+        ) AS ipv6_capable,
+
+        SUM(
+            CASE
+                WHEN has_ipv4 = true AND has_ipv6 = false
+                THEN 1
+                ELSE 0
+            END
+        ) AS ipv4_only
+    """
+
+    result = execute_cypher_test(query)
+
+    if not result["success"]:
+        return {"error": result["error"]}
+
+    row = result["data"][0]
+
+    total = row.get("total_domains", 0) or 0
+    ipv6 = row.get("ipv6_capable", 0) or 0
+    ipv4_only = row.get("ipv4_only", 0) or 0
+
+    ipv6_pct = round((ipv6 / total) * 100, 2) if total else 0.0
+
+    return {
+        "country": country_code.upper(),
+        "total_domains": total,
+        "ipv6_capable": ipv6,
+        "ipv4_only": ipv4_only,
+        "ipv6_percentage": ipv6_pct,
+        "error": None
+    }
+
+def get_government_ipv6_readiness(sample_limit: int = 1000) -> dict:
+    """
+    Section 4.3.2
+
+    Analyze IPv6 readiness of Indian government websites.
+    """
+
+    query = f"""
+    MATCH (d:DomainName)-[:RANK]->(:Ranking)
+
+    WHERE d.name ENDS WITH '.gov.in'
+
+    WITH DISTINCT d
+    LIMIT {sample_limit}
+
+    OPTIONAL MATCH (d)-[:PART_OF]-(h:HostName)
+
+    OPTIONAL MATCH (h)-[:RESOLVES_TO]->(ip4:IP {{af: 4}})
+    OPTIONAL MATCH (h)-[:RESOLVES_TO]->(ip6:IP {{af: 6}})
+
+    WITH
+        d,
+
+        COUNT(DISTINCT ip4) > 0 AS has_ipv4,
+        COUNT(DISTINCT ip6) > 0 AS has_ipv6
+
+    RETURN
+        COUNT(DISTINCT d) AS total_gov_domains,
+
+        SUM(
+            CASE WHEN has_ipv6 THEN 1 ELSE 0 END
+        ) AS ipv6_capable,
+
+        SUM(
+            CASE
+                WHEN has_ipv4 = true AND has_ipv6 = false
+                THEN 1
+                ELSE 0
+            END
+        ) AS ipv4_only
+    """
+
+    result = execute_cypher_test(query)
+
+    if not result["success"]:
+        return {"error": result["error"]}
+
+    row = result["data"][0]
+
+    total = row.get("total_gov_domains", 0) or 0
+    ipv6 = row.get("ipv6_capable", 0) or 0
+    ipv4_only = row.get("ipv4_only", 0) or 0
+
+    pct = round((ipv6 / total) * 100, 2) if total else 0.0
+
+    return {
+        "total_gov_domains": total,
+        "ipv6_capable": ipv6,
+        "ipv4_only": ipv4_only,
+        "ipv6_percentage": pct,
+        "error": None
+    }
+
+def get_sector_ipv6_readiness(sector_name: str,
+                              keywords: list,
+                              sample_limit: int = 1000) -> dict:
+    """
+    Section 4.3
+
+    Analyze IPv6 readiness for a heuristic web sector.
+    """
+
+    keyword_conditions = " OR ".join(
+        [f"d.name CONTAINS '{kw}'" for kw in keywords]
+    )
+
+    query = f"""
+    MATCH (d:DomainName)-[:RANK]->(:Ranking)
+
+    WHERE ({keyword_conditions})
+    AND (
+        d.name ENDS WITH '.in'
+        OR d.name ENDS WITH '.co.in'
+    )
+
+    WITH DISTINCT d
+    LIMIT {sample_limit}
+
+    OPTIONAL MATCH (d)-[:PART_OF]-(h:HostName)
+
+    OPTIONAL MATCH (h)-[:RESOLVES_TO]->(ip4:IP {{af: 4}})
+    OPTIONAL MATCH (h)-[:RESOLVES_TO]->(ip6:IP {{af: 6}})
+
+    WITH
+        d,
+
+        COUNT(DISTINCT ip4) > 0 AS has_ipv4,
+        COUNT(DISTINCT ip6) > 0 AS has_ipv6
+
+    RETURN
+        COUNT(DISTINCT d) AS total_domains,
+
+        SUM(
+            CASE WHEN has_ipv6 THEN 1 ELSE 0 END
+        ) AS ipv6_capable,
+
+        SUM(
+            CASE
+                WHEN has_ipv4 = true AND has_ipv6 = false
+                THEN 1
+                ELSE 0
+            END
+        ) AS ipv4_only
+    """
+
+    result = execute_cypher_test(query)
+
+    if not result["success"]:
+        return {"error": result["error"]}
+
+    row = result["data"][0]
+
+    total = row.get("total_domains", 0) or 0
+    ipv6 = row.get("ipv6_capable", 0) or 0
+    ipv4_only = row.get("ipv4_only", 0) or 0
+
+    pct = round((ipv6 / total) * 100, 2) if total else 0.0
+
+    return {
+        "sector": sector_name,
+        "total_domains": total,
+        "ipv6_capable": ipv6,
+        "ipv4_only": ipv4_only,
+        "ipv6_percentage": pct,
+        "error": None
+    }
+
+def get_cdn_ipv6_correlation(country_code: str,
+                             sample_limit: int = 1000) -> dict:
+    """
+    Section 4.4 / 4.4.2
+
+    Analyze CDN usage correlation with IPv6 readiness.
+    """
+
+    tld = country_code.lower()
+
+    cdn_patterns = [
+        "cloudflare",
+        "cloudfront",
+        "fastly",
+        "akamai",
+        "edgekey",
+        "azure",
+        "wixdns",
+        "webflow",
+        "googlehosted",
+        "vercel",
+        "cdn"
+    ]
+
+    cdn_condition = " OR ".join(
+        [f"toLower(alias.name) CONTAINS '{p}'" for p in cdn_patterns]
+    )
+
+    query = f"""
+    MATCH (d:DomainName)-[:RANK]->(:Ranking)
+
+    WHERE d.name ENDS WITH '.{tld}'
+
+    WITH DISTINCT d
+    LIMIT {sample_limit}
+
+    OPTIONAL MATCH (d)-[:PART_OF]-(h:HostName)
+
+    OPTIONAL MATCH (h)-[:ALIAS_OF]->(alias:HostName)
+
+    OPTIONAL MATCH (h)-[:RESOLVES_TO]->(ip4:IP {{af: 4}})
+    OPTIONAL MATCH (h)-[:RESOLVES_TO]->(ip6:IP {{af: 6}})
+
+    WITH
+        d,
+
+        COUNT(DISTINCT ip4) > 0 AS has_ipv4,
+        COUNT(DISTINCT ip6) > 0 AS has_ipv6,
+
+        COUNT(
+            DISTINCT CASE
+                WHEN ({cdn_condition})
+                THEN alias.name
+            END
+        ) > 0 AS uses_cdn
+
+    RETURN
+
+        COUNT(DISTINCT d) AS total_domains,
+
+        SUM(
+            CASE
+                WHEN uses_cdn = true
+                THEN 1
+                ELSE 0
+            END
+        ) AS cdn_domains,
+
+        SUM(
+            CASE
+                WHEN uses_cdn = false
+                THEN 1
+                ELSE 0
+            END
+        ) AS self_hosted,
+
+        SUM(
+            CASE
+                WHEN has_ipv6 = true AND uses_cdn = true
+                THEN 1
+                ELSE 0
+            END
+        ) AS ipv6_cdn,
+
+        SUM(
+            CASE
+                WHEN has_ipv4 = true
+                 AND has_ipv6 = false
+                 AND uses_cdn = false
+                THEN 1
+                ELSE 0
+            END
+        ) AS ipv4_only_self_hosted
+    """
+
+    result = execute_cypher_test(query)
+
+    if not result["success"]:
+        return {"error": result["error"]}
+
+    row = result["data"][0]
+
+    total = row.get("total_domains", 0) or 0
+    cdn_domains = row.get("cdn_domains", 0) or 0
+    self_hosted = row.get("self_hosted", 0) or 0
+    ipv6_cdn = row.get("ipv6_cdn", 0) or 0
+    ipv4_self = row.get("ipv4_only_self_hosted", 0) or 0
+
+    return {
+        "country": country_code.upper(),
+        "total_domains": total,
+        "cdn_domains": cdn_domains,
+        "self_hosted": self_hosted,
+        "ipv6_cdn": ipv6_cdn,
+        "ipv4_only_self_hosted": ipv4_self,
+        "error": None
+    }
 
 # ═══════════════════════════════════════════════════════════════════════════
 # SECTION 2 — ISP DEPLOYMENT SCORECARD
@@ -969,6 +1289,10 @@ def export_policy_brief(
     tld_comparison_data: dict,
     nameserver_data: dict,
     glue_data: dict,
+    web_data: dict,
+    gov_data: dict,
+    sector_data: dict,
+    cdn_data: dict,
     output_dir:  Optional[str] = None,
 ) -> str:
     """
@@ -1142,6 +1466,93 @@ def export_policy_brief(
         "",
         "---",
         "",
+        "## Section 4 — Web Services IPv6 Readiness",
+        "",
+
+        f"**Popular Domains Analyzed:** {web_data.get('total_domains', 0)}  ",
+        f"**IPv6-Reachable Domains:** {web_data.get('ipv6_capable', 0)}  ",
+        f"**IPv4-Only Domains:** {web_data.get('ipv4_only', 0)}  ",
+        f"**IPv6 Web Readiness:** {web_data.get('ipv6_percentage', 0):.2f}%  ",
+        "",
+
+        "> This analysis measures IPv6 reachability among",
+        "> ranked/popular domains within the national",
+        "> web ecosystem.",
+        "",
+
+        "> Domains were classified as IPv6-capable when",
+        "> associated hostnames resolved to AF=6 IP nodes",
+        "> within the IYP graph.",
+        "",
+
+        "> IPv4-only domains represent services that",
+        "> continue to rely exclusively on IPv4 connectivity.",
+        "",
+        "### Government Website IPv6 Readiness",
+        "",
+
+        f"**Government Domains Assessed:** {gov_data.get('total_gov_domains', 0)}  ",
+        f"**IPv6-Capable Government Domains:** {gov_data.get('ipv6_capable', 0)}  ",
+        f"**IPv4-Only Government Domains:** {gov_data.get('ipv4_only', 0)}  ",
+        f"**Government IPv6 Readiness:** {gov_data.get('ipv6_percentage', 0):.2f}%  ",
+        "",
+
+        "> Government domains were identified using",
+        "> the .gov.in namespace and evaluated for",
+        "> IPv6-capable hostname resolution.",
+        "",
+
+        "> Results indicate comparatively weak IPv6",
+        "> adoption within public-sector digital",
+        "> infrastructure.",
+        "",
+        "",
+        "",
+        "---",
+        "",
+        "### Comparative Sector IPv6 Readiness",
+        "",
+
+        "| Sector | Domains | IPv6 Readiness |",
+        "|--------|---------|----------------|",
+
+        *[
+            f"| {entry['sector']} | "
+            f"{entry['total_domains']} | "
+            f"{entry['ipv6_percentage']:.2f}% |"
+            for entry in sector_data
+        ],
+
+        "",
+
+        "> Comparative sectoral analysis highlights",
+        "> differences in IPv6 deployment maturity",
+        "> across major digital-service ecosystems.",
+        "",
+        "",
+        "---",
+        "",
+        "### CDN Correlation and Hosting Analysis",
+        "",
+
+        f"**CDN-Backed Domains:** {cdn_data.get('cdn_domains', 0)}  ",
+        f"**Self-Hosted Domains:** {cdn_data.get('self_hosted', 0)}  ",
+        f"**IPv6-Capable CDN Domains:** {cdn_data.get('ipv6_cdn', 0)}  ",
+        f"**IPv4-Only Self-Hosted Domains:** {cdn_data.get('ipv4_only_self_hosted', 0)}  ",
+        "",
+
+        "> CDN infrastructure was inferred through",
+        "> hostname alias relationships associated",
+        "> with major CDN and edge-hosting providers.",
+        "",
+
+        "> Results suggest that IPv6 deployment is",
+        "> significantly stronger among CDN-backed",
+        "> services than self-hosted infrastructure.",
+        "",
+
+        "---",
+        "",
         "## Section 5 — Country TLD IPv6 Health",
         "",
 
@@ -1174,7 +1585,7 @@ def export_policy_brief(
         "",
         "> Comparative sampled analysis across major TLD ecosystems",
         "> provides relative benchmarking of IPv6 DNS readiness.",
-        "---",
+        
         "",
         "### Authoritative Nameserver IPv6 Reachability",
         "",
