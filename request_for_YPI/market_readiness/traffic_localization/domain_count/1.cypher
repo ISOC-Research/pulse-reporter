@@ -1,11 +1,11 @@
-// Identifie les domaines du ccTLD les plus requêtés depuis l'intérieur du pays.
+// Identifies the ccTLD domains most frequently queried from within the country.
 // The $countryCode parameter must be provided during execution (e.g., 'SN', 'FR', 'JP').
 MATCH (c:Country {country_code: $countryCode})
-// Filtre les domaines qui se terminent par le ccTLD du pays (ex: .sn)
+// Filters domains that end with the country's ccTLD (e.g., .sn)
 MATCH (d:DomainName)
 WHERE d.name ENDS WITH '.' + toLower($countryCode)
 
-// Trouve la relation de requête depuis ce pays (source: Cloudflare Radar)
+// Finds the query relationship from this country (source: Cloudflare Radar)
 MATCH (d)-[q:QUERIED_FROM]->(c)
 WHERE q.value IS NOT NULL
 
