@@ -7,5 +7,5 @@ MATCH (c:Country {country_code: $countryCode})
 MATCH (p:AtlasProbe)
 WHERE p.country_code = $countryCode
 RETURN c.name AS country,
-       count(p) AS numberOfAtlasProbes
+       count(DISTINCT p) AS numberOfAtlasProbes
 ORDER BY numberOfAtlasProbes DESC
