@@ -8,8 +8,9 @@ WHERE NOT (provider)-[:COUNTRY]->(c)
 WITH provider, count(DISTINCT as) AS localCustomers
 // Récupère le nom du fournisseur pour une meilleure lisibilité.
 OPTIONAL MATCH (provider)-[:NAME]->(n:Name)
+WITH provider, localCustomers, collect(DISTINCT n.name)[0] AS providerName
 RETURN provider.asn AS providerASN,
-       n.name AS providerName,
+       providerName,
        localCustomers
 ORDER BY localCustomers DESC
 LIMIT 10;

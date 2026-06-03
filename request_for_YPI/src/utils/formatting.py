@@ -44,8 +44,13 @@ def format_neo4j_results(records, query_path: str, params: dict) -> str:
         return str([r.data() for r in records])
 
     try:
+        max_display = template_data.get("max_display", 10) if isinstance(template_data, dict) else 10
         jinja_template = Template(template_str)
-        formatted_output = jinja_template.render(results=[r.data() for r in records], params=params)
+        formatted_output = jinja_template.render(
+            results=[r.data() for r in records], 
+            params=params, 
+            max_display=max_display
+        )
         return formatted_output
     except Exception as e:
         return f"Error formatting template: {e}\nRaw data: {records}"

@@ -12,11 +12,12 @@ WHERE NOT EXISTS {
 
 // Get AS Rank to sort by importance (lower rank is more important)
 OPTIONAL MATCH (localAS)-[r:RANK]->(:Ranking {name:'CAIDA ASRank'})
+WITH localAS, r
 OPTIONAL MATCH (localAS)-[:NAME]->(n:Name)
 
 RETURN
     localAS.asn AS asn,
-    n.name AS asName,
+    collect(DISTINCT n.name)[0] AS asName,
     r.rank AS caidaRank
 ORDER BY caidaRank ASC
 LIMIT 20;

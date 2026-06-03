@@ -21,7 +21,7 @@ queries:
       
       {% for item in results %}
       - **Rank {{ loop.index }}:** {{ item.localDomain }}
-        Share of Local Queries: **{{ "%.4f"|format(item.percentageOfQueriesInCountry * 100) }}%**
+        Share of Local Queries: **{{ "%.4f"|format(item.percentageOfQueriesInCountry) }}%**
       {% endfor %}
       
       {% if results|length > max_display %}

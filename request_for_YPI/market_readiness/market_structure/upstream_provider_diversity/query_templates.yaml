@@ -63,17 +63,25 @@ queries:
       While the previous analysis counted connections, this metric quantifies the *criticality* of those connections using the "Hegemony" score (0 to 1). A high hegemony score indicates that a provider is unavoidable for the networks that depend on it. High scores here suggest deep structural dependencies and significant resilience risks.
       
       {% if results %}
-      **Top Critical Dependencies (by Average Hegemony):**
+      **1. Highest Risk (by Hegemony Score - "The Single Point of Failure"):**
+      Providers that have near-total control over the local networks they serve.
       
-      {% for provider in results %}
+      {% set by_score = results | sort(attribute='averageHegemony', reverse=true) %}
+      {% for provider in by_score[:max_display] %}
       - **Rank {{ loop.index }}:** {{ provider.providerName }} (AS{{ provider.providerASN }})
         Average Hegemony Score: **{{ "%.3f"|format(provider.averageHegemony) }}**
         (Affecting {{ provider.dependentASNs }} local networks)
       {% endfor %}
+
+      **2. Widest Impact (by Affected Networks - "The Widespread Risk"):**
+      Providers that provide internet to the largest sheer volume of local networks.
       
-      {% if results|length > max_display %}
-      _({{ results|length - max_display }} other provider(s) omitted from this view)_
-      {% endif %}
+      {% set by_volume = results | sort(attribute='dependentASNs', reverse=true) %}
+      {% for provider in by_volume[:max_display] %}
+      - **Rank {{ loop.index }}:** {{ provider.providerName }} (AS{{ provider.providerASN }})
+        Average Hegemony Score: **{{ "%.3f"|format(provider.averageHegemony) }}**
+        (Affecting {{ provider.dependentASNs }} local networks)
+      {% endfor %}
       
       {% else %}
       No significant critical dependencies (Hegemony > 0.1) detected for external providers.

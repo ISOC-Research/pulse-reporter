@@ -9,75 +9,75 @@ queries:
   # Query 1: Calculate the Core Peering Efficiency Ratio
   # ----------------------------------------------------------------------------
   "1.cypher":
-    description: "Calcule le ratio d'efficacité du peering (AS locaux membres d'IXP locaux vs total AS locaux)."
+    description: "Calculates the peering efficiency ratio (local ASes in local IXPs vs total local ASes)."
     
     template: |
-      Titre: Ratio d'Efficacité du Peering pour {{ params.countryCode | upper }}
+      Title: Peering Efficiency Ratio for {{ params.countryCode | upper }}
       
-      Cette métrique mesure la densité de l'écosystème de peering local. Elle calcule le ratio entre les réseaux (AS) participant aux IXP nationaux et le nombre total de réseaux dans le pays. Un ratio élevé (proche de 100%) indique un marché mature et résilient, où le trafic local est échangé efficacement, réduisant la latence et la dépendance au transit international.
+      This metric measures the density of the local peering ecosystem. It calculates the ratio between the networks (ASes) participating in domestic IXPs and the total number of networks in the country. A high ratio (close to 100%) indicates a mature and resilient market, where local traffic is exchanged efficiently, reducing latency and dependence on international transit.
       
       {% if results %}
-      **Résultats de l'analyse :**
+      **Analysis Results:**
       
-      - Nombre total d'AS dans le pays : **{{ results[0].totalASNs|default(0) }}**
-      - AS participant au peering local : **{{ results[0].peeringASNs|default(0) }}**
-      - Taux d'efficacité du Peering : **{{ (results[0].peeringEfficiencyRatio * 100)|round(2) }}%**
+      - Total number of ASes in the country: **{{ results[0].totalASNs|default(0) }}**
+      - ASes participating in local peering: **{{ results[0].peeringASNs|default(0) }}**
+      - Peering Efficiency Ratio: **{{ (results[0].peeringEfficiencyRatio * 100)|round(2) }}%**
       
       {% else %}
-      Données non disponibles pour calculer le ratio d'efficacité du peering pour ce pays.
+      Data not available to calculate the peering efficiency ratio for this country.
       {% endif %}
       
     fields:
       totalASNs:
         type: "integer"
-        label: "Nombre total d'AS"
+        label: "Total Number of ASes"
         format: "number"
       peeringASNs:
         type: "integer"
-        label: "Nombre d'AS en peering"
+        label: "Number of Peering ASes"
         format: "number"
       peeringEfficiencyRatio:
         type: "float"
-        label: "Ratio d'efficacité"
+        label: "Efficiency Ratio"
         format: "percentage"
 
   # ----------------------------------------------------------------------------
   # Query 2: List Domestic IXPs and their Peering Density
   # ----------------------------------------------------------------------------
   "2.cypher":
-    description: "Liste les IXP nationaux et leur nombre de membres AS locaux."
+    description: "Lists domestic IXPs and their number of local AS members."
     
     template: |
-      Titre: Classement des IXP nationaux par densité pour {{ params.countryCode | upper }}
+      Title: Domestic IXP Density Ranking for {{ params.countryCode | upper }}
       
-      Cette analyse identifie tous les points d'échange Internet (IXP) nationaux et les classe par nombre de membres AS locaux. Cela permet de voir quels IXP sont les plus critiques pour l'écosystème de peering du pays et si cet écosystème est distribué (plusieurs IXP) ou centralisé (un seul IXP dominant).
+      This analysis identifies all domestic Internet Exchange Points (IXPs) and ranks them by the number of local AS members. This reveals which IXPs are the most critical for the country's peering ecosystem and whether this ecosystem is distributed (multiple IXPs) or centralized (a single dominant IXP).
       
       {% if results %}
-      **Classement des {{ results|length }} IXP identifié(s) par nombre de membres locaux :**
+      **Ranking of the {{ results|length }} identified IXP(s) by local member count:**
       
       {% for ixp in results %}
-      - **Rang {{ loop.index }}:** {{ ixp.ixpName }} (ID: {{ ixp.ixpId }})
-        Nombre de membres locaux : **{{ ixp.localMemberCount }}**
+      - **Rank {{ loop.index }}:** {{ ixp.ixpName }} (ID: {{ ixp.ixpId }})
+        Number of local members: **{{ ixp.localMemberCount }}**
       {% endfor %}
       
       {% if results|length > max_display %}
-      _({{ results|length - max_display }} autre(s) IXP dans le classement complet)_
+      _({{ results|length - max_display }} other IXP(s) in the complete ranking)_
       {% endif %}
       
       {% else %}
-      Aucun IXP national identifié pour ce pays.
+      No domestic IXP identified for this country.
       {% endif %}
       
     fields:
       ixpId:
         type: "integer"
-        label: "ID IXP"
+        label: "IXP ID"
       ixpName:
         type: "string"
-        label: "Nom de l'IXP"
+        label: "IXP Name"
       localMemberCount:
         type: "integer"
-        label: "Membres locaux"
+        label: "Local Members"
         format: "number"
     
     max_display: 15
@@ -88,27 +88,27 @@ queries:
   # Query 3: Identify High-Impact ASNs Not Peering Domestically
   # ----------------------------------------------------------------------------
   "3.cypher":
-    description: "Identifie les AS locaux à fort impact (par taille de cône client) qui ne participent pas au peering national."
+    description: "Identifies high-impact local ASes (by customer cone size) that do not participate in domestic peering."
     
     template: |
-      Titre: AS à fort impact ne participant pas au peering local pour {{ params.countryCode | upper }}
+      Title: High-Impact ASes Not Participating in Local Peering for {{ params.countryCode | upper }}
       
-      Cette analyse identifie les réseaux (AS) locaux qui ne sont membres d'aucun IXP national. Ils sont classés par leur importance (taille du cône client via CAIDA ASRank) pour révéler quels acteurs manquant ont le plus d'impact sur l'efficacité du peering national. L'incitation de ces acteurs à rejoindre les IXP locaux est une action clé pour améliorer la résilience.
+      This analysis identifies local networks (ASes) that are not members of any domestic IXP. They are ranked by their global importance (via CAIDA ASRank, where a lower number means a bigger network) to reveal which missing players have the biggest impact on domestic peering efficiency. Incentivizing these players to join local IXPs is a key action to improve resilience.
       
       {% if results %}
-      **Classement des principaux AS non-participants (par taille de cône client) :**
+      **Ranking of major non-participating ASes (by Global Rank):**
       
       {% for as in results %}
-      - **Rang {{ loop.index }}:** {{ as.asName|default('Nom inconnu') }} (AS{{ as.asn }})
-        Taille du cône client : **{{ as.customerConeSize|default(0) }}**
+      - **Rank {{ loop.index }}:** {{ as.asName|default('Unknown Name') }} (AS{{ as.asn }})
+        Global Rank (ASRank): **{{ as.caidaRank|default('Unknown') }}**
       {% endfor %}
       
       {% if results|length > max_display %}
-      _({{ results|length - max_display }} autre(s) AS non-participant(s) identifié(s))_
+      _({{ results|length - max_display }} other non-participating AS(es) identified)_
       {% endif %}
       
       {% else %}
-      Excellente nouvelle : Tous les AS identifiés dans ce pays semblent participer à au moins un IXP local, ou aucun AS avec données de rang n'a été trouvé.
+      Excellent news: All identified ASes in this country appear to participate in at least one local IXP, or no ASes with rank data were found.
       {% endif %}
       
     fields:
@@ -117,15 +117,15 @@ queries:
         label: "ASN"
       asName:
         type: "string"
-        label: "Nom de l'AS"
-      customerConeSize:
+        label: "AS Name"
+      caidaRank:
         type: "integer"
-        label: "Taille du cône client (ASRank)"
+        label: "Global Rank (ASRank)"
         format: "number"
     
     max_display: 20
-    sort_by: "customerConeSize"
-    sort_order: "desc"
+    sort_by: "caidaRank"
+    sort_order: "asc"
 
   # ----------------------------------------------------------------------------
   # Query 4: IXP Membership Depth Distribution

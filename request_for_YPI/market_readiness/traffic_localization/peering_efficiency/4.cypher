@@ -4,9 +4,8 @@
 MATCH (c:Country {country_code: $countryCode})
 MATCH (as:AS)-[:COUNTRY]->(c)
 
-// Find all local IXPs the AS is a member of.
-OPTIONAL MATCH (ixp:IXP)-[:COUNTRY]->(c)
-OPTIONAL MATCH (as)-[:MEMBER_OF]->(ixp)
+// Find local IXPs the AS is ACTUALLY a member of.
+OPTIONAL MATCH (as)-[:MEMBER_OF]->(ixp:IXP)-[:COUNTRY]->(c)
 
 WITH as, count(DISTINCT ixp) AS ixpMembershipCount
 WHERE ixpMembershipCount > 0
