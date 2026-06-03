@@ -94,7 +94,7 @@ queries:
       | Domain Name | Hosting ASN | Hosting AS Name | Hosting Type | Query Percentage |
       |-------------|-------------|-----------------|--------------|------------------|
       {% for row in results %}
-      | {{ row.popularDomain }} | {{ row.hostingCdnASN }} | {{ row.hostingCdnName or "(unnamed)" }} | {{ row.hostingType or "CDN/DDoS" }} | {{ "%.2f"|format(row.queryPercentage) }} |
+      | {{ row.popularDomain }} | {{ row.hostingASN }} | {{ row.hostingName or "(unnamed)" }} | {{ row.protections | join(", ") }} | {{ "%.2f"|format(row.queryPercentage) }} |
       {% endfor %}
       
       **Interpretation:**
