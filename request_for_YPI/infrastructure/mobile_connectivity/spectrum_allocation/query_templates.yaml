@@ -55,25 +55,25 @@ queries:
     sort_order: "desc"
 
   "2.cypher":
-    description: "Top ASes by total prefix count — largest IP address space holders"
+    description: "Top ASes by total prefix count with IPv6 adoption status"
     
     template: |
       Title: Largest IP Address Space Holders in {{ params.countryCode | upper }}
       
-      This analysis identifies the top 10 network operators in the country by number of BGP prefixes announced, broken down by IPv4 and IPv6. Operators with the largest prefix counts hold the most IP address space, indicating their capacity as significant network infrastructure providers.
+      This analysis identifies the top 20 network operators in the country by number of BGP prefixes announced, broken down by IPv4 and IPv6, with an IPv6 adoption flag. Operators with zero IPv6 prefixes are not future-ready and represent resilience risks as IPv4 address space becomes increasingly scarce.
       
       {% if results %}
       **Top Operators by Address Space:**
       
-      | ASN | Operator Name | Total Prefixes | IPv4 | IPv6 |
-      |-----|---------------|----------------|------|------|
+      | ASN | Operator Name | Total Prefixes | IPv4 | IPv6 | IPv6 Adopted |
+      |-----|---------------|----------------|------|------|--------------|
       {% for row in results %}
-      | AS{{ row.ASN }} | {{ row.operatorName or "(unnamed)" }} | {{ row.totalPrefixes }} | {{ row.ipv4Prefixes }} | {{ row.ipv6Prefixes }} |
+      | AS{{ row.ASN }} | {{ row.OperatorName if row.OperatorName else "(unnamed)" }} | {{ row.TotalPrefixes }} | {{ row.IPv4Prefixes }} | {{ row.IPv6Prefixes }} | {{ row.IPv6Adopted }} |
       {% endfor %}
       
       **Interpretation:**
       
-      Operators with large address space allocations are the backbone of the country's internet capacity. The IPv6 column reveals which large operators have modernized their address space — those with zero IPv6 prefixes are critical targets for IPv6 adoption programs.
+      Operators with large address space allocations are the backbone of the country's internet capacity. The IPv6 Adopted column highlights which major operators have modernized — those showing "No" are critical targets for IPv6 adoption programs, as IPv4 exhaustion threatens long-term scalability and resilience.
       
       {% else %}
       No address space data available for this country.
@@ -83,19 +83,23 @@ queries:
       ASN:
         type: "integer"
         label: "ASN"
-      operatorName:
+      OperatorName:
         type: "string"
         label: "Operator Name"
-      totalPrefixes:
+      TotalPrefixes:
         type: "integer"
         label: "Total Prefixes"
-      ipv4Prefixes:
+      IPv4Prefixes:
         type: "integer"
         label: "IPv4 Prefixes"
-      ipv6Prefixes:
+      IPv6Prefixes:
         type: "integer"
         label: "IPv6 Prefixes"
+      IPv6Adopted:
+        type: "string"
+        label: "IPv6 Adopted"
     
-    sort_by: "totalPrefixes"
+    sort_by: "TotalPrefixes"
     sort_order: "desc"
-    limit: 10
+    limit: 20
+

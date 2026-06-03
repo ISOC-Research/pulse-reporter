@@ -5,22 +5,24 @@
 
 queries:
   "1.cypher":
-    description: "Total number of Autonomous Systems registered in the country — network operator density"
+    description: "Network operator ecosystem health — active vs dormant ASes"
     
     template: |
-      Title: Network Operator Count in {{ params.countryCode | upper }}
+      Title: Network Operator Ecosystem Health in {{ params.countryCode | upper }}
       
-      This analysis counts the total number of distinct Autonomous Systems (ASes) registered in the country. In the IYP graph, the number of unique AS operators correlates with the breadth of the network coverage ecosystem — more operators typically indicate greater competition, geographic spread, and resilience.
+      This analysis breaks down the country's Autonomous Systems into active operators (those announcing BGP routes) and dormant registrations (ASes with no active routing). The active-to-total ratio is a direct measure of ecosystem vitality — countries with many registered but inactive ASes have underutilized network capacity.
       
       {% if results %}
-      **Analysis Results:**
+      **Operator Ecosystem Overview:**
       
       - Country: **{{ results[0].Country }}**
-      - Total Autonomous Systems (Network Operators): **{{ results[0].ASN_Count }}**
+      - Total Registered ASes: **{{ results[0].TotalASes }}**
+      - Active Operators (BGP): **{{ results[0].ActiveASes }}** ({{ results[0].ActivePercent }}%)
+      - Dormant Registrations: **{{ results[0].DormantASes }}**
       
       **Interpretation:**
       
-      A higher AS count indicates a more diverse network operator ecosystem. Countries with more registered ASes typically have broader geographic coverage, more competitive markets, and greater resilience against operator-level outages. This metric serves as a structural proxy for network coverage density within the IYP graph.
+      **{{ results[0].ActiveASes }}** out of **{{ results[0].TotalASes }}** registered ASes are actively originating BGP routes ({{ results[0].ActivePercent }}%). A higher active percentage indicates a healthier, more competitive network ecosystem. Dormant ASes may represent unused allocations, acquired-but-undeployed resources, or legacy registrations.
       
       {% else %}
       No network operator data available for this country.
@@ -30,30 +32,38 @@ queries:
       Country:
         type: "string"
         label: "Country Name"
-      ASN_Count:
+      TotalASes:
         type: "integer"
-        label: "Total Number of Network Operators (ASes)"
-    
-    sort_by: "ASN_Count"
-    sort_order: "desc"
+        label: "Total Registered ASes"
+      ActiveASes:
+        type: "integer"
+        label: "Active Operators"
+      DormantASes:
+        type: "integer"
+        label: "Dormant ASes"
+      ActivePercent:
+        type: "float"
+        label: "Active Percentage"
 
   "2.cypher":
-    description: "Number of physical infrastructure nodes (Facilities) used by ASes in the country"
+    description: "Physical infrastructure footprint — domestic vs international facility presence"
     
     template: |
       Title: Physical Infrastructure Footprint in {{ params.countryCode | upper }}
       
-      This analysis counts the number of distinct physical facilities (data centers, colocation sites) where the country's Autonomous Systems are physically located. This represents the physical footprint of the network coverage infrastructure and is a proxy for geographic distribution of connectivity nodes.
+      This analysis counts the physical data center facilities where the country's ASes are colocated, separating domestic facilities (within the country) from international ones (abroad). Domestic facility count measures local infrastructure depth; international presence shows global connectivity reach.
       
       {% if results %}
-      **Analysis Results:**
+      **Infrastructure Footprint:**
       
       - Country: **{{ results[0].Country }}**
-      - Physical Infrastructure Nodes (Facilities): **{{ results[0].InfrastructureNodes }}**
+      - Domestic Facilities: **{{ results[0].DomesticFacilities }}**
+      - International Facilities: **{{ results[0].InternationalFacilities }}**
+      - Total Facilities: **{{ results[0].TotalFacilities }}**
       
       **Interpretation:**
       
-      A higher number of physical facilities indicates a well-distributed network infrastructure. Countries where ASes operate across many geographically dispersed facilities are more resilient to localized outages and can provide more consistent network coverage across their territory.
+      **{{ results[0].DomesticFacilities }}** facilities are located within the country, while **{{ results[0].InternationalFacilities }}** are abroad. A strong domestic facility base is essential for network resilience — it means local traffic can be served locally. International presence indicates operators are globally connected, but over-reliance on foreign infrastructure is a resilience risk.
       
       {% else %}
       No physical infrastructure data available for this country.
@@ -63,63 +73,77 @@ queries:
       Country:
         type: "string"
         label: "Country Name"
-      InfrastructureNodes:
+      DomesticFacilities:
         type: "integer"
-        label: "Physical Infrastructure Nodes (Facilities)"
-    
-    sort_by: "InfrastructureNodes"
-    sort_order: "desc"
+        label: "Domestic Facilities"
+      InternationalFacilities:
+        type: "integer"
+        label: "International Facilities"
+      TotalFacilities:
+        type: "integer"
+        label: "Total Facilities"
 
   "3.cypher":
-    description: "Number of declared geographic coverage points (Points) for ASes in the country"
+    description: "IXP connectivity gap — active ASes connected to a domestic IXP vs those that are not"
     
     template: |
-      Title: Geographic Coverage Points in {{ params.countryCode | upper }}
+      Title: IXP Connectivity Gap Analysis in {{ params.countryCode | upper }}
       
-      This analysis counts the number of distinct geographic Points declared by the country's Autonomous Systems in the IYP database. Geographic points represent declared network presence locations and serve as a proxy for the physical reach of the country's network operators.
+      This analysis identifies how many active network operators are members of at least one domestic IXP versus those with no local IXP presence. ASes not connected to any domestic IXP must route all traffic via upstream transit providers, increasing costs and latency while reducing resilience.
       
       {% if results %}
-      **Analysis Results:**
+      **IXP Connectivity Overview:**
       
       - Country: **{{ results[0].Country }}**
-      - Geographic Coverage Points: **{{ results[0].GeoCoveragePoints }}**
+      - Active ASes connected to a domestic IXP: **{{ results[0].IXPConnected }}**
+      - Active ASes NOT connected to any domestic IXP: **{{ results[0].NotIXPConnected }}**
+      - Total Active ASes: **{{ results[0].TotalActive }}**
+      - IXP Adoption Rate: **{{ results[0].IXPAdoptionPercent }}%**
       
       **Interpretation:**
       
-      A higher number of geographic coverage points suggests broader territorial reach by network operators. Countries with many declared points of presence typically have better rural and suburban connectivity, meaning the internet infrastructure is more evenly distributed rather than concentrated in a single urban hub.
+      Only **{{ results[0].IXPAdoptionPercent }}%** of active ASes are members of a domestic IXP. The remaining **{{ results[0].NotIXPConnected }}** operators must rely entirely on upstream transit for traffic exchange. Increasing IXP adoption is one of the most impactful policy actions for improving network coverage resilience — it enables local traffic to stay local.
       
       {% else %}
-      No geographic coverage data available for this country.
+      No IXP connectivity data available for this country.
       {% endif %}
     
     fields:
       Country:
         type: "string"
         label: "Country Name"
-      GeoCoveragePoints:
+      IXPConnected:
         type: "integer"
-        label: "Geographic Coverage Points"
-    
-    sort_by: "GeoCoveragePoints"
-    sort_order: "desc"
+        label: "IXP Connected ASes"
+      NotIXPConnected:
+        type: "integer"
+        label: "Non-IXP ASes"
+      TotalActive:
+        type: "integer"
+        label: "Total Active ASes"
+      IXPAdoptionPercent:
+        type: "float"
+        label: "IXP Adoption Rate"
 
   "4.cypher":
-    description: "Total peering connections between local ASes and their peers — network interconnection density"
+    description: "Peering density — domestic vs international peering connections"
     
     template: |
-      Title: Network Interconnection Density in {{ params.countryCode | upper }}
+      Title: Network Peering Density in {{ params.countryCode | upper }}
       
-      This analysis counts the total number of peering relationships between the country's Autonomous Systems and their peers (both domestic and international). A high number of peering connections indicates a well-interconnected network ecosystem, which is a foundational element of broad and resilient network coverage.
+      This analysis breaks down the country's peering relationships into domestic (both ASes in the same country) and international. High domestic peering density means local traffic can be exchanged locally; low domestic peering means traffic must route internationally — a critical resilience weakness.
       
       {% if results %}
-      **Analysis Results:**
+      **Peering Density Overview:**
       
       - Country: **{{ results[0].Country }}**
-      - Total Peering Connections: **{{ results[0].TotalPeerings }}**
+      - Domestic Peers: **{{ results[0].DomesticPeers }}**
+      - International Peers: **{{ results[0].InternationalPeers }}**
+      - Total Peers: **{{ results[0].TotalPeers }}**
       
       **Interpretation:**
       
-      The total number of peering connections reflects how interconnected the country's network operators are with the global and regional internet. A high peering count suggests diverse routing paths, reducing the risk of traffic bottlenecks and improving resilience — all prerequisites for comprehensive network coverage.
+      **{{ results[0].DomesticPeers }}** domestic peers versus **{{ results[0].InternationalPeers }}** international peers. A healthy peering ecosystem has strong domestic interconnection so that local traffic doesn't need to leave the country. The ratio of domestic to international peering is a key indicator of network self-sufficiency and resilience.
       
       {% else %}
       No peering data available for this country.
@@ -129,9 +153,12 @@ queries:
       Country:
         type: "string"
         label: "Country Name"
-      TotalPeerings:
+      DomesticPeers:
         type: "integer"
-        label: "Total Peering Connections"
-    
-    sort_by: "TotalPeerings"
-    sort_order: "desc"
+        label: "Domestic Peers"
+      InternationalPeers:
+        type: "integer"
+        label: "International Peers"
+      TotalPeers:
+        type: "integer"
+        label: "Total Peers"

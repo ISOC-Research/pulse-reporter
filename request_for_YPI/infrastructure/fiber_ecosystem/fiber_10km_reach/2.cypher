@@ -1,14 +1,13 @@
-// BGP prefix count per active AS — a proxy for geographic network coverage depth.
-// Operators with more BGP prefixes have finer-grained network segmentation,
-// typically indicating a broader physical footprint and more granular routing control.
-// The parameter $countryCode must be provided during execution (e.g., 'FR', 'SN', 'JP').
+// Top network operators by BGP prefix count and colocation footprint.
+// Combines prefix count (routing footprint) with facility count (physical presence)
+// to identify operators with the broadest infrastructure reach.
+// The $countryCode parameter must be provided during execution (e.g., 'AU', 'FR', 'DE').
 MATCH (c:Country {country_code: $countryCode})<-[:COUNTRY]-(a:AS)-[:ORIGINATE]->(p:BGPPrefix)
 OPTIONAL MATCH (a)-[:NAME]->(n:Name)
-WITH a, n, count(DISTINCT p) AS prefixCount
-WHERE prefixCount > 0
-RETURN a.asn AS ASN,
-       n.name AS operatorName,
-       prefixCount AS announcedPrefixes
-ORDER BY announcedPrefixes DESC
+OPTIONAL MATCH (a)-[:LOCATED_IN]->(f:Facility)-[:COUNTRY]->(c)
+WITH a.asn AS ASN, MIN(n.name) AS OperatorName,
+     COUNT(DISTINCT p) AS AnnouncedPrefixes,
+     COUNT(DISTINCT f) AS FacilityPresence
+RETURN ASN, OperatorName, AnnouncedPrefixes, FacilityPresence
+ORDER BY AnnouncedPrefixes DESC
 LIMIT 20;
-
