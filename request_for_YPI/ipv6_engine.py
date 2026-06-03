@@ -13,6 +13,7 @@ Mentor  : Amreesh Phokeer (Internet Society)
 
 import os
 import sys
+import json
 import pathlib
 from datetime import datetime
 from typing import Optional
@@ -36,8 +37,66 @@ from request_for_YPI.pulse_service import (
 
 
 # ═══════════════════════════════════════════════════════════════════════════
-# CONSTANTS — Archetype thresholds (per Amreesh's policy rules)
+# CONSTANTS — Government TLD mapping & Archetype thresholds
 # ═══════════════════════════════════════════════════════════════════════════
+
+# Maps ISO-2 country codes to their government domain suffix.
+# Fallback: .gov.<cc> (covers most countries).
+GOV_TLD_MAP = {
+    "FR": "gouv.fr",
+    "IN": "gov.in",
+    "US": "gov",
+    "GB": "gov.uk",
+    "AU": "gov.au",
+    "CA": "gc.ca",
+    "BR": "gov.br",
+    "DE": "bund.de",
+    "JP": "go.jp",
+    "KR": "go.kr",
+    "ZA": "gov.za",
+    "NG": "gov.ng",
+    "KE": "go.ke",
+    "MA": "gov.ma",
+    "SN": "gouv.sn",
+    "EG": "gov.eg",
+    "MX": "gob.mx",
+    "AR": "gob.ar",
+    "CL": "gob.cl",
+    "CO": "gov.co",
+    "PE": "gob.pe",
+    "NZ": "govt.nz",
+    "KZ": "gov.kz",
+    "ID": "go.id",
+    "TH": "go.th",
+    "PH": "gov.ph",
+    "MY": "gov.my",
+    "SG": "gov.sg",
+    "PK": "gov.pk",
+    "BD": "gov.bd",
+    "LK": "gov.lk",
+    "VN": "gov.vn",
+    "CN": "gov.cn",
+    "TW": "gov.tw",
+    "IL": "gov.il",
+    "AE": "gov.ae",
+    "SA": "gov.sa",
+    "TZ": "go.tz",
+    "GH": "gov.gh",
+    "ET": "gov.et",
+    "RW": "gov.rw",
+    "UG": "go.ug",
+}
+
+
+def _get_gov_tld(country_code: str) -> str:
+    """Return the government domain suffix for a country code."""
+    cc = country_code.upper()
+    return GOV_TLD_MAP.get(cc, f"gov.{cc.lower()}")
+
+
+def _get_ccTLD(country_code: str) -> str:
+    """Return the ccTLD for a country (e.g., 'FR' -> '.fr')."""
+    return f".{country_code.lower()}"
 
 BOTTLENECK_MARKET_SHARE  = 0.15   # 15% — Category D trigger
 BOTTLENECK_ADOPTION_CAP  = 0.20   # 20% adoption ceiling for D
@@ -247,6 +306,91 @@ def get_ipv6_upstream_connectivity(country_code: str) -> dict:
         "error": None,
     }
 
+
+def get_ixp_ipv6_peering(country_code: str) -> dict:
+    """
+    Section 1.2.2 — IXP IPv6 Peering Analysis.
+
+    Measures IPv6 peering readiness at domestic IXPs using two signals:
+    1. PeeringLAN: Does the IXP offer an IPv6 peering LAN (af=6)?
+    2. MEMBER_OF.info_ipv6: Do member ASes have IPv6 peering enabled?
+
+    Returns per-IXP breakdown and national summary.
+    """
+
+    country_code = country_code.upper()
+
+    query = f"""
+    MATCH (c:Country {{country_code: '{country_code}'}})
+    MATCH (ixp:IXP)-[:COUNTRY]->(c)
+
+    // Check if the IXP has an IPv6 PeeringLAN
+    OPTIONAL MATCH (pl:PeeringLAN)-[:MANAGED_BY]->(ixp)
+    WITH ixp, c,
+         count(DISTINCT CASE WHEN pl.af = 6 THEN pl END) > 0 AS has_ipv6_lan
+
+    // Count members with IPv6 peering enabled
+    OPTIONAL MATCH (member:AS)-[m:MEMBER_OF]->(ixp)
+    WITH ixp, has_ipv6_lan,
+         count(DISTINCT member) AS total_members,
+         count(DISTINCT CASE WHEN m.info_ipv6 = true THEN member END) AS ipv6_members
+
+    RETURN
+        ixp.name AS ixpName,
+        has_ipv6_lan AS hasIPv6LAN,
+        total_members AS totalMembers,
+        ipv6_members AS ipv6Members
+    ORDER BY total_members DESC
+    """
+
+    result = execute_cypher_test(query)
+
+    if not result["success"]:
+        return {"error": result["error"]}
+
+    ixps = []
+    total_ixps = 0
+    ipv6_capable_ixps = 0
+    total_members_all = 0
+    ipv6_members_all = 0
+
+    for row in result["data"]:
+        total_ixps += 1
+        total_m = row.get("totalMembers", 0) or 0
+        ipv6_m = row.get("ipv6Members", 0) or 0
+        has_lan = row.get("hasIPv6LAN", False)
+
+        total_members_all += total_m
+        ipv6_members_all += ipv6_m
+
+        if has_lan:
+            ipv6_capable_ixps += 1
+
+        ipv6_pct = round((ipv6_m / total_m) * 100, 1) if total_m > 0 else 0.0
+
+        ixps.append({
+            "ixp_name": row.get("ixpName", "?"),
+            "has_ipv6_lan": has_lan,
+            "total_members": total_m,
+            "ipv6_members": ipv6_m,
+            "ipv6_member_pct": ipv6_pct,
+        })
+
+    ixp_ipv6_pct = round((ipv6_capable_ixps / total_ixps) * 100, 1) if total_ixps else 0.0
+    member_ipv6_pct = round((ipv6_members_all / total_members_all) * 100, 1) if total_members_all else 0.0
+
+    return {
+        "country": country_code,
+        "total_ixps": total_ixps,
+        "ipv6_capable_ixps": ipv6_capable_ixps,
+        "ixp_ipv6_pct": ixp_ipv6_pct,
+        "total_members": total_members_all,
+        "ipv6_members": ipv6_members_all,
+        "member_ipv6_pct": member_ipv6_pct,
+        "ixps": ixps,
+        "error": None,
+    }
+
 def get_tld_ipv6_health(country_code: str) -> dict:
     """
     Section 5.1 — ccTLD IPv6 readiness analysis.
@@ -387,6 +531,111 @@ def compare_tld_ipv6_readiness(base_country: str) -> dict:
     return {
         "country": base_country,
         "comparisons": results,
+    }
+
+
+# ── TLD Trend History File ───────────────────────────────────────────────
+_TLD_TREND_FILE = _ROOT / "data" / "tld_trend_history.json"
+
+
+def _load_tld_trend_history() -> dict:
+    """Load the TLD trend history from disk."""
+    if _TLD_TREND_FILE.exists():
+        with open(_TLD_TREND_FILE, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return {}
+
+
+def _save_tld_trend_history(history: dict):
+    """Save the TLD trend history to disk."""
+    _TLD_TREND_FILE.parent.mkdir(parents=True, exist_ok=True)
+    with open(_TLD_TREND_FILE, "w", encoding="utf-8") as f:
+        json.dump(history, f, indent=2, ensure_ascii=False)
+
+
+def get_tld_ipv6_trend(country_code: str, tld_data: dict = None) -> dict:
+    """
+    Section 5.1.2 — TLD IPv6 Readiness Trend.
+
+    Since IYP is a current-state database with no historical snapshots,
+    this function maintains its own trend file on disk. Each time the
+    report runs, the current TLD readiness is recorded with a date stamp.
+    Over time, this builds a multi-month/multi-year trend automatically.
+
+    If tld_data is provided (from a previous get_tld_ipv6_health call),
+    it is recorded as the latest snapshot. Otherwise a fresh query is run.
+
+    Returns:
+    {
+        "country": str,
+        "tld": str,
+        "trend": [{"date": "2026-06-03", "total": int, "ipv6": int, "pct": float}, ...],
+        "note": str,
+        "error": None
+    }
+    """
+
+    country_code = country_code.upper()
+    tld = f".{country_code.lower()}"
+
+    # If no pre-fetched data, query fresh
+    if tld_data is None:
+        tld_data = get_tld_ipv6_health(country_code)
+
+    if tld_data.get("error"):
+        return {"error": tld_data["error"]}
+
+    # Current snapshot
+    today = datetime.now().strftime("%Y-%m-%d")
+    current_snapshot = {
+        "date": today,
+        "total": tld_data.get("total_domains", 0),
+        "ipv6": tld_data.get("ipv6_enabled_domains", 0),
+        "pct": tld_data.get("percentage", 0.0),
+    }
+
+    # Load history, record current snapshot (one entry per date per country)
+    history = _load_tld_trend_history()
+
+    if country_code not in history:
+        history[country_code] = []
+
+    # Replace entry for today if it already exists, else append
+    entries = history[country_code]
+    updated = False
+    for i, entry in enumerate(entries):
+        if entry["date"] == today:
+            entries[i] = current_snapshot
+            updated = True
+            break
+
+    if not updated:
+        entries.append(current_snapshot)
+
+    # Sort by date
+    entries.sort(key=lambda x: x["date"])
+
+    history[country_code] = entries
+    _save_tld_trend_history(history)
+
+    # Build note based on data points
+    n = len(entries)
+    if n < 2:
+        note = ("This is the first recorded snapshot. "
+                "Run the report again in the future to build a trend.")
+    else:
+        oldest = entries[0]
+        delta = current_snapshot["pct"] - oldest["pct"]
+        direction = "increased" if delta > 0 else ("decreased" if delta < 0 else "remained stable")
+        note = (f"TLD IPv6 readiness has {direction} by {abs(delta):.1f} pp "
+                f"since {oldest['date']} ({n} snapshots recorded).")
+
+    return {
+        "country": country_code,
+        "tld": tld,
+        "trend": entries,
+        "note": note,
+        "error": None,
     }
 
 
@@ -573,17 +822,21 @@ def get_web_ipv6_readiness(country_code: str,
         "error": None
     }
 
-def get_government_ipv6_readiness(sample_limit: int = 1000) -> dict:
+def get_government_ipv6_readiness(country_code: str,
+                                  sample_limit: int = 1000) -> dict:
     """
     Section 4.3.2
 
-    Analyze IPv6 readiness of Indian government websites.
+    Analyze IPv6 readiness of government websites for any country.
+    Uses the GOV_TLD_MAP to resolve the correct government domain suffix.
     """
+
+    gov_tld = _get_gov_tld(country_code)
 
     query = f"""
     MATCH (d:DomainName)-[:RANK]->(:Ranking)
 
-    WHERE d.name ENDS WITH '.gov.in'
+    WHERE d.name ENDS WITH '.{gov_tld}'
 
     WITH DISTINCT d
     LIMIT {sample_limit}
@@ -629,6 +882,7 @@ def get_government_ipv6_readiness(sample_limit: int = 1000) -> dict:
     pct = round((ipv6 / total) * 100, 2) if total else 0.0
 
     return {
+        "gov_tld": gov_tld,
         "total_gov_domains": total,
         "ipv6_capable": ipv6,
         "ipv4_only": ipv4_only,
@@ -638,12 +892,16 @@ def get_government_ipv6_readiness(sample_limit: int = 1000) -> dict:
 
 def get_sector_ipv6_readiness(sector_name: str,
                               keywords: list,
+                              country_code: str,
                               sample_limit: int = 1000) -> dict:
     """
     Section 4.3
 
     Analyze IPv6 readiness for a heuristic web sector.
+    Dynamically uses the country's ccTLD instead of hardcoded .in.
     """
+
+    cc = country_code.lower()
 
     keyword_conditions = " OR ".join(
         [f"d.name CONTAINS '{kw}'" for kw in keywords]
@@ -654,8 +912,8 @@ def get_sector_ipv6_readiness(sector_name: str,
 
     WHERE ({keyword_conditions})
     AND (
-        d.name ENDS WITH '.in'
-        OR d.name ENDS WITH '.co.in'
+        d.name ENDS WITH '.{cc}'
+        OR d.name ENDS WITH '.co.{cc}'
     )
 
     WITH DISTINCT d
@@ -1285,8 +1543,10 @@ def export_policy_brief(
     rpki_data:   dict,
     isp_rpki_data: dict,
     upstream_data: dict,
+    ixp_data: dict,
     tld_data: dict,
     tld_comparison_data: dict,
+    tld_trend_data: dict,
     nameserver_data: dict,
     glue_data: dict,
     web_data: dict,
@@ -1301,14 +1561,14 @@ def export_policy_brief(
     """
     country  = scorecard.get("country", "XX")
     year     = scorecard.get("year", 2024)
-    date_str = datetime.now().strftime("%Y%m%d_%H%M")
 
     if output_dir is None:
         output_dir = str(_ROOT / "reports")
 
     os.makedirs(output_dir, exist_ok=True)
 
-    filepath = os.path.join(output_dir, f"IPv6_{country}_{date_str}.md")
+    # Simple filename — overwrites previous report for the same country.
+    filepath = os.path.join(output_dir, f"IPv6_Report_{country}.md")
 
     nat_pct  = round(scorecard.get("national_adoption", 0) * 100, 1)
     isps     = scorecard.get("isps", [])
@@ -1371,6 +1631,29 @@ def export_policy_brief(
         "",
         "> NOTE: This metric is currently experimental and based on",
         "> inferred AS dependency relationships within the IYP graph.",
+        "",
+        "---",
+        "",
+        "### IXP IPv6 Peering",
+        "",
+        f"**Domestic IXPs:** {ixp_data.get('total_ixps', 0)}  ",
+        f"**IXPs with IPv6 LAN:** {ixp_data.get('ipv6_capable_ixps', 0)} ({ixp_data.get('ixp_ipv6_pct', 0)}%)  ",
+        f"**Members with IPv6 Peering:** {ixp_data.get('ipv6_members', 0)} / {ixp_data.get('total_members', 0)} ({ixp_data.get('member_ipv6_pct', 0)}%)  ",
+        "",
+        "| IXP | IPv6 LAN | Members | IPv6 Members | IPv6 % |",
+        "|-----|:--------:|:-------:|:------------:|:------:|",
+
+        *[
+            f"| {ixp['ixp_name'][:35]} | "
+            f"{'Yes' if ixp['has_ipv6_lan'] else 'No'} | "
+            f"{ixp['total_members']} | "
+            f"{ixp['ipv6_members']} | "
+            f"{ixp['ipv6_member_pct']:.1f}% |"
+            for ixp in ixp_data.get("ixps", [])[:15]
+        ],
+
+        "",
+        "> IXP IPv6 readiness was measured using PeeringDB data within the IYP graph.",
         "",
         "---",
         "",
@@ -1498,7 +1781,7 @@ def export_policy_brief(
         "",
 
         "> Government domains were identified using",
-        "> the .gov.in namespace and evaluated for",
+        f"> the .{gov_data.get('gov_tld', 'gov')} namespace and evaluated for",
         "> IPv6-capable hostname resolution.",
         "",
 
@@ -1586,6 +1869,19 @@ def export_policy_brief(
         "> Comparative sampled analysis across major TLD ecosystems",
         "> provides relative benchmarking of IPv6 DNS readiness.",
         
+        "",
+        "### TLD IPv6 Readiness Trend",
+        "",
+        "| Date | Domains Sampled | IPv6-Enabled | Readiness |",
+        "|------|:---------------:|:------------:|:---------:|",
+
+        *[
+            f"| {entry['date']} | {entry['total']} | {entry['ipv6']} | {entry['pct']:.1f}% |"
+            for entry in tld_trend_data.get("trend", [])
+        ],
+
+        "",
+        f"> {tld_trend_data.get('note', 'No trend data available yet.')}",
         "",
         "### Authoritative Nameserver IPv6 Reachability",
         "",
