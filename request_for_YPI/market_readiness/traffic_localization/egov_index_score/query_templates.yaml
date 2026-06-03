@@ -21,7 +21,7 @@ queries:
       
       {% for item in results %}
       - **Rank {{ loop.index }}:** {{ item.domainName }}
-        Local Query Share: **{{ "%.4f"|format(item.percentageOfLocalQueries * 100) }}%**
+        Local Query Share: **{{ "%.4f"|format(item.percentageOfLocalQueries) }}%**
         {% if item.trancoRank %}
         (Global Tranco Rank: {{ item.trancoRank }})
         {% endif %}
