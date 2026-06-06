@@ -1,74 +1,79 @@
-### Analyse de l’Indicateur SRI (Spectre d’Allocation Réseau)
+### Analysis of the SRI (Spectrum Allocation Index) Indicator
 
-Cet indicateur du pilier « Infrastructure » évalue la capacité d’allocation du spectre Internet national, c’est-à-dire la portion d’adressage IP effectivement utilisée et annoncée par les opérateurs du pays.
-L’objectif est de mesurer la densité d’utilisation du spectre d’adressage BGP par les Systèmes Autonomes (:AS) locaux, reflet direct du poids technique du pays dans l’espace Internet mondial.
+This indicator from the "Infrastructure" pillar evaluates the allocation capacity of the national IP address spectrum, measuring the portion of IP address space actually utilized and announced by the country's network operators. The objective is to evaluate the volume and family split (IPv4 vs. IPv6) of BGP prefix announcements by local Autonomous Systems (:AS), which serves as a key proxy for network capacity and logical address space allocation maturity.
 
-Les entités techniques clés impliquées sont :
+The key technical entities involved are:
+* `:AS` (Autonomous Systems operating in the country)
+* `:BGPPrefix` (IP prefixes announced publicly via BGP)
+* `:Country` (representing country code assignments)
 
-les :AS (Systèmes Autonomes opérant dans le pays),
+### YPI Relevance and Technical Analysis Plan
 
-les :BGPPrefix (préfixes IP annoncés publiquement via le protocole BGP),
+* **Relevance Assessment:** Case A (Highly Relevant). The YPI schema integrates `:ORIGINATE` relationships between `:AS` and their `:BGPPrefix` nodes derived from CAIDA and RIPE RIS routing tables. This allows a detailed evaluation of active IP prefix volumes, address family distributions, and IPv6 adoption readiness among national operators.
 
-et le :Country (pays d’appartenance des opérateurs).
+* **Note on Scope:** The indicator measures logical IP address space allocation capacity in the BGP routing table. It does not measure physical radiofrequency spectrum allocations (RF bands or cellular spectrum licences) but focuses on the logical internet address space.
 
-### Pertinence YPI et Plan d’Analyse Technique
+Here is the technical analysis plan for this indicator:
 
-Évaluation de pertinence : Cas A (Très Pertinent).
-Le schéma YPI intègre des relations :ORIGINATE entre les :AS et leurs :BGPPrefix, issues de jeux de données CAIDA et RIPE RIS.
-Cela permet une évaluation fidèle du volume d’adresses IP actives et du niveau d’activité réseau des opérateurs nationaux.
+#### Query 1: IP Address Space Utilization (IPv4/IPv6 BGP Prefix Breakdown)
 
-Note sur la portée :
-L’indicateur mesure la capacité d’allocation et d’utilisation du spectre IP sur la partie BGP — il ne couvre pas les bandes hertziennes ou spectres radio au sens télécom, mais se concentre sur le spectre logique de l’Internet routé.
+* **Query Objective:** This query counts the total originated BGP prefixes for the country, breaking them down into IPv4 and IPv6 families, and calculating the percentage of IPv6 prefix announcements. A larger total prefix footprint indicates greater logical capacity, while a higher IPv6 share reflects address space modernization.
 
-Voici le plan d’analyse technique pour cet indicateur :
+* **Cypher Query:**
+    ```cypher
+    // BGP prefix count breakdown by address family — measures IP address space utilization.
+    // IPv4 prefix count shows existing deployment scale; IPv6 prefix count shows
+    // forward-looking address space adoption and future network capacity planning.
+    // The parameter $countryCode must be provided during execution (e.g., 'FR', 'SN', 'JP').
+    MATCH (c:Country {country_code: $countryCode})<-[:COUNTRY]-(as:AS)-[:ORIGINATE]->(p:BGPPrefix)
+    RETURN c.name AS Country,
+           count(DISTINCT p)                                                    AS Originated_Prefixes,
+           count(DISTINCT CASE WHEN p.af = 4 THEN p ELSE null END)             AS IPv4_Prefixes,
+           count(DISTINCT CASE WHEN p.af = 6 THEN p ELSE null END)             AS IPv6_Prefixes,
+           count(DISTINCT as)                                                   AS ActiveOperators,
+           round(100.0 * count(DISTINCT CASE WHEN p.af = 6 THEN p ELSE null END)
+                 / count(DISTINCT p), 2)                                        AS IPv6_SharePercent
+    ORDER BY Originated_Prefixes DESC;
+    ```
 
-#### Requête 1 : Volume de Préfixes BGP Originés par les AS Locaux
+#### Query 2: Largest IP Address Space Holders with IPv6 Adoption Status
 
-Objectif de la requête :
-Quantifier le nombre total de préfixes IP annoncés (originés) par les Systèmes Autonomes d’un pays.
-Cela donne une mesure directe de la taille du spectre Internet utilisé par le pays dans le routage mondial.
+* **Query Objective:** This query lists the top 20 network operators (ASes) in the country by announced prefix count, showing their IPv4 and IPv6 split and an IPv6 adoption flag. Identifying large operators with zero IPv6 prefixes highlights critical modernization targets, as IPv4 scarcity limits long-term capacity.
 
-Requête Cypher :
-```
-// Allocation du spectre : préfixes originés par les AS du pays.
+* **Cypher Query:**
+    ```cypher
+    // Top network operators by BGP prefix count — largest IP address space holders,
+    // broken down by IPv4/IPv6 with adoption readiness flag.
+    // The $countryCode parameter must be provided during execution (e.g., 'AU', 'FR', 'DE').
+    MATCH (c:Country {country_code: $countryCode})<-[:COUNTRY]-(a:AS)-[:ORIGINATE]->(p:BGPPrefix)
+    OPTIONAL MATCH (a)-[:NAME]->(n:Name)
+    WITH a, MIN(n.name) AS OperatorName,
+         COUNT(DISTINCT CASE WHEN p.af = 4 THEN p END) AS IPv4Prefixes,
+         COUNT(DISTINCT CASE WHEN p.af = 6 THEN p END) AS IPv6Prefixes
+    WITH a.asn AS ASN, OperatorName, IPv4Prefixes, IPv6Prefixes,
+         (IPv4Prefixes + IPv6Prefixes) AS TotalPrefixes,
+         CASE WHEN IPv6Prefixes > 0 THEN 'Yes' ELSE 'No' END AS IPv6Adopted
+    RETURN ASN, OperatorName, TotalPrefixes, IPv4Prefixes, IPv6Prefixes, IPv6Adopted
+    ORDER BY TotalPrefixes DESC
+    LIMIT 20;
+    ```
 
-MATCH (a:AS)-[:COUNTRY]->(c:Country {country_code: $countryCode})
-MATCH (a)-[:ORIGINATE]->(p:BGPPrefix)
-RETURN c.name AS Country,
-       COUNT(DISTINCT p) AS Originated_Prefixes;
-```
-Interprétation :
-Le nombre de Originated_Prefixes représente le volume d’adresses IP effectivement visibles dans le routage mondial pour ce pays.
-Une valeur élevée traduit une capacité technique et économique forte, une bonne gestion du spectre IP, et un haut niveau d’activité réseau.
-Une valeur faible suggère une sous-exploitation du spectre ou une dépendance à des opérateurs étrangers pour l’annonce des routes BGP nationales.
+### Overall Analysis Objective
 
-### Objectif Global de l’Analyse
+Executing these queries provides a view of the country's IP address allocation maturity and readiness:
+1. Total capacity and IPv6 migration progress (Query 1)
+2. Distribution of address space and tracking major non-adopters (Query 2)
 
-L’exécution de cette requête permet de :
+### Strategic Interpretation
 
-mesurer la taille réelle du spectre d’adressage IP routé par les acteurs nationaux,
+| Observed Situation | Possible Interpretation |
+|---|---|
+| High prefix count + strong IPv6 share (%) | High capacity, modernized network ecosystem, future-ready operators. |
+| High prefix count but low/zero IPv6 share | High immediate capacity, but significant long-term growth constraints due to IPv4 exhaustion. |
+| Low prefix count + high operator concentration | Limited national address footprint, high vulnerability to single-operator routing/outage events. |
+| Low prefix count + low active operators | Underdeveloped digital economy with low hosting infrastructure footprint. |
 
-évaluer la maturité du réseau à travers sa visibilité mondiale,
+### Policy Recommendations
 
-et identifier les disparités régionales (pays sous-annoncés ou concentrant l’adressage dans peu d’AS).
-
-### Interprétation Stratégique
-Situation observée	Interprétation possible
-Grand nombre de préfixes originés	Pays à forte autonomie réseau et large spectre IP utilisé
-Peu de préfixes originés	Couverture logique limitée, dépendance à l’international
-Concentration sur peu d’AS	Risque de centralisation et de vulnérabilité du routage
-Répartition équilibrée entre de nombreux AS	Écosystème résilient et bien distribué
-
-### Recommandations d’Amélioration
-
-Renforcement de la gestion du spectre IP :
-Encourager les opérateurs locaux à obtenir et annoncer leurs propres préfixes, plutôt que de dépendre d’entités tierces.
-
-Diversification des annonceurs BGP :
-Réduire la concentration en favorisant plus d’AS actifs dans le routage national.
-
-Optimisation de la visibilité mondiale :
-Mettre en place des politiques nationales favorisant l’autonomie du routage, notamment via des IXP nationaux ou régionaux.
-
-Surveillance continue :
-Intégrer le suivi des préfixes originés dans une veille régulière de la topologie BGP, pour détecter rapidement toute perte de spectre (ex. hijack, retrait d’annonces).
+* **Address Space Modernization (Query 1):** Set national targets or procurement rules requiring all public-facing services (e.g. government portals) to support dual-stack IPv4/IPv6.
+* **Target Major Operators (Query 2):** Engage directly with the top operators showing "No" for IPv6 adoption to provide technical workshops or incentives for deploying IPv6 prefixes.

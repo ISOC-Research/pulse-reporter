@@ -1,113 +1,101 @@
-### Analyse de l’Indicateur FRI (Fibre Reach Index)
+### Analysis of the FRI (Fiber Reach Index) Indicator
 
-Cet indicateur du pilier « Infrastructure » évalue la portée du réseau fibre au sein d’un pays.
-L’objectif est de mesurer la densité et la proximité des infrastructures de connectivité qui permettent aux services haut débit (fibre, backbone IP) d’atteindre efficacement les zones desservies.
-Plus la distribution des points de présence et des interconnexions locales est dense, plus la portée du réseau fibre est grande — c’est-à-dire que la fibre est disponible à faible distance des opérateurs et potentiellement des utilisateurs.
+This indicator from the "Infrastructure" pillar evaluates the geographic reach of the fiber optic network within a country. The objective is to assess the density and proximity of connectivity infrastructures that enable high-speed services (fiber, IP backbones) to effectively reach populated areas. A denser distribution of physical network nodes and local interconnections indicates a broader fiber footprint, meaning that fiber backbones are available closer to operators and potentially end-users.
 
-Les entités techniques clés impliquées sont :
+The key technical entities involved are:
+* `:AS` (Autonomous Systems, representing network operators)
+* `:Point` (geographic points or physical network nodes)
+* `:Facility` (physical data center/colocation nodes)
+* `:BGPPrefix` (announced IP blocks indicating routing activity)
 
-les :AS (systèmes autonomes, équivalents des opérateurs de réseau),
+### YPI Relevance and Technical Analysis Plan
 
-les :Point (points géographiques ou nœuds physiques du réseau),
+* **Relevance Assessment:** Case B (Relevant but partial). The YPI (Your Peering Intelligence) schema does not contain direct physical telemetry on fiber cables (such as physical route length, topology, or channel capacities). However, it offers a robust structural proxy via geographic points (:Point), data center facility footprints (:Facility), and BGP prefix allocations. These elements allow a realistic approximation of fiber reach by analyzing the physical and logical distribution of active network operators.
 
-les relations :LOCATED_IN (localisation des AS dans ces points),
+Here is the technical analysis plan for this indicator:
 
-et les relations :PEERS_WITH (liens d’interconnexion directe entre opérateurs).
+#### Query 1: Fiber Infrastructure Geographic Reach (Active Operator Points)
 
-Pertinence YPI et Plan d’Analyse Technique
+* **Query Objective:** This query approximates physical fiber reach by counting the number of distinct geographic Points associated with active Autonomous Systems (operators that actively announce BGP prefixes). A higher number of geographic points spread across active operators indicates a broader physical network footprint and suggests a wider fiber deployment reach.
 
-Évaluation de pertinence : Cas B (Pertinent mais partiel).
-Le schéma YPI (Your Peering Intelligence) ne contient pas de métriques physiques sur les fibres (longueurs, topologie ou débits),
-mais il offre un proxy robuste via les points réseau (:Point) et les relations de peering (:PEERS_WITH).
-Ces éléments permettent une approximation réaliste de la portée de la fibre à travers la densité et la connectivité locale des AS.
+* **Cypher Query:**
+    ```cypher
+    // Fiber reach approximation: counts geographic coverage points of ASes that
+    // actively originate BGP prefixes (i.e., are operating networks, not dormant registrations).
+    // More geographic points across more active operators = broader physical infrastructure reach.
+    // The parameter $countryCode must be provided during execution (e.g., 'FR', 'SN', 'JP').
+    MATCH (c:Country {country_code: $countryCode})<-[:COUNTRY]-(a:AS)
+    WHERE (a)-[:ORIGINATE]->(:BGPPrefix)
+    OPTIONAL MATCH (a)-[:LOCATED_IN]->(p:Point)
+    RETURN c.name AS Country,
+           count(DISTINCT p) AS GeoCoveragePoints,
+           count(DISTINCT a) AS ActiveOperators
+    ORDER BY GeoCoveragePoints DESC;
+    ```
 
-Note sur la portée :
-Le modèle YPI ne permet pas de mesurer la distance réelle de 10 km ni la couverture client,
-mais il capture bien la structure du maillage de connectivité, essentielle pour estimer la proximité réseau effective.
+#### Query 2: Network Operators by Routing Footprint and Physical Presence
 
-Voici le plan d’analyse technique pour cet indicateur :
+* **Query Objective:** This query ranks the country's active network operators by their routing footprint (BGP prefixes announced) combined with their physical facility presence (number of data center facilities they occupy). Operators possessing both high BGP prefix counts and presence across multiple facilities represent the backbone of the country's fiber infrastructure.
 
-Requête 1 : Densité de Points Réseau Locaux
+* **Cypher Query:**
+    ```cypher
+    // Top network operators by BGP prefix count and colocation footprint.
+    // Combines prefix count (routing footprint) with facility count (physical presence)
+    // to identify operators with the broadest infrastructure reach.
+    // The $countryCode parameter must be provided during execution (e.g., 'AU', 'FR', 'DE').
+    MATCH (c:Country {country_code: $countryCode})<-[:COUNTRY]-(a:AS)-[:ORIGINATE]->(p:BGPPrefix)
+    OPTIONAL MATCH (a)-[:NAME]->(n:Name)
+    OPTIONAL MATCH (a)-[:LOCATED_IN]->(f:Facility)-[:COUNTRY]->(c)
+    WITH a.asn AS ASN, MIN(n.name) AS OperatorName,
+         COUNT(DISTINCT p) AS AnnouncedPrefixes,
+         COUNT(DISTINCT f) AS FacilityPresence
+    RETURN ASN, OperatorName, AnnouncedPrefixes, FacilityPresence
+    ORDER BY AnnouncedPrefixes DESC
+    LIMIT 20;
+    ```
 
-Objectif de la requête :
-Évaluer la densité des points géographiques où sont présents les AS d’un pays.
-Plus il y a de :Point uniques associés à des :AS locaux, plus le maillage est dense,
-et plus la portée de la fibre est étendue sur le territoire.
+#### Query 3: Multi-Facility Network Operators
 
-Requête Cypher :
-```
-// Approximation de la portée fibre : densité de points géographiques des AS
-// $countryCode = code du pays (ex: 'FR', 'SN', 'JP')
+* **Query Objective:** This query identifies network operators colocated in more than one physical facility within the country. An active operator present across multiple facilities demonstrates physically distributed infrastructure, which is a strong indicator of real geographic reach and fiber backbone diversity beyond a single central office.
 
-MATCH (a:AS)-[:COUNTRY]->(c:Country {country_code: $countryCode})
-MATCH (a)-[:LOCATED_IN]->(p:Point)
-RETURN c.name AS Country,
-       COUNT(DISTINCT p) AS GeoCoveragePoints,
-       COUNT(DISTINCT a) AS Operators
-ORDER BY GeoCoveragePoints DESC;
-```
-Interprétation des résultats :
-Un nombre élevé de GeoCoveragePoints indique une bonne répartition des infrastructures et une grande proximité locale.
-Si la valeur est faible, cela suggère une concentration des opérateurs dans peu de zones, traduisant une portée fibre limitée.
+* **Cypher Query:**
+    ```cypher
+    // Multi-facility operators — active ASes present in more than one data center facility.
+    // Operators with presence across multiple facilities have physically distributed
+    // infrastructure, the strongest indicator of real geographic network reach.
+    // The $countryCode parameter must be provided during execution (e.g., 'AU', 'FR', 'DE').
+    MATCH (c:Country {country_code: $countryCode})<-[:COUNTRY]-(a:AS)-[:LOCATED_IN]->(f:Facility)
+    WHERE (a)-[:ORIGINATE]->(:BGPPrefix)
+    AND (f)-[:COUNTRY]->(c)
+    WITH a, COUNT(DISTINCT f) AS FacilityCount
+    WHERE FacilityCount > 1
+    OPTIONAL MATCH (a)-[:NAME]->(n:Name)
+    RETURN a.asn AS ASN,
+           MIN(n.name) AS OperatorName,
+           FacilityCount AS NumberOfFacilities
+    ORDER BY FacilityCount DESC
+    LIMIT 20;
+    ```
 
-Requête 2 : Proximité Réseau Locale (Peering)
+### Overall Analysis Objective
 
-Objectif de la requête :
-Mesurer la proximité fonctionnelle entre les opérateurs d’un pays via les connexions :PEERS_WITH.
-Dans ce modèle, un AS ayant de nombreux voisins locaux est fortement interconnecté,
-ce qui traduit une portée réseau courte et une connectivité fibre efficace (faible distance logique entre réseaux).
+Executing these queries provides a functional picture of the country's fiber and backbone network reach:
+1. **Query 1** measures physical footprint (geographic presence of active networks).
+2. **Query 2** measures logical vs. physical scale (major operators and their facilities).
+3. **Query 3** highlights infrastructure distribution (operators with redundant, multi-site presence).
 
-Requête Cypher :
-```
-// Approxime la proximité fibre : nombre de voisins réseau locaux.
-// Plus un AS a de connexions PEERS_WITH, plus il a une "portée" courte.
+Combining these dimensions helps analysts determine if the fiber ecosystem is well-distributed, resilient, or concentrated in a single geographic hub.
 
-MATCH (a:AS)-[:COUNTRY]->(c:Country {country_code: $countryCode})
-MATCH (a)-[:PEERS_WITH]-(b:AS)
-RETURN a.asn AS ASN,
-       COUNT(DISTINCT b) AS LocalNeighbors
-ORDER BY LocalNeighbors DESC
-LIMIT 20;
-```
-Interprétation des résultats :
-Les AS en tête de cette liste sont les nœuds les plus interconnectés du pays,
-souvent les opérateurs d’infrastructure ou les points de concentration régionaux (backbones, grands FAI).
-Si peu d’AS possèdent un grand nombre de voisins, cela indique une structure centralisée — bonne pour la performance urbaine, mais moins favorable à la couverture nationale.
-Si la connectivité est distribuée, cela montre une portée fibre équilibrée sur plusieurs opérateurs.
+### Strategic Interpretation
 
-Objectif Global de l’Analyse
+| Observed Situation | Possible Interpretation |
+|---|---|
+| High GeoCoveragePoints + strong multi-facility operator base | Broad fiber reach, competitive market, and high geographic resilience. |
+| Low GeoCoveragePoints + high operator concentration | Fiber infrastructure is concentrated in a few urban centers, leaving other regions underserved. |
+| High GeoCoveragePoints + low facility diversity | Wide geographic coverage, but high risk of single-point-of-failure outages due to facility concentration. |
+| Low GeoCoveragePoints + low facility presence | Underdeveloped backbone ecosystem, high reliance on foreign infrastructure or single-transit providers. |
 
-Ces deux requêtes permettent de dresser un portrait fonctionnel de la portée fibre d’un pays :
+### Policy Recommendations
 
-La Requête 1 mesure la densité physique de la connectivité (présence territoriale).
-
-La Requête 2 mesure la densité logique de la connectivité (interconnexion locale).
-
-Croiser ces deux dimensions permet d’évaluer si la fibre est :
-
-bien répartie (forte densité géographique),
-
-bien interconnectée (forte proximité réseau).
-
-Interprétation stratégique
-
-Cas idéal :
-Densité élevée (GeoCoveragePoints) + nombreux voisins (LocalNeighbors)
-→ forte couverture fibre et interconnexion locale efficace.
-
-Cas problématique :
-
-Faible densité mais forte interconnexion → fibre concentrée dans quelques hubs urbains.
-
-Forte densité mais faible interconnexion → réseau fragmenté, sous-exploité.
-
-Cas critique :
-Faible densité et faible interconnexion → réseau peu maillé, dépendant de transit international ou centralisé.
-
-Recommandations d’Amélioration
-
-Si la densité est faible (Req 1) → encourager le déploiement de POP régionaux ou de facilities locales.
-
-Si la proximité est faible (Req 2) → inciter les opérateurs à plus de peering local pour réduire la latence.
-
-Si les deux sont faibles → plan de renforcement structurel : incitations publiques, co-investissements fibre, ou hébergement d’IXP régionaux.
+* **If geographic points (Query 1) are low:** Encourage public-private partnerships or grant infrastructure concessions to expand fiber backhauls to secondary cities and rural areas.
+* **If facility presence (Query 2/3) is low:** Promote the construction of local carrier-neutral facilities to incentivize operators to distribute their points of presence (PoPs), improving regional routing redundancy.

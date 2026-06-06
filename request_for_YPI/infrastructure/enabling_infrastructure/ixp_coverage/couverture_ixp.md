@@ -1,75 +1,82 @@
-### Analyse de l'Indicateur IRI
+### Analysis of the IRI Indicator
 
-Cet indicateur du pilier "Infrastructure" évalue la disponibilité des Points d'Échange Internet (IXP) au sein d'un pays, en particulier par rapport à ses grands centres de population. Un score élevé signifie que l'infrastructure critique permettant de conserver le trafic Internet local et d'améliorer la performance est présente là où elle est le plus nécessaire. Les entités techniques clés sont les **:IXP**, les **:AS** (en tant que membres), les **:Facility** (où les IXP sont hébergés) et le **:Country**.
+This indicator from the "Infrastructure" pillar evaluates the availability and distribution of Internet Exchange Points (IXPs) within a country, particularly in relation to its major population centers. A high score signifies that critical infrastructure for keeping local internet traffic local and improving network performance is present where it is needed most. The key technical entities involved are `:IXP`, `:AS` (acting as members), `:Facility` (where IXPs are hosted), and `:Country`.
 
-### Pertinence YPI et Plan d'Analyse Technique
+### YPI Relevance and Technical Analysis Plan
 
-* **Évaluation de pertinence :** Cas A (Très Pertinent, avec une limitation). Le schéma YPI, grâce aux données de PeeringDB, fournit des informations exhaustives sur les IXP, leurs membres et leurs localisations physiques (data centers). Il permet une analyse en profondeur de la santé de l'écosystème d'échange de trafic d'un pays. **Limitation :** YPI ne contient pas de données démographiques ou géographiques au niveau des villes. Par conséquent, il ne peut pas directement corréler la présence d'un IXP avec un "centre de population de plus de 300 000 habitants". Cependant, en analysant l'existence, le nombre et la vitalité des IXP, nous pouvons établir une base technique solide qui explique en grande partie le score de cet indicateur.
+* **Relevance Assessment:** Case A (Highly Relevant, with a limitation). The YPI schema, utilizing PeeringDB data, provides comprehensive information about IXPs, their members, and their physical hosting locations (data centers). It allows for an in-depth analysis of the health of a country's peering ecosystem. **Limitation:** YPI does not contain demographic or geographical data at the city level. Consequently, it cannot directly correlate IXP presence with a "population center of over 300,000 inhabitants." However, by analyzing the existence, count, and vitality of IXPs, we can establish a solid technical foundation that largely explains this indicator's score.
 
-Voici le plan d'analyse technique pour cet indicateur :
+Here is the technical analysis plan for this indicator:
 
-#### Requête 1 : Inventaire des IXP et de leur localisation physique
+#### Query 1: IXP Inventory and Physical Facility Distribution
 
-* **Objectif de la requête :** La première étape consiste à vérifier l'existence même d'IXP dans le pays cible. Cette requête liste tous les IXP déclarés et, de manière cruciale, les centres de données (:Facility) où ils sont physiquement présents. Cela donne une première idée de la distribution géographique de cette infrastructure critique.
+* **Query Objective:** The first step is to verify the existence of IXPs in the target country and identify the physical data centers (:Facility) where they are hosted. This provides a baseline understanding of the geographic footprint and physical distribution of this critical infrastructure.
 
-* **Requête Cypher :**
+* **Cypher Query:**
     ```cypher
-    // Liste les IXP d'un pays et les data centers où ils sont situés.
-    // Le paramètre $countryCode doit être fourni lors de l'exécution (ex: 'SN', 'FR', 'JP').
-    MATCH (i:IXP)<-[:MEMBER_OF]-(a:AS)-[:LOCATED_IN]->(f:Facility),
-      (a)-[:COUNTRY]->(c:Country {country_code: $countryCode})
+    // Lists all Internet Exchange Points (IXPs) located in a country,
+    // along with the data center facilities where each IXP is hosted.
+    // The $countryCode parameter must be provided during execution (e.g., 'AU', 'FR', 'DE').
+    MATCH (i:IXP)-[:COUNTRY]->(c:Country {country_code: $countryCode})
+    OPTIONAL MATCH (i)-[:LOCATED_IN]->(f:Facility)
     RETURN i.name AS IXP, COLLECT(DISTINCT f.name) AS Facilities
     ORDER BY SIZE(Facilities) DESC;
     ```
 
-#### Requête 2 : Mesurer la vitalité des IXP par le nombre de membres
+#### Query 2: Measuring IXP Vitality via Member Breakdown
 
-* **Objectif de la requête :** Un IXP n'est utile que si les réseaux s'y connectent. Cette requête mesure la vitalité de chaque IXP en comptant le nombre de membres (AS) locaux et internationaux. Un nombre élevé de membres locaux est le signe d'un écosystème de peering national sain, ce qui est l'objectif principal d'un IXP pour la résilience.
+* **Query Objective:** An IXP is only beneficial if networks actively connect to it. This query measures the vitality of each local IXP by counting the number of local (domestic) and international (foreign) Autonomous System (AS) members. A strong domestic member base indicates a healthy local traffic localization loop.
 
-* **Requête Cypher :**
+* **Cypher Query:**
     ```cypher
-    // Compte les membres locaux et internationaux pour chaque IXP d'un pays.
-    // Le paramètre $countryCode doit être fourni lors de l'exécution (ex: 'SN', 'FR', 'JP').
-    MATCH (i:IXP)<-[:MEMBER_OF]-(a:AS)-[:COUNTRY]->(c:Country)
-    WITH i, c, a, (CASE WHEN c.country_code = $countryCode THEN 1 ELSE 0 END) AS local
-    WHERE c.country_code IS NOT NULL
-    RETURN i.name AS IXP,
-        SUM(local) AS LocalMembers,
-        COUNT(DISTINCT a) - SUM(local) AS ForeignMembers
+    // Counts the local and international AS members for each IXP located in a country.
+    // Local = AS also registered in the same country. Foreign = AS from another country.
+    // The $countryCode parameter must be provided during execution (e.g., 'AU', 'FR', 'DE').
+    MATCH (i:IXP)-[:COUNTRY]->(ic:Country {country_code: $countryCode})
+    MATCH (i)<-[:MEMBER_OF]-(a:AS)
+    OPTIONAL MATCH (a)-[:COUNTRY]->(ac:Country)
+    WITH i, a, COLLECT(DISTINCT ac.country_code) AS member_countries
+    WITH i,
+         COUNT(DISTINCT CASE WHEN $countryCode IN member_countries THEN a END) AS LocalMembers,
+         COUNT(DISTINCT CASE WHEN NOT $countryCode IN member_countries THEN a END) AS ForeignMembers
+    RETURN i.name AS IXP, LocalMembers, ForeignMembers
     ORDER BY LocalMembers DESC;
     ```
 
-#### Requête 3 : Identifier les principaux réseaux internationaux présents sur les IXP
+#### Query 3: Identifying Major International Networks Present at Local IXPs
 
-* **Objectif de la requête :** La valeur d'un IXP augmente de manière exponentielle lorsqu'il attire de grands fournisseurs de contenu (CDN, Cloud, etc.). Leur présence permet de servir le contenu populaire localement, réduisant ainsi la latence et la dépendance au transit international. Cette requête identifie les réseaux internationaux les plus importants (selon le classement CAIDA AS Rank) connectés aux IXP du pays.
+* **Query Objective:** The utility of an IXP grows exponentially when it attracts large global content providers (CDNs, Cloud networks, etc.). Their participation allows popular content to be cached and served locally, lowering latency and reducing reliance on costly international transit links. This query identifies the highest-ranked foreign networks (by CAIDA ASRank) present at the country's IXPs.
 
-* **Requête Cypher :**
+* **Cypher Query:**
     ```cypher
-    // Trouve les réseaux internationaux les mieux classés présents sur les IXP d'un pays.
-    // Le paramètre $countryCode doit être fourni lors de l'exécution (ex: 'SN', 'FR', 'JP').
-    MATCH (i:IXP)<-[:MEMBER_OF]-(a:AS)-[:COUNTRY]->(c:Country)
-    WHERE c.country_code <> $countryCode
-    AND EXISTS {
-        MATCH (a2:AS)-[:COUNTRY]->(c2:Country {country_code: $countryCode})
-        MATCH (a2)-[:MEMBER_OF]->(i)
-    }
-    OPTIONAL MATCH (a)-[:RANK]->(r:Ranking)
-    RETURN a.asn AS ASN, i.name AS IXP, r.name AS Rank
-    ORDER BY r.name ASC
-    LIMIT 10;
-        ```
+    // Finds the top foreign networks (by CAIDA ASRank) that are members of IXPs
+    // located in the country. Shows their global importance rank and which local
+    // IXPs they participate in. Indicates whether the country is a regional peering hub.
+    // The $countryCode parameter must be provided during execution (e.g., 'AU', 'FR', 'DE').
+    MATCH (i:IXP)-[:COUNTRY]->(ic:Country {country_code: $countryCode})
+    MATCH (i)<-[:MEMBER_OF]-(a:AS)
+    OPTIONAL MATCH (a)-[:COUNTRY]->(ac:Country)
+    WITH i, a, COLLECT(DISTINCT ac.country_code) AS member_countries
+    WHERE NOT $countryCode IN member_countries
+    OPTIONAL MATCH (a)-[rel:RANK]->(r:Ranking {name: 'CAIDA ASRank'})
+    OPTIONAL MATCH (a)-[:NAME]->(n:Name)
+    WITH a.asn AS ASN, MIN(n.name) AS NetworkName, COLLECT(DISTINCT i.name) AS IXPs, MIN(rel.rank) AS CaidaRank
+    WHERE CaidaRank IS NOT NULL
+    RETURN ASN, NetworkName, IXPs, CaidaRank
+    ORDER BY CaidaRank ASC
+    LIMIT 15;
+    ```
 
-### Objectif Global de l'Analyse
+### Overall Analysis Objective
 
-L'exécution de ces requêtes fournira une vue d'ensemble technique de l'écosystème d'échange de trafic du pays, ce qui est le fondement de l'indicateur IRI "Couverture des IXP".
+Executing these queries will deliver a thorough technical overview of the country's peering and traffic exchange ecosystem, explaining its IRI score for "IXP Coverage".
 
-* **Compréhension :** Si un pays a un mauvais score, ces requêtes en révéleront la raison technique.
-    * La **Requête 1** pourrait ne retourner aucun résultat, indiquant une absence totale d'IXP.
-    * La **Requête 2** pourrait montrer des IXP existants mais avec très peu de membres, en particulier locaux, ce qui signifie que l'infrastructure est sous-utilisée et que son impact sur la résilience est faible.
-    * La **Requête 3** pourrait révéler l'absence de grands fournisseurs de contenu internationaux, indiquant que même si les acteurs locaux échangent du trafic entre eux, le trafic le plus demandé (vidéo, cloud) doit toujours être récupéré via des liaisons de transit coûteuses et moins performantes.
+* **Understanding:** If a country has a poor score, these queries will pinpoint the technical bottleneck:
+    * **Query 1** may return no results, indicating a complete absence of local IXPs.
+    * **Query 2** might show that IXPs exist but suffer from very low local membership, meaning the local operator community is not leveraging the infrastructure to keep traffic local.
+    * **Query 3** could show a lack of major international content networks, revealing that local users must still cross international transit backbones to fetch popular global content.
 
-* **Amélioration :** Les résultats orientent directement vers des actions concrètes.
-    * **Absence d'IXP :** L'action prioritaire est de lancer une initiative nationale pour créer un premier IXP, en rassemblant les opérateurs locaux et en cherchant le soutien des pouvoirs publics et d'organisations comme l'Internet Society.
-    * **IXP sous-utilisé :** Il faut mener une campagne de sensibilisation et d'incitation auprès des opérateurs de réseaux locaux pour qu'ils rejoignent l'IXP. Cela peut inclure des formations sur les avantages techniques et économiques du peering et la simplification des procédures de connexion.
-    * **Absence de contenu majeur :** L'opérateur de l'IXP et la communauté technique locale (NOG) peuvent engager un dialogue stratégique avec les grands CDN et fournisseurs de cloud, en leur présentant la valeur du marché local (nombre d'utilisateurs) pour les inciter à installer un cache local et à se connecter à l'IXP.
-    
+* **Improvement:** The findings point directly to actionable steps:
+    * **No IXPs:** Launch a coordinated national project to establish an IXP, involving local ISPs, the regulator, and organizations like the Internet Society (ISOC).
+    * **Underutilized IXP:** Run outreach campaigns, local network operator group (NOG) forums, or provide connectivity incentives to local ISPs to encourage peering.
+    * **No Major Global Content Providers:** The IXP operator and national community should proactively approach large CDNs and cloud providers with traffic statistics to justify setting up local caches and joining the IXP.
