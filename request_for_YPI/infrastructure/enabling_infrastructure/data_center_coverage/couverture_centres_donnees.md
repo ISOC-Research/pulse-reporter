@@ -1,64 +1,70 @@
-### Analyse de l'Indicateur IRI
+### Analysis of the IRI Indicator
 
-Cet indicateur du pilier "Infrastructure" évalue la couverture des Points d'Échange Internet (IXP) au sein d'un pays. L'objectif est de mesurer à quel point les grands centres de population sont desservis par des IXP, ce qui est fondamental pour que le trafic Internet local reste local, améliorant ainsi la performance, la latence et la résilience du réseau national. Les entités techniques clés impliquées sont les `:IXP`, les `:AS` (en tant que membres), les `:Facility` (data centers où les IXP sont hébergés) et le `:Country`.
+This indicator from the "Infrastructure" pillar evaluates the coverage and availability of physical data center (colocation) facilities within a country. The goal is to measure the density, operator diversity, and physical footprint of these facilities, which represent the physical foundation of the internet ecosystem. The key technical entities involved are `:Facility`, `:AS` (representing networks colocated in facilities via `:LOCATED_IN`), `:Organization` (managing facilities via `:MANAGED_BY`), and `:Country`.
 
-### Pertinence YPI et Plan d'Analyse Technique
+### YPI Relevance and Technical Analysis Plan
 
-* **Évaluation de pertinence :** Cas A (Très Pertinent). Le schéma YPI intègre des données complètes de PeeringDB, l'une des sources de référence pour cet indicateur IRI. YPI nous permet d'identifier les IXP d'un pays, de quantifier leur importance en comptant leurs membres et de cartographier leur empreinte physique via les data centers.
+* **Relevance Assessment:** Case A (Highly Relevant). The YPI schema integrates comprehensive data from PeeringDB, which is the reference registry for colocation facilities, organizations, and networks. YPI allows us to map the data center landscape, assess provider concentration, and identify key networks that lack physical colocation.
 
-* **Note sur la portée :** Le YPI ne contient pas de données démographiques ou géospatiales sur les "grands centres de population". L'analyse se concentrera donc sur la présence, la vitalité et la distribution physique des IXP, qui sont les fondations techniques de cet indicateur de couverture.
+Here is the technical analysis plan for this indicator:
 
-Voici le plan d'analyse technique pour cet indicateur :
+#### Query 1: Data Center Facility Landscape in the Country
 
-#### Requête 1 : Inventaire et Localisation des IXP du Pays
+* **Query Objective:** This query maps all physical data center (colocation) facilities registered in the country via PeeringDB, ranked by the number of Autonomous Systems colocated at each site. High colocation density at a facility indicates that it is a critical hub for the country's internet infrastructure.
 
-* **Objectif de la requête :** La première étape est de dresser la liste de tous les IXP présents dans le pays cible et d'identifier les villes où ils opèrent. Cela fournit un aperçu de base de l'empreinte de l'écosystème de peering national.
-
-* **Requête Cypher :**
+* **Cypher Query:**
     ```cypher
-    // Liste tous les IXP d'un pays et les villes où ils sont présents.
-    // Le paramètre $countryCode doit être fourni lors de l'exécution (ex: 'KE', 'BR', 'DE').
-    MATCH (i:IXP)<-[:MEMBER_OF]-(a:AS)-[:COUNTRY]->(c:Country {country_code: $countryCode})
-    OPTIONAL MATCH (a)-[:LOCATED_IN]->(f:Facility)
-    RETURN i.name AS IXP, COLLECT(DISTINCT f.name) AS Cities
-    ORDER BY IXP;
+    // Lists all data center facilities (colocation facilities) in a country,
+    // along with the count of ASes colocated at each facility.
+    // The $countryCode parameter must be provided during execution (e.g., 'AU', 'FR', 'DE').
+    MATCH (f:Facility)-[:COUNTRY]->(c:Country {country_code: $countryCode})
+    OPTIONAL MATCH (a:AS)-[:LOCATED_IN]->(f)
+    RETURN f.name AS DataCenter, COUNT(DISTINCT a) AS ColocatedASes
+    ORDER BY ColocatedASes DESC;
     ```
 
-#### Requête 2 : Mesurer la Vitalité des IXP (Nombre de Membres Locaux)
+#### Query 2: Data Center Operator Concentration
 
-* **Objectif de la requête :** Un IXP n'est utile que si les réseaux s'y connectent. Cette requête mesure la vitalité de chaque IXP en comptant le nombre d'AS du pays qui y sont membres. Un nombre élevé de membres locaux est le signe d'un écosystème de peering sain et efficace.
+* **Query Objective:** This query identifies the organizations managing data center facilities in the country and counts how many facilities each operator controls. Heavy concentration in one or two operators indicates a structural resilience risk.
 
-* **Requête Cypher :**
+* **Cypher Query:**
     ```cypher
-    // Compte le nombre de membres AS locaux pour chaque IXP dans un pays donné.
-    // Le paramètre $countryCode doit être fourni lors de l'exécution (ex: 'KE', 'BR', 'DE').
-    MATCH (a:AS)-[:MEMBER_OF]->(i:IXP), (a)-[:COUNTRY]->(c:Country {country_code: $countryCode})
-    RETURN i.name AS IXP, COUNT(DISTINCT a) AS LocalMembers
-    ORDER BY LocalMembers DESC;
+    // For each data center in the country, lists the operator (organization) that manages it.
+    // Helps assess whether the data center market is dominated by one or a few operators (concentration risk).
+    // The $countryCode parameter must be provided during execution (e.g., 'AU', 'FR', 'DE').
+    MATCH (f:Facility)-[:COUNTRY]->(c:Country {country_code: $countryCode})
+    OPTIONAL MATCH (f)-[:MANAGED_BY]->(org:Organization)
+    RETURN org.name AS Operator, COUNT(DISTINCT f) AS DataCenterCount
+    ORDER BY DataCenterCount DESC;
     ```
 
-#### Requête 3 : Identifier les Principaux Acteurs Absents des IXP Locaux
+#### Query 3: Significant Networks Without Data Center Presence
 
-* **Objectif de la requête :** Identifier les réseaux les plus importants d'un pays (en termes de taille de cône client, selon CAIDA) qui ne sont membres d'AUCUN IXP dans ce même pays. Cette information est cruciale pour identifier les "chaînons manquants" et les opportunités manquées de localisation du trafic.
+* **Query Objective:** This query identifies the most significant Autonomous Systems in the country (ranked by routing footprint / prefix count) that are not colocated in any physical data center facility known to YPI/PeeringDB. These are networks with real infrastructure weight but no recorded physical colocation presence.
 
-* **Requête Cypher :**
+* **Cypher Query:**
     ```cypher
-    // Trouve les 10 AS les plus importants d'un pays qui ne sont membres d'aucun IXP local.
-    // Le paramètre $countryCode doit être fourni lors de l'exécution (ex: 'KE', 'BR', 'DE').
+    // Identifies the most significant ASes in the country that are not colocated in any
+    // data center facility. Ranked by prefix count (routing footprint) so the most
+    // infrastructure-relevant networks appear first.
+    // The $countryCode parameter must be provided during execution (e.g., 'AU', 'FR', 'DE').
     MATCH (a:AS)-[:COUNTRY]->(c:Country {country_code: $countryCode})
-    WHERE NOT (a)-[:MEMBER_OF]->(:IXP)
-    RETURN a.asn AS ASN
-    ORDER BY a.asn ASC
-    LIMIT 10;
+    WHERE NOT (a)-[:LOCATED_IN]->(:Facility)
+    OPTIONAL MATCH (a)-[:NAME]->(n:Name)
+    OPTIONAL MATCH (a)-[:ORIGINATE]->(pfx:Prefix)
+    WITH a, MIN(n.name) AS NetworkName, COUNT(DISTINCT pfx) AS PrefixCount
+    RETURN DISTINCT a.asn AS ASN, NetworkName, PrefixCount
+    ORDER BY PrefixCount DESC
+    LIMIT 20;
     ```
 
-### Objectif Global de l'Analyse
+### Overall Analysis Objective
 
-L'exécution de ces trois requêtes fournira une image multidimensionnelle de l'écosystème de peering d'un pays, expliquant son score IRI "Couverture IXP".
+Executing these three queries will provide a multi-dimensional picture of the country's data center ecosystem, explaining its IRI score for "Data Center Coverage".
 
-* **Compréhension :** La **Requête 1** répond à la question "Avons-nous des IXP et où ?". La **Requête 2** répond à "Sont-ils utiles et activement utilisés par la communauté locale ?". La **Requête 3** révèle le potentiel inexploité en identifiant les réseaux clés qui opèrent en marge de cet écosystème. Un pays avec un mauvais score pourrait avoir un IXP (Req 1 OK), mais avec très peu de membres (Req 2 faible) et des opérateurs majeurs qui l'ignorent (Req 3 révèle des noms), ce qui signifie que sa couverture effective est quasi-nulle.
+* **Understanding:** **Query 1** answers "what facilities exist and how critical are they based on network density?". **Query 2** answers "who owns and operates these facilities, and is there a concentration risk?". **Query 3** reveals visibility gaps or deliberate absences by identifying major local networks operating outside public colocation ecosystems. A poor score could be due to a complete absence of facilities, extreme concentration under a single operator, or key local ISPs failing to utilize shared infrastructure.
 
-* **Amélioration :** Les résultats sont directement exploitables.
-    * Si la **Requête 1** ne retourne rien, l'action prioritaire est d'amorcer la création d'un IXP national.
-    * Si la **Requête 2** montre un faible nombre de membres, des actions de renforcement de la communauté sont nécessaires : organisation de forums d'opérateurs (Peering Forums), campagnes de sensibilisation sur les avantages du peering, ou subventions pour les coûts de connexion.
-    * Si la **Requête 3** identifie des acteurs majeurs absents, une démarche ciblée peut être entreprise auprès de ces opérateurs pour les encourager à rejoindre les IXP locaux, ce qui aurait un impact significatif sur la localisation du trafic et la résilience globale.
+* **Improvement:** The results guide direct, concrete policy actions:
+    * If **Query 1** yields no facilities or extremely low AS counts, the priority is to foster a local data center industry, potentially through tax incentives or public-private partnerships for carrier-neutral colocation facilities.
+    * If **Query 2** reveals high concentration (e.g., one operator controlling all major facilities), efforts should be made to encourage market entry from competitor operators to reduce single-point-of-failure risks.
+    * If **Query 3** lists key national ISPs/operators without known colocation, the national regulator or industry groups should encourage these operators to establish points of presence (PoPs) in local neutral data centers and ensure their PeeringDB records are complete, boosting national routing efficiency and resilience.
