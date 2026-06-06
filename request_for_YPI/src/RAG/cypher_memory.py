@@ -3,13 +3,13 @@ from langchain_community.vectorstores import Chroma
 from langchain_openai import OpenAIEmbeddings
 from langchain_core.documents import Document
 
-# Configuration du chemin de stockage persistant pour cette mémoire spécifique
+# Configuration of persistent storage path for this specific memory
 MEMORY_DB_PATH = os.path.join("data", "cypher_memory_db")
 
 class CypherMemory:
     def __init__(self):
         self.embeddings = OpenAIEmbeddings()
-        # On utilise une collection séparée pour ne pas polluer le RAG documentaire
+        # We use a separate collection to avoid polluting the document RAG
         self.vector_store = Chroma(
             persist_directory=MEMORY_DB_PATH,
             embedding_function=self.embeddings,
@@ -18,12 +18,12 @@ class CypherMemory:
 
     def save_query(self, user_question, cypher_query, explanation="Valid query"):
         """
-        Stocke une requête réussie.
+        Saves a successful query.
         """
-        # On formate le contenu pour qu'il soit lisible par le LLM lors de la récupération
+        # We format the content to be readable by the LLM during retrieval
         content_to_embed = f"QUESTION: {user_question}\nCYPHER_QUERY: {cypher_query}\nEXPLANATION: {explanation}"
         
-        # On ajoute des métadonnées pour pouvoir filtrer si besoin
+        # We add metadata to be able to filter if needed
         metadata = {
             "type": "cypher_example",
             "question": user_question,
@@ -32,23 +32,23 @@ class CypherMemory:
         
         doc = Document(page_content=content_to_embed, metadata=metadata)
         self.vector_store.add_documents([doc])
-        print(f"💾 Requête Cypher sauvegardée en mémoire pour : {user_question[:30]}...")
+        print(f"💾 Cypher query saved in memory for: {user_question[:30]}...")
 
     def get_similar_examples(self, user_question, k=3):
         """
-        Récupère les k exemples les plus proches sémantiquement.
+        Retrieves the k semantically closest examples.
         """
         try:
             results = self.vector_store.similarity_search(user_question, k=k)
             if not results:
                 return ""
             
-            # Formater les exemples pour le prompt
+            # Format the examples for the prompt
             formatted_examples = "\n\n".join([f"--- EXAMPLE {i+1} ---\n{doc.page_content}" for i, doc in enumerate(results)])
             return formatted_examples
         except Exception as e:
-            print(f"⚠️ Erreur récupération mémoire Cypher : {e}")
+            print(f"⚠️ Error retrieving Cypher memory: {e}")
             return ""
 
-# Instance globale
+# Global instance
 cypher_memory = CypherMemory()  

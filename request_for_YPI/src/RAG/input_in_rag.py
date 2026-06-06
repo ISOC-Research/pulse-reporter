@@ -8,8 +8,8 @@ from src.tools.summarize_text import summarize_raw_content
 
 def input_in_rag(text: str, url: str, source_type: str):
     """
-    Fonction DÉDIÉE à l'ingestion RAG.
-    Gère le nettoyage, le découpage, la vectorisation et le stockage.
+    Function dedicated to RAG ingestion.
+    Manages cleaning, chunking, vectorization and storage.
     """
     try:
         logger.info(f"💾 RAG processing for: {url}")

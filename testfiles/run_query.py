@@ -85,7 +85,6 @@ def main():
             print("\n" + "="*50)
             print("✅ RAW RESULT RECEIVED FROM NEO4J")
             print("="*50)
-            print(records)
 
             print("\n" + "="*50)
             print("✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)")

@@ -17,7 +17,7 @@ def get_embedding_model(task_type: str = "retrieval_document"):
     )
 
 def get_text_embedding(text: str) -> list:
-    """Génère le vecteur pour un texte donné (raccourci pour test)."""
+    """Generates the vector for a given text (shortcut for testing)."""
     model = get_embedding_model(task_type="retrieval_document")
     try:
         return model.embed_query(text)

@@ -14,7 +14,7 @@ VECTOR_INDEX_NAME = "chunk_vector_index"
 VECTOR_DIMENSIONS = 768
 
 def get_local_driver():
-    """Crée une connexion vers l'instance Neo4j locale."""
+    """Creates a connection to the local Neo4j instance."""
     try:
         driver = GraphDatabase.driver(URI_LOCAL, auth=AUTH_LOCAL)
         driver.verify_connectivity()
@@ -24,13 +24,13 @@ def get_local_driver():
         raise e
 
 def setup_local_graph():
-    """Initialise le schéma et les index nécessaires."""
+    """Initializes the schema and necessary indexes."""
     driver = get_local_driver()
     with driver.session() as session:
-        # 1. Contrainte d'unicité sur les URLs
+        # 1. Uniqueness constraint on URLs
         session.run("CREATE CONSTRAINT IF NOT EXISTS FOR (d:Document) REQUIRE d.url IS UNIQUE")
         
-        # 2. Création de l'Index Vectoriel
+        # 2. Creation of the Vector Index
         check_index_query = "SHOW VECTOR INDEXES WHERE name = $name"
         result = session.run(check_index_query, name="chunk_vector_index").data()
         
@@ -50,18 +50,18 @@ def setup_local_graph():
             except Exception as e:
                 logger.error(f"Error creating vector index: {e}")
         else:
-            logger.debug("L'index vectoriel existe déjà.")
+            logger.debug("The vector index already exists.")
     
     driver.close()
 
 def store_document_with_chunks(doc_data: dict, chunks: list):
     """
-    Stocke un document et ses chunks vectorisés.
+    Stores a document and its vectorized chunks.
     """
     driver = get_local_driver()
     
-    # --- CORRECTION DE LA REQUÊTE CYPHER ICI ---
-    # Ajout du WITH c, d, chunk_data entre CREATE et CALL
+    # --- CYPHER QUERY CORRECTION HERE ---
+    # Adding WITH c, d, chunk_data between CREATE and CALL
     query = """
     MERGE (d:Document {url: $doc.url})
     SET d.title = $doc.title,
@@ -95,7 +95,7 @@ def store_document_with_chunks(doc_data: dict, chunks: list):
 
 def is_source_in_rag(url: str) -> bool:
     """
-    Vérifie si une source (URL) est déjà présente dans le RAG.
+    Checks if a source (URL) is already present in the RAG.
     """
     driver = get_local_driver()
     try:
