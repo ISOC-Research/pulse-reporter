@@ -37,6 +37,7 @@ from request_for_YPI.ipv6_engine import (
     get_rpki_coverage,
     get_ipv6_upstream_connectivity,
     get_ixp_ipv6_peering,
+    get_ipv6_deployment_age,
     get_sector_ipv6_readiness,
     get_tld_ipv6_health,
     get_tld_ipv6_trend,
@@ -256,6 +257,56 @@ def print_scorecard(scorecard: dict):
     print(_coloured("    C = Laggard (No Traffic)    → CPE/hardware standards", _YELLOW))
     print(_coloured("    D = Bottleneck (HIGH IMPACT) → Direct govt engagement", _RED + _BOLD))
     print(_coloured("    OK= Compliant", _GREEN))
+
+
+def print_deployment_age(deploy_data: dict):
+    print(f"\n{_header('SECTION 2.1.2 — IPv6 DEPLOYMENT AGE (RIPEstat)')}")
+    print()
+
+    isps = deploy_data.get("isps", [])
+
+    if not isps:
+        print("  No deployment age data available.")
+        print()
+        return
+
+    col = "{:<8} {:<28} {:>8} {:>10} {:>12} {:>10} {:>10}"
+    print(_BOLD + col.format(
+        "ASN", "ISP", "Mkt Shr", "Adoption", "First Seen", "Age (yrs)", "Reason"
+    ) + _RESET)
+    print("─" * WIDTH)
+
+    for isp in isps:
+        first = isp.get("first_ipv6_seen") or "N/A"
+        years = isp.get("deployment_years")
+        years_str = f"{years:.1f}" if years is not None else "N/A"
+        reason = isp.get("selection_reason", "")
+        reason_label = "⭐ Top" if reason == "top_market_share" else "⚠ Laggard"
+        adoption = isp.get("ipv6_adoption_pct", 0)
+        arch = isp.get("archetype", "OK")
+        colour = _ARCHETYPE_COLOUR.get(arch, "")
+
+        if isp.get("error"):
+            first = "[error]"
+            years_str = "—"
+
+        row = col.format(
+            f"AS{isp['asn']}",
+            isp["isp"][:28],
+            f"{isp['market_share_pct']:.1f}%",
+            f"{adoption:.1f}%",
+            first,
+            years_str,
+            reason_label,
+        )
+        print(_coloured(row, colour))
+
+    print("─" * WIDTH)
+    print()
+    print(_DIM + "  ⭐ Top = queried due to high market share" + _RESET)
+    print(_DIM + "  ⚠ Laggard = queried due to low adoption despite significant market share" + _RESET)
+    print(_DIM + "  Source: RIPEstat announced-prefixes (data from 2000–present)" + _RESET)
+    print()
 
 
 # ── Section 3: User-Side Adoption ───────────────────────────────────────
@@ -550,7 +601,7 @@ def main():
 
     country = args.country.upper()
     step = 0
-    total_steps = 14
+    total_steps = 15
 
     def _step(msg):
         nonlocal step
@@ -598,6 +649,11 @@ def main():
 
     print("done.")
     print_scorecard(scorecard)
+
+    _step(f"Fetching IPv6 deployment age (RIPEstat)...")
+    deploy_age_data = get_ipv6_deployment_age(scorecard)
+    print("done.")
+    print_deployment_age(deploy_age_data)
 
     # ── Section 3: Trend ─────────────────────────────────────────────────────
     _step(f"Fetching adoption trend ({args.trend_start}–{args.year})...")
@@ -686,6 +742,7 @@ def main():
                 isp_rpki_data  = isp_rpki_data,
                 upstream_data  = upstream_data,
                 ixp_data       = ixp_data,
+                deploy_age_data = deploy_age_data,
                 tld_data       = tld_data,
                 tld_comparison_data  = tld_comparison_data,
                 tld_trend_data = tld_trend_data,

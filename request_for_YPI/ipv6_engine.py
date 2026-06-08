@@ -15,6 +15,7 @@ import os
 import sys
 import json
 import pathlib
+import requests
 from datetime import datetime
 from typing import Optional
 
@@ -1335,6 +1336,188 @@ def get_combined_laggard_share(scorecard: dict) -> float:
 
 
 # ═══════════════════════════════════════════════════════════════════════════
+# SECTION 2.1.2 — IPv6 DEPLOYMENT AGE (via RIPEstat)
+# ═══════════════════════════════════════════════════════════════════════════
+
+_RIPESTAT_BASE = "https://stat.ripe.net/data"
+_RIPESTAT_APP  = "isoc-pulse-reporter"
+
+
+def _ripestat_first_ipv6_date(asn: int, timeout: int = 60) -> dict:
+    """
+    Query RIPEstat routing-history endpoint for a single ASN
+    and return the earliest IPv6 prefix announcement date.
+
+    Uses routing-history instead of announced-prefixes because the
+    latter times out for large ISPs (e.g. Reliance Jio AS55836).
+
+    Returns:
+        {"asn": int, "first_seen": str or None, "prefix": str or None, "error": str or None}
+    """
+    url = (
+        f"{_RIPESTAT_BASE}/routing-history/data.json"
+        f"?resource=AS{asn}"
+        f"&starttime=2000-01-01"
+        f"&sourceapp={_RIPESTAT_APP}"
+    )
+
+    try:
+        r = requests.get(url, timeout=timeout)
+        r.raise_for_status()
+        data = r.json()
+
+        # routing-history nests under by_origin[].prefixes[].timelines[]
+        origins = data.get("data", {}).get("by_origin", [])
+
+        earliest_date = None
+        earliest_prefix = None
+
+        for origin in origins:
+            for p in origin.get("prefixes", []):
+                pfx = p.get("prefix", "")
+                # Filter to IPv6 only (contains ':')
+                if ":" not in pfx:
+                    continue
+                for tl in p.get("timelines", []):
+                    start = tl.get("starttime", "")
+                    if start and (earliest_date is None or start < earliest_date):
+                        earliest_date = start
+                        earliest_prefix = pfx
+
+        if not earliest_date:
+            return {"asn": asn, "first_seen": None, "prefix": None, "error": None}
+
+        # Extract just the date part (YYYY-MM-DD)
+        earliest_date = earliest_date[:10]
+
+        return {
+            "asn": asn,
+            "first_seen": earliest_date,
+            "prefix": earliest_prefix,
+            "error": None,
+        }
+
+    except requests.exceptions.Timeout:
+        return {"asn": asn, "first_seen": None, "prefix": None, "error": "timeout"}
+    except Exception as e:
+        return {"asn": asn, "first_seen": None, "prefix": None, "error": str(e)}
+
+
+def get_ipv6_deployment_age(scorecard: dict,
+                            top_n: int = 5,
+                            laggard_market_floor: float = 1.0,
+                            laggard_adoption_ceil: float = 0.20) -> dict:
+    """
+    Section 2.1.2 — IPv6 Deployment Age.
+
+    Queries the public RIPEstat API to find the first-ever IPv6 prefix
+    announcement date for strategically selected ISPs:
+
+    1. The top N ISPs by market share ("The Giants").
+    2. Any ISP with market share >= laggard_market_floor %
+       AND IPv6 adoption < laggard_adoption_ceil ("The Bottlenecks").
+
+    This keeps API calls to ~10-15 per country (fast + within rate limits).
+
+    Args:
+        scorecard:            A completed scorecard dict from build_scorecard().
+        top_n:                Number of top ISPs by market share to query.
+        laggard_market_floor: Minimum market share % to be considered a
+                              significant laggard (default 1%).
+        laggard_adoption_ceil: Maximum IPv6 adoption rate (0-1) to be
+                               considered a laggard (default 20%).
+
+    Returns:
+    {
+        "country": str,
+        "isps": [
+            {
+                "asn": int,
+                "isp": str,
+                "market_share_pct": float,
+                "ipv6_adoption_pct": float,
+                "archetype": str,
+                "first_ipv6_seen": str or None,   # "2012-05-14"
+                "deployment_years": float or None, # 14.1
+                "first_prefix": str or None,
+                "selection_reason": str,           # "top_market_share" / "laggard"
+                "error": str or None,
+            },
+            ...
+        ],
+        "error": None
+    }
+    """
+    if scorecard.get("error"):
+        return {"error": scorecard["error"]}
+
+    country = scorecard["country"]
+    isps = scorecard.get("isps", [])
+
+    if not isps:
+        return {"country": country, "isps": [], "error": None}
+
+    # ── 1. Select ISPs to query ──────────────────────────────────────────
+    # Sort by market share descending
+    sorted_isps = sorted(isps, key=lambda x: x["market_share_pct"], reverse=True)
+
+    # Top N by market share
+    top_isps = sorted_isps[:top_n]
+    top_asns = {isp["asn"] for isp in top_isps}
+
+    # Laggards: significant market share but terrible adoption
+    laggards = [
+        isp for isp in sorted_isps
+        if isp["asn"] not in top_asns
+        and isp["market_share_pct"] >= laggard_market_floor
+        and isp["ipv6_adoption_est"] < laggard_adoption_ceil
+    ]
+
+    # Combine (no duplicates)
+    targets = []
+    for isp in top_isps:
+        targets.append((isp, "top_market_share"))
+    for isp in laggards:
+        targets.append((isp, "laggard"))
+
+    # ── 2. Query RIPEstat for each target ────────────────────────────────
+    results = []
+    today = datetime.now()
+
+    for isp, reason in targets:
+        ripe = _ripestat_first_ipv6_date(isp["asn"])
+
+        first_seen = ripe.get("first_seen")
+        deployment_years = None
+
+        if first_seen:
+            try:
+                first_dt = datetime.strptime(first_seen, "%Y-%m-%d")
+                deployment_years = round((today - first_dt).days / 365.25, 1)
+            except ValueError:
+                pass
+
+        results.append({
+            "asn":               isp["asn"],
+            "isp":               isp["isp"],
+            "market_share_pct":  isp["market_share_pct"],
+            "ipv6_adoption_pct": round(isp["ipv6_adoption_est"] * 100, 1),
+            "archetype":         isp["archetype"],
+            "first_ipv6_seen":   first_seen,
+            "deployment_years":  deployment_years,
+            "first_prefix":      ripe.get("prefix"),
+            "selection_reason":  reason,
+            "error":             ripe.get("error"),
+        })
+
+    return {
+        "country": country,
+        "isps": results,
+        "error": None,
+    }
+
+
+# ═══════════════════════════════════════════════════════════════════════════
 # SECTION 2 — EXECUTIVE SUMMARY GENERATOR
 # ═══════════════════════════════════════════════════════════════════════════
 
@@ -1544,6 +1727,7 @@ def export_policy_brief(
     isp_rpki_data: dict,
     upstream_data: dict,
     ixp_data: dict,
+    deploy_age_data: dict,
     tld_data: dict,
     tld_comparison_data: dict,
     tld_trend_data: dict,
@@ -1689,6 +1873,30 @@ def export_policy_brief(
         "| C | Laggard (No Traffic) | Last Mile: CPE/router hardware import standards |",
         "| D | **Bottleneck (High-Impact)** | **PRIORITY — Direct government engagement** |",
         "| OK | Compliant | No immediate intervention required |",
+        "",
+        "---",
+        "",
+        "### IPv6 Deployment Age (Section 2.1.2)",
+        "",
+        "| ASN | ISP | Market Share | Adoption | First IPv6 Seen | Age (yrs) | Reason |",
+        "|-----|-----|:-----------:|:--------:|:---------------:|:---------:|--------|",
+
+        *[
+            '| AS{asn} | {isp} | {mkt:.1f}% | {adpt:.1f}% | {first} | {age} | {reason} |'.format(
+                asn=isp['asn'],
+                isp=isp['isp'],
+                mkt=isp['market_share_pct'],
+                adpt=isp['ipv6_adoption_pct'],
+                first=isp.get('first_ipv6_seen') or 'N/A',
+                age='{:.1f}'.format(isp['deployment_years']) if isp.get('deployment_years') is not None else 'N/A',
+                reason='Top' if isp.get('selection_reason') == 'top_market_share' else 'Laggard',
+            )
+            for isp in deploy_age_data.get('isps', [])
+        ],
+
+        "",
+        "> Source: [RIPEstat](https://stat.ripe.net) — Announced Prefixes endpoint (historical data from 2000–present).  ",
+        "> ⭐ Top = queried due to high market share | ⚠ Laggard = queried due to low adoption despite significant market share",
         "",
         "---",
         "",
