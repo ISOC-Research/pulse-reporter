@@ -1,6 +1,6 @@
 # YPI Cypher Queries — Complete Reference
 
-> All Cypher queries used for the YPI research, organized by pillar, sub-category, and metric. Each query is numbered in execution order. All outputs shown are for **France (`FR`)**.
+> All Cypher queries used for the IYP research, organized by pillar, sub-category, and metric. Each query is numbered in execution order. All outputs shown are for **France (`FR`)**.
 
 # 1. Infrastructure
 
@@ -20,912 +20,482 @@ RETURN f.name AS DataCenter, COUNT(DISTINCT a) AS ColocatedASes
 ORDER BY ColocatedASes DESC;
 ```
 
-> **Output (225 record(s)):**
+> **Output :**
 
-```json
-[
-  {
-    "DataCenter": "Telehouse - Paris 2 (Voltaire - Léon Frot)",
-    "ColocatedASes": 347
-  },
-  {
-    "DataCenter": "Digital Realty Marseille MRS1/2/3/4",
-    "ColocatedASes": 212
-  },
-  {
-    "DataCenter": "Equinix PA2 - Paris, Saint-Denis",
-    "ColocatedASes": 141
-  },
-  {
-    "DataCenter": "Equinix PA3 - Paris, Saint-Denis",
-    "ColocatedASes": 120
-  },
-  {
-    "DataCenter": "UltraEdge Lyon-Venissieux",
-    "ColocatedASes": 82
-  },
-  {
-    "DataCenter": "Digital Realty Paris PAR5",
-    "ColocatedASes": 68
-  },
-  {
-    "DataCenter": "Equinix PA6 - Paris, Condorcet",
-    "ColocatedASes": 56
-  },
-  {
-    "DataCenter": "Equinix PA5 - Paris, Victor Hugo",
-    "ColocatedASes": 55
-  },
-  {
-    "DataCenter": "Digital Realty Paris PAR2",
-    "ColocatedASes": 53
-  },
-  {
-    "DataCenter": "Equinix PA7 - Paris, Energy Park",
-    "ColocatedASes": 49
-  },
-  {
-    "DataCenter": "Telehouse - Paris 3 (Magny)",
-    "ColocatedASes": 48
-  },
-  {
-    "DataCenter": "OPCORE - DC2 / PAR2",
-    "ColocatedASes": 47
-  },
-  {
-    "DataCenter": "Equinix PA4 - Paris, Pantin",
-    "ColocatedASes": 47
-  },
-  {
-    "DataCenter": "ETIX Lille #2",
-    "ColocatedASes": 46
-  },
-  {
-    "DataCenter": "UltraEdge Paris - Courbevoie",
-    "ColocatedASes": 41
-  },
-  {
-    "DataCenter": "UltraEdge Strasbourg",
-    "ColocatedASes": 41
-  },
-  {
-    "DataCenter": "Digital Realty Paris PAR1",
-    "ColocatedASes": 34
-  },
-  {
-    "DataCenter": "Global Switch Paris",
-    "ColocatedASes": 31
-  },
-  {
-    "DataCenter": "UltraEdge Bordeaux",
-    "ColocatedASes": 28
-  },
-  {
-    "DataCenter": "ETIX Lyon #1",
-    "ColocatedASes": 27
-  },
-  {
-    "DataCenter": "Free Pro - Marseille - MRS1",
-    "ColocatedASes": 27
-  },
-  {
-    "DataCenter": "Cogent Rennes",
-    "ColocatedASes": 26
-  },
-  {
-    "DataCenter": "OPCORE - DC3 / PAR3",
-    "ColocatedASes": 25
-  },
-  {
-    "DataCenter": "Free Pro - Lyon - Rock",
-    "ColocatedASes": 23
-  },
-  {
-    "DataCenter": "Cogent Grenoble",
-    "ColocatedASes": 21
-  },
-  {
-    "DataCenter": "DATA4 Paris Marcoussis - PAR1",
-    "ColocatedASes": 21
-  },
-  {
-    "DataCenter": "Eurofiber DC - TLS00",
-    "ColocatedASes": 21
-  },
-  {
-    "DataCenter": "Digital Realty Paris PAR7",
-    "ColocatedASes": 20
-  },
-  {
-    "DataCenter": "Treefaz Jeûneurs",
-    "ColocatedASes": 20
-  },
-  {
-    "DataCenter": "ETIX Lille #3",
-    "ColocatedASes": 20
-  },
-  {
-    "DataCenter": "ETIX Nantes #1",
-    "ColocatedASes": 20
-  },
-  {
-    "DataCenter": "dc2scale PAR2 (Vélizy-Villacoublay)",
-    "ColocatedASes": 20
-  },
-  {
-    "DataCenter": "Telehouse - Paris 1 (Jeûneurs)",
-    "ColocatedASes": 19
-  },
-  {
-    "DataCenter": "nLighten Lyon LYS1",
-    "ColocatedASes": 19
-  },
-  {
-    "DataCenter": "Digital Realty Paris PAR3",
-    "ColocatedASes": 18
-  },
-  {
-    "DataCenter": "Cogent Toulouse",
-    "ColocatedASes": 18
-  },
-  {
-    "DataCenter": "Cogent Nantes",
-    "ColocatedASes": 17
-  },
-  {
-    "DataCenter": "Free Pro - Limonest",
-    "ColocatedASes": 16
-  },
-  {
-    "DataCenter": "Orange Business - La Fabrique [Grenoble]",
-    "ColocatedASes": 15
-  },
-  {
-    "DataCenter": "nLighten Sophia Antipolis NCE1",
-    "ColocatedASes": 15
-  },
-  {
-    "DataCenter": "Cogent Montpellier",
-    "ColocatedASes": 15
-  },
-  {
-    "DataCenter": "Equinix PA10 - Paris, Saint-Denis",
-    "ColocatedASes": 14
-  },
-  {
-    "DataCenter": "Digital Realty Paris PAR6",
-    "ColocatedASes": 14
-  },
-  {
-    "DataCenter": "ETIX Lille #1",
-    "ColocatedASes": 13
-  },
-  {
-    "DataCenter": "nLighten Besancon MLH1",
-    "ColocatedASes": 13
-  },
-  {
-    "DataCenter": "Level(3) Paris (Le Capitole)",
-    "ColocatedASes": 12
-  },
-  {
-    "DataCenter": "Penta Infra Paris PAR01",
-    "ColocatedASes": 12
-  },
-  {
-    "DataCenter": "ETIX Nantes #2",
-    "ColocatedASes": 12
-  },
-  {
-    "DataCenter": "Telco Center",
-    "ColocatedASes": 12
-  },
-  {
-    "DataCenter": "ETIX Montpellier #1",
-    "ColocatedASes": 12
-  },
-  {
-    "DataCenter": "Cogent Strasbourg",
-    "ColocatedASes": 12
-  },
-  {
-    "DataCenter": "dc2scale PAR3 (Vélizy-Villacoublay)",
-    "ColocatedASes": 11
-  },
-  {
-    "DataCenter": "ETIX Toulouse #1",
-    "ColocatedASes": 11
-  },
-  {
-    "DataCenter": "Cogent Bordeaux",
-    "ColocatedASes": 11
-  },
-  {
-    "DataCenter": "Cogent Poitiers",
-    "ColocatedASes": 10
-  },
-  {
-    "DataCenter": "TDF Datacenter Rennes Cesson",
-    "ColocatedASes": 10
-  },
-  {
-    "DataCenter": "Cogent Dijon",
-    "ColocatedASes": 10
-  },
-  {
-    "DataCenter": "CC IN2P3",
-    "ColocatedASes": 10
-  },
-  {
-    "DataCenter": "Cogent Rouen",
-    "ColocatedASes": 9
-  },
-  {
-    "DataCenter": "Oceanet Armor B",
-    "ColocatedASes": 9
-  },
-  {
-    "DataCenter": "Ikoula IKDC1",
-    "ColocatedASes": 9
-  },
-  {
-    "DataCenter": "Datacenter NEXEREN",
-    "ColocatedASes": 8
-  },
-  {
-    "DataCenter": "Cogent Tours",
-    "ColocatedASes": 8
-  },
-  {
-    "DataCenter": "Cogent Velizy",
-    "ColocatedASes": 8
-  },
-  {
-    "DataCenter": "nLighten Strasbourg SXB1",
-    "ColocatedASes": 7
-  },
-  {
-    "DataCenter": "UltraEdge Rennes",
-    "ColocatedASes": 7
-  },
-  {
-    "DataCenter": "Equinix BX1 - Bordeaux",
-    "ColocatedASes": 7
-  },
-  {
-    "DataCenter": "moji1",
-    "ColocatedASes": 7
-  },
-  {
-    "DataCenter": "Cogent Nice",
-    "ColocatedASes": 7
-  },
-  {
-    "DataCenter": "Equinix PA1 - Paris, Roissy",
-    "ColocatedASes": 7
-  },
-  {
-    "DataCenter": "ETIX Nantes #3",
-    "ColocatedASes": 7
-  },
-  {
-    "DataCenter": "Cogent Lille",
-    "ColocatedASes": 7
-  },
-  {
-    "DataCenter": "TDF Datacenter Bordeaux Bouliac",
-    "ColocatedASes": 7
-  },
-  {
-    "DataCenter": "Dyjix",
-    "ColocatedASes": 6
-  },
-  {
-    "DataCenter": "nLighten Paris PAR2",
-    "ColocatedASes": 6
-  },
-  {
-    "DataCenter": "Digital Realty Paris PAR8",
-    "ColocatedASes": 6
-  },
-  {
-    "DataCenter": "OPCORE - DC5 / PAR5",
-    "ColocatedASes": 6
-  },
-  {
-    "DataCenter": "TDF Datacenter Aix Marseille",
-    "ColocatedASes": 6
-  },
-  {
-    "DataCenter": "Datacenter Cyrès",
-    "ColocatedASes": 6
-  },
-  {
-    "DataCenter": "Green Data - Nanterre",
-    "ColocatedASes": 6
-  },
-  {
-    "DataCenter": "ETIX Paris #3",
-    "ColocatedASes": 6
-  },
-  {
-    "DataCenter": "Cogent Antibes",
-    "ColocatedASes": 5
-  },
-  {
-    "DataCenter": "ETIX Paris #1",
-    "ColocatedASes": 5
-  },
-  {
-    "DataCenter": "Neuf Cesson",
-    "ColocatedASes": 5
-  },
-  {
-    "DataCenter": "Axione Lotim Telecom",
-    "ColocatedASes": 5
-  },
-  {
-    "DataCenter": "Digital Realty Paris PAR4",
-    "ColocatedASes": 5
-  },
-  {
-    "DataCenter": "Axione ADTIM",
-    "ColocatedASes": 5
-  },
-  {
-    "DataCenter": "UltraEdge Rezé",
-    "ColocatedASes": 5
-  },
-  {
-    "DataCenter": "Maxnod",
-    "ColocatedASes": 4
-  },
-  {
-    "DataCenter": "UltraEdge Toulouse",
-    "ColocatedASes": 4
-  },
-  {
-    "DataCenter": "Orange / Val de Rueil",
-    "ColocatedASes": 4
-  },
-  {
-    "DataCenter": "Hotel des Telecoms",
-    "ColocatedASes": 4
-  },
-  {
-    "DataCenter": "UltraEdge Montpellier",
-    "ColocatedASes": 4
-  },
-  {
-    "DataCenter": "TDF Datacenter Lille Lambersart",
-    "ColocatedASes": 4
-  },
-  {
-    "DataCenter": "10 Rue des Frères Peuge",
-    "ColocatedASes": 3
-  },
-  {
-    "DataCenter": "Salamandre",
-    "ColocatedASes": 3
-  },
-  {
-    "DataCenter": "MCI/Verizon Paris St Denis",
-    "ColocatedASes": 3
-  },
-  {
-    "DataCenter": "Prosoluce SG-1 Datacenter",
-    "ColocatedASes": 3
-  },
-  {
-    "DataCenter": "Advanced MedioMatrix",
-    "ColocatedASes": 3
-  },
-  {
-    "DataCenter": "Hexanet - DC Sabine",
-    "ColocatedASes": 3
-  },
-  {
-    "DataCenter": "Montpellier Internet Telecom Datacenter",
-    "ColocatedASes": 3
-  },
-  {
-    "DataCenter": "LASOTEL PIXEL",
-    "ColocatedASes": 3
-  },
-  {
-    "DataCenter": "EXA Edge DC Nice",
-    "ColocatedASes": 3
-  },
-  {
-    "DataCenter": "UltraEdge Grenoble",
-    "ColocatedASes": 3
-  },
-  {
-    "DataCenter": "Comarch France #1",
-    "ColocatedASes": 3
-  },
-  {
-    "DataCenter": "COLT DC Paris II",
-    "ColocatedASes": 3
-  },
-  {
-    "DataCenter": "APPLIWAVE - CBO",
-    "ColocatedASes": 3
-  },
-  {
-    "DataCenter": "ITinSell Cloud Datacenter",
-    "ColocatedASes": 3
-  },
-  {
-    "DataCenter": "Haute-Saône Numérique",
-    "ColocatedASes": 3
-  },
-  {
-    "DataCenter": "Axione Limousin",
-    "ColocatedASes": 3
-  },
-  {
-    "DataCenter": "Hexanet - DC Roland",
-    "ColocatedASes": 3
-  },
-  {
-    "DataCenter": "Aqua Ray Aurora",
-    "ColocatedASes": 3
-  },
-  {
-    "DataCenter": "D-LAKE",
-    "ColocatedASes": 3
-  },
-  {
-    "DataCenter": "UltraEdge Lille",
-    "ColocatedASes": 2
-  },
-  {
-    "DataCenter": "Ecocenter",
-    "ColocatedASes": 2
-  },
-  {
-    "DataCenter": "dc2scale PAR4x (Meudon)",
-    "ColocatedASes": 2
-  },
-  {
-    "DataCenter": "Somme-numerique DC1",
-    "ColocatedASes": 2
-  },
-  {
-    "DataCenter": "XL360",
-    "ColocatedASes": 2
-  },
-  {
-    "DataCenter": "Completel Val de Reuil",
-    "ColocatedASes": 2
-  },
-  {
-    "DataCenter": "Cassin1",
-    "ColocatedASes": 2
-  },
-  {
-    "DataCenter": "Ad Valem Technologies - France (Saint-Denis)",
-    "ColocatedASes": 2
-  },
-  {
-    "DataCenter": "DTIX Dijon",
-    "ColocatedASes": 2
-  },
-  {
-    "DataCenter": "TDF Datacenter Paris Fort de Romainville",
-    "ColocatedASes": 2
-  },
-  {
-    "DataCenter": "Celeste Marilyn",
-    "ColocatedASes": 2
-  },
-  {
-    "DataCenter": "PoP Faraday (Rouen)",
-    "ColocatedASes": 2
-  },
-  {
-    "DataCenter": "Techcrea Valenciennes",
-    "ColocatedASes": 2
-  },
-  {
-    "DataCenter": "TAS Sophia",
-    "ColocatedASes": 2
-  },
-  {
-    "DataCenter": "XSALTO Grenoble",
-    "ColocatedASes": 2
-  },
-  {
-    "DataCenter": "dc2scale PAR5 (Vélizy-Villacoublay)",
-    "ColocatedASes": 2
-  },
-  {
-    "DataCenter": "DATAGREX",
-    "ColocatedASes": 2
-  },
-  {
-    "DataCenter": "DATA4 Paris Marcoussis PAR2",
-    "ColocatedASes": 2
-  },
-  {
-    "DataCenter": "Cogent Paris",
-    "ColocatedASes": 2
-  },
-  {
-    "DataCenter": "NeoCenter Paris",
-    "ColocatedASes": 2
-  },
-  {
-    "DataCenter": "nLighten Paris PAR1",
-    "ColocatedASes": 2
-  },
-  {
-    "DataCenter": "AtlasEdge DC Paris CDG001",
-    "ColocatedASes": 2
-  },
-  {
-    "DataCenter": "SI Cloud Montpellier",
-    "ColocatedASes": 2
-  },
-  {
-    "DataCenter": "EXA Edge DC Bordeaux",
-    "ColocatedASes": 2
-  },
-  {
-    "DataCenter": "System-Net HDC 1",
-    "ColocatedASes": 2
-  },
-  {
-    "DataCenter": "ETIX Vendée #1",
-    "ColocatedASes": 2
-  },
-  {
-    "DataCenter": "Groupe Cyllene - DC - Nanterre",
-    "ColocatedASes": 1
-  },
-  {
-    "DataCenter": "Alpes Networks DataCenter",
-    "ColocatedASes": 1
-  },
-  {
-    "DataCenter": "MEDIACTIVE MN3",
-    "ColocatedASes": 1
-  },
-  {
-    "DataCenter": "Eurofiber DC - AUC00",
-    "ColocatedASes": 1
-  },
-  {
-    "DataCenter": "RTDC",
-    "ColocatedASes": 1
-  },
-  {
-    "DataCenter": "dc2scale ALP1 (Grenoble)",
-    "ColocatedASes": 1
-  },
-  {
-    "DataCenter": "Orange / Chartres",
-    "ColocatedASes": 1
-  },
-  {
-    "DataCenter": "EXA Edge DC Poitiers",
-    "ColocatedASes": 1
-  },
-  {
-    "DataCenter": "Viatel Amiens",
-    "ColocatedASes": 1
-  },
-  {
-    "DataCenter": "Extendo Datacenter Belfort",
-    "ColocatedASes": 1
-  },
-  {
-    "DataCenter": "Hexatom Sophia Antipolis",
-    "ColocatedASes": 1
-  },
-  {
-    "DataCenter": "Celeste Fil d’Ariane",
-    "ColocatedASes": 1
-  },
-  {
-    "DataCenter": "IzarHost",
-    "ColocatedASes": 1
-  },
-  {
-    "DataCenter": "NetaPOP Pontarlier",
-    "ColocatedASes": 1
-  },
-  {
-    "DataCenter": "Ikoula IKDC2",
-    "ColocatedASes": 1
-  },
-  {
-    "DataCenter": "Groupe Cyllene - DC - Montigny les Bretonneux",
-    "ColocatedASes": 1
-  },
-  {
-    "DataCenter": "Digital Realty Paris PAR12",
-    "ColocatedASes": 1
-  },
-  {
-    "DataCenter": "Fiducial Cloud LYO1",
-    "ColocatedASes": 1
-  },
-  {
-    "DataCenter": "NETICENTER",
-    "ColocatedASes": 1
-  },
-  {
-    "DataCenter": "COLT DC Paris SouthWest",
-    "ColocatedASes": 1
-  },
-  {
-    "DataCenter": "OT - Capella",
-    "ColocatedASes": 1
-  },
-  {
-    "DataCenter": "EXA Edge DC Marseille",
-    "ColocatedASes": 1
-  },
-  {
-    "DataCenter": "OT - Armor",
-    "ColocatedASes": 1
-  },
-  {
-    "DataCenter": "NetaPOP Besançon",
-    "ColocatedASes": 1
-  },
-  {
-    "DataCenter": "Multicoms Paris (Velizy)",
-    "ColocatedASes": 1
-  },
-  {
-    "DataCenter": "COLT DC Paris III",
-    "ColocatedASes": 1
-  },
-  {
-    "DataCenter": "BT-BLUE Datacenter 1",
-    "ColocatedASes": 1
-  },
-  {
-    "DataCenter": "Dataxion France DTX01",
-    "ColocatedASes": 1
-  },
-  {
-    "DataCenter": "OPCORE - DC4 / PAR4",
-    "ColocatedASes": 1
-  },
-  {
-    "DataCenter": "Castle-IT Tours",
-    "ColocatedASes": 1
-  },
-  {
-    "DataCenter": "Neuf Rouen",
-    "ColocatedASes": 1
-  },
-  {
-    "DataCenter": "Neuf Reims",
-    "ColocatedASes": 1
-  },
-  {
-    "DataCenter": "Thésée Datacenter",
-    "ColocatedASes": 1
-  },
-  {
-    "DataCenter": "Sanef Telecom Reims",
-    "ColocatedASes": 1
-  },
-  {
-    "DataCenter": "Ultraedge Canteleu",
-    "ColocatedASes": 1
-  },
-  {
-    "DataCenter": "Groupe Cyllene - DC - Courbevoie",
-    "ColocatedASes": 1
-  },
-  {
-    "DataCenter": "BB1",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "ICODIA NETWORK INTEGRITY",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "UltraEdge Velizy",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "Cloudata",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "MENGINE",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "Centrinuity Toulouse",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "EXA Edge DC Strasbourg",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "HELIANTIS",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "Alionis VBO",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "DTiX Chalon-sur-Saône",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "Alliance Réseaux",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "nLighten Sophia Antipolis NCE2",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "Magic OnLine",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "RUBIX DATACENTER - DC-1",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "VirtuaCenter Auxerre",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "Serinya Telecom",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "EXA Edge DC Vauchelles",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "dc2scale Nanterre",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "nLighten Paris PAR3",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "REDHEBERG SAS",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "Metroptics Datacenter",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "connect-ix",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "Ouiherberg Aimargues",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "EXA Edge DC Nancy",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "EXA Edge DC Ychoux",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "Civicos Networking DCROUBAIX",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "Betech Solution",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "Crypteo Marssac",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "dc2scale LIL1 (Lille Datacenter)",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "EXA Edge DC Sequedin",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "dc2scale MRS1 (Marseille datacenter)",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "Reliance Plerin",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "PHOCEA DC-M1",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "Neuf Caen",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "Smartdc Paris",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "Digital Realty Paris PAR13",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "ATE #1",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "SynAApS",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "DARVA Hosting",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "PAM00",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "Sigma DC3",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "OT - Rezé",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "Reliance St. Denis",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "Association Alsace Reseau Neutre",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "EXA Edge DC Toulouse",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "IMADIFF",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "Sipartech Paris",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "ADISTA Groupe",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "EXA Edge DC Willerval",
-    "ColocatedASes": 0
-  },
-  {
-    "DataCenter": "Firstheberg",
-    "ColocatedASes": 0
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: Data Center Facility Landscape in FR
+
+This analysis maps all physical data center (colocation) facilities registered in the country via PeeringDB, ranked by how many Autonomous Systems are colocated at each site. High colocation density at a facility indicates it is a critical hub for the country's internet infrastructure.
+g
+
+**Data Centers by Colocated Network Count:**
+
+| Data Center Name | Colocated ASes |
+|------------------|----------------|
+
+| Telehouse - Paris 2 (Voltaire - Léon Frot) | 347 |
+
+| Digital Realty Marseille MRS1/2/3/4 | 212 |
+
+| Equinix PA2 - Paris, Saint-Denis | 141 |
+
+| Equinix PA3 - Paris, Saint-Denis | 120 |
+
+| UltraEdge Lyon-Venissieux | 82 |
+
+| Digital Realty Paris PAR5 | 68 |
+
+| Equinix PA6 - Paris, Condorcet | 56 |
+
+| Equinix PA5 - Paris, Victor Hugo | 55 |
+
+| Digital Realty Paris PAR2 | 53 |
+
+| Equinix PA7 - Paris, Energy Park | 49 |
+
+| Telehouse - Paris 3 (Magny) | 48 |
+
+| OPCORE - DC2 / PAR2 | 47 |
+
+| Equinix PA4 - Paris, Pantin | 47 |
+
+| ETIX Lille #2 | 46 |
+
+| UltraEdge Paris - Courbevoie | 41 |
+
+| UltraEdge Strasbourg | 41 |
+
+| Digital Realty Paris PAR1 | 34 |
+
+| Global Switch Paris | 31 |
+
+| UltraEdge Bordeaux | 28 |
+
+| ETIX Lyon #1 | 27 |
+
+| Free Pro - Marseille - MRS1 | 27 |
+
+| Cogent Rennes | 26 |
+
+| OPCORE - DC3 / PAR3 | 25 |
+
+| Free Pro - Lyon - Rock | 23 |
+
+| Cogent Grenoble | 21 |
+
+| DATA4 Paris Marcoussis - PAR1 | 21 |
+
+| Eurofiber DC - TLS00 | 21 |
+
+| Digital Realty Paris PAR7 | 20 |
+
+| Treefaz Jeûneurs | 20 |
+
+| ETIX Lille #3 | 20 |
+
+| ETIX Nantes #1 | 20 |
+
+| dc2scale PAR2 (Vélizy-Villacoublay) | 20 |
+
+| Telehouse - Paris 1 (Jeûneurs) | 19 |
+
+| nLighten Lyon LYS1 | 19 |
+
+| Digital Realty Paris PAR3 | 18 |
+
+| Cogent Toulouse | 18 |
+
+| Cogent Nantes | 17 |
+
+| Free Pro - Limonest | 16 |
+
+| Orange Business - La Fabrique [Grenoble] | 15 |
+
+| nLighten Sophia Antipolis NCE1 | 15 |
+
+| Cogent Montpellier | 15 |
+
+| Equinix PA10 - Paris, Saint-Denis | 14 |
+
+| Digital Realty Paris PAR6 | 14 |
+
+| ETIX Lille #1 | 13 |
+
+| nLighten Besancon MLH1 | 13 |
+
+| Level(3) Paris (Le Capitole) | 12 |
+
+| Penta Infra Paris PAR01 | 12 |
+
+| ETIX Nantes #2 | 12 |
+
+| Telco Center | 12 |
+
+| ETIX Montpellier #1 | 12 |
+
+| Cogent Strasbourg | 12 |
+
+| dc2scale PAR3 (Vélizy-Villacoublay) | 11 |
+
+| ETIX Toulouse #1 | 11 |
+
+| Cogent Bordeaux | 11 |
+
+| Cogent Poitiers | 10 |
+
+| TDF Datacenter Rennes Cesson | 10 |
+
+| Cogent Dijon | 10 |
+
+| CC IN2P3 | 10 |
+
+| Cogent Rouen | 9 |
+
+| Oceanet Armor B | 9 |
+
+| Ikoula IKDC1 | 9 |
+
+| Datacenter NEXEREN | 8 |
+
+| Cogent Tours | 8 |
+
+| Cogent Velizy | 8 |
+
+| nLighten Strasbourg SXB1 | 7 |
+
+| UltraEdge Rennes | 7 |
+
+| Equinix BX1 - Bordeaux | 7 |
+
+| moji1 | 7 |
+
+| Cogent Nice | 7 |
+
+| Equinix PA1 - Paris, Roissy | 7 |
+
+| ETIX Nantes #3 | 7 |
+
+| Cogent Lille | 7 |
+
+| TDF Datacenter Bordeaux Bouliac | 7 |
+
+| Dyjix | 6 |
+
+| nLighten Paris PAR2 | 6 |
+
+| Digital Realty Paris PAR8 | 6 |
+
+| OPCORE - DC5 / PAR5 | 6 |
+
+| TDF Datacenter Aix Marseille | 6 |
+
+| Datacenter Cyrès | 6 |
+
+| Green Data - Nanterre | 6 |
+
+| ETIX Paris #3 | 6 |
+
+| Cogent Antibes | 5 |
+
+| ETIX Paris #1 | 5 |
+
+| Neuf Cesson | 5 |
+
+| Axione Lotim Telecom | 5 |
+
+| Digital Realty Paris PAR4 | 5 |
+
+| Axione ADTIM | 5 |
+
+| UltraEdge Rezé | 5 |
+
+| Maxnod | 4 |
+
+| UltraEdge Toulouse | 4 |
+
+| Orange / Val de Rueil | 4 |
+
+| Hotel des Telecoms | 4 |
+
+| UltraEdge Montpellier | 4 |
+
+| TDF Datacenter Lille Lambersart | 4 |
+
+| 10 Rue des Frères Peuge | 3 |
+
+| Salamandre | 3 |
+
+| MCI/Verizon Paris St Denis | 3 |
+
+| Prosoluce SG-1 Datacenter | 3 |
+
+| Advanced MedioMatrix | 3 |
+
+| Hexanet - DC Sabine | 3 |
+
+| Montpellier Internet Telecom Datacenter | 3 |
+
+| LASOTEL PIXEL | 3 |
+
+| EXA Edge DC Nice | 3 |
+
+| UltraEdge Grenoble | 3 |
+
+| Comarch France #1 | 3 |
+
+| COLT DC Paris II | 3 |
+
+| APPLIWAVE - CBO | 3 |
+
+| ITinSell Cloud Datacenter | 3 |
+
+| Haute-Saône Numérique | 3 |
+
+| Axione Limousin | 3 |
+
+| Hexanet - DC Roland | 3 |
+
+| Aqua Ray Aurora | 3 |
+
+| D-LAKE | 3 |
+
+| UltraEdge Lille | 2 |
+
+| Ecocenter | 2 |
+
+| dc2scale PAR4x (Meudon) | 2 |
+
+| Somme-numerique DC1 | 2 |
+
+| XL360 | 2 |
+
+| Completel Val de Reuil | 2 |
+
+| Cassin1 | 2 |
+
+| Ad Valem Technologies - France (Saint-Denis) | 2 |
+
+| DTIX Dijon | 2 |
+
+| TDF Datacenter Paris Fort de Romainville | 2 |
+
+| Celeste Marilyn | 2 |
+
+| PoP Faraday (Rouen) | 2 |
+
+| Techcrea Valenciennes | 2 |
+
+| TAS Sophia | 2 |
+
+| XSALTO Grenoble | 2 |
+
+| dc2scale PAR5 (Vélizy-Villacoublay) | 2 |
+
+| DATAGREX | 2 |
+
+| DATA4 Paris Marcoussis PAR2 | 2 |
+
+| Cogent Paris | 2 |
+
+| NeoCenter Paris | 2 |
+
+| nLighten Paris PAR1 | 2 |
+
+| AtlasEdge DC Paris CDG001 | 2 |
+
+| SI Cloud Montpellier | 2 |
+
+| EXA Edge DC Bordeaux | 2 |
+
+| System-Net HDC 1 | 2 |
+
+| ETIX Vendée #1 | 2 |
+
+| Groupe Cyllene - DC - Nanterre | 1 |
+
+| Alpes Networks DataCenter | 1 |
+
+| MEDIACTIVE MN3 | 1 |
+
+| Eurofiber DC - AUC00 | 1 |
+
+| RTDC | 1 |
+
+| dc2scale ALP1 (Grenoble) | 1 |
+
+| Orange / Chartres | 1 |
+
+| EXA Edge DC Poitiers | 1 |
+
+| Viatel Amiens | 1 |
+
+| Extendo Datacenter Belfort | 1 |
+
+| Hexatom Sophia Antipolis | 1 |
+
+| Celeste Fil d’Ariane | 1 |
+
+| IzarHost | 1 |
+
+| NetaPOP Pontarlier | 1 |
+
+| Ikoula IKDC2 | 1 |
+
+| Groupe Cyllene - DC - Montigny les Bretonneux | 1 |
+
+| Digital Realty Paris PAR12 | 1 |
+
+| Fiducial Cloud LYO1 | 1 |
+
+| NETICENTER | 1 |
+
+| COLT DC Paris SouthWest | 1 |
+
+| OT - Capella | 1 |
+
+| EXA Edge DC Marseille | 1 |
+
+| OT - Armor | 1 |
+
+| NetaPOP Besançon | 1 |
+
+| Multicoms Paris (Velizy) | 1 |
+
+| COLT DC Paris III | 1 |
+
+| BT-BLUE Datacenter 1 | 1 |
+
+| Dataxion France DTX01 | 1 |
+
+| OPCORE - DC4 / PAR4 | 1 |
+
+| Castle-IT Tours | 1 |
+
+| Neuf Rouen | 1 |
+
+| Neuf Reims | 1 |
+
+| Thésée Datacenter | 1 |
+
+| Sanef Telecom Reims | 1 |
+
+| Ultraedge Canteleu | 1 |
+
+| Groupe Cyllene - DC - Courbevoie | 1 |
+
+| BB1 | 0 |
+
+| ICODIA NETWORK INTEGRITY | 0 |
+
+| UltraEdge Velizy | 0 |
+
+| Cloudata | 0 |
+
+| MENGINE | 0 |
+
+| Centrinuity Toulouse | 0 |
+
+| EXA Edge DC Strasbourg | 0 |
+
+| HELIANTIS | 0 |
+
+| Alionis VBO | 0 |
+
+| DTiX Chalon-sur-Saône | 0 |
+
+| Alliance Réseaux | 0 |
+
+| nLighten Sophia Antipolis NCE2 | 0 |
+
+| Magic OnLine | 0 |
+
+| RUBIX DATACENTER - DC-1 | 0 |
+
+| VirtuaCenter Auxerre | 0 |
+
+| Serinya Telecom | 0 |
+
+| EXA Edge DC Vauchelles | 0 |
+
+| dc2scale Nanterre | 0 |
+
+| nLighten Paris PAR3 | 0 |
+
+| REDHEBERG SAS | 0 |
+
+| Metroptics Datacenter | 0 |
+
+| connect-ix | 0 |
+
+| Ouiherberg Aimargues | 0 |
+
+| EXA Edge DC Nancy | 0 |
+
+| EXA Edge DC Ychoux | 0 |
+
+| Civicos Networking DCROUBAIX | 0 |
+
+| Betech Solution | 0 |
+
+| Crypteo Marssac | 0 |
+
+| dc2scale LIL1 (Lille Datacenter) | 0 |
+
+| EXA Edge DC Sequedin | 0 |
+
+| dc2scale MRS1 (Marseille datacenter) | 0 |
+
+| Reliance Plerin | 0 |
+
+| PHOCEA DC-M1 | 0 |
+
+| Neuf Caen | 0 |
+
+| Smartdc Paris | 0 |
+
+| Digital Realty Paris PAR13 | 0 |
+
+| ATE #1 | 0 |
+
+| SynAApS | 0 |
+
+| DARVA Hosting | 0 |
+
+| PAM00 | 0 |
+
+| Sigma DC3 | 0 |
+
+| OT - Rezé | 0 |
+
+| Reliance St. Denis | 0 |
+
+| Association Alsace Reseau Neutre | 0 |
+
+| EXA Edge DC Toulouse | 0 |
+
+| IMADIFF | 0 |
+
+| Sipartech Paris | 0 |
+
+| ADISTA Groupe | 0 |
+
+| EXA Edge DC Willerval | 0 |
+
+| Firstheberg | 0 |
+
+
+**Summary:** 225 data center facilities identified in FR.
+
+**Interpretation:**
+
+Facilities with high AS colocation counts are the most critical nodes in the country's enabling infrastructure. Geographic concentration of these hubs in a single city or operator represents a resilience risk. A healthy ecosystem has multiple well-distributed facilities with significant colocation.
+
 **Query 2 — Data center operators (concentration risk)**
 
 ```cypher
@@ -938,452 +508,250 @@ RETURN org.name AS Operator, COUNT(DISTINCT f) AS DataCenterCount
 ORDER BY DataCenterCount DESC;
 ```
 
-> **Output (110 record(s)):**
+> **Output :**
 
-```json
-[
-  {
-    "Operator": "Cogent Communications, Inc.",
-    "DataCenterCount": 16
-  },
-  {
-    "Operator": "UltraEdge",
-    "DataCenterCount": 12
-  },
-  {
-    "Operator": "Etix Everywhere",
-    "DataCenterCount": 12
-  },
-  {
-    "Operator": "Digital Realty",
-    "DataCenterCount": 11
-  },
-  {
-    "Operator": "EXA Infrastructure",
-    "DataCenterCount": 11
-  },
-  {
-    "Operator": "Equinix, Inc.",
-    "DataCenterCount": 9
-  },
-  {
-    "Operator": "nLighten HQ BV",
-    "DataCenterCount": 8
-  },
-  {
-    "Operator": "dc2scale SAS",
-    "DataCenterCount": 8
-  },
-  {
-    "Operator": "TDF",
-    "DataCenterCount": 5
-  },
-  {
-    "Operator": "Eurofiber France",
-    "DataCenterCount": 5
-  },
-  {
-    "Operator": "Colt Technology Services Group",
-    "DataCenterCount": 4
-  },
-  {
-    "Operator": "OPCORE",
-    "DataCenterCount": 4
-  },
-  {
-    "Operator": "Neuf Cegetel SA.",
-    "DataCenterCount": 4
-  },
-  {
-    "Operator": "Groupe Oceanet Technology",
-    "DataCenterCount": 4
-  },
-  {
-    "Operator": "Telehouse - Global Data Centers",
-    "DataCenterCount": 3
-  },
-  {
-    "Operator": "Cyllene SAS",
-    "DataCenterCount": 3
-  },
-  {
-    "Operator": "Free Pro",
-    "DataCenterCount": 3
-  },
-  {
-    "Operator": "Sipartech SAS",
-    "DataCenterCount": 2
-  },
-  {
-    "Operator": "Zayo Group",
-    "DataCenterCount": 2
-  },
-  {
-    "Operator": "DTiX SAS",
-    "DataCenterCount": 2
-  },
-  {
-    "Operator": "DATA4 s.a r.l",
-    "DataCenterCount": 2
-  },
-  {
-    "Operator": "Hexanet SAS",
-    "DataCenterCount": 2
-  },
-  {
-    "Operator": "Celeste SAS",
-    "DataCenterCount": 2
-  },
-  {
-    "Operator": "Netalis SAS",
-    "DataCenterCount": 2
-  },
-  {
-    "Operator": "Ikoula Net SAS",
-    "DataCenterCount": 2
-  },
-  {
-    "Operator": "WEBINDUSTRIE",
-    "DataCenterCount": 2
-  },
-  {
-    "Operator": "FLAG Telecom",
-    "DataCenterCount": 2
-  },
-  {
-    "Operator": "Alpes Networks SAS",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "MEDIACTIVE GROUP",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "ICODIA",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "ABICOM SAS",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Adeli",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "ResoLv SARL",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Cloudata",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "IELO-LIAZO SERVICES SAS",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Penta C.V.",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Orange S.A.",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "MENGINE",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Centrinuity Toulouse",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Verizon Communications, Inc.",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "HELIANTIS SAS",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Alionis",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "PROSOLUCE SAS",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Global Switch",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "★ Dyjix SAS",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Alliance Reseaux SAS",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Treefaz",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Somme-numerique DC1",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Orange / Val de Rueil",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Magic OnLine",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Xavier Lafaure",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Completel SAS",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Datacampus SAS",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "RUBIX DATACENTER",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Ad Valem Technologies",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Viatel Amiens",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Advanced MedioMatrix",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Virtua Networks",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Extendo Datacenter",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Serinya Telecom",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Hexatom S.A.R.L.",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Orange Business - La Fabrique",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "IZARLINK SAS",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "moji",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Quantic Telecom SAS",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Techcrea",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Montpellier Internet Telecom Datacenter",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "TelcoCenter",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "LASOTEL SAS",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "TAS France",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "XSALTO",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "NEXEREN",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "REDHEBERG SAS",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Metroptics",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "SAS CONNECT-IX",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "OuiHeberg SARL",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Fiducial Cloud Organisation",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Axione Lotim Telecom",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Civicos Networking, S.L.U.",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "DATAGREX SAS",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "BeTech Solution",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "AZA TELECOM SARL",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "GREEN DATA SAS",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Comarch SAS",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "PHOCEA DC",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Axione Adtim",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Smartdc",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "AtlasEdge",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "ATE - Avenir Télématique",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "MULTICOMS FACILITIES MANAGEMENT",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Centre de Calcul de l'Institut National de Physique NuclÃ©aire et de Physique des Particules",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Bretagne Telecom",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "SynAAps",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "DEVELOPPEMENT D'APPLICATIONS SUR RESEAUX A VALEUR AJOUTEE SA",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "ITinSell Cloud",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "SI Cloud SASU",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "EQUADEX SAS",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "SIGMA INFORMATIQUE SAS",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Département de la Haute-Saône",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "EASYTEAM (ex DATAXION)",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Caste-IT SAS",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Association Alsace Reseau Neutre",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Axione Limousin",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "System-Net SAS",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "IMA'DIFF",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Aqua Ray",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Thésée Datacenter",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Sanef Telecom",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "Firstheberg",
-    "DataCenterCount": 1
-  },
-  {
-    "Operator": "D-LAKE SAS",
-    "DataCenterCount": 1
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: Data Center Operator Concentration in FR
+
+This analysis identifies the organizations managing data center facilities in the country and counts how many facilities each operator controls. Heavy concentration in one or two operators indicates a structural resilience risk.
+
+
+**Operators by Number of Facilities Managed:**
+
+| Operator | Facilities Managed |
+|----------|--------------------|
+
+| Cogent Communications, Inc. | 16 |
+
+| UltraEdge | 12 |
+
+| Etix Everywhere | 12 |
+
+| Digital Realty | 11 |
+
+| EXA Infrastructure | 11 |
+
+| Equinix, Inc. | 9 |
+
+| nLighten HQ BV | 8 |
+
+| dc2scale SAS | 8 |
+
+| TDF | 5 |
+
+| Eurofiber France | 5 |
+
+| Colt Technology Services Group | 4 |
+
+| OPCORE | 4 |
+
+| Neuf Cegetel SA. | 4 |
+
+| Groupe Oceanet Technology | 4 |
+
+| Telehouse - Global Data Centers | 3 |
+
+| Cyllene SAS | 3 |
+
+| Free Pro | 3 |
+
+| Sipartech SAS | 2 |
+
+| Zayo Group | 2 |
+
+| DTiX SAS | 2 |
+
+| DATA4 s.a r.l | 2 |
+
+| Hexanet SAS | 2 |
+
+| Celeste SAS | 2 |
+
+| Netalis SAS | 2 |
+
+| Ikoula Net SAS | 2 |
+
+| WEBINDUSTRIE | 2 |
+
+| FLAG Telecom | 2 |
+
+| Alpes Networks SAS | 1 |
+
+| MEDIACTIVE GROUP | 1 |
+
+| ICODIA | 1 |
+
+| ABICOM SAS | 1 |
+
+| Adeli | 1 |
+
+| ResoLv SARL | 1 |
+
+| Cloudata | 1 |
+
+| IELO-LIAZO SERVICES SAS | 1 |
+
+| Penta C.V. | 1 |
+
+| Orange S.A. | 1 |
+
+| MENGINE | 1 |
+
+| Centrinuity Toulouse | 1 |
+
+| Verizon Communications, Inc. | 1 |
+
+| HELIANTIS SAS | 1 |
+
+| Alionis | 1 |
+
+| PROSOLUCE SAS | 1 |
+
+| Global Switch | 1 |
+
+| ★ Dyjix SAS | 1 |
+
+| Alliance Reseaux SAS | 1 |
+
+| Treefaz | 1 |
+
+| Somme-numerique DC1 | 1 |
+
+| Orange / Val de Rueil | 1 |
+
+| Magic OnLine | 1 |
+
+| Xavier Lafaure | 1 |
+
+| Completel SAS | 1 |
+
+| Datacampus SAS | 1 |
+
+| RUBIX DATACENTER | 1 |
+
+| Ad Valem Technologies | 1 |
+
+| Viatel Amiens | 1 |
+
+| Advanced MedioMatrix | 1 |
+
+| Virtua Networks | 1 |
+
+| Extendo Datacenter | 1 |
+
+| Serinya Telecom | 1 |
+
+| Hexatom S.A.R.L. | 1 |
+
+| Orange Business - La Fabrique | 1 |
+
+| IZARLINK SAS | 1 |
+
+| moji | 1 |
+
+| Quantic Telecom SAS | 1 |
+
+| Techcrea | 1 |
+
+| Montpellier Internet Telecom Datacenter | 1 |
+
+| TelcoCenter | 1 |
+
+| LASOTEL SAS | 1 |
+
+| TAS France | 1 |
+
+| XSALTO | 1 |
+
+| NEXEREN | 1 |
+
+| REDHEBERG SAS | 1 |
+
+| Metroptics | 1 |
+
+| SAS CONNECT-IX | 1 |
+
+| OuiHeberg SARL | 1 |
+
+| Fiducial Cloud Organisation | 1 |
+
+| Axione Lotim Telecom | 1 |
+
+| Civicos Networking, S.L.U. | 1 |
+
+| DATAGREX SAS | 1 |
+
+| BeTech Solution | 1 |
+
+| AZA TELECOM SARL | 1 |
+
+| GREEN DATA SAS | 1 |
+
+| Comarch SAS | 1 |
+
+| PHOCEA DC | 1 |
+
+| Axione Adtim | 1 |
+
+| Smartdc | 1 |
+
+| AtlasEdge | 1 |
+
+| ATE - Avenir Télématique | 1 |
+
+| MULTICOMS FACILITIES MANAGEMENT | 1 |
+
+| Centre de Calcul de l'Institut National de Physique NuclÃ©aire et de Physique des Particules | 1 |
+
+| Bretagne Telecom | 1 |
+
+| SynAAps | 1 |
+
+| DEVELOPPEMENT D'APPLICATIONS SUR RESEAUX A VALEUR AJOUTEE SA | 1 |
+
+| ITinSell Cloud | 1 |
+
+| SI Cloud SASU | 1 |
+
+| EQUADEX SAS | 1 |
+
+| SIGMA INFORMATIQUE SAS | 1 |
+
+| Département de la Haute-Saône | 1 |
+
+| EASYTEAM (ex DATAXION) | 1 |
+
+| Caste-IT SAS | 1 |
+
+| Association Alsace Reseau Neutre | 1 |
+
+| Axione Limousin | 1 |
+
+| System-Net SAS | 1 |
+
+| IMA'DIFF | 1 |
+
+| Aqua Ray | 1 |
+
+| Thésée Datacenter | 1 |
+
+| Sanef Telecom | 1 |
+
+| Firstheberg | 1 |
+
+| D-LAKE SAS | 1 |
+
+
+**Interpretation:**
+
+A data center market dominated by one or two large operators creates systemic risk — a business failure, regulatory action, or outage affecting that operator can impact a disproportionate share of the country's internet infrastructure. Diversity of operators is a positive resilience indicator.
+
 **Query 3 — Significant ASes not colocated in any data center**
 
 ```cypher
@@ -1401,112 +769,161 @@ ORDER BY PrefixCount DESC
 LIMIT 20;
 ```
 
-> **Output (20 record(s)):**
+> **Output:** 
 
-```json
-[
-  {
-    "ASN": 29066,
-    "NetworkName": "VELIANET-AS",
-    "PrefixCount": 435
-  },
-  {
-    "ASN": 62610,
-    "NetworkName": "ZEN-DPS",
-    "PrefixCount": 288
-  },
-  {
-    "ASN": 8677,
-    "NetworkName": "WORLDLINE",
-    "PrefixCount": 200
-  },
-  {
-    "ASN": 12696,
-    "NetworkName": "AXA Technology Services France GIE",
-    "PrefixCount": 115
-  },
-  {
-    "ASN": 2060,
-    "NetworkName": "FR-RENATER",
-    "PrefixCount": 91
-  },
-  {
-    "ASN": 207147,
-    "NetworkName": "NETCOM-AS",
-    "PrefixCount": 82
-  },
-  {
-    "ASN": 34949,
-    "NetworkName": "IDLINE SAS",
-    "PrefixCount": 69
-  },
-  {
-    "ASN": 60855,
-    "NetworkName": "DISIC-RIE-AS",
-    "PrefixCount": 65
-  },
-  {
-    "ASN": 210403,
-    "NetworkName": "Groupe LWS SARL",
-    "PrefixCount": 56
-  },
-  {
-    "ASN": 25215,
-    "NetworkName": "BNP PARIBAS S.A.",
-    "PrefixCount": 55
-  },
-  {
-    "ASN": 206178,
-    "NetworkName": "AWEBO",
-    "PrefixCount": 50
-  },
-  {
-    "ASN": 205710,
-    "NetworkName": "Association CREALAB",
-    "PrefixCount": 50
-  },
-  {
-    "ASN": 200546,
-    "NetworkName": "ALEXANDRE-SAGE-TRADING-AS-VELYS-SOFTWARE Alexandre SAGE trading as VELYS SOFTWARE",
-    "PrefixCount": 50
-  },
-  {
-    "ASN": 206445,
-    "NetworkName": "LE RESEAU VERT",
-    "PrefixCount": 50
-  },
-  {
-    "ASN": 207480,
-    "NetworkName": "ALGOMEDIA",
-    "PrefixCount": 50
-  },
-  {
-    "ASN": 211980,
-    "NetworkName": "Association ECHOES",
-    "PrefixCount": 50
-  },
-  {
-    "ASN": 207001,
-    "NetworkName": "Association LOS AMIGOS",
-    "PrefixCount": 50
-  },
-  {
-    "ASN": 206809,
-    "NetworkName": "PRO RESEAU",
-    "PrefixCount": 48
-  },
-  {
-    "ASN": 206778,
-    "NetworkName": "OPTA",
-    "PrefixCount": 48
-  },
-  {
-    "ASN": 215727,
-    "NetworkName": "ASNSWORLDWIDE",
-    "PrefixCount": 47
-  }
-]
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: Significant Networks Without Data Center Presence in FR
+
+This analysis identifies the most significant Autonomous Systems in the country (ranked by routing footprint / prefix count) that are not colocated in any physical data center facility known to IYP/PeeringDB. These are networks with real infrastructure weight but no recorded physical colocation presence.
+
+
+**Top ASes With No Known Colocation (by Prefix Count):**
+
+| ASN | Network Name | Prefixes Announced |
+|-----|--------------|--------------------|
+
+| AS29066 | VELIANET-AS | 435 |
+
+| AS62610 | ZEN-DPS | 288 |
+
+| AS8677 | WORLDLINE | 200 |
+
+| AS12696 | AXA Technology Services France GIE | 115 |
+
+| AS2060 | FR-RENATER | 91 |
+
+| AS207147 | NETCOM-AS | 82 |
+
+| AS34949 | IDLINE SAS | 69 |
+
+| AS60855 | DISIC-RIE-AS | 65 |
+
+| AS210403 | Groupe LWS SARL | 56 |
+
+| AS25215 | BNP PARIBAS S.A. | 55 |
+
+| AS206178 | AWEBO | 50 |
+
+| AS205710 | Association CREALAB | 50 |
+
+| AS200546 | ALEXANDRE-SAGE-TRADING-AS-VELYS-SOFTWARE Alexandre SAGE trading as VELYS SOFTWARE | 50 |
+
+| AS206445 | LE RESEAU VERT | 50 |
+
+| AS207480 | ALGOMEDIA | 50 |
+
+| AS211980 | Association ECHOES | 50 |
+
+| AS207001 | Association LOS AMIGOS | 50 |
+
+| AS206809 | PRO RESEAU | 48 |
+
+| AS206778 | OPTA | 48 |
+
+| AS215727 | ASNSWORLDWIDE | 47 |
+
+
+**Interpretation:**
+
+Networks with high prefix counts that lack colocation data represent a gap in infrastructure visibility. They may be operating from on-premise facilities, have incomplete PeeringDB records, or be deliberately absent from public colocation registries. Large ASes not present in any data center are more exposed to single-point-of-failure outages and reduce the country's overall infrastructure resilience.
+
+
+
+### 1.1.2 IXP Coverage
+
+**Query 1 — IXPs and their hosting facilities**
+
+```cypher
+// Lists all Internet Exchange Points (IXPs) located in a country,
+// along with the data center facilities where each IXP is hosted.
+// The $countryCode parameter must be provided during execution (e.g., 'AU', 'FR', 'DE').
+MATCH (i:IXP)-[:COUNTRY]->(c:Country {country_code: $countryCode})
+OPTIONAL MATCH (i)-[:LOCATED_IN]->(f:Facility)
+RETURN i.name AS IXP, COLLECT(DISTINCT f.name) AS Facilities
+ORDER BY SIZE(Facilities) DESC;
 ```
+
+> **Output :**
+
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: IXP Coverage and Facility Distribution in FR
+
+This analysis maps the Internet Exchange Points (IXPs) present in the country and the physical data center facilities where they are hosted. IXP coverage is a direct measure of how well the country's network infrastructure enables efficient, local traffic exchange — reducing latency and transit costs.
+
+
+**IXP Facility Distribution:**
+
+| IXP Name | Hosting Facilities |
+|----------|--------------------|
+
+| nine | Seeweb Milano Caldera, Digital Realty Marseille MRS1/2/3/4, nLighten Lyon LYS1, Equinix PA2 - Paris, Saint-Denis, ETIX Montpellier #1, UltraEdge Bordeaux, Telehouse - London (Docklands West), ETIX Lille #2, Telehouse - Paris 2 (Voltaire - Léon Frot), UltraEdge Lyon-Venissieux, Equinix AM7 - Amsterdam, Kuiperberweg, Equinix ZH4 - Zurich, ETIX Lille #1, Equinix FR5 - Frankfurt, KleyerStrasse, Free Pro - Marseille - MRS1, OPCORE - DC3 / PAR3, moji1, NIKHEF Amsterdam |
+
+| Hopus | Digital Realty Frankfurt FRA1-16, OPCORE - DC2 / PAR2, OPCORE - DC3 / PAR3, Telehouse - Paris 1 (Jeûneurs), Equinix GV1 - Geneva, City, UltraEdge Paris - Courbevoie, Equinix ZH2 - Zurich, Equinix PA2 - Paris, Saint-Denis, colozueri.ch Zurich, Digital Realty Marseille MRS1/2/3/4, Equinix PA3 - Paris, Saint-Denis, Telehouse - Paris 2 (Voltaire - Léon Frot), NIKHEF Amsterdam, UltraEdge Lyon-Venissieux |
+
+| France-IX Paris | Telehouse - Paris 2 (Voltaire - Léon Frot), Digital Realty Paris PAR5, Equinix PA6 - Paris, Condorcet, OPCORE - DC3 / PAR3, Digital Realty Paris PAR2, OPCORE - DC2 / PAR2, Telehouse - Paris 3 (Magny), Equinix PA7 - Paris, Energy Park, DATA4 Paris Marcoussis - PAR1 |
+
+| Equinix Paris | Equinix PA4 - Paris, Pantin, Telehouse - Paris 2 (Voltaire - Léon Frot), Equinix PA3 - Paris, Saint-Denis, Equinix PA2 - Paris, Saint-Denis, Equinix PA7 - Paris, Energy Park, Equinix PA5 - Paris, Victor Hugo, Equinix PA6 - Paris, Condorcet, Equinix PA10 - Paris, Saint-Denis |
+
+| France-IX AURA | ETIX Lyon #1, UltraEdge Lyon-Venissieux, Free Pro - Limonest, Cogent Grenoble, Orange Business - La Fabrique [Grenoble], CC IN2P3 |
+
+| SBG-IX | nLighten Strasbourg SXB1, Cogent Strasbourg, UltraEdge Strasbourg |
+
+| Lillix | ETIX Lille #1, ETIX Lille #3, ETIX Lille #2 |
+
+| EuroRhine-IX | nLighten Strasbourg SXB1, Cogent Strasbourg, UltraEdge Strasbourg |
+
+| Ouest.Network | Cogent Nantes, ETIX Nantes #1 |
+
+| France-IX Marseille | Digital Realty Marseille MRS1/2/3/4, Free Pro - Marseille - MRS1 |
+
+| SFINX | Telehouse - Paris 2 (Voltaire - Léon Frot), Digital Realty Paris PAR1 |
+
+| MPLIX | Cogent Montpellier, ETIX Montpellier #1 |
+
+| DE-CIX Marseille | Digital Realty Marseille MRS1/2/3/4, Free Pro - Marseille - MRS1 |
+
+| BreizhIX | Cogent Rennes, TDF Datacenter Rennes Cesson |
+
+| ERA-IX Paris | Telehouse - Paris 2 (Voltaire - Léon Frot) |
+
+| Association HwHost | Digital Realty Paris PAR5 |
+
+| France-IX Lille | ETIX Lille #2 |
+
+| France-IX Bordeaux | Equinix BX1 - Bordeaux |
+
+| France-IX Toulouse | Eurofiber DC - TLS00 |
+
+| AuvernIX | (no facility data) |
+
+| NormandIX | (no facility data) |
+
+| BrestIX | (no facility data) |
+
+| BéarnIX | (no facility data) |
+
+| BGP.Exchange - Paris | (no facility data) |
+
+| BGP.Exchange - Lyon | (no facility data) |
+
+
+**Interpretation:**
+
+IXPs present in more physical facilities are more resilient and accessible to a wider range of network operators. A country with multiple IXPs each hosted across diverse facilities has significantly better enabling infrastructure than one relying on a single facility or a single IXP.
+
+
 **Query 2 — Local vs. foreign AS members per IXP**
 
 ```cypher
@@ -1524,127 +941,75 @@ RETURN i.name AS IXP, LocalMembers, ForeignMembers
 ORDER BY LocalMembers DESC;
 ```
 
-> **Output (23 record(s)):**
+> **Output :**
 
-```json
-[
-  {
-    "IXP": "France-IX Paris",
-    "LocalMembers": 235,
-    "ForeignMembers": 212
-  },
-  {
-    "IXP": "Equinix Paris",
-    "LocalMembers": 151,
-    "ForeignMembers": 92
-  },
-  {
-    "IXP": "France-IX AURA",
-    "LocalMembers": 59,
-    "ForeignMembers": 15
-  },
-  {
-    "IXP": "nine",
-    "LocalMembers": 48,
-    "ForeignMembers": 31
-  },
-  {
-    "IXP": "France-IX Marseille",
-    "LocalMembers": 37,
-    "ForeignMembers": 75
-  },
-  {
-    "IXP": "Lillix",
-    "LocalMembers": 32,
-    "ForeignMembers": 8
-  },
-  {
-    "IXP": "Hopus",
-    "LocalMembers": 27,
-    "ForeignMembers": 6
-  },
-  {
-    "IXP": "SFINX",
-    "LocalMembers": 19,
-    "ForeignMembers": 5
-  },
-  {
-    "IXP": "BreizhIX",
-    "LocalMembers": 18,
-    "ForeignMembers": 2
-  },
-  {
-    "IXP": "AuvernIX",
-    "LocalMembers": 12,
-    "ForeignMembers": 1
-  },
-  {
-    "IXP": "EuroRhine-IX",
-    "LocalMembers": 10,
-    "ForeignMembers": 1
-  },
-  {
-    "IXP": "DE-CIX Marseille",
-    "LocalMembers": 10,
-    "ForeignMembers": 112
-  },
-  {
-    "IXP": "France-IX Lille",
-    "LocalMembers": 10,
-    "ForeignMembers": 6
-  },
-  {
-    "IXP": "BGP.Exchange - Paris",
-    "LocalMembers": 10,
-    "ForeignMembers": 34
-  },
-  {
-    "IXP": "Ouest.Network",
-    "LocalMembers": 9,
-    "ForeignMembers": 0
-  },
-  {
-    "IXP": "France-IX Toulouse",
-    "LocalMembers": 9,
-    "ForeignMembers": 4
-  },
-  {
-    "IXP": "B�arnIX",
-    "LocalMembers": 8,
-    "ForeignMembers": 1
-  },
-  {
-    "IXP": "BGP.Exchange - Lyon",
-    "LocalMembers": 8,
-    "ForeignMembers": 16
-  },
-  {
-    "IXP": "SBG-IX",
-    "LocalMembers": 3,
-    "ForeignMembers": 2
-  },
-  {
-    "IXP": "BrestIX",
-    "LocalMembers": 2,
-    "ForeignMembers": 0
-  },
-  {
-    "IXP": "MPLIX",
-    "LocalMembers": 2,
-    "ForeignMembers": 0
-  },
-  {
-    "IXP": "NormandIX",
-    "LocalMembers": 1,
-    "ForeignMembers": 0
-  },
-  {
-    "IXP": "France-IX Bordeaux",
-    "LocalMembers": 1,
-    "ForeignMembers": 1
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: Local vs. Foreign Membership at IXPs in FR
+
+This analysis compares the number of local (domestic) versus foreign (international) Autonomous System members at each IXP in the country. IXPs that attract international networks indicate that the country is a significant regional peering hub, while purely domestic IXPs serve local traffic exchange.
+
+
+**IXP Membership Breakdown:**
+
+| IXP Name | Local Members | Foreign Members |
+|----------|---------------|-----------------|
+
+| France-IX Paris | 235 | 212 |
+
+| Equinix Paris | 151 | 92 |
+
+| France-IX AURA | 59 | 15 |
+
+| nine | 48 | 31 |
+
+| France-IX Marseille | 37 | 75 |
+
+| Lillix | 32 | 8 |
+
+| Hopus | 27 | 6 |
+
+| SFINX | 19 | 5 |
+
+| BreizhIX | 18 | 2 |
+
+| AuvernIX | 12 | 1 |
+
+| EuroRhine-IX | 10 | 1 |
+
+| DE-CIX Marseille | 10 | 112 |
+
+| France-IX Lille | 10 | 6 |
+
+| BGP.Exchange - Paris | 10 | 34 |
+
+| Ouest.Network | 9 | 0 |
+
+| France-IX Toulouse | 9 | 4 |
+
+| BéarnIX | 8 | 1 |
+
+| BGP.Exchange - Lyon | 8 | 16 |
+
+| SBG-IX | 3 | 2 |
+
+| BrestIX | 2 | 0 |
+
+| MPLIX | 2 | 0 |
+
+| NormandIX | 1 | 0 |
+
+| France-IX Bordeaux | 1 | 1 |
+
+
+**Interpretation:**
+
+A healthy IXP ecosystem has a mix of local members (showing domestic traffic stays local) and foreign members (showing the country is a regional internet hub). IXPs with very few local members relative to foreign members may indicate that local ISPs are not fully leveraging the local peering infrastructure.
 
 **Query 3 — Top foreign networks at local IXPs (regional peering hub indicator)**
 
@@ -1667,149 +1032,59 @@ ORDER BY CaidaRank ASC
 LIMIT 15;
 ```
 
-> **Output (15 record(s)):**
+> **Output :**
 
-```json
-[
-  {
-    "ASN": 6939,
-    "NetworkName": "HURRICANE",
-    "IXPs": [
-      "Equinix Paris",
-      "France-IX Marseille",
-      "nine",
-      "DE-CIX Marseille",
-      "France-IX AURA",
-      "France-IX Paris"
-    ],
-    "CaidaRank": 7
-  },
-  {
-    "ASN": 6461,
-    "NetworkName": "ZAYO-6461",
-    "IXPs": [
-      "Equinix Paris",
-      "Lillix",
-      "France-IX Marseille",
-      "nine",
-      "France-IX AURA",
-      "France-IX Paris"
-    ],
-    "CaidaRank": 8
-  },
-  {
-    "ASN": 9002,
-    "NetworkName": "RETN",
-    "IXPs": [
-      "France-IX Paris"
-    ],
-    "CaidaRank": 11
-  },
-  {
-    "ASN": 12956,
-    "NetworkName": "TELXIUS",
-    "IXPs": [
-      "DE-CIX Marseille"
-    ],
-    "CaidaRank": 13
-  },
-  {
-    "ASN": 1273,
-    "NetworkName": "CW",
-    "IXPs": [
-      "Equinix Paris"
-    ],
-    "CaidaRank": 14
-  },
-  {
-    "ASN": 4637,
-    "NetworkName": "ASN-TELSTRA-GLOBAL",
-    "IXPs": [
-      "France-IX Paris"
-    ],
-    "CaidaRank": 16
-  },
-  {
-    "ASN": 37468,
-    "NetworkName": "ANGOLA-CABLES",
-    "IXPs": [
-      "France-IX Marseille"
-    ],
-    "CaidaRank": 21
-  },
-  {
-    "ASN": 9498,
-    "NetworkName": "BBIL-AP",
-    "IXPs": [
-      "DE-CIX Marseille"
-    ],
-    "CaidaRank": 22
-  },
-  {
-    "ASN": 58453,
-    "NetworkName": "CMI-INT-HK",
-    "IXPs": [
-      "Equinix Paris",
-      "France-IX Paris"
-    ],
-    "CaidaRank": 26
-  },
-  {
-    "ASN": 20485,
-    "NetworkName": "TRANSTELECOM",
-    "IXPs": [
-      "France-IX Paris"
-    ],
-    "CaidaRank": 27
-  },
-  {
-    "ASN": 31133,
-    "NetworkName": "MF-MGSM-AS",
-    "IXPs": [
-      "DE-CIX Marseille"
-    ],
-    "CaidaRank": 28
-  },
-  {
-    "ASN": 20764,
-    "NetworkName": "CJSC RASCOM",
-    "IXPs": [
-      "France-IX Paris"
-    ],
-    "CaidaRank": 29
-  },
-  {
-    "ASN": 33891,
-    "NetworkName": "CORE-BACKBONE",
-    "IXPs": [
-      "France-IX Paris"
-    ],
-    "CaidaRank": 37
-  },
-  {
-    "ASN": 15412,
-    "NetworkName": "FLAG Telecom",
-    "IXPs": [
-      "Equinix Paris",
-      "France-IX Marseille",
-      "France-IX Paris"
-    ],
-    "CaidaRank": 43
-  },
-  {
-    "ASN": 8220,
-    "NetworkName": "COLT",
-    "IXPs": [
-      "Equinix Paris",
-      "France-IX Marseille",
-      "France-IX Paris"
-    ],
-    "CaidaRank": 44
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
 
----
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: International Networks at FR IXPs
+
+This analysis identifies the highest-ranked international Autonomous Systems that are members of the country's IXPs, ranked by their CAIDA global AS rank (lower = more important). The presence of major global carriers and content networks at local IXPs is a strong indicator that the country is a recognized regional internet hub.
+
+
+**Top International Networks Present:**
+
+| ASN | Network Name | CAIDA Global Rank | IXPs Present At |
+|-----|--------------|-------------------|-----------------|
+
+| AS6939 | HURRICANE | #7 | Equinix Paris, France-IX Marseille, nine, DE-CIX Marseille, France-IX AURA, France-IX Paris |
+
+| AS6461 | ZAYO-6461 | #8 | Equinix Paris, Lillix, France-IX Marseille, nine, France-IX AURA, France-IX Paris |
+
+| AS9002 | RETN | #11 | France-IX Paris |
+
+| AS12956 | TELXIUS | #13 | DE-CIX Marseille |
+
+| AS1273 | CW | #14 | Equinix Paris |
+
+| AS4637 | ASN-TELSTRA-GLOBAL | #16 | France-IX Paris |
+
+| AS37468 | ANGOLA-CABLES | #21 | France-IX Marseille |
+
+| AS9498 | BBIL-AP | #22 | DE-CIX Marseille |
+
+| AS58453 | CMI-INT-HK | #26 | Equinix Paris, France-IX Paris |
+
+| AS20485 | TRANSTELECOM | #27 | France-IX Paris |
+
+| AS31133 | MF-MGSM-AS | #28 | DE-CIX Marseille |
+
+| AS20764 | CJSC RASCOM | #29 | France-IX Paris |
+
+| AS33891 | CORE-BACKBONE | #37 | France-IX Paris |
+
+| AS15412 | FLAG Telecom | #43 | Equinix Paris, France-IX Marseille, France-IX Paris |
+
+| AS8220 | COLT | #44 | Equinix Paris, France-IX Marseille, France-IX Paris |
+
+
+**Interpretation:**
+
+International tier-1 and major content networks appearing at local IXPs confirms that the country has sufficient market size and connectivity to attract global players. This drives down latency for local users and validates the country's strategic position in regional internet topology. Networks with a CAIDA rank below 100 are considered globally significant.
 
 ## 1.2 Fiber Ecosystem
 
@@ -1831,17 +1106,30 @@ RETURN c.name AS Country,
 ORDER BY GeoCoveragePoints DESC;
 ```
 
-> **Output (1 record(s)):**
+> **Output :**
 
-```json
-[
-  {
-    "Country": "France",
-    "GeoCoveragePoints": 1016,
-    "ActiveOperators": 1524
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: Fiber Infrastructure Geographic Reach in FR
+
+This analysis approximates the physical fiber reach of internet infrastructure by counting the number of distinct geographic Points associated with active Autonomous Systems (operators that actually announce BGP routes). More geographic points spread across more operators indicates a broader physical network footprint and suggests wider fiber deployment reach.
+
+
+**Analysis Results:**
+
+- Country: **France**
+- Geographic coverage points: **1016**
+- Active network operators: **1524**
+
+**Interpretation:**
+
+**1016** distinct geographic locations are registered by **1524** active network operators. A higher count indicates operators have declared infrastructure presence in more locations, which is a structural proxy for fiber or fixed network deployment breadth.
+
 
 **Query 2 — Top operators by BGP prefix count and colocation footprint**
 
@@ -1861,132 +1149,70 @@ ORDER BY AnnouncedPrefixes DESC
 LIMIT 20;
 ```
 
-> **Output (20 record(s)):**
+> **Output :**
 
-```json
-[
-  {
-    "ASN": 12322,
-    "OperatorName": "Free FR",
-    "AnnouncedPrefixes": 1065,
-    "FacilityPresence": 14
-  },
-  {
-    "ASN": 3215,
-    "OperatorName": "AS3215",
-    "AnnouncedPrefixes": 984,
-    "FacilityPresence": 6
-  },
-  {
-    "ASN": 16276,
-    "OperatorName": "OVH",
-    "AnnouncedPrefixes": 792,
-    "FacilityPresence": 5
-  },
-  {
-    "ASN": 5511,
-    "OperatorName": "OPENTRANSIT",
-    "AnnouncedPrefixes": 576,
-    "FacilityPresence": 21
-  },
-  {
-    "ASN": 51167,
-    "OperatorName": "CONTABO",
-    "AnnouncedPrefixes": 570,
-    "FacilityPresence": 0
-  },
-  {
-    "ASN": 29066,
-    "OperatorName": "VELIANET-AS",
-    "AnnouncedPrefixes": 435,
-    "FacilityPresence": 0
-  },
-  {
-    "ASN": 2200,
-    "OperatorName": "FR-RENATER",
-    "AnnouncedPrefixes": 356,
-    "FacilityPresence": 4
-  },
-  {
-    "ASN": 63023,
-    "OperatorName": "AS-GLOBALTELEHOST",
-    "AnnouncedPrefixes": 323,
-    "FacilityPresence": 2
-  },
-  {
-    "ASN": 62610,
-    "OperatorName": "ZEN-DPS",
-    "AnnouncedPrefixes": 288,
-    "FacilityPresence": 0
-  },
-  {
-    "ASN": 46475,
-    "OperatorName": "LIMESTONENETWORKS",
-    "AnnouncedPrefixes": 262,
-    "FacilityPresence": 1
-  },
-  {
-    "ASN": 25369,
-    "OperatorName": "BANDWIDTH-AS",
-    "AnnouncedPrefixes": 207,
-    "FacilityPresence": 1
-  },
-  {
-    "ASN": 8677,
-    "OperatorName": "WORLDLINE",
-    "AnnouncedPrefixes": 200,
-    "FacilityPresence": 0
-  },
-  {
-    "ASN": 16347,
-    "OperatorName": "ADISTA SAS",
-    "AnnouncedPrefixes": 165,
-    "FacilityPresence": 21
-  },
-  {
-    "ASN": 15557,
-    "OperatorName": "LDCOMNET",
-    "AnnouncedPrefixes": 158,
-    "FacilityPresence": 6
-  },
-  {
-    "ASN": 1299,
-    "OperatorName": "Arelion",
-    "AnnouncedPrefixes": 139,
-    "FacilityPresence": 14
-  },
-  {
-    "ASN": 43350,
-    "OperatorName": "NFORCE",
-    "AnnouncedPrefixes": 130,
-    "FacilityPresence": 0
-  },
-  {
-    "ASN": 12696,
-    "OperatorName": "AXA Technology Services France GIE",
-    "AnnouncedPrefixes": 115,
-    "FacilityPresence": 0
-  },
-  {
-    "ASN": 34177,
-    "OperatorName": "CELESTE",
-    "AnnouncedPrefixes": 101,
-    "FacilityPresence": 33
-  },
-  {
-    "ASN": 2060,
-    "OperatorName": "FR-RENATER",
-    "AnnouncedPrefixes": 91,
-    "FacilityPresence": 0
-  },
-  {
-    "ASN": 25540,
-    "OperatorName": "ALPHALINK-AS",
-    "AnnouncedPrefixes": 91,
-    "FacilityPresence": 5
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: Network Operators by Routing Footprint and Physical Presence in FR
+
+This analysis ranks the country's active network operators by the number of BGP prefixes they announce (routing footprint) combined with the number of data center facilities they are present in (physical footprint). Operators with both high prefix counts and broad facility presence have the deepest infrastructure reach.
+
+
+**Top Operators by Routing and Physical Footprint:**
+
+| ASN | Operator Name | BGP Prefixes | Facilities |
+|-----|---------------|--------------|------------|
+
+| AS12322 | Free FR | 1065 | 14 |
+
+| AS3215 | AS3215 | 984 | 6 |
+
+| AS16276 | OVH | 792 | 5 |
+
+| AS5511 | OPENTRANSIT | 576 | 21 |
+
+| AS51167 | CONTABO | 570 | 0 |
+
+| AS29066 | VELIANET-AS | 435 | 0 |
+
+| AS2200 | FR-RENATER | 356 | 4 |
+
+| AS63023 | AS-GLOBALTELEHOST | 323 | 2 |
+
+| AS62610 | ZEN-DPS | 288 | 0 |
+
+| AS46475 | LIMESTONENETWORKS | 262 | 1 |
+
+| AS25369 | BANDWIDTH-AS | 207 | 1 |
+
+| AS8677 | WORLDLINE | 200 | 0 |
+
+| AS16347 | ADISTA SAS | 165 | 21 |
+
+| AS15557 | LDCOMNET | 158 | 6 |
+
+| AS1299 | Arelion | 139 | 14 |
+
+| AS43350 | NFORCE | 130 | 0 |
+
+| AS12696 | AXA Technology Services France GIE | 115 | 0 |
+
+| AS34177 | CELESTE | 101 | 33 |
+
+| AS2060 | FR-RENATER | 91 | 0 |
+
+| AS25540 | ALPHALINK-AS | 91 | 5 |
+
+
+**Interpretation:**
+
+Operators with many BGP prefixes but low facility presence may be using third-party infrastructure. Operators with both high prefix counts and multiple facilities have the strongest physical infrastructure footprint and are the backbone of the country's fiber ecosystem.
+
 
 **Query 3 — Multi-facility operators (physically distributed infrastructure)**
 
@@ -2008,114 +1234,70 @@ ORDER BY FacilityCount DESC
 LIMIT 20;
 ```
 
-> **Output (20 record(s)):**
+> **Output :**
 
-```json
-[
-  {
-    "ASN": 29075,
-    "OperatorName": "IELO",
-    "NumberOfFacilities": 68
-  },
-  {
-    "ASN": 35625,
-    "OperatorName": "EUROFIBER-FRANCE",
-    "NumberOfFacilities": 52
-  },
-  {
-    "ASN": 30781,
-    "OperatorName": "Free Pro",
-    "NumberOfFacilities": 42
-  },
-  {
-    "ASN": 8309,
-    "OperatorName": "SIPARTECH",
-    "NumberOfFacilities": 41
-  },
-  {
-    "ASN": 8218,
-    "OperatorName": "NEO-ASN",
-    "NumberOfFacilities": 34
-  },
-  {
-    "ASN": 34177,
-    "OperatorName": "CELESTE",
-    "NumberOfFacilities": 33
-  },
-  {
-    "ASN": 200780,
-    "OperatorName": "APPLIWAVE",
-    "NumberOfFacilities": 27
-  },
-  {
-    "ASN": 39180,
-    "OperatorName": "LASOTEL",
-    "NumberOfFacilities": 25
-  },
-  {
-    "ASN": 8487,
-    "OperatorName": "PHIBEE",
-    "NumberOfFacilities": 23
-  },
-  {
-    "ASN": 62000,
-    "OperatorName": "NETRIX-AS",
-    "NumberOfFacilities": 23
-  },
-  {
-    "ASN": 206120,
-    "OperatorName": "KOESIO Networks SAS",
-    "NumberOfFacilities": 22
-  },
-  {
-    "ASN": 212815,
-    "OperatorName": "AS-DYJIX",
-    "NumberOfFacilities": 22
-  },
-  {
-    "ASN": 16347,
-    "OperatorName": "ADISTA SAS",
-    "NumberOfFacilities": 21
-  },
-  {
-    "ASN": 5511,
-    "OperatorName": "OPENTRANSIT",
-    "NumberOfFacilities": 21
-  },
-  {
-    "ASN": 43646,
-    "OperatorName": "TDF",
-    "NumberOfFacilities": 20
-  },
-  {
-    "ASN": 30889,
-    "OperatorName": "ADISTA SAS",
-    "NumberOfFacilities": 20
-  },
-  {
-    "ASN": 34019,
-    "OperatorName": "HIVANE",
-    "NumberOfFacilities": 18
-  },
-  {
-    "ASN": 47160,
-    "OperatorName": "MOJI",
-    "NumberOfFacilities": 16
-  },
-  {
-    "ASN": 20565,
-    "OperatorName": "NETALIS",
-    "NumberOfFacilities": 16
-  },
-  {
-    "ASN": 44407,
-    "OperatorName": "ASN-LINKT",
-    "NumberOfFacilities": 15
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
 
----
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: Multi-Facility Network Operators in FR
+
+This analysis identifies network operators colocated in more than one data center facility within the country. An operator present across multiple facilities has physically distributed infrastructure — the strongest structural indicator of real geographic network reach and fiber deployment beyond a single site.
+
+
+**Multi-Facility Operators:**
+
+| ASN | Operator Name | Facilities |
+|-----|---------------|------------|
+
+| AS29075 | IELO | 68 |
+
+| AS35625 | EUROFIBER-FRANCE | 52 |
+
+| AS30781 | Free Pro | 42 |
+
+| AS8309 | SIPARTECH | 41 |
+
+| AS8218 | NEO-ASN | 34 |
+
+| AS34177 | CELESTE | 33 |
+
+| AS200780 | APPLIWAVE | 27 |
+
+| AS39180 | LASOTEL | 25 |
+
+| AS8487 | PHIBEE | 23 |
+
+| AS62000 | NETRIX-AS | 23 |
+
+| AS206120 | KOESIO Networks SAS | 22 |
+
+| AS212815 | AS-DYJIX | 22 |
+
+| AS16347 | ADISTA SAS | 21 |
+
+| AS5511 | OPENTRANSIT | 21 |
+
+| AS43646 | TDF | 20 |
+
+| AS30889 | ADISTA SAS | 20 |
+
+| AS34019 | HIVANE | 18 |
+
+| AS47160 | MOJI | 16 |
+
+| AS20565 | NETALIS | 16 |
+
+| AS44407 | ASN-LINKT | 15 |
+
+
+**Interpretation:**
+
+Countries where many operators are present in multiple facilities have a more resilient, geographically dispersed fiber ecosystem. Operators appearing in only a single facility represent single-point-of-failure risks.
+
 
 ## 1.3 Mobile Connectivity
 
@@ -2139,19 +1321,31 @@ RETURN c.name AS Country, TotalASes, ActiveASes, DormantASes,
        ROUND(ActiveASes * 100.0 / TotalASes * 100) / 100 AS ActivePercent;
 ```
 
-> **Output (1 record(s)):**
+> **Output :**
 
-```json
-[
-  {
-    "Country": "France",
-    "TotalASes": 2238,
-    "ActiveASes": 1524,
-    "DormantASes": 714,
-    "ActivePercent": 68.1
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: Network Operator Ecosystem Health in FR
+
+This analysis breaks down the country's Autonomous Systems into active operators (those announcing BGP routes) and dormant registrations (ASes with no active routing). The active-to-total ratio is a direct measure of ecosystem vitality — countries with many registered but inactive ASes have underutilized network capacity.
+
+
+**Operator Ecosystem Overview:**
+
+- Country: **France**
+- Total Registered ASes: **2238**
+- Active Operators (BGP): **1524** (68.1%)
+- Dormant Registrations: **714**
+
+**Interpretation:**
+
+**1524** out of **2238** registered ASes are actively originating BGP routes (68.1%). A higher active percentage indicates a healthier, more competitive network ecosystem. Dormant ASes may represent unused allocations, acquired-but-undeployed resources, or legacy registrations.
+
 
 **Query 2 — Physical infrastructure footprint (domestic vs. international facilities)**
 
@@ -2170,18 +1364,31 @@ RETURN c.name AS Country,
        COUNT(DISTINCT f) AS TotalFacilities;
 ```
 
-> **Output (1 record(s)):**
+> **Output :**
 
-```json
-[
-  {
-    "Country": "France",
-    "DomesticFacilities": 168,
-    "InternationalFacilities": 453,
-    "TotalFacilities": 621
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: Physical Infrastructure Footprint in FR
+
+This analysis counts the physical data center facilities where the country's ASes are colocated, separating domestic facilities (within the country) from international ones (abroad). Domestic facility count measures local infrastructure depth; international presence shows global connectivity reach.
+
+
+**Infrastructure Footprint:**
+
+- Country: **France**
+- Domestic Facilities: **168**
+- International Facilities: **453**
+- Total Facilities: **621**
+
+**Interpretation:**
+
+**168** facilities are located within the country, while **453** are abroad. A strong domestic facility base is essential for network resilience — it means local traffic can be served locally. International presence indicates operators are globally connected, but over-reliance on foreign infrastructure is a resilience risk.
+
 
 **Query 3 — IXP connectivity gap analysis**
 
@@ -2203,19 +1410,33 @@ RETURN c.name AS Country,
              COUNT(DISTINCT a) * 100) / 100 AS IXPAdoptionPercent;
 ```
 
-> **Output (1 record(s)):**
+> **Output :**
 
-```json
-[
-  {
-    "Country": "France",
-    "IXPConnected": 346,
-    "NotIXPConnected": 1178,
-    "TotalActive": 1524,
-    "IXPAdoptionPercent": 22.7
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: IXP Connectivity Gap Analysis in FR
+
+This analysis identifies how many active network operators are members of at least one domestic IXP versus those with no local IXP presence. ASes not connected to any domestic IXP must route all traffic via upstream transit providers, increasing costs and latency while reducing resilience.
+
+
+**IXP Connectivity Overview:**
+
+- Country: **France**
+- Active ASes connected to a domestic IXP: **346**
+- Active ASes NOT connected to any domestic IXP: **1178**
+- Total Active ASes: **1524**
+- IXP Adoption Rate: **22.7%**
+
+**Interpretation:**
+
+Only **22.7%** of active ASes are members of a domestic IXP. The remaining **1178** operators must rely entirely on upstream transit for traffic exchange. Increasing IXP adoption is one of the most impactful policy actions for improving network coverage resilience — it enables local traffic to stay local.
+
+
 
 **Query 4 — Peering density analysis (domestic vs. international)**
 
@@ -2235,20 +1456,32 @@ RETURN c.name AS Country,
        COUNT(DISTINCT b) AS TotalPeers;
 ```
 
-> **Output (1 record(s)):**
+> **Output :**
 
-```json
-[
-  {
-    "Country": "France",
-    "DomesticPeers": 1271,
-    "InternationalPeers": 10613,
-    "TotalPeers": 11884
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
 
----
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: Network Peering Density in FR
+
+This analysis breaks down the country's peering relationships into domestic (both ASes in the same country) and international. High domestic peering density means local traffic can be exchanged locally; low domestic peering means traffic must route internationally — a critical resilience weakness.
+
+
+**Peering Density Overview:**
+
+- Country: **France**
+- Domestic Peers: **1271**
+- International Peers: **10613**
+- Total Peers: **11884**
+
+**Interpretation:**
+
+**1271** domestic peers versus **10613** international peers. A healthy peering ecosystem has strong domestic interconnection so that local traffic doesn't need to leave the country. The ratio of domestic to international peering is a key indicator of network self-sufficiency and resilience.
+
+
 
 ### 1.3.2 Spectrum Allocation
 
@@ -2270,20 +1503,32 @@ RETURN c.name AS Country,
 ORDER BY Originated_Prefixes DESC;
 ```
 
-> **Output (1 record(s)):**
+> **Output :**
 
-```json
-[
-  {
-    "Country": "France",
-    "Originated_Prefixes": 15996,
-    "IPv4_Prefixes": 13138,
-    "IPv6_Prefixes": 2858,
-    "ActiveOperators": 1524,
-    "IPv6_SharePercent": 17.87
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: IP Address Space Utilization in FR
+
+This analysis measures the total BGP prefix footprint of the country's network operators, broken down by address family (IPv4 vs IPv6). In the IYP graph, this serves as the best available proxy for network capacity and address space allocation — a structural correlate of spectrum/address utilization maturity.
+
+
+**Analysis Results:**
+
+- Country: **France**
+- Total BGP prefixes originated: **15996**
+- IPv4 prefixes: **13138**
+- IPv6 prefixes: **2858**
+- Active operators: **1524**
+- IPv6 share of prefix table: **17.87%**
+
+**Interpretation:**
+
+A higher total prefix count indicates greater IP address space allocation and more granular network segmentation. An increasing IPv6 share reflects modernization of the address space — operators planning for long-term scalability beyond IPv4 exhaustion.
 
 **Query 2 — Top operators by prefix count with IPv6 adoption flag**
 
@@ -2304,174 +1549,70 @@ ORDER BY TotalPrefixes DESC
 LIMIT 20;
 ```
 
-> **Output (20 record(s)):**
+> **Output :**
 
-```json
-[
-  {
-    "ASN": 12322,
-    "OperatorName": "Free FR",
-    "TotalPrefixes": 1065,
-    "IPv4Prefixes": 538,
-    "IPv6Prefixes": 527,
-    "IPv6Adopted": "Yes"
-  },
-  {
-    "ASN": 3215,
-    "OperatorName": "AS3215",
-    "TotalPrefixes": 984,
-    "IPv4Prefixes": 941,
-    "IPv6Prefixes": 43,
-    "IPv6Adopted": "Yes"
-  },
-  {
-    "ASN": 16276,
-    "OperatorName": "OVH",
-    "TotalPrefixes": 792,
-    "IPv4Prefixes": 751,
-    "IPv6Prefixes": 41,
-    "IPv6Adopted": "Yes"
-  },
-  {
-    "ASN": 5511,
-    "OperatorName": "OPENTRANSIT",
-    "TotalPrefixes": 576,
-    "IPv4Prefixes": 563,
-    "IPv6Prefixes": 13,
-    "IPv6Adopted": "Yes"
-  },
-  {
-    "ASN": 51167,
-    "OperatorName": "CONTABO",
-    "TotalPrefixes": 570,
-    "IPv4Prefixes": 565,
-    "IPv6Prefixes": 5,
-    "IPv6Adopted": "Yes"
-  },
-  {
-    "ASN": 29066,
-    "OperatorName": "VELIANET-AS",
-    "TotalPrefixes": 435,
-    "IPv4Prefixes": 425,
-    "IPv6Prefixes": 10,
-    "IPv6Adopted": "Yes"
-  },
-  {
-    "ASN": 2200,
-    "OperatorName": "FR-RENATER",
-    "TotalPrefixes": 356,
-    "IPv4Prefixes": 354,
-    "IPv6Prefixes": 2,
-    "IPv6Adopted": "Yes"
-  },
-  {
-    "ASN": 63023,
-    "OperatorName": "AS-GLOBALTELEHOST",
-    "TotalPrefixes": 323,
-    "IPv4Prefixes": 298,
-    "IPv6Prefixes": 25,
-    "IPv6Adopted": "Yes"
-  },
-  {
-    "ASN": 62610,
-    "OperatorName": "ZEN-DPS",
-    "TotalPrefixes": 288,
-    "IPv4Prefixes": 209,
-    "IPv6Prefixes": 79,
-    "IPv6Adopted": "Yes"
-  },
-  {
-    "ASN": 46475,
-    "OperatorName": "LIMESTONENETWORKS",
-    "TotalPrefixes": 262,
-    "IPv4Prefixes": 238,
-    "IPv6Prefixes": 24,
-    "IPv6Adopted": "Yes"
-  },
-  {
-    "ASN": 25369,
-    "OperatorName": "BANDWIDTH-AS",
-    "TotalPrefixes": 207,
-    "IPv4Prefixes": 188,
-    "IPv6Prefixes": 19,
-    "IPv6Adopted": "Yes"
-  },
-  {
-    "ASN": 8677,
-    "OperatorName": "WORLDLINE",
-    "TotalPrefixes": 200,
-    "IPv4Prefixes": 200,
-    "IPv6Prefixes": 0,
-    "IPv6Adopted": "No"
-  },
-  {
-    "ASN": 16347,
-    "OperatorName": "ADISTA SAS",
-    "TotalPrefixes": 165,
-    "IPv4Prefixes": 147,
-    "IPv6Prefixes": 18,
-    "IPv6Adopted": "Yes"
-  },
-  {
-    "ASN": 15557,
-    "OperatorName": "LDCOMNET",
-    "TotalPrefixes": 158,
-    "IPv4Prefixes": 146,
-    "IPv6Prefixes": 12,
-    "IPv6Adopted": "Yes"
-  },
-  {
-    "ASN": 1299,
-    "OperatorName": "Arelion",
-    "TotalPrefixes": 139,
-    "IPv4Prefixes": 115,
-    "IPv6Prefixes": 24,
-    "IPv6Adopted": "Yes"
-  },
-  {
-    "ASN": 43350,
-    "OperatorName": "NFORCE",
-    "TotalPrefixes": 130,
-    "IPv4Prefixes": 109,
-    "IPv6Prefixes": 21,
-    "IPv6Adopted": "Yes"
-  },
-  {
-    "ASN": 12696,
-    "OperatorName": "AXA Technology Services France GIE",
-    "TotalPrefixes": 115,
-    "IPv4Prefixes": 115,
-    "IPv6Prefixes": 0,
-    "IPv6Adopted": "No"
-  },
-  {
-    "ASN": 34177,
-    "OperatorName": "CELESTE",
-    "TotalPrefixes": 101,
-    "IPv4Prefixes": 90,
-    "IPv6Prefixes": 11,
-    "IPv6Adopted": "Yes"
-  },
-  {
-    "ASN": 25540,
-    "OperatorName": "ALPHALINK-AS",
-    "TotalPrefixes": 91,
-    "IPv4Prefixes": 84,
-    "IPv6Prefixes": 7,
-    "IPv6Adopted": "Yes"
-  },
-  {
-    "ASN": 2060,
-    "OperatorName": "FR-RENATER",
-    "TotalPrefixes": 91,
-    "IPv4Prefixes": 91,
-    "IPv6Prefixes": 0,
-    "IPv6Adopted": "No"
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
 
----
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: Largest IP Address Space Holders in FR
+
+This analysis identifies the top 20 network operators in the country by number of BGP prefixes announced, broken down by IPv4 and IPv6, with an IPv6 adoption flag. Operators with zero IPv6 prefixes are not future-ready and represent resilience risks as IPv4 address space becomes increasingly scarce.
+
+
+**Top Operators by Address Space:**
+
+| ASN | Operator Name | Total Prefixes | IPv4 | IPv6 | IPv6 Adopted |
+|-----|---------------|----------------|------|------|--------------|
+
+| AS12322 | Free FR | 1065 | 538 | 527 | Yes |
+
+| AS3215 | AS3215 | 984 | 941 | 43 | Yes |
+
+| AS16276 | OVH | 792 | 751 | 41 | Yes |
+
+| AS5511 | OPENTRANSIT | 576 | 563 | 13 | Yes |
+
+| AS51167 | CONTABO | 570 | 565 | 5 | Yes |
+
+| AS29066 | VELIANET-AS | 435 | 425 | 10 | Yes |
+
+| AS2200 | FR-RENATER | 356 | 354 | 2 | Yes |
+
+| AS63023 | AS-GLOBALTELEHOST | 323 | 298 | 25 | Yes |
+
+| AS62610 | ZEN-DPS | 288 | 209 | 79 | Yes |
+
+| AS46475 | LIMESTONENETWORKS | 262 | 238 | 24 | Yes |
+
+| AS25369 | BANDWIDTH-AS | 207 | 188 | 19 | Yes |
+
+| AS8677 | WORLDLINE | 200 | 200 | 0 | No |
+
+| AS16347 | ADISTA SAS | 165 | 147 | 18 | Yes |
+
+| AS15557 | LDCOMNET | 158 | 146 | 12 | Yes |
+
+| AS1299 | Arelion | 139 | 115 | 24 | Yes |
+
+| AS43350 | NFORCE | 130 | 109 | 21 | Yes |
+
+| AS12696 | AXA Technology Services France GIE | 115 | 115 | 0 | No |
+
+| AS34177 | CELESTE | 101 | 90 | 11 | Yes |
+
+| AS25540 | ALPHALINK-AS | 91 | 84 | 7 | Yes |
+
+| AS2060 | FR-RENATER | 91 | 91 | 0 | No |
+
+
+**Interpretation:**
+
+Operators with large address space allocations are the backbone of the country's internet capacity. The IPv6 Adopted column highlights which major operators have modernized — those showing "No" are critical targets for IPv6 adoption programs, as IPv4 exhaustion threatens long-term scalability and resilience.
+
 
 # 2. Market Readiness
 
@@ -2623,34 +1764,11 @@ LIMIT 30;
     "asn": 16347,
     "asName": "INHERENT ADISTA SAS",
     "marketSharePercent": 0.0656237635812126
-  },
-  {
-    "asn": 8362,
-    "asName": "NordNet SA",
-    "marketSharePercent": 0.06443063173805709
-  },
-  {
-    "asn": 41114,
-    "asName": "ORNETHD ORNE THD SPL",
-    "marketSharePercent": 0.05723554769530177
-  },
-  {
-    "asn": 8399,
-    "asName": "SEWAN-FR SEWAN SAS",
-    "marketSharePercent": 0.052243750212087124
-  },
-  {
-    "asn": 12727,
-    "asName": "VIALIS Vialis SEM",
-    "marketSharePercent": 0.04772073710324283
-  },
-  {
-    "asn": 174,
-    "asName": "COGENT-174 - Cogent Communications, LLC",
-    "marketSharePercent": 0.04717483013825026
   }
 ]
+// ... (5 more records omitted, 30 total)
 ```
+
 **Query 2 — Herfindahl-Hirschman Index (HHI) for market concentration**
 
 ```cypher
@@ -2937,159 +2055,11 @@ LIMIT 50;
     "providerName": "SWISSCOM Swisscom (Schweiz) AG",
     "averageHegemony": 0.3679940361057383,
     "dependentASNs": 13
-  },
-  {
-    "providerASN": 32787,
-    "providerName": "PROLEXIC-TECHNOLOGIES-DDOS-MITIGATION-NETWORK - Akamai Technologies, Inc.",
-    "averageHegemony": 0.902790113719113,
-    "dependentASNs": 12
-  },
-  {
-    "providerASN": 34927,
-    "providerName": "iFog-GmbH iFog GmbH",
-    "averageHegemony": 0.7000000000000001,
-    "dependentASNs": 12
-  },
-  {
-    "providerASN": 24961,
-    "providerName": "MYLOC-AS WIIT AG",
-    "averageHegemony": 0.6184782608695651,
-    "dependentASNs": 12
-  },
-  {
-    "providerASN": 60144,
-    "providerName": "THREE-W-INFRA-AS 3W Infra B.V.",
-    "averageHegemony": 0.22727272727272724,
-    "dependentASNs": 12
-  },
-  {
-    "providerASN": 198949,
-    "providerName": "Radware Radware Ltd",
-    "averageHegemony": 0.6103896103896106,
-    "dependentASNs": 11
-  },
-  {
-    "providerASN": 8801,
-    "providerName": "ROCKETFIBRE Rocket Fibre Ltd",
-    "averageHegemony": 0.4189203202235118,
-    "dependentASNs": 11
-  },
-  {
-    "providerASN": 207841,
-    "providerName": "INFERNO Inferno Communications Ltd",
-    "averageHegemony": 0.21657226562499998,
-    "dependentASNs": 11
-  },
-  {
-    "providerASN": 702,
-    "providerName": "UUNET - Verizon Business",
-    "averageHegemony": 0.7934920634920636,
-    "dependentASNs": 10
-  },
-  {
-    "providerASN": 212895,
-    "providerName": "ROUTE64_ORG Johannes Ernst",
-    "averageHegemony": 0.790948275862069,
-    "dependentASNs": 10
-  },
-  {
-    "providerASN": 21351,
-    "providerName": "CANALPLUSTELECOM Canal + Telecom SAS",
-    "averageHegemony": 0.8361111111111111,
-    "dependentASNs": 9
-  },
-  {
-    "providerASN": 60068,
-    "providerName": "CDN77 Datacamp Limited",
-    "averageHegemony": 0.6304687500000001,
-    "dependentASNs": 8
-  },
-  {
-    "providerASN": 203446,
-    "providerName": "AS203446 SMARTNET LIMITED",
-    "averageHegemony": 0.4187229437229438,
-    "dependentASNs": 5
-  },
-  {
-    "providerASN": 210233,
-    "providerName": "Pixinko Pixinko SARL",
-    "averageHegemony": 0.38522727272727275,
-    "dependentASNs": 5
-  },
-  {
-    "providerASN": 33891,
-    "providerName": "CORE-BACKBONE Core-Backbone GmbH",
-    "averageHegemony": 0.2808333333333333,
-    "dependentASNs": 5
-  },
-  {
-    "providerASN": 4637,
-    "providerName": "ASN-TELSTRA-GLOBAL Telstra Global",
-    "averageHegemony": 0.19829545454545455,
-    "dependentASNs": 5
-  },
-  {
-    "providerASN": 2603,
-    "providerName": "NORDUNET NORDUnet",
-    "averageHegemony": 0.16388033510075428,
-    "dependentASNs": 5
-  },
-  {
-    "providerASN": 16509,
-    "providerName": "AMAZON-02 - Amazon.com, Inc.",
-    "averageHegemony": 1.0,
-    "dependentASNs": 4
-  },
-  {
-    "providerASN": 2686,
-    "providerName": "ATGS-MMD-AS - AT&T Enterprises, LLC",
-    "averageHegemony": 0.8291666666666668,
-    "dependentASNs": 4
-  },
-  {
-    "providerASN": 209533,
-    "providerName": "BGPTunnel iFog GmbH",
-    "averageHegemony": 0.6199999999999999,
-    "dependentASNs": 4
-  },
-  {
-    "providerASN": 5400,
-    "providerName": "BT British Telecommunications PLC",
-    "averageHegemony": 0.5021645021645021,
-    "dependentASNs": 4
-  },
-  {
-    "providerASN": 41051,
-    "providerName": "FREETRANSIT Openfactory GmbH",
-    "averageHegemony": 0.4375,
-    "dependentASNs": 4
-  },
-  {
-    "providerASN": 5405,
-    "providerName": "INTERDOTLINK Inter.link GmbH",
-    "averageHegemony": 0.435,
-    "dependentASNs": 4
-  },
-  {
-    "providerASN": 394177,
-    "providerName": "SHIFT-HOSTING-LLC - SHIFT HOSTING LLC",
-    "averageHegemony": 0.27307692307692305,
-    "dependentASNs": 4
-  },
-  {
-    "providerASN": 50263,
-    "providerName": "IXP-1-IX-EU A-Systems Sp. z o.o.",
-    "averageHegemony": 0.2727272727272727,
-    "dependentASNs": 4
-  },
-  {
-    "providerASN": 59796,
-    "providerName": "STORMWALL-AS StormWall s.r.o.",
-    "averageHegemony": 0.7722222222222221,
-    "dependentASNs": 3
   }
 ]
+// ... (25 more records omitted, 50 total)
 ```
+
 ---
 
 ## 2.2 Traffic Localization
@@ -3336,109 +2306,11 @@ ORDER BY domainCount DESC;
   {
     "hostingCountryCode": "MU",
     "domainCount": 2
-  },
-  {
-    "hostingCountryCode": "KE",
-    "domainCount": 2
-  },
-  {
-    "hostingCountryCode": "RO",
-    "domainCount": 2
-  },
-  {
-    "hostingCountryCode": "BH",
-    "domainCount": 2
-  },
-  {
-    "hostingCountryCode": "AO",
-    "domainCount": 2
-  },
-  {
-    "hostingCountryCode": "RS",
-    "domainCount": 2
-  },
-  {
-    "hostingCountryCode": "SE",
-    "domainCount": 2
-  },
-  {
-    "hostingCountryCode": "DE",
-    "domainCount": 2
-  },
-  {
-    "hostingCountryCode": "DK",
-    "domainCount": 2
-  },
-  {
-    "hostingCountryCode": "PH",
-    "domainCount": 2
-  },
-  {
-    "hostingCountryCode": "LV",
-    "domainCount": 2
-  },
-  {
-    "hostingCountryCode": "ES",
-    "domainCount": 2
-  },
-  {
-    "hostingCountryCode": "SG",
-    "domainCount": 2
-  },
-  {
-    "hostingCountryCode": "VN",
-    "domainCount": 2
-  },
-  {
-    "hostingCountryCode": "LK",
-    "domainCount": 2
-  },
-  {
-    "hostingCountryCode": "AD",
-    "domainCount": 2
-  },
-  {
-    "hostingCountryCode": "CD",
-    "domainCount": 2
-  },
-  {
-    "hostingCountryCode": "BE",
-    "domainCount": 2
-  },
-  {
-    "hostingCountryCode": "ZA",
-    "domainCount": 2
-  },
-  {
-    "hostingCountryCode": "AZ",
-    "domainCount": 2
-  },
-  {
-    "hostingCountryCode": "LU",
-    "domainCount": 2
-  },
-  {
-    "hostingCountryCode": "TH",
-    "domainCount": 2
-  },
-  {
-    "hostingCountryCode": "EE",
-    "domainCount": 2
-  },
-  {
-    "hostingCountryCode": "EU",
-    "domainCount": 2
-  },
-  {
-    "hostingCountryCode": "CA",
-    "domainCount": 2
-  },
-  {
-    "hostingCountryCode": "CZ",
-    "domainCount": 1
   }
 ]
+// ... (25 more records omitted, 50 total)
 ```
+
 ---
 
 ### 2.2.2 E-Gov Index Score
@@ -4225,15 +3097,11 @@ ORDER BY type(r)
   },
   {
     "type(r)": "SIBLING_OF"
-  },
-  {
-    "type(r)": "TARGET"
-  },
-  {
-    "type(r)": "WEBSITE"
   }
 ]
+// ... (2 more records omitted, 27 total)
 ```
+
 ---
 
 ### 3.1.2 DNSSEC Validation
