@@ -1636,138 +1636,90 @@ ORDER BY marketSharePercent DESC
 LIMIT 30;
 ```
 
-> **Output (30 record(s)):**
+> **Output**
 
-```json
-[
-  {
-    "asn": 3215,
-    "asName": "AS3215 Orange S.A.",
-    "marketSharePercent": 35.38051167179335
-  },
-  {
-    "asn": 12322,
-    "asName": "PROXAD Free SAS",
-    "marketSharePercent": 18.649609448176673
-  },
-  {
-    "asn": 5410,
-    "asName": "BOUYGTEL-ISP Bouygues Telecom SA",
-    "marketSharePercent": 17.747870947714453
-  },
-  {
-    "asn": 15557,
-    "asName": "LDCOMNET Societe Francaise Du Radiotelephone - SFR SA",
-    "marketSharePercent": 17.522857472432
-  },
-  {
-    "asn": 51207,
-    "asName": "FREEM Free Mobile SAS",
-    "marketSharePercent": 4.545856517745062
-  },
-  {
-    "asn": 16276,
-    "asName": "OVH OVH SAS",
-    "marketSharePercent": 0.8547753793962675
-  },
-  {
-    "asn": 63023,
-    "asName": "AS-GLOBALTELEHOST - GTHost",
-    "marketSharePercent": 0.7778947419995292
-  },
-  {
-    "asn": 12876,
-    "asName": "AS12876 Scaleway SAS",
-    "marketSharePercent": 0.6916868077604803
-  },
-  {
-    "asn": 51167,
-    "asName": "CONTABO Contabo GmbH",
-    "marketSharePercent": 0.323644195442315
-  },
-  {
-    "asn": 31404,
-    "asName": "Lycatel-AS LYCATEL DISTRIBUTION UK LIMITED",
-    "marketSharePercent": 0.2571962786868061
-  },
-  {
-    "asn": 13335,
-    "asName": "CLOUDFLARENET - Cloudflare, Inc.",
-    "marketSharePercent": 0.21004564387110403
-  },
-  {
-    "asn": 30058,
-    "asName": "FDCSERVERS - FDCservers.net",
-    "marketSharePercent": 0.20984300804476327
-  },
-  {
-    "asn": 14593,
-    "asName": "SPACEX-STARLINK - Space Exploration Technologies Corporation",
-    "marketSharePercent": 0.1865474490538752
-  },
-  {
-    "asn": 21859,
-    "asName": "ZEN-ECN",
-    "marketSharePercent": 0.1690633040975202
-  },
-  {
-    "asn": 29066,
-    "asName": "VELIANET-AS velia.net Internetdienste GmbH",
-    "marketSharePercent": 0.1433618227207507
-  },
-  {
-    "asn": 16509,
-    "asName": "AMAZON-02 - Amazon.com, Inc.",
-    "marketSharePercent": 0.13970076797768416
-  },
-  {
-    "asn": 52075,
-    "asName": "WIFIRST Wifirst S.A.S.",
-    "marketSharePercent": 0.12223628172089958
-  },
-  {
-    "asn": 62610,
-    "asName": "ZEN-DPS - Zenlayer Inc",
-    "marketSharePercent": 0.10571087642051495
-  },
-  {
-    "asn": 212238,
-    "asName": "CDNEXT Datacamp Limited",
-    "marketSharePercent": 0.0926227191296265
-  },
-  {
-    "asn": 136787,
-    "asName": "PACKETHUBSA-AS-AP PacketHub S.A.",
-    "marketSharePercent": 0.09188173737658949
-  },
-  {
-    "asn": 2200,
-    "asName": "FR-RENATER Reseau National de telecommunications pour la Technologie",
-    "marketSharePercent": 0.09037104192498954
-  },
-  {
-    "asn": 199636,
-    "asName": "FREEBOXPRO Free Pro SAS",
-    "marketSharePercent": 0.08000788283608619
-  },
-  {
-    "asn": 42487,
-    "asName": "Vialis-Moselle Vialis SEM",
-    "marketSharePercent": 0.07747795942214553
-  },
-  {
-    "asn": 63949,
-    "asName": "AKAMAI-LINODE-AP Akamai Connected Cloud",
-    "marketSharePercent": 0.0765600493729752
-  },
-  {
-    "asn": 16347,
-    "asName": "INHERENT ADISTA SAS",
-    "marketSharePercent": 0.0656237635812126
-  }
-]
-// ... (5 more records omitted, 30 total)
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: Internet Market Share Distribution in FR
+
+This analysis maps the market share of each Autonomous System (internet operator) in the country, measured by the percentage of the population they serve. This directly reflects the competitive landscape of the country's internet access market.
+
+
+**Market Share by Operator (Top 30):**
+
+| ASN | Operator Name | Market Share (%) |
+|-----|---------------|------------------|
+
+| AS3215 | AS3215 Orange S.A. | 35.38 |
+
+| AS12322 | PROXAD Free SAS | 18.65 |
+
+| AS5410 | BOUYGTEL-ISP Bouygues Telecom SA | 17.75 |
+
+| AS15557 | LDCOMNET Societe Francaise Du Radiotelephone - SFR SA | 17.52 |
+
+| AS51207 | FREEM Free Mobile SAS | 4.55 |
+
+| AS16276 | OVH OVH SAS | 0.85 |
+
+| AS63023 | AS-GLOBALTELEHOST - GTHost | 0.78 |
+
+| AS12876 | AS12876 Scaleway SAS | 0.69 |
+
+| AS51167 | CONTABO Contabo GmbH | 0.32 |
+
+| AS31404 | Lycatel-AS LYCATEL DISTRIBUTION UK LIMITED | 0.26 |
+
+| AS13335 | CLOUDFLARENET - Cloudflare, Inc. | 0.21 |
+
+| AS30058 | FDCSERVERS - FDCservers.net | 0.21 |
+
+| AS14593 | SPACEX-STARLINK - Space Exploration Technologies Corporation | 0.19 |
+
+| AS21859 | ZEN-ECN | 0.17 |
+
+| AS29066 | VELIANET-AS velia.net Internetdienste GmbH | 0.14 |
+
+| AS16509 | AMAZON-02 - Amazon.com, Inc. | 0.14 |
+
+| AS52075 | WIFIRST Wifirst S.A.S. | 0.12 |
+
+| AS62610 | ZEN-DPS - Zenlayer Inc | 0.11 |
+
+| AS212238 | CDNEXT Datacamp Limited | 0.09 |
+
+| AS136787 | PACKETHUBSA-AS-AP PacketHub S.A. | 0.09 |
+
+| AS2200 | FR-RENATER Reseau National de telecommunications pour la Technologie | 0.09 |
+
+| AS199636 | FREEBOXPRO Free Pro SAS | 0.08 |
+
+| AS42487 | Vialis-Moselle Vialis SEM | 0.08 |
+
+| AS63949 | AKAMAI-LINODE-AP Akamai Connected Cloud | 0.08 |
+
+| AS16347 | INHERENT ADISTA SAS | 0.07 |
+
+| AS8362 | NordNet SA | 0.06 |
+
+| AS41114 | ORNETHD ORNE THD SPL | 0.06 |
+
+| AS8399 | SEWAN-FR SEWAN SAS | 0.05 |
+
+| AS12727 | VIALIS Vialis SEM | 0.05 |
+
+| AS174 | COGENT-174 - Cogent Communications, LLC | 0.05 |
+
+
+**Interpretation:**
+
+A market where the top operator holds more than 50% indicates a dominant-player market with limited competition. A healthy market has multiple operators each below 30% market share.
+
 
 **Query 2 — Herfindahl-Hirschman Index (HHI) for market concentration**
 
@@ -1787,19 +1739,34 @@ RETURN hhi,
        END AS marketConcentration;
 ```
 
-> **Output (1 record(s)):**
+> **Output**
 
-```json
-[
-  {
-    "hhi": 2244.5674407387573,
-    "totalAS": 65,
-    "marketConcentration": "Moderately Concentrated Market"
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
 
----
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: Internet Market Concentration (HHI) in FR
+
+This analysis calculates the Herfindahl-Hirschman Index (HHI) — the standard economic measure of market concentration used by competition regulators worldwide. The HHI is the sum of the squares of each operator's market share. A higher HHI indicates a more concentrated, less competitive market.
+
+
+**Market Concentration Results:**
+
+- Total operators in market: **65**
+- HHI Score: **2245**
+- Market Assessment: **Moderately Concentrated Market**
+
+**HHI Reference Scale:**
+
+| HHI Range | Assessment |
+|-----------|------------|
+| < 1,500 | Competitive Market |
+| 1,500 to 2,500 | Moderately Concentrated Market |
+| > 2,500 | Highly Concentrated Market |
+
 
 ### 2.1.2 Upstream Provider Diversity
 
@@ -1824,62 +1791,53 @@ ORDER BY localCustomers DESC
 LIMIT 10;
 ```
 
-> **Output (10 record(s)):**
+> **Output**
 
-```json
-[
-  {
-    "providerASN": 12654,
-    "providerName": "RIPE-NCC-RIS-AS Reseaux IP Europeens Network Coordination Centre (RIPE NCC)",
-    "localCustomers": 7
-  },
-  {
-    "providerASN": 4455,
-    "providerName": "BSO IX Reach Ltd",
-    "localCustomers": 4
-  },
-  {
-    "providerASN": 9009,
-    "providerName": "M247 M247 Europe SRL",
-    "localCustomers": 3
-  },
-  {
-    "providerASN": 200019,
-    "providerName": "AlexHost ALEXHOST SRL",
-    "localCustomers": 3
-  },
-  {
-    "providerASN": 55256,
-    "providerName": "NETSKOPE - Netskope Inc",
-    "localCustomers": 3
-  },
-  {
-    "providerASN": 20776,
-    "providerName": "OUTREMER-AS Outremer Telecom SAS",
-    "localCustomers": 3
-  },
-  {
-    "providerASN": 52025,
-    "providerName": "PARADOXNETWORKS-LIMITED ParadoxNetworks Limited",
-    "localCustomers": 3
-  },
-  {
-    "providerASN": 25091,
-    "providerName": "IP-Max IP-Max SA",
-    "localCustomers": 3
-  },
-  {
-    "providerASN": 3573,
-    "providerName": "ACCENTURE - Accenture LLP",
-    "localCustomers": 3
-  },
-  {
-    "providerASN": 21859,
-    "providerName": "ZEN-ECN",
-    "localCustomers": 3
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: Upstream Transit Provider Landscape for FR
+
+This analysis identifies international Autonomous Systems (AS) that provide internet transit to local networks within the country. It ranks them by the number of local "customer" networks they serve. A high concentration of local networks relying on a single external provider indicates a potential Single Point of Failure (SPOF).
+
+
+**Top Transit Providers by Local Customer Count:**
+
+
+- **Rank 1:** RIPE-NCC-RIS-AS Reseaux IP Europeens Network Coordination Centre (RIPE NCC) (AS12654)
+  Local Customer Networks: **7**
+
+- **Rank 2:** BSO IX Reach Ltd (AS4455)
+  Local Customer Networks: **4**
+
+- **Rank 3:** M247 M247 Europe SRL (AS9009)
+  Local Customer Networks: **3**
+
+- **Rank 4:** AlexHost ALEXHOST SRL (AS200019)
+  Local Customer Networks: **3**
+
+- **Rank 5:** NETSKOPE - Netskope Inc (AS55256)
+  Local Customer Networks: **3**
+
+- **Rank 6:** OUTREMER-AS Outremer Telecom SAS (AS20776)
+  Local Customer Networks: **3**
+
+- **Rank 7:** PARADOXNETWORKS-LIMITED ParadoxNetworks Limited (AS52025)
+  Local Customer Networks: **3**
+
+- **Rank 8:** IP-Max IP-Max SA (AS25091)
+  Local Customer Networks: **3**
+
+- **Rank 9:** ACCENTURE - Accenture LLP (AS3573)
+  Local Customer Networks: **3**
+
+- **Rank 10:** ZEN-ECN (AS21859)
+  Local Customer Networks: **3**
+
 
 **Query 2 — Transit dependency measurement (IHR hegemony metric)**
 
@@ -1902,165 +1860,111 @@ ORDER BY dependentASNs DESC, averageHegemony DESC
 LIMIT 50;
 ```
 
-> **Output (50 record(s)):**
+> **Output**
 
-```json
-[
-  {
-    "providerASN": 6939,
-    "providerName": "HURRICANE - Hurricane Electric LLC",
-    "averageHegemony": 0.3616924934522763,
-    "dependentASNs": 762
-  },
-  {
-    "providerASN": 174,
-    "providerName": "COGENT-174 - Cogent Communications, LLC",
-    "averageHegemony": 0.45982608872302655,
-    "dependentASNs": 410
-  },
-  {
-    "providerASN": 3356,
-    "providerName": "LEVEL3 - Level 3 Parent, LLC",
-    "averageHegemony": 0.32980246239887173,
-    "dependentASNs": 161
-  },
-  {
-    "providerASN": 6762,
-    "providerName": "SEABONE-NET TELECOM ITALIA SPARKLE S.p.A.",
-    "averageHegemony": 0.2839998442887947,
-    "dependentASNs": 131
-  },
-  {
-    "providerASN": 6461,
-    "providerName": "ZAYO-6461 - Zayo Bandwidth",
-    "averageHegemony": 0.4446795464390604,
-    "dependentASNs": 105
-  },
-  {
-    "providerASN": 8220,
-    "providerName": "COLT COLT Technology Services Group Limited",
-    "averageHegemony": 0.6860529475859558,
-    "dependentASNs": 99
-  },
-  {
-    "providerASN": 137409,
-    "providerName": "GSLNETWORKS-AS-AP GSL Networks Pty LTD",
-    "averageHegemony": 0.3443724997198507,
-    "dependentASNs": 91
-  },
-  {
-    "providerASN": 3257,
-    "providerName": "GTT-BACKBONE GTT Communications Inc.",
-    "averageHegemony": 0.4401493959727144,
-    "dependentASNs": 60
-  },
-  {
-    "providerASN": 29222,
-    "providerName": "Infomaniak-AS Infomaniak Network SA",
-    "averageHegemony": 0.12451615605026818,
-    "dependentASNs": 56
-  },
-  {
-    "providerASN": 2914,
-    "providerName": "NTT-DATA-2914 - NTT America, Inc.",
-    "averageHegemony": 0.24954843032761384,
-    "dependentASNs": 48
-  },
-  {
-    "providerASN": 9002,
-    "providerName": "RETN-AS RETN Limited",
-    "averageHegemony": 0.24807248910509788,
-    "dependentASNs": 40
-  },
-  {
-    "providerASN": 21320,
-    "providerName": "GEANT_IAS_VRF GEANT Vereniging",
-    "averageHegemony": 0.15633080341877825,
-    "dependentASNs": 37
-  },
-  {
-    "providerASN": 25091,
-    "providerName": "IP-Max IP-Max SA",
-    "averageHegemony": 0.5982164423444529,
-    "dependentASNs": 28
-  },
-  {
-    "providerASN": 1273,
-    "providerName": "CW Vodafone Group PLC",
-    "averageHegemony": 0.14575581395348838,
-    "dependentASNs": 27
-  },
-  {
-    "providerASN": 20473,
-    "providerName": "AS-VULTR - The Constant Company, LLC",
-    "averageHegemony": 0.7801846590909093,
-    "dependentASNs": 25
-  },
-  {
-    "providerASN": 199524,
-    "providerName": "GCORE G-Core Labs S.A.",
-    "averageHegemony": 0.6655303030303031,
-    "dependentASNs": 18
-  },
-  {
-    "providerASN": 4455,
-    "providerName": "BSO IX Reach Ltd",
-    "averageHegemony": 0.539139293139293,
-    "dependentASNs": 18
-  },
-  {
-    "providerASN": 15830,
-    "providerName": "Equinix Equinix (EMEA) Acquisition Enterprises B.V.",
-    "averageHegemony": 0.7440694218654746,
-    "dependentASNs": 17
-  },
-  {
-    "providerASN": 34872,
-    "providerName": "Servperso_Systems Sarah Rossius trading as Servperso Systems",
-    "averageHegemony": 0.7280172413793103,
-    "dependentASNs": 17
-  },
-  {
-    "providerASN": 6453,
-    "providerName": "AS6453 - TATA COMMUNICATIONS AMERICA INC",
-    "averageHegemony": 0.510497833301183,
-    "dependentASNs": 17
-  },
-  {
-    "providerASN": 29467,
-    "providerName": "LuxNetwork LUXNETWORK S.A.",
-    "averageHegemony": 0.42224482308503275,
-    "dependentASNs": 16
-  },
-  {
-    "providerASN": 399486,
-    "providerName": "VIRTUO - 12651980 CANADA INC.",
-    "averageHegemony": 0.8509685230024212,
-    "dependentASNs": 15
-  },
-  {
-    "providerASN": 13335,
-    "providerName": "CLOUDFLARENET - Cloudflare, Inc.",
-    "averageHegemony": 0.6943162393162391,
-    "dependentASNs": 14
-  },
-  {
-    "providerASN": 209735,
-    "providerName": "LAGRANGE Lagrange Cloud Technologies Limited",
-    "averageHegemony": 0.8126942567567568,
-    "dependentASNs": 13
-  },
-  {
-    "providerASN": 3303,
-    "providerName": "SWISSCOM Swisscom (Schweiz) AG",
-    "averageHegemony": 0.3679940361057383,
-    "dependentASNs": 13
-  }
-]
-// ... (25 more records omitted, 50 total)
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
 
----
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: Critical Upstream Dependency (Hegemony) for FR
+
+While the previous analysis counted connections, this metric quantifies the *criticality* of those connections using the "Hegemony" score (0 to 1). A high hegemony score indicates that a provider is unavoidable for the networks that depend on it. High scores here suggest deep structural dependencies and significant resilience risks.
+
+
+**1. Highest Risk (by Hegemony Score - "The Single Point of Failure"):**
+Providers that have near-total control over the local networks they serve.
+
+
+
+- **Rank 1:** AMAZON-02 - Amazon.com, Inc. (AS16509)
+  Average Hegemony Score: **1.000**
+  (Affecting 4 local networks)
+
+- **Rank 2:** PROLEXIC-TECHNOLOGIES-DDOS-MITIGATION-NETWORK - Akamai Technologies, Inc. (AS32787)
+  Average Hegemony Score: **0.903**
+  (Affecting 12 local networks)
+
+- **Rank 3:** VIRTUO - 12651980 CANADA INC. (AS399486)
+  Average Hegemony Score: **0.851**
+  (Affecting 15 local networks)
+
+- **Rank 4:** CANALPLUSTELECOM Canal + Telecom SAS (AS21351)
+  Average Hegemony Score: **0.836**
+  (Affecting 9 local networks)
+
+- **Rank 5:** ATGS-MMD-AS - AT&T Enterprises, LLC (AS2686)
+  Average Hegemony Score: **0.829**
+  (Affecting 4 local networks)
+
+- **Rank 6:** LAGRANGE Lagrange Cloud Technologies Limited (AS209735)
+  Average Hegemony Score: **0.813**
+  (Affecting 13 local networks)
+
+- **Rank 7:** UUNET - Verizon Business (AS702)
+  Average Hegemony Score: **0.793**
+  (Affecting 10 local networks)
+
+- **Rank 8:** ROUTE64_ORG Johannes Ernst (AS212895)
+  Average Hegemony Score: **0.791**
+  (Affecting 10 local networks)
+
+- **Rank 9:** AS-VULTR - The Constant Company, LLC (AS20473)
+  Average Hegemony Score: **0.780**
+  (Affecting 25 local networks)
+
+- **Rank 10:** STORMWALL-AS StormWall s.r.o. (AS59796)
+  Average Hegemony Score: **0.772**
+  (Affecting 3 local networks)
+
+
+**2. Widest Impact (by Affected Networks - "The Widespread Risk"):**
+Providers that provide internet to the largest sheer volume of local networks.
+
+
+
+- **Rank 1:** HURRICANE - Hurricane Electric LLC (AS6939)
+  Average Hegemony Score: **0.362**
+  (Affecting 762 local networks)
+
+- **Rank 2:** COGENT-174 - Cogent Communications, LLC (AS174)
+  Average Hegemony Score: **0.460**
+  (Affecting 410 local networks)
+
+- **Rank 3:** LEVEL3 - Level 3 Parent, LLC (AS3356)
+  Average Hegemony Score: **0.330**
+  (Affecting 161 local networks)
+
+- **Rank 4:** SEABONE-NET TELECOM ITALIA SPARKLE S.p.A. (AS6762)
+  Average Hegemony Score: **0.284**
+  (Affecting 131 local networks)
+
+- **Rank 5:** ZAYO-6461 - Zayo Bandwidth (AS6461)
+  Average Hegemony Score: **0.445**
+  (Affecting 105 local networks)
+
+- **Rank 6:** COLT COLT Technology Services Group Limited (AS8220)
+  Average Hegemony Score: **0.686**
+  (Affecting 99 local networks)
+
+- **Rank 7:** GSLNETWORKS-AS-AP GSL Networks Pty LTD (AS137409)
+  Average Hegemony Score: **0.344**
+  (Affecting 91 local networks)
+
+- **Rank 8:** GTT-BACKBONE GTT Communications Inc. (AS3257)
+  Average Hegemony Score: **0.440**
+  (Affecting 60 local networks)
+
+- **Rank 9:** Infomaniak-AS Infomaniak Network SA (AS29222)
+  Average Hegemony Score: **0.125**
+  (Affecting 56 local networks)
+
+- **Rank 10:** NTT-DATA-2914 - NTT America, Inc. (AS2914)
+  Average Hegemony Score: **0.250**
+  (Affecting 48 local networks)
+
 
 ## 2.2 Traffic Localization
 
@@ -2086,92 +1990,82 @@ ORDER BY percentageOfQueriesInCountry DESC
 LIMIT 20;
 ```
 
-> **Output (20 record(s)):**
+> **Output**
 
-```json
-[
-  {
-    "localDomain": "ameli.fr",
-    "percentageOfQueriesInCountry": 91.973244
-  },
-  {
-    "localDomain": "louvre.fr",
-    "percentageOfQueriesInCountry": 87.40458
-  },
-  {
-    "localDomain": "huffingtonpost.fr",
-    "percentageOfQueriesInCountry": 86.813187
-  },
-  {
-    "localDomain": "doctolib.fr",
-    "percentageOfQueriesInCountry": 82.938389
-  },
-  {
-    "localDomain": "leroymerlin.fr",
-    "percentageOfQueriesInCountry": 81.426814
-  },
-  {
-    "localDomain": "lepoint.fr",
-    "percentageOfQueriesInCountry": 76.404494
-  },
-  {
-    "localDomain": "leboncoin.fr",
-    "percentageOfQueriesInCountry": 75.0
-  },
-  {
-    "localDomain": "impots.gouv.fr",
-    "percentageOfQueriesInCountry": 75.0
-  },
-  {
-    "localDomain": "vinted.fr",
-    "percentageOfQueriesInCountry": 72.349061
-  },
-  {
-    "localDomain": "labanquepostale.fr",
-    "percentageOfQueriesInCountry": 70.707071
-  },
-  {
-    "localDomain": "cic.fr",
-    "percentageOfQueriesInCountry": 70.37037
-  },
-  {
-    "localDomain": "cnil.fr",
-    "percentageOfQueriesInCountry": 70.0
-  },
-  {
-    "localDomain": "caf.fr",
-    "percentageOfQueriesInCountry": 69.014085
-  },
-  {
-    "localDomain": "sg.fr",
-    "percentageOfQueriesInCountry": 66.666667
-  },
-  {
-    "localDomain": "lemonde.fr",
-    "percentageOfQueriesInCountry": 66.065574
-  },
-  {
-    "localDomain": "tf1info.fr",
-    "percentageOfQueriesInCountry": 65.306122
-  },
-  {
-    "localDomain": "laredoute.fr",
-    "percentageOfQueriesInCountry": 64.46281
-  },
-  {
-    "localDomain": "rugbyrama.fr",
-    "percentageOfQueriesInCountry": 64.285714
-  },
-  {
-    "localDomain": "creditmutuel.fr",
-    "percentageOfQueriesInCountry": 63.888889
-  },
-  {
-    "localDomain": "lesechos.fr",
-    "percentageOfQueriesInCountry": 62.666667
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: Popularity of Local Domains (ccTLD) in FR
+
+This analysis verifies if locally registered domains (e.g., .sn, .jp) are actually consumed by local users. It measures the percentage of DNS queries originating from the country that target these specific domains. High usage suggests a relevant local content ecosystem, whereas low usage implies users primarily consume foreign content.
+
+
+**Most Queried Local Domains:**
+
+
+- **Rank 1:** ameli.fr
+  Share of Local Queries: **91.9732%**
+
+- **Rank 2:** louvre.fr
+  Share of Local Queries: **87.4046%**
+
+- **Rank 3:** huffingtonpost.fr
+  Share of Local Queries: **86.8132%**
+
+- **Rank 4:** doctolib.fr
+  Share of Local Queries: **82.9384%**
+
+- **Rank 5:** leroymerlin.fr
+  Share of Local Queries: **81.4268%**
+
+- **Rank 6:** lepoint.fr
+  Share of Local Queries: **76.4045%**
+
+- **Rank 7:** leboncoin.fr
+  Share of Local Queries: **75.0000%**
+
+- **Rank 8:** impots.gouv.fr
+  Share of Local Queries: **75.0000%**
+
+- **Rank 9:** vinted.fr
+  Share of Local Queries: **72.3491%**
+
+- **Rank 10:** labanquepostale.fr
+  Share of Local Queries: **70.7071%**
+
+- **Rank 11:** cic.fr
+  Share of Local Queries: **70.3704%**
+
+- **Rank 12:** cnil.fr
+  Share of Local Queries: **70.0000%**
+
+- **Rank 13:** caf.fr
+  Share of Local Queries: **69.0141%**
+
+- **Rank 14:** sg.fr
+  Share of Local Queries: **66.6667%**
+
+- **Rank 15:** lemonde.fr
+  Share of Local Queries: **66.0656%**
+
+- **Rank 16:** tf1info.fr
+  Share of Local Queries: **65.3061%**
+
+- **Rank 17:** laredoute.fr
+  Share of Local Queries: **64.4628%**
+
+- **Rank 18:** rugbyrama.fr
+  Share of Local Queries: **64.2857%**
+
+- **Rank 19:** creditmutuel.fr
+  Share of Local Queries: **63.8889%**
+
+- **Rank 20:** lesechos.fr
+  Share of Local Queries: **62.6667%**
 
 **Query 2 — Geographic distribution of hosting for top ccTLD domains**
 
@@ -2203,115 +2097,273 @@ RETURN hostingCountry.country_code AS hostingCountryCode,
 ORDER BY domainCount DESC;
 ```
 
-> **Output (50 record(s)):**
+> **Output**
 
-```json
-[
-  {
-    "hostingCountryCode": "US",
-    "domainCount": 51
-  },
-  {
-    "hostingCountryCode": "FR",
-    "domainCount": 49
-  },
-  {
-    "hostingCountryCode": "AU",
-    "domainCount": 21
-  },
-  {
-    "hostingCountryCode": "AF",
-    "domainCount": 19
-  },
-  {
-    "hostingCountryCode": "NL",
-    "domainCount": 13
-  },
-  {
-    "hostingCountryCode": "GB",
-    "domainCount": 6
-  },
-  {
-    "hostingCountryCode": "CH",
-    "domainCount": 4
-  },
-  {
-    "hostingCountryCode": "AT",
-    "domainCount": 4
-  },
-  {
-    "hostingCountryCode": "BG",
-    "domainCount": 3
-  },
-  {
-    "hostingCountryCode": "BR",
-    "domainCount": 2
-  },
-  {
-    "hostingCountryCode": "IT",
-    "domainCount": 2
-  },
-  {
-    "hostingCountryCode": "TR",
-    "domainCount": 2
-  },
-  {
-    "hostingCountryCode": "MX",
-    "domainCount": 2
-  },
-  {
-    "hostingCountryCode": "CO",
-    "domainCount": 2
-  },
-  {
-    "hostingCountryCode": "CL",
-    "domainCount": 2
-  },
-  {
-    "hostingCountryCode": "LT",
-    "domainCount": 2
-  },
-  {
-    "hostingCountryCode": "UY",
-    "domainCount": 2
-  },
-  {
-    "hostingCountryCode": "HK",
-    "domainCount": 2
-  },
-  {
-    "hostingCountryCode": "KH",
-    "domainCount": 2
-  },
-  {
-    "hostingCountryCode": "AE",
-    "domainCount": 2
-  },
-  {
-    "hostingCountryCode": "PA",
-    "domainCount": 2
-  },
-  {
-    "hostingCountryCode": "AR",
-    "domainCount": 2
-  },
-  {
-    "hostingCountryCode": "UA",
-    "domainCount": 2
-  },
-  {
-    "hostingCountryCode": "RU",
-    "domainCount": 2
-  },
-  {
-    "hostingCountryCode": "MU",
-    "domainCount": 2
-  }
-]
-// ... (25 more records omitted, 50 total)
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
 
----
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: Hosting Locations of Top Local Domains for FR
+
+This metric analyzes where the top 100 most popular local domains (ccTLD) are physically hosted.
+- **Local Hosting:** Desirable for data sovereignty, lower latency, and reduced reliance on international transit.
+- **Foreign Hosting:** Indicates "content leakage," where local traffic must traverse international links to access local content.
+
+
+**Hosting Distribution (by Country):**
+
+
+- **US**: 51 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **FR**: 49 domain(s)
+  
+  *(LOCAL HOSTING - Good for resilience)*
+  
+
+- **AU**: 21 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **AF**: 19 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **NL**: 13 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **GB**: 6 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **CH**: 4 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **AT**: 4 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **BG**: 3 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **BR**: 2 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **IT**: 2 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **TR**: 2 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **MX**: 2 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **CO**: 2 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **CL**: 2 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **LT**: 2 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **UY**: 2 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **HK**: 2 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **KH**: 2 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **AE**: 2 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **PA**: 2 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **AR**: 2 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **UA**: 2 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **RU**: 2 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **MU**: 2 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **KE**: 2 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **RO**: 2 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **BH**: 2 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **AO**: 2 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **RS**: 2 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **SE**: 2 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **DE**: 2 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **DK**: 2 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **PH**: 2 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **LV**: 2 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **ES**: 2 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **SG**: 2 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **VN**: 2 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **LK**: 2 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **AD**: 2 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **CD**: 2 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **BE**: 2 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **ZA**: 2 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **AZ**: 2 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **LU**: 2 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **TH**: 2 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **EE**: 2 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **EU**: 2 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **CA**: 2 domain(s)
+  
+  *(Foreign Hosting)*
+  
+
+- **CZ**: 1 domain(s)
+  
+  *(Foreign Hosting)*
 
 ### 2.2.2 E-Gov Index Score
 
@@ -2330,137 +2382,171 @@ ORDER BY percentageOfLocalQueries DESC, trancoRank ASC
 LIMIT 25;
 ```
 
-> **Output (25 record(s)):**
+> **Output**
 
-```json
-[
-  {
-    "domainName": "ameli.fr",
-    "percentageOfLocalQueries": 91.973244,
-    "trancoRank": 4954
-  },
-  {
-    "domainName": "louvre.fr",
-    "percentageOfLocalQueries": 87.40458,
-    "trancoRank": 6231
-  },
-  {
-    "domainName": "huffingtonpost.fr",
-    "percentageOfLocalQueries": 86.813187,
-    "trancoRank": 5614
-  },
-  {
-    "domainName": "doctolib.fr",
-    "percentageOfLocalQueries": 82.938389,
-    "trancoRank": 5094
-  },
-  {
-    "domainName": "leroymerlin.fr",
-    "percentageOfLocalQueries": 81.426814,
-    "trancoRank": 1287
-  },
-  {
-    "domainName": "lepoint.fr",
-    "percentageOfLocalQueries": 76.404494,
-    "trancoRank": 5703
-  },
-  {
-    "domainName": "leboncoin.fr",
-    "percentageOfLocalQueries": 75.0,
-    "trancoRank": 1111
-  },
-  {
-    "domainName": "impots.gouv.fr",
-    "percentageOfLocalQueries": 75.0,
-    "trancoRank": 8698
-  },
-  {
-    "domainName": "vinted.fr",
-    "percentageOfLocalQueries": 72.349061,
-    "trancoRank": 1857
-  },
-  {
-    "domainName": "labanquepostale.fr",
-    "percentageOfLocalQueries": 70.707071,
-    "trancoRank": 7772
-  },
-  {
-    "domainName": "cic.fr",
-    "percentageOfLocalQueries": 70.37037,
-    "trancoRank": 8550
-  },
-  {
-    "domainName": "cnil.fr",
-    "percentageOfLocalQueries": 70.0,
-    "trancoRank": 3428
-  },
-  {
-    "domainName": "caf.fr",
-    "percentageOfLocalQueries": 69.014085,
-    "trancoRank": 6257
-  },
-  {
-    "domainName": "sg.fr",
-    "percentageOfLocalQueries": 66.666667,
-    "trancoRank": 7474
-  },
-  {
-    "domainName": "lemonde.fr",
-    "percentageOfLocalQueries": 66.065574,
-    "trancoRank": 693
-  },
-  {
-    "domainName": "tf1info.fr",
-    "percentageOfLocalQueries": 65.306122,
-    "trancoRank": 6164
-  },
-  {
-    "domainName": "laredoute.fr",
-    "percentageOfLocalQueries": 64.46281,
-    "trancoRank": 6867
-  },
-  {
-    "domainName": "rugbyrama.fr",
-    "percentageOfLocalQueries": 64.285714,
-    "trancoRank": 9150
-  },
-  {
-    "domainName": "creditmutuel.fr",
-    "percentageOfLocalQueries": 63.888889,
-    "trancoRank": 7616
-  },
-  {
-    "domainName": "lesechos.fr",
-    "percentageOfLocalQueries": 62.666667,
-    "trancoRank": 3711
-  },
-  {
-    "domainName": "radiofrance.fr",
-    "percentageOfLocalQueries": 62.447257,
-    "trancoRank": 3561
-  },
-  {
-    "domainName": "lefigaro.fr",
-    "percentageOfLocalQueries": 59.073359,
-    "trancoRank": 813
-  },
-  {
-    "domainName": "tf1.fr",
-    "percentageOfLocalQueries": 57.687723,
-    "trancoRank": 5851
-  },
-  {
-    "domainName": "paris.fr",
-    "percentageOfLocalQueries": 57.297297,
-    "trancoRank": 6130
-  },
-  {
-    "domainName": "meteociel.fr",
-    "percentageOfLocalQueries": 57.142857,
-    "trancoRank": 3765
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: Top Locally Accessed Domains (ccTLD) in FR
+
+This analysis identifies the most frequently queried local domains (ending in .fr) from within the country. While not all are government sites, this list highlights the most critical digital services for the local population. Identifying these domains is the first step to analyzing the resilience of the national digital ecosystem.
+
+
+**Most Popular Local Domains:**
+
+
+- **Rank 1:** ameli.fr
+  Local Query Share: **91.9732%**
+  
+  (Global Tranco Rank: 4954)
+  
+
+- **Rank 2:** louvre.fr
+  Local Query Share: **87.4046%**
+  
+  (Global Tranco Rank: 6231)
+  
+
+- **Rank 3:** huffingtonpost.fr
+  Local Query Share: **86.8132%**
+  
+  (Global Tranco Rank: 5614)
+  
+
+- **Rank 4:** doctolib.fr
+  Local Query Share: **82.9384%**
+  
+  (Global Tranco Rank: 5094)
+  
+
+- **Rank 5:** leroymerlin.fr
+  Local Query Share: **81.4268%**
+  
+  (Global Tranco Rank: 1287)
+  
+
+- **Rank 6:** lepoint.fr
+  Local Query Share: **76.4045%**
+  
+  (Global Tranco Rank: 5703)
+  
+
+- **Rank 7:** leboncoin.fr
+  Local Query Share: **75.0000%**
+  
+  (Global Tranco Rank: 1111)
+  
+
+- **Rank 8:** impots.gouv.fr
+  Local Query Share: **75.0000%**
+  
+  (Global Tranco Rank: 8698)
+  
+
+- **Rank 9:** vinted.fr
+  Local Query Share: **72.3491%**
+  
+  (Global Tranco Rank: 1857)
+  
+
+- **Rank 10:** labanquepostale.fr
+  Local Query Share: **70.7071%**
+  
+  (Global Tranco Rank: 7772)
+  
+
+- **Rank 11:** cic.fr
+  Local Query Share: **70.3704%**
+  
+  (Global Tranco Rank: 8550)
+  
+
+- **Rank 12:** cnil.fr
+  Local Query Share: **70.0000%**
+  
+  (Global Tranco Rank: 3428)
+  
+
+- **Rank 13:** caf.fr
+  Local Query Share: **69.0141%**
+  
+  (Global Tranco Rank: 6257)
+  
+
+- **Rank 14:** sg.fr
+  Local Query Share: **66.6667%**
+  
+  (Global Tranco Rank: 7474)
+  
+
+- **Rank 15:** lemonde.fr
+  Local Query Share: **66.0656%**
+  
+  (Global Tranco Rank: 693)
+  
+
+- **Rank 16:** tf1info.fr
+  Local Query Share: **65.3061%**
+  
+  (Global Tranco Rank: 6164)
+  
+
+- **Rank 17:** laredoute.fr
+  Local Query Share: **64.4628%**
+  
+  (Global Tranco Rank: 6867)
+  
+
+- **Rank 18:** rugbyrama.fr
+  Local Query Share: **64.2857%**
+  
+  (Global Tranco Rank: 9150)
+  
+
+- **Rank 19:** creditmutuel.fr
+  Local Query Share: **63.8889%**
+  
+  (Global Tranco Rank: 7616)
+  
+
+- **Rank 20:** lesechos.fr
+  Local Query Share: **62.6667%**
+  
+  (Global Tranco Rank: 3711)
+  
+
+- **Rank 21:** radiofrance.fr
+  Local Query Share: **62.4473%**
+  
+  (Global Tranco Rank: 3561)
+  
+
+- **Rank 22:** lefigaro.fr
+  Local Query Share: **59.0734%**
+  
+  (Global Tranco Rank: 813)
+
+
+- **Rank 23:** tf1.fr
+  Local Query Share: **57.6877%**
+  
+  (Global Tranco Rank: 5851)
+  
+
+- **Rank 24:** paris.fr
+  Local Query Share: **57.2973%**
+  
+  (Global Tranco Rank: 6130)
+  
+
+- **Rank 25:** meteociel.fr
+  Local Query Share: **57.1429%**
+  
+  (Global Tranco Rank: 3765)
 
 **Query 2 — Hosting analysis (AS and country hosting a domain)**
 
@@ -2491,11 +2577,44 @@ RETURN DISTINCT
 LIMIT 10;
 ```
 
-> **Output (0 record(s)):**
+> **Output**
 
-```json
-[]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: Hosting Infrastructure Analysis for service-public.fr
+
+This query investigates the physical and logical location of the server hosting the domain **service-public.fr**.
+- **Digital Sovereignty:** Local hosting ensures data remains within national jurisdiction and reduces latency.
+- **Resilience Risk:** Hosting critical government services abroad creates dependencies on international transit and foreign legal frameworks.
+
+
+**Hosting Details:**
+
+
+- **Hosting Provider:** DISIC-RIE-AS LA DIRECTION INTERMINISTERIELLE DU NUMERIQUE (AS60855)
+- **Location:** FR
+  
+  
+  ✅ **Status:** LOCALLY HOSTED. This contributes to high digital sovereignty and resilience.
+  
+
+- **Hosting Provider:** OUTSCALE Outscale SASU (AS50624)
+- **Location:** FR
+  
+  
+  ✅ **Status:** LOCALLY HOSTED. This contributes to high digital sovereignty and resilience.
+  
+
+- **Hosting Provider:** CELESTE-AS CELESTE SAS (AS34177)
+- **Location:** FR
+  
+  
+  ✅ **Status:** LOCALLY HOSTED. This contributes to high digital sovereignty and resilience.
 
 **Query 3 — RPKI status of a hosting AS**
 
@@ -2509,22 +2628,33 @@ RETURN t.label AS rpkiStatus,
 ORDER BY numberOfPrefixes DESC;
 ```
 
-> **Output (2 record(s)):**
+> **Output:**
 
-```json
-[
-  {
-    "rpkiStatus": "RPKI Valid",
-    "numberOfPrefixes": 1758
-  },
-  {
-    "rpkiStatus": "RPKI NotFound",
-    "numberOfPrefixes": 212
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
 
----
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: Routing Security (RPKI) Status for AS3215
+
+This metric evaluates the routing hygiene of the Autonomous System hosting the target service.
+- **RPKI Valid:** The provider protects its IP prefixes against BGP hijacking.
+- **RPKI NotFound/Invalid:** The infrastructure is vulnerable to routing attacks, which could make the e-government service unreachable.
+
+
+**RPKI Status Distribution:**
+
+
+- **RPKI Valid:** 1758 prefix(es)
+  
+  *(Secure)*
+  
+
+- **RPKI NotFound:** 212 prefix(es)
+  
+  *(Vulnerable)*
 
 ### 2.2.3 Peering Efficiency
 
@@ -2555,17 +2685,25 @@ RETURN
     END AS peeringEfficiencyRatio;
 ```
 
-> **Output (1 record(s)):**
+> **Output**
 
-```json
-[
-  {
-    "totalASNs": 2238,
-    "peeringASNs": 376,
-    "peeringEfficiencyRatio": 0.1680071492403932
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: Peering Efficiency Ratio for FR
+
+This metric measures the density of the local peering ecosystem. It calculates the ratio between the networks (ASes) participating in domestic IXPs and the total number of networks in the country. A high ratio (close to 100%) indicates a mature and resilient market, where local traffic is exchanged efficiently, reducing latency and dependence on international transit.
+
+
+**Analysis Results:**
+
+- Total number of ASes in the country: **2238**
+- ASes participating in local peering: **376**
+- Peering Efficiency Ratio: **16.8%**
 
 **Query 2 — Domestic IXPs and their local AS members**
 
@@ -2583,87 +2721,67 @@ ORDER BY localMemberCount DESC
 LIMIT 15;
 ```
 
-> **Output (15 record(s)):**
+> **Output**
 
-```json
-[
-  {
-    "ixpId": 3654261,
-    "ixpName": "France-IX Paris",
-    "localMemberCount": 235
-  },
-  {
-    "ixpId": 3653469,
-    "ixpName": "Equinix Paris",
-    "localMemberCount": 151
-  },
-  {
-    "ixpId": 3654213,
-    "ixpName": "France-IX AURA",
-    "localMemberCount": 59
-  },
-  {
-    "ixpId": 3653957,
-    "ixpName": "nine",
-    "localMemberCount": 48
-  },
-  {
-    "ixpId": 3653665,
-    "ixpName": "France-IX Marseille",
-    "localMemberCount": 37
-  },
-  {
-    "ixpId": 3653633,
-    "ixpName": "Lillix",
-    "localMemberCount": 32
-  },
-  {
-    "ixpId": 3654552,
-    "ixpName": "Hopus",
-    "localMemberCount": 27
-  },
-  {
-    "ixpId": 3653687,
-    "ixpName": "SFINX",
-    "localMemberCount": 19
-  },
-  {
-    "ixpId": 3654422,
-    "ixpName": "BreizhIX",
-    "localMemberCount": 18
-  },
-  {
-    "ixpId": 3653428,
-    "ixpName": "AuvernIX",
-    "localMemberCount": 12
-  },
-  {
-    "ixpId": 3654025,
-    "ixpName": "DE-CIX Marseille",
-    "localMemberCount": 10
-  },
-  {
-    "ixpId": 3654000,
-    "ixpName": "EuroRhine-IX",
-    "localMemberCount": 10
-  },
-  {
-    "ixpId": 3654383,
-    "ixpName": "France-IX Lille",
-    "localMemberCount": 10
-  },
-  {
-    "ixpId": 3654425,
-    "ixpName": "BGP.Exchange - Paris",
-    "localMemberCount": 10
-  },
-  {
-    "ixpId": 3653506,
-    "ixpName": "Ouest.Network",
-    "localMemberCount": 9
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: Domestic IXP Density Ranking for FR
+
+This analysis identifies all domestic Internet Exchange Points (IXPs) and ranks them by the number of local AS members. This reveals which IXPs are the most critical for the country's peering ecosystem and whether this ecosystem is distributed (multiple IXPs) or centralized (a single dominant IXP).
+
+
+**Ranking of the 15 identified IXP(s) by local member count:**
+
+
+- **Rank 1:** France-IX Paris (ID: 3654261)
+  Number of local members: **235**
+
+- **Rank 2:** Equinix Paris (ID: 3653469)
+  Number of local members: **151**
+
+- **Rank 3:** France-IX AURA (ID: 3654213)
+  Number of local members: **59**
+
+- **Rank 4:** nine (ID: 3653957)
+  Number of local members: **48**
+
+- **Rank 5:** France-IX Marseille (ID: 3653665)
+  Number of local members: **37**
+
+- **Rank 6:** Lillix (ID: 3653633)
+  Number of local members: **32**
+
+- **Rank 7:** Hopus (ID: 3654552)
+  Number of local members: **27**
+
+- **Rank 8:** SFINX (ID: 3653687)
+  Number of local members: **19**
+
+- **Rank 9:** BreizhIX (ID: 3654422)
+  Number of local members: **18**
+
+- **Rank 10:** AuvernIX (ID: 3653428)
+  Number of local members: **12**
+
+- **Rank 11:** DE-CIX Marseille (ID: 3654025)
+  Number of local members: **10**
+
+- **Rank 12:** EuroRhine-IX (ID: 3654000)
+  Number of local members: **10**
+
+- **Rank 13:** France-IX Lille (ID: 3654383)
+  Number of local members: **10**
+
+- **Rank 14:** BGP.Exchange - Paris (ID: 3654425)
+  Number of local members: **10**
+
+- **Rank 15:** Ouest.Network (ID: 3653506)
+  Number of local members: **9**
 
 **Query 3 — Local ASes not peering at any local IXP**
 
@@ -2693,112 +2811,82 @@ ORDER BY caidaRank ASC
 LIMIT 20;
 ```
 
-> **Output (20 record(s)):**
+> **Output**
 
-```json
-[
-  {
-    "asn": 1299,
-    "asName": "TWELVE99 Arelion Sweden AB",
-    "caidaRank": 2
-  },
-  {
-    "asn": 3215,
-    "asName": "AS3215 Orange S.A.",
-    "caidaRank": 247
-  },
-  {
-    "asn": 43531,
-    "asName": "IXREACH BSO Network Solutions SAS",
-    "caidaRank": 375
-  },
-  {
-    "asn": 31216,
-    "asName": "BSOCOM BSO Network Solutions SAS",
-    "caidaRank": 376
-  },
-  {
-    "asn": 43350,
-    "asName": "NFORCE NForce Entertainment B.V.",
-    "caidaRank": 1530
-  },
-  {
-    "asn": 12844,
-    "asName": "BOUYGTEL-B2B Bouygues Telecom SA",
-    "caidaRank": 1945
-  },
-  {
-    "asn": 198831,
-    "asName": "HOLYCLOUD GENIUSWEER SAS",
-    "caidaRank": 2233
-  },
-  {
-    "asn": 48185,
-    "asName": "team_blue team.blue NV",
-    "caidaRank": 2251
-  },
-  {
-    "asn": 39886,
-    "asName": "STELOGY-INFRASTRUCTURE Nomotech SAS",
-    "caidaRank": 2272
-  },
-  {
-    "asn": 62610,
-    "asName": "ZEN-DPS - Zenlayer Inc",
-    "caidaRank": 2393
-  },
-  {
-    "asn": 206120,
-    "asName": "KOESIO-NETWORKS KOESIO Networks SAS",
-    "caidaRank": 2637
-  },
-  {
-    "asn": 31221,
-    "asName": "NLT-FR nLighten France SAS",
-    "caidaRank": 3139
-  },
-  {
-    "asn": 29066,
-    "asName": "VELIANET-AS velia.net Internetdienste GmbH",
-    "caidaRank": 3265
-  },
-  {
-    "asn": 200780,
-    "asName": "APPLIWAVE Eurofiber France SAS",
-    "caidaRank": 3396
-  },
-  {
-    "asn": 12670,
-    "asName": "AS-COMPLETEL Completel SAS",
-    "caidaRank": 3459
-  },
-  {
-    "asn": 52073,
-    "asName": "I2SNETWORK I2SNETWORK SAS",
-    "caidaRank": 3586
-  },
-  {
-    "asn": 33392,
-    "asName": "DAUPHIN-TELECOM - Dauphin Telecom",
-    "caidaRank": 4448
-  },
-  {
-    "asn": 215114,
-    "asName": "PLB-NET Stevan Durand--L'Hours t/a SLBCLOUD",
-    "caidaRank": 4680
-  },
-  {
-    "asn": 5583,
-    "asName": "ORANGE-BUSINESS-SERVICES-BENELUX Orange S.A.",
-    "caidaRank": 4729
-  },
-  {
-    "asn": 57179,
-    "asName": "IELO-B",
-    "caidaRank": 5079
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: High-Impact ASes Not Participating in Local Peering for FR
+
+This analysis identifies local networks (ASes) that are not members of any domestic IXP. They are ranked by their global importance (via CAIDA ASRank, where a lower number means a bigger network) to reveal which missing players have the biggest impact on domestic peering efficiency. Incentivizing these players to joinlocal IXPs is a key action to improve resilience.
+
+
+**Ranking of major non-participating ASes (by Global Rank):**
+
+
+- **Rank 1:** TWELVE99 Arelion Sweden AB (AS1299)
+  Global Rank (ASRank): **2**
+
+- **Rank 2:** AS3215 Orange S.A. (AS3215)
+  Global Rank (ASRank): **247**
+
+- **Rank 3:** IXREACH BSO Network Solutions SAS (AS43531)
+  Global Rank (ASRank): **375**
+
+- **Rank 4:** BSOCOM BSO Network Solutions SAS (AS31216)
+  Global Rank (ASRank): **376**
+
+- **Rank 5:** NFORCE NForce Entertainment B.V. (AS43350)
+  Global Rank (ASRank): **1530**
+
+- **Rank 6:** BOUYGTEL-B2B Bouygues Telecom SA (AS12844)
+  Global Rank (ASRank): **1945**
+
+- **Rank 7:** HOLYCLOUD GENIUSWEER SAS (AS198831)
+  Global Rank (ASRank): **2233**
+
+- **Rank 8:** team_blue team.blue NV (AS48185)
+  Global Rank (ASRank): **2251**
+
+- **Rank 9:** STELOGY-INFRASTRUCTURE Nomotech SAS (AS39886)
+  Global Rank (ASRank): **2272**
+
+- **Rank 10:** ZEN-DPS - Zenlayer Inc (AS62610)
+  Global Rank (ASRank): **2393**
+
+- **Rank 11:** KOESIO-NETWORKS KOESIO Networks SAS (AS206120)
+  Global Rank (ASRank): **2637**
+
+- **Rank 12:** NLT-FR nLighten France SAS (AS31221)
+  Global Rank (ASRank): **3139**
+
+- **Rank 13:** VELIANET-AS velia.net Internetdienste GmbH (AS29066)
+  Global Rank (ASRank): **3265**
+
+- **Rank 14:** APPLIWAVE Eurofiber France SAS (AS200780)
+  Global Rank (ASRank): **3396**
+
+- **Rank 15:** AS-COMPLETEL Completel SAS (AS12670)
+  Global Rank (ASRank): **3459**
+
+- **Rank 16:** I2SNETWORK I2SNETWORK SAS (AS52073)
+  Global Rank (ASRank): **3586**
+
+- **Rank 17:** DAUPHIN-TELECOM - Dauphin Telecom (AS33392)
+  Global Rank (ASRank): **4448**
+
+- **Rank 18:** PLB-NET Stevan Durand--L'Hours t/a SLBCLOUD (AS215114)
+  Global Rank (ASRank): **4680**
+
+- **Rank 19:** ORANGE-BUSINESS-SERVICES-BENELUX Orange S.A. (AS5583)
+  Global Rank (ASRank): **4729**
+
+- **Rank 20:** IELO-B (AS57179)
+  Global Rank (ASRank): **5079**
 
 **Query 4 — IXP peering depth distribution**
 
@@ -2822,46 +2910,45 @@ RETURN
 ORDER BY ixpMembershipCount DESC;
 ```
 
-> **Output (8 record(s)):**
+> **Output**
 
-```json
-[
-  {
-    "numberOfIXPsMemberOf": 12,
-    "numberOfASes": 1
-  },
-  {
-    "numberOfIXPsMemberOf": 9,
-    "numberOfASes": 1
-  },
-  {
-    "numberOfIXPsMemberOf": 6,
-    "numberOfASes": 10
-  },
-  {
-    "numberOfIXPsMemberOf": 5,
-    "numberOfASes": 7
-  },
-  {
-    "numberOfIXPsMemberOf": 4,
-    "numberOfASes": 19
-  },
-  {
-    "numberOfIXPsMemberOf": 3,
-    "numberOfASes": 47
-  },
-  {
-    "numberOfIXPsMemberOf": 2,
-    "numberOfASes": 97
-  },
-  {
-    "numberOfIXPsMemberOf": 1,
-    "numberOfASes": 194
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
 
----
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: IXP Membership Depth Distribution for FR
+
+This analysis shows how many local Autonomous Systems participate in multiple Internet Exchange Points simultaneously. ASes peering at more IXPs have greater redundancy and resilience. A country where many ASes join only one IXP has a more fragile peering ecosystem than one where ASes routinely multi-home across several IXPs.
+
+
+**IXP Membership Depth:**
+
+| IXPs Joined | Number of ASes |
+|-------------|----------------|
+
+| 12 | 1 |
+
+| 9 | 1 |
+
+| 6 | 10 |
+
+| 5 | 7 |
+
+| 4 | 19 |
+
+| 3 | 47 |
+
+| 2 | 97 |
+
+| 1 | 194 |
+
+
+**Interpretation:**
+
+Rows with `numberOfIXPsMemberOf > 1` represent ASes with redundant IXP presence — a sign of a mature peering ecosystem. If most ASes appear only in the `1` row, the ecosystem is functional but not yet resilient against a single IXP outage.
 
 # 3. Security
 
