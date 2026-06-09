@@ -1,3 +1,4 @@
 MATCH ()-[r]->()
-RETURN DISTINCT type(r)
-ORDER BY type(r)
+RETURN
+type(r) AS domainName,
+0.0 AS queryPercentage

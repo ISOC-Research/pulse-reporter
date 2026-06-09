@@ -2968,112 +2968,102 @@ ORDER BY queryPercentage DESC
 LIMIT 25;
 ```
 
-> **Output (25 record(s)):**
+> **Output**
 
-```json
-[
-  {
-    "domainName": "akamaixbc.net",
-    "queryPercentage": 100.0
-  },
-  {
-    "domainName": "tik.porn",
-    "queryPercentage": 95.66787
-  },
-  {
-    "domainName": "adprime.com",
-    "queryPercentage": 94.198324
-  },
-  {
-    "domainName": "ameli.fr",
-    "queryPercentage": 91.973244
-  },
-  {
-    "domainName": "dfn.nl",
-    "queryPercentage": 89.700806
-  },
-  {
-    "domainName": "louvre.fr",
-    "queryPercentage": 87.40458
-  },
-  {
-    "domainName": "huffingtonpost.fr",
-    "queryPercentage": 86.813187
-  },
-  {
-    "domainName": "doctolib.fr",
-    "queryPercentage": 82.938389
-  },
-  {
-    "domainName": "bigcartel.com",
-    "queryPercentage": 82.141071
-  },
-  {
-    "domainName": "proofpoint.us",
-    "queryPercentage": 81.818182
-  },
-  {
-    "domainName": "leroymerlin.fr",
-    "queryPercentage": 81.426814
-  },
-  {
-    "domainName": "anlikaltinfiyatlari.com",
-    "queryPercentage": 79.62963
-  },
-  {
-    "domainName": "boursorama.com",
-    "queryPercentage": 79.411765
-  },
-  {
-    "domainName": "destentor.nl",
-    "queryPercentage": 79.310345
-  },
-  {
-    "domainName": "fti.net",
-    "queryPercentage": 77.941176
-  },
-  {
-    "domainName": "meteofrance.com",
-    "queryPercentage": 77.483444
-  },
-  {
-    "domainName": "airbus.com",
-    "queryPercentage": 77.469671
-  },
-  {
-    "domainName": "lepoint.fr",
-    "queryPercentage": 76.404494
-  },
-  {
-    "domainName": "nestlechinese.com",
-    "queryPercentage": 75.409836
-  },
-  {
-    "domainName": "ortb.net",
-    "queryPercentage": 75.08067
-  },
-  {
-    "domainName": "leboncoin.fr",
-    "queryPercentage": 75.0
-  },
-  {
-    "domainName": "impots.gouv.fr",
-    "queryPercentage": 75.0
-  },
-  {
-    "domainName": "telenor.se",
-    "queryPercentage": 72.447889
-  },
-  {
-    "domainName": "vinted.fr",
-    "queryPercentage": 72.349061
-  },
-  {
-    "domainName": "yggtorrent.org",
-    "queryPercentage": 72.222222
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: Top 25 Most Popular Domains by DNS Query Percentage for FR
+
+This analysis retrieves the 25 most popular domains for the specified country based on the percentage of DNS queries. It highlights the domains that are most frequently queried, providing insights into the browsing habits and preferences of users in the country.
+
+
+**Top 25 domains by query percentage:**
+
+
+- **Rank 1:** akamaixbc.net
+  Query Percentage: **100.00%**
+
+- **Rank 2:** tik.porn
+  Query Percentage: **95.67%**
+
+- **Rank 3:** adprime.com
+  Query Percentage: **94.20%**
+
+- **Rank 4:** ameli.fr
+  Query Percentage: **91.97%**
+
+- **Rank 5:** dfn.nl
+  Query Percentage: **89.70%**
+
+- **Rank 6:** louvre.fr
+  Query Percentage: **87.40%**
+
+- **Rank 7:** huffingtonpost.fr
+  Query Percentage: **86.81%**
+
+- **Rank 8:** doctolib.fr
+  Query Percentage: **82.94%**
+
+- **Rank 9:** bigcartel.com
+  Query Percentage: **82.14%**
+
+- **Rank 10:** proofpoint.us
+  Query Percentage: **81.82%**
+
+- **Rank 11:** leroymerlin.fr
+  Query Percentage: **81.43%**
+
+- **Rank 12:** anlikaltinfiyatlari.com
+  Query Percentage: **79.63%**
+
+- **Rank 13:** boursorama.com
+  Query Percentage: **79.41%**
+
+- **Rank 14:** destentor.nl
+  Query Percentage: **79.31%**
+
+- **Rank 15:** fti.net
+  Query Percentage: **77.94%**
+
+- **Rank 16:** meteofrance.com
+  Query Percentage: **77.48%**
+
+- **Rank 17:** airbus.com
+  Query Percentage: **77.47%**
+
+- **Rank 18:** lepoint.fr
+  Query Percentage: **76.40%**
+
+- **Rank 19:** nestlechinese.com
+  Query Percentage: **75.41%**
+
+- **Rank 20:** ortb.net
+  Query Percentage: **75.08%**
+
+- **Rank 21:** leboncoin.fr
+  Query Percentage: **75.00%**
+
+- **Rank 22:** impots.gouv.fr
+  Query Percentage: **75.00%**
+
+- **Rank 23:** telenor.se
+  Query Percentage: **72.45%**
+
+- **Rank 24:** vinted.fr
+  Query Percentage: **72.35%**
+
+- **Rank 25:** yggtorrent.org
+  Query Percentage: **72.22%**
+
+
+
+_(Results are limited to the top 25 domains)_
+
 
 **Query 2 — Popular domains hosted on infrastructure in the target country**
 
@@ -3092,7 +3082,7 @@ ORDER BY r.rank ASC
 LIMIT 25;
 ```
 
-> **Output (0 record(s)):**
+> **Output**
 
 ```json
 []
@@ -3106,7 +3096,7 @@ RETURN DISTINCT type(r)
 ORDER BY type(r)
 ```
 
-> **Output (27 record(s)):**
+> **Output**
 
 ```json
 [
@@ -3217,17 +3207,26 @@ RETURN
     END AS rpkiValidationPercentage;
 ```
 
-> **Output (1 record(s)):**
+> **Output**
 
-```json
-[
-  {
-    "rpkiValidatingASNs": 143,
-    "totalASNs": 2238,
-    "rpkiValidationPercentage": 6.389633601429848
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: Routing Security Baseline (RPKI ROV) for FR
+
+This analysis calculates the percentage of network operators (ASes) in the country that are validating RPKI Route Origin Authorizations (ROV). This is the primary routing security practice promoted by MANRS and serves as a key indicator of overall network security maturity, which is a prerequisite for reliable DNSSEC validation infrastructure.
+
+
+**Analysis Results:**
+
+- Total number of ASes: **2238**
+- Number of RPKI ROV-validating ASes: **143**
+- RPKI validation percentage: **6.39%**
+
 
 **Query 2 — Top ASes by population served with RPKI validation status**
 
@@ -3254,72 +3253,62 @@ ORDER BY populationServedPercentage DESC
 LIMIT 10
 ```
 
-> **Output (10 record(s)):**
+> **Output**
 
-```json
-[
-  {
-    "asn": 3215,
-    "name": "AS3215 Orange S.A.",
-    "populationServedPercentage": 35.38051167179335,
-    "isRpkiValidating": true
-  },
-  {
-    "asn": 12322,
-    "name": "PROXAD Free SAS",
-    "populationServedPercentage": 18.649609448176673,
-    "isRpkiValidating": true
-  },
-  {
-    "asn": 5410,
-    "name": "BOUYGTEL-ISP Bouygues Telecom SA",
-    "populationServedPercentage": 17.747870947714453,
-    "isRpkiValidating": false
-  },
-  {
-    "asn": 15557,
-    "name": "LDCOMNET Societe Francaise Du Radiotelephone - SFR SA",
-    "populationServedPercentage": 17.522857472432,
-    "isRpkiValidating": true
-  },
-  {
-    "asn": 51207,
-    "name": "FREEM Free Mobile SAS",
-    "populationServedPercentage": 4.545856517745062,
-    "isRpkiValidating": true
-  },
-  {
-    "asn": 16276,
-    "name": "OVH OVH SAS",
-    "populationServedPercentage": 0.8547753793962675,
-    "isRpkiValidating": true
-  },
-  {
-    "asn": 63023,
-    "name": "AS-GLOBALTELEHOST - GTHost",
-    "populationServedPercentage": 0.7778947419995292,
-    "isRpkiValidating": true
-  },
-  {
-    "asn": 12876,
-    "name": "AS12876 Scaleway SAS",
-    "populationServedPercentage": 0.6916868077604803,
-    "isRpkiValidating": true
-  },
-  {
-    "asn": 51167,
-    "name": "CONTABO Contabo GmbH",
-    "populationServedPercentage": 0.323644195442315,
-    "isRpkiValidating": true
-  },
-  {
-    "asn": 31404,
-    "name": "Lycatel-AS LYCATEL DISTRIBUTION UK LIMITED",
-    "populationServedPercentage": 0.2571962786868061,
-    "isRpkiValidating": true
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: RPKI ROV Status of Major Access Networks for FR
+
+This analysis identifies the most important access networks in the country (by population served) and checks whether they are validating RPKI Route Origin Authorizations. Networks that perform RPKI ROV validation actively protect their customers from BGP route hijacking and misconfiguration, which is a foundational security practice.
+
+
+**Major Access Networks and Their Routing Security Status:**
+
+
+- **Rank 1:** AS3215 Orange S.A. (AS3215)
+  Population served: **35.38%**
+  Validating RPKI ROV: **Yes**
+
+- **Rank 2:** PROXAD Free SAS (AS12322)
+  Population served: **18.65%**
+  Validating RPKI ROV: **Yes**
+
+- **Rank 3:** BOUYGTEL-ISP Bouygues Telecom SA (AS5410)
+  Population served: **17.75%**
+  Validating RPKI ROV: **No**
+
+- **Rank 4:** LDCOMNET Societe Francaise Du Radiotelephone - SFR SA (AS15557)
+  Population served: **17.52%**
+  Validating RPKI ROV: **Yes**
+
+- **Rank 5:** FREEM Free Mobile SAS (AS51207)
+  Population served: **4.55%**
+  Validating RPKI ROV: **Yes**
+
+- **Rank 6:** OVH OVH SAS (AS16276)
+  Population served: **0.85%**
+  Validating RPKI ROV: **Yes**
+
+- **Rank 7:** AS-GLOBALTELEHOST - GTHost (AS63023)
+  Population served: **0.78%**
+  Validating RPKI ROV: **Yes**
+
+- **Rank 8:** AS12876 Scaleway SAS (AS12876)
+  Population served: **0.69%**
+  Validating RPKI ROV: **Yes**
+
+- **Rank 9:** CONTABO Contabo GmbH (AS51167)
+  Population served: **0.32%**
+  Validating RPKI ROV: **Yes**
+
+- **Rank 10:** Lycatel-AS LYCATEL DISTRIBUTION UK LIMITED (AS31404)
+  Population served: **0.26%**
+  Validating RPKI ROV: **Yes**
 
 ---
 
@@ -3346,17 +3335,29 @@ RETURN
        count_total
 ```
 
-> **Output (1 record(s)):**
+> **Output**
 
-```json
-[
-  {
-    "https_adoption_rate": 98.62266817296518,
-    "count_https": 974246,
-    "count_total": 987852
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: HTTPS Adoption Rate for FR
+
+This analysis calculates the percentage of distinct hostnames in the country that are served over HTTPS, based on the Google ranking dataset. A high adoption rate indicates strong commitment to transport-layer security and encrypted communication.
+
+
+**Analysis Results:**
+
+- Total number of distinct hostnames: **987852**
+- Number of hostnames served over HTTPS: **974246**
+- HTTPS adoption percentage: **98.62%**
+
+**Interpretation:**
+
+An HTTPS adoption rate of **98.62%** indicates that approximately 974246 out of 987852 hostnames use secure HTTPS connections. This metric reflects the maturity of web security practices in the country.
 
 **Query 2 — HTTPS adoption among locally queried domains**
 
@@ -3385,18 +3386,26 @@ RETURN
     END AS httpsAdoptionRate
 ```
 
-> **Output (1 record(s)):**
+> **Output**
 
-```json
-[
-  {
-    "totalQueried": 7438,
-    "httpsCount": 901,
-    "resolvedDomains": 901,
-    "httpsAdoptionRate": 12.11
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: HTTPS Adoption for Locally Queried Domains in FR
+
+This analysis examines HTTPS adoption among the most queried domains in the country using local DNS query data. Unlike the Google CrUX-based metric, this reflects the actual browsing patterns of the country's internet users — domains that are heavily queried locally but not served over HTTPS represent a direct security risk to the local population.
+
+
+**Analysis Results:**
+
+- Total locally queried domains: **7438**
+- Domains resolvable to IPs (active): **901**
+- HTTPS-prefixed domains: **901**
+- Local HTTPS adoption rate: **12.11%**
 
 ---
 
@@ -3431,19 +3440,31 @@ RETURN c.name AS country,
 ORDER BY ipv6PrefixesPercentage DESC
 ```
 
-> **Output (1 record(s)):**
+> **Output**
 
-```json
-[
-  {
-    "country": "France",
-    "totalPrefixes": 89499,
-    "ipv4Prefixes": 72344,
-    "ipv6Prefixes": 17155,
-    "ipv6PrefixesPercentage": 19.167811930859564
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: IPv6 Adoption Rate for FR
+
+This analysis measures the percentage of BGP prefixes announced by Autonomous Systems (AS) in the country that are IPv6 prefixes. IPv6 adoption is a critical indicator of internet infrastructure modernization and future-proofing.
+
+
+**Analysis Results:**
+
+- Country: **France**
+- Total number of BGP prefixes announced: **89499**
+- IPv4 prefixes: **72344**
+- IPv6 prefixes: **17155**
+- IPv6 adoption rate: **19.17%**
+
+**Interpretation:**
+
+An IPv6 adoption rate of **19.17%** indicates that approximately 17155 out of 89499 BGP prefixes announced from the country's ASes are IPv6. This reflects the readiness of the country's internet infrastructure for next-generation protocols.
 
 **Query 2 — ASes without IPv6, ranked by importance**
 
@@ -3472,87 +3493,61 @@ ORDER BY customerConeSize DESC
 LIMIT 15;
 ```
 
-> **Output (15 record(s)):**
+> **Output**
 
-```json
-[
-  {
-    "asn": 51706,
-    "name": "France-IX Paris Route Servers",
-    "customerConeSize": 16
-  },
-  {
-    "asn": 51706,
-    "name": "France-IX Paris RS",
-    "customerConeSize": 16
-  },
-  {
-    "asn": 51706,
-    "name": "FRANCE-IX-PAR-AS",
-    "customerConeSize": 16
-  },
-  {
-    "asn": 51706,
-    "name": "FRANCE-IX-PAR-AS France IX Services SASU",
-    "customerConeSize": 16
-  },
-  {
-    "asn": 12844,
-    "name": "BOUYGTEL-B2B",
-    "customerConeSize": 15
-  },
-  {
-    "asn": 12844,
-    "name": "Bouygues Telecom SA",
-    "customerConeSize": 15
-  },
-  {
-    "asn": 12844,
-    "name": "BOUYGTEL-B2B Bouygues Telecom SA",
-    "customerConeSize": 15
-  },
-  {
-    "asn": 39886,
-    "name": "NOMOTECH",
-    "customerConeSize": 12
-  },
-  {
-    "asn": 39886,
-    "name": "STELOGY-INFRASTRUCTURE Nomotech SAS",
-    "customerConeSize": 12
-  },
-  {
-    "asn": 39886,
-    "name": "Nomotech SAS",
-    "customerConeSize": 12
-  },
-  {
-    "asn": 197033,
-    "name": "CPRO-AS",
-    "customerConeSize": 8
-  },
-  {
-    "asn": 197033,
-    "name": "KOESIO NETWORKS",
-    "customerConeSize": 8
-  },
-  {
-    "asn": 197033,
-    "name": "CPRO-AS KOESIO Networks SAS",
-    "customerConeSize": 8
-  },
-  {
-    "asn": 197033,
-    "name": "CPRO-AS",
-    "customerConeSize": 8
-  },
-  {
-    "asn": 197033,
-    "name": "KOESIO Networks SAS",
-    "customerConeSize": 8
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: ASes Without IPv6 Support in FR
+
+This analysis identifies Autonomous Systems (ASes) in the country that do not announce any IPv6 prefixes, ranked by their customer cone size (a measure of their influence and importance in the internet hierarchy). This highlights targets for IPv6 deployment initiatives.
+
+
+**Analysis Results:**
+
+A total of **15** ASes in the country do not announce IPv6 prefixes. The top 15 most significant (by customer cone size) are listed below:
+
+| ASN | Name | Customer Cone Size |
+|-----|------|-------------------|
+
+| 51706 | France-IX Paris Route Servers | 16 |
+
+| 51706 | France-IX Paris RS | 16 |
+
+| 51706 | FRANCE-IX-PAR-AS | 16 |
+
+| 51706 | FRANCE-IX-PAR-AS France IX Services SASU | 16 |
+
+| 12844 | BOUYGTEL-B2B | 15 |
+
+| 12844 | Bouygues Telecom SA | 15 |
+
+| 12844 | BOUYGTEL-B2B Bouygues Telecom SA | 15 |
+
+| 39886 | NOMOTECH | 12 |
+
+| 39886 | STELOGY-INFRASTRUCTURE Nomotech SAS | 12 |
+
+| 39886 | Nomotech SAS | 12 |
+
+| 197033 | CPRO-AS | 8 |
+
+| 197033 | KOESIO NETWORKS | 8 |
+
+| 197033 | CPRO-AS KOESIO Networks SAS | 8 |
+
+| 197033 | CPRO-AS | 8 |
+
+| 197033 | KOESIO Networks SAS | 8 |
+
+
+**Interpretation:**
+
+These ASes represent critical infrastructure gaps in IPv6 deployment. ASes with larger customer cone sizes have greater impact on the overall internet connectivity of the country. Prioritizing IPv6 adoption among these operators would significantly improve the country's IPv6 readiness.
 
 **Query 3 — IPv6 population coverage rate (ITU methodology)**
 
@@ -3577,18 +3572,30 @@ RETURN c.name AS country,
        END AS ipv6PopulationCoverageRate;
 ```
 
-> **Output (1 record(s)):**
+> **Output**
 
-```json
-[
-  {
-    "country": "France",
-    "totalCoveredPopulationPct": 99.46,
-    "ipv6CoveredPopulationPct": 99.42,
-    "ipv6PopulationCoverageRate": 99.96
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: IPv6 Population Coverage Rate for FR
+
+This analysis calculates the percentage of the country's population served by Autonomous Systems that announce at least one IPv6 prefix. This population-weighted metric aligns with the ITU's IPv6 adoption measurement methodology — it measures whether end-users actually have access to IPv6-capable infrastructure.
+
+
+**Analysis Results:**
+
+- Country: **France**
+- Total population covered by measured operators: **99.46%**
+- Population served by IPv6-capable operators: **99.42%**
+- IPv6 population coverage rate: **99.96%**
+
+**Interpretation:**
+
+An IPv6 population coverage rate of **99.96%** means approximately that share of the country's residents are served by IPv6-capable operators. This is the most user-centric IPv6 metric — it reflects whether residents actually have access to IPv6 services, not just whether operators have declared prefixes.
 
 ---
 
@@ -3614,17 +3621,29 @@ RETURN
   round(100.0 * rpkiValidatingCount / totalASNsInCountry, 2) AS adoptionRatePercentage;
 ```
 
-> **Output (1 record(s)):**
+> **Output**
 
-```json
-[
-  {
-    "totalASNsInCountry": 2238,
-    "rpkiValidatingCount": 143,
-    "adoptionRatePercentage": 6.39
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: Routing Security (RPKI ROV) Adoption Rate for FR
+
+This analysis measures the percentage of Autonomous Systems (ASes) in the country that are actively validating RPKI Route Origin Authorizations (ROV). RPKI ROV is the primary technical action promoted by the MANRS initiative, and it directly prevents BGP route hijacking and prefix forgeries — a foundational requirement for a resilient internet.
+
+
+**Analysis Results:**
+
+- Total number of ASes in the country: **2238**
+- Number of ASes validating RPKI ROV: **143**
+- RPKI ROV adoption rate: **6.39%**
+
+**Interpretation:**
+
+An RPKI ROV adoption rate of **6.39%** means that approximately **143** out of **2238** Autonomous Systems actively filter and reject invalid BGP routes. A higher rate indicates greater resistance to routing hijacks and a more trustworthy national internet infrastructure.
 
 **Query 2 — ASes validating RPKI ROV, ranked by customer cone**
 
@@ -3654,112 +3673,71 @@ ORDER BY customerConeSize DESC
 LIMIT 20;
 ```
 
-> **Output (20 record(s)):**
+> **Output**
 
-```json
-[
-  {
-    "asn": 1299,
-    "asName": "TWELVE99 Arelion Sweden AB",
-    "customerConeSize": 41002
-  },
-  {
-    "asn": 5511,
-    "asName": "Opentransit Orange S.A.",
-    "customerConeSize": 7818
-  },
-  {
-    "asn": 8218,
-    "asName": "NEO-ASN Zayo Infrastructure France SA",
-    "customerConeSize": 265
-  },
-  {
-    "asn": 29075,
-    "asName": "IELO IELO-LIAZO SERVICES SAS",
-    "customerConeSize": 203
-  },
-  {
-    "asn": 3215,
-    "asName": "AS3215 Orange S.A.",
-    "customerConeSize": 203
-  },
-  {
-    "asn": 30781,
-    "asName": "JAGUAR-AS Free Pro SAS",
-    "customerConeSize": 199
-  },
-  {
-    "asn": 16276,
-    "asName": "OVH OVH SAS",
-    "customerConeSize": 119
-  },
-  {
-    "asn": 15557,
-    "asName": "LDCOMNET Societe Francaise Du Radiotelephone - SFR SA",
-    "customerConeSize": 91
-  },
-  {
-    "asn": 62000,
-    "asName": "NETRIX-AS SERVERD SAS",
-    "customerConeSize": 83
-  },
-  {
-    "asn": 25369,
-    "asName": "BANDWIDTH-AS Hydra Communications Ltd",
-    "customerConeSize": 83
-  },
-  {
-    "asn": 47160,
-    "asName": "MOJI MOJI SAS",
-    "customerConeSize": 56
-  },
-  {
-    "asn": 49434,
-    "asName": "FBWNETWORKS FBW NETWORKS SAS",
-    "customerConeSize": 51
-  },
-  {
-    "asn": 29169,
-    "asName": "GANDI-AS GANDI SAS",
-    "customerConeSize": 37
-  },
-  {
-    "asn": 34019,
-    "asName": "HIVANE Hivane Association",
-    "customerConeSize": 32
-  },
-  {
-    "asn": 39180,
-    "asName": "LASOTEL LASOTEL SAS",
-    "customerConeSize": 26
-  },
-  {
-    "asn": 63023,
-    "asName": "AS-GLOBALTELEHOST - GTHost",
-    "customerConeSize": 23
-  },
-  {
-    "asn": 8309,
-    "asName": "SIPARTECH SIPARTECH SAS",
-    "customerConeSize": 22
-  },
-  {
-    "asn": 212815,
-    "asName": "AS-DYJIX Dyjix SAS",
-    "customerConeSize": 17
-  },
-  {
-    "asn": 46475,
-    "asName": "LIMESTONENETWORKS - Limestone Networks, Inc.",
-    "customerConeSize": 14
-  },
-  {
-    "asn": 2027,
-    "asName": "MilkyWan MilkyWan Association",
-    "customerConeSize": 13
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: Top RPKI-Validating ASes in FR
+
+This analysis lists the most influential Autonomous Systems in the country that are actively validating RPKI Route Origin Authorizations, ranked by their customer cone size (a measure of their reach and influence in the internet hierarchy). These are the networks whose routing hygiene has the greatest impact on the country's overall security posture.
+
+
+**Analysis Results:**
+
+A total of **20** ASes with RPKI ROV validation operate in the country. The top 20 most significant (by customer cone size) are listed below:
+
+| ASN | AS Name | Customer Cone Size |
+|-----|---------|-------------------|
+
+| 1299 | TWELVE99 Arelion Sweden AB | 41002 |
+
+| 5511 | Opentransit Orange S.A. | 7818 |
+
+| 8218 | NEO-ASN Zayo Infrastructure France SA | 265 |
+
+| 29075 | IELO IELO-LIAZO SERVICES SAS | 203 |
+
+| 3215 | AS3215 Orange S.A. | 203 |
+
+| 30781 | JAGUAR-AS Free Pro SAS | 199 |
+
+| 16276 | OVH OVH SAS | 119 |
+
+| 15557 | LDCOMNET Societe Francaise Du Radiotelephone - SFR SA | 91 |
+
+| 62000 | NETRIX-AS SERVERD SAS | 83 |
+
+| 25369 | BANDWIDTH-AS Hydra Communications Ltd | 83 |
+
+| 47160 | MOJI MOJI SAS | 56 |
+
+| 49434 | FBWNETWORKS FBW NETWORKS SAS | 51 |
+
+| 29169 | GANDI-AS GANDI SAS | 37 |
+
+| 34019 | HIVANE Hivane Association | 32 |
+
+| 39180 | LASOTEL LASOTEL SAS | 26 |
+
+| 63023 | AS-GLOBALTELEHOST - GTHost | 23 |
+
+| 8309 | SIPARTECH SIPARTECH SAS | 22 |
+
+| 212815 | AS-DYJIX Dyjix SAS | 17 |
+
+| 46475 | LIMESTONENETWORKS - Limestone Networks, Inc. | 14 |
+
+| 2027 | MilkyWan MilkyWan Association | 13 |
+
+
+**Interpretation:**
+
+ASes with larger customer cone sizes that validate RPKI provide stronger routing security guarantees for downstream networks. When major national operators validate RPKI, they protect a larger share of the country's internet traffic from route hijacks.
 
 **Query 3 — Routing hygiene breakdown (RPKI & IRR status of prefixes)**
 
@@ -3791,36 +3769,47 @@ RETURN
 ORDER BY implementingASNs DESC;
 ```
 
-> **Output (6 record(s)):**
+> **Output**
 
-```json
-[
-  {
-    "routingHygieneAction": "IRR Valid",
-    "implementingASNs": 12850
-  },
-  {
-    "routingHygieneAction": "RPKI Valid",
-    "implementingASNs": 12106
-  },
-  {
-    "routingHygieneAction": "RPKI NotFound",
-    "implementingASNs": 3131
-  },
-  {
-    "routingHygieneAction": "IRR NotFound",
-    "implementingASNs": 351
-  },
-  {
-    "routingHygieneAction": "IRR Invalid",
-    "implementingASNs": 270
-  },
-  {
-    "routingHygieneAction": "RPKI Invalid",
-    "implementingASNs": 8
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: Routing Hygiene Action Breakdown for FR
+
+This analysis shows the distribution of RPKI and IRR routing security tags across all Autonomous Systems in the country. RPKI (Resource Public Key Infrastructure) and IRR (Internet Routing Registry) status tags represent the two core routing hygiene actions promoted by MANRS: Origin Validation (RPKI) and Route Filtering (IRR).
+
+
+**Routing Hygiene Tag Distribution:**
+
+| Routing Hygiene Action | Number of ASes |
+|------------------------|---------------|
+
+| IRR Valid | 12850 |
+
+| RPKI Valid | 12106 |
+
+| RPKI NotFound | 3131 |
+
+| IRR NotFound | 351 |
+
+| IRR Invalid | 270 |
+
+| RPKI Invalid | 8 |
+
+
+**Interpretation Guide:**
+
+- **RPKI Valid / Validating RPKI ROV**: ASes actively implementing origin validation — the highest level of routing security.
+- **IRR Valid**: ASes with correctly registered routes in the Internet Routing Registry — enables route filtering by peers.
+- **RPKI NotFound / IRR NotFound**: ASes with no security record — highest risk for route hijacking.
+- **RPKI Invalid / IRR Invalid**: ASes with conflicting records — actively harmful to routing security.
+
+The proportion of `RPKI Valid` and `Validating RPKI ROV` to `RPKI NotFound` directly indicates the country's progress toward MANRS compliance.
+
 
 **Query 4 — MANRS Action 1: Route Filtering (IRR Valid rate)**
 
@@ -3844,17 +3833,29 @@ RETURN
   round(100.0 * irrValidCount / totalASNs, 2) AS irrValidRatePercentage;
 ```
 
-> **Output (1 record(s)):**
+> **Output**
 
-```json
-[
-  {
-    "totalASNs": 2238,
-    "irrValidCount": 1441,
-    "irrValidRatePercentage": 64.39
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: MANRS Action 1 — Route Filtering (IRR Valid Rate) for FR
+
+This analysis measures the percentage of Autonomous Systems in the country that have their route announcements registered and validated in the Internet Routing Registry (IRR). IRR registration is the foundational prerequisite for MANRS Action 1 (Route Filtering): operators who register their routes enable peers to validate and filter BGP announcements, directly preventing route leaks and hijacks.
+
+
+**Analysis Results:**
+
+- Total number of ASes: **2238**
+- ASes with IRR-valid routes: **1441**
+- IRR Valid registration rate: **64.39%**
+
+**Interpretation:**
+
+An IRR Valid rate of **64.39%** means that approximately **1441** operators have made their routing policy publicly verifiable. Peers of these operators can enforce route filters based on authoritative IRR data, which is the primary mechanism for preventing route leaks from spreading across the internet.
 
 **Query 5 — MANRS Action 3: Coordination (PeeringDB registration rate)**
 
@@ -3877,17 +3878,29 @@ RETURN
   round(100.0 * peeringdbCount / totalASNs, 2) AS coordinationRatePercentage;
 ```
 
-> **Output (1 record(s)):**
+> **Output**
 
-```json
-[
-  {
-    "totalASNs": 2238,
-    "peeringdbCount": 556,
-    "coordinationRatePercentage": 24.84
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: MANRS Action 3 — Coordination (PeeringDB Presence Rate) for FR
+
+This analysis measures the percentage of Autonomous Systems in the country that are registered in PeeringDB — the internet's primary network information database. MANRS Action 3 (Coordination) requires operators to maintain accurate, up-to-date contact and routing policy information so that peers and incident responders can reach them quickly during routing events. PeeringDB registration is the most direct and verifiable evidence of this commitment.
+
+
+**Analysis Results:**
+
+- Total number of ASes: **2238**
+- ASes registered in PeeringDB: **556**
+- Coordination rate: **24.84%**
+
+**Interpretation:**
+
+A PeeringDB coordination rate of **24.84%** means that **556** operators are publicly reachable and documented for interconnection coordination. Countries with high rates have a network operator community that is actively engaged in the global peering ecosystem and can respond to routing incidents quickly.
 
 ---
 
@@ -3925,132 +3938,71 @@ ORDER BY caidaASRank ASC, local_clients DESC
 LIMIT 20;
 ```
 
-> **Output (20 record(s)):**
+> **Output**
 
-```json
-[
-  {
-    "providerASN": 6939,
-    "providerName": "HURRICANE - Hurricane Electric LLC",
-    "local_clients": 3,
-    "caidaASRank": 7
-  },
-  {
-    "providerASN": 9002,
-    "providerName": "RETN-AS RETN Limited",
-    "local_clients": 2,
-    "caidaASRank": 11
-  },
-  {
-    "providerASN": 1273,
-    "providerName": "CW Vodafone Group PLC",
-    "local_clients": 2,
-    "caidaASRank": 14
-  },
-  {
-    "providerASN": 7473,
-    "providerName": "SINGTEL-AS-AP Singapore Telecommunications Ltd",
-    "local_clients": 1,
-    "caidaASRank": 15
-  },
-  {
-    "providerASN": 4637,
-    "providerName": "ASN-TELSTRA-GLOBAL Telstra Global",
-    "local_clients": 2,
-    "caidaASRank": 16
-  },
-  {
-    "providerASN": 12389,
-    "providerName": "ROSTELECOM-AS PJSC Rostelecom",
-    "local_clients": 2,
-    "caidaASRank": 17
-  },
-  {
-    "providerASN": 37468,
-    "providerName": "ANGOLA-CABLES",
-    "local_clients": 1,
-    "caidaASRank": 21
-  },
-  {
-    "providerASN": 9498,
-    "providerName": "BBIL-AP BHARTI Airtel Ltd.",
-    "local_clients": 1,
-    "caidaASRank": 22
-  },
-  {
-    "providerASN": 7195,
-    "providerName": "EDGEUNO S.A.S",
-    "local_clients": 1,
-    "caidaASRank": 23
-  },
-  {
-    "providerASN": 3216,
-    "providerName": "SOVAM-AS PJSC \"Vimpelcom\"",
-    "local_clients": 1,
-    "caidaASRank": 24
-  },
-  {
-    "providerASN": 58453,
-    "providerName": "CMI-INT-HK China Mobile International Limited",
-    "local_clients": 2,
-    "caidaASRank": 26
-  },
-  {
-    "providerASN": 20485,
-    "providerName": "TRANSTELECOM Joint Stock Company TransTeleCom",
-    "local_clients": 1,
-    "caidaASRank": 27
-  },
-  {
-    "providerASN": 31133,
-    "providerName": "MF-MGSM-AS PJSC MegaFon",
-    "local_clients": 1,
-    "caidaASRank": 28
-  },
-  {
-    "providerASN": 52320,
-    "providerName": "GlobeNet Cabos Submarinos Colombia, S.A.S.",
-    "local_clients": 1,
-    "caidaASRank": 30
-  },
-  {
-    "providerASN": 7922,
-    "providerName": "COMCAST-7922 - Comcast Cable Communications, LLC",
-    "local_clients": 2,
-    "caidaASRank": 36
-  },
-  {
-    "providerASN": 33891,
-    "providerName": "CORE-BACKBONE Core-Backbone GmbH",
-    "local_clients": 1,
-    "caidaASRank": 37
-  },
-  {
-    "providerASN": 52468,
-    "providerName": "UFINET PANAMA S.A.",
-    "local_clients": 2,
-    "caidaASRank": 38
-  },
-  {
-    "providerASN": 4826,
-    "providerName": "VOCUS-BACKBONE-AS Vocus Connect International Backbone",
-    "local_clients": 1,
-    "caidaASRank": 41
-  },
-  {
-    "providerASN": 15412,
-    "providerName": "FLAG-AS FLAG TELECOM UK LIMITED",
-    "local_clients": 1,
-    "caidaASRank": 43
-  },
-  {
-    "providerASN": 8220,
-    "providerName": "COLT COLT Technology Services Group Limited",
-    "local_clients": 2,
-    "caidaASRank": 44
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: Transit Providers for FR
+
+This analysis identifies external Autonomous Systems that provide transit services to local ASes in the country. Transit providers are critical for ensuring reliable international connectivity. Results are ranked by CAIDA ASRank, a metric that measures AS importance in the global internet hierarchy.
+
+
+**Analysis Results:**
+
+Top 20 transit providers serving the country:
+
+| Provider ASN | Provider Name | Local Clients | CAIDA ASRank |
+|--------------|---------------|--------------|--------------|
+
+| 6939 | HURRICANE - Hurricane Electric LLC | 3 | 7 |
+
+| 9002 | RETN-AS RETN Limited | 2 | 11 |
+
+| 1273 | CW Vodafone Group PLC | 2 | 14 |
+
+| 7473 | SINGTEL-AS-AP Singapore Telecommunications Ltd | 1 | 15 |
+
+| 4637 | ASN-TELSTRA-GLOBAL Telstra Global | 2 | 16 |
+
+| 12389 | ROSTELECOM-AS PJSC Rostelecom | 2 | 17 |
+
+| 37468 | ANGOLA-CABLES | 1 | 21 |
+
+| 9498 | BBIL-AP BHARTI Airtel Ltd. | 1 | 22 |
+
+| 7195 | EDGEUNO S.A.S | 1 | 23 |
+
+| 3216 | SOVAM-AS PJSC "Vimpelcom" | 1 | 24 |
+
+| 58453 | CMI-INT-HK China Mobile International Limited | 2 | 26 |
+
+| 20485 | TRANSTELECOM Joint Stock Company TransTeleCom | 1 | 27 |
+
+| 31133 | MF-MGSM-AS PJSC MegaFon | 1 | 28 |
+
+| 52320 | GlobeNet Cabos Submarinos Colombia, S.A.S. | 1 | 30 |
+
+| 7922 | COMCAST-7922 - Comcast Cable Communications, LLC | 2 | 36 |
+
+| 33891 | CORE-BACKBONE Core-Backbone GmbH | 1 | 37 |
+
+| 52468 | UFINET PANAMA S.A. | 2 | 38 |
+
+| 4826 | VOCUS-BACKBONE-AS Vocus Connect International Backbone | 1 | 41 |
+
+| 15412 | FLAG-AS FLAG TELECOM UK LIMITED | 1 | 43 |
+
+| 8220 | COLT COLT Technology Services Group Limited | 2 | 44 |
+
+
+**Interpretation:**
+
+Transit providers with lower CAIDA ASRank values (Tier-1 providers) are generally more reliable and influential. The number of local clients connected to each provider indicates the provider's importance for the country's internet connectivity. Concentration among few providers may indicate vulnerability to outages or geopolitical influence.
 
 **Query 2 — Provider tier distribution**
 
@@ -4077,32 +4029,46 @@ RETURN
 ORDER BY providerTier;
 ```
 
-> **Output (5 record(s)):**
+> **Output**
 
-```json
-[
-  {
-    "providerTier": "A) Top 100 (Internet Core)",
-    "numberOfProviders": 51
-  },
-  {
-    "providerTier": "B) Top 101-500 (Major)",
-    "numberOfProviders": 187
-  },
-  {
-    "providerTier": "C) Top 501-2000 (Important)",
-    "numberOfProviders": 417
-  },
-  {
-    "providerTier": "D) Beyond 2000 (Regional/Niche)",
-    "numberOfProviders": 2429
-  },
-  {
-    "providerTier": "E) Unranked",
-    "numberOfProviders": 74
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: Upstream Provider Tiers for FR
+
+This analysis categorizes the country's external transit providers into tiers based on their CAIDA ASRank. The distribution across tiers reflects the diversity and resilience of the country's upstream connectivity.
+
+
+**Analysis Results:**
+
+| Provider Tier | Number of Providers |
+|---------------|-------------------|
+
+| A) Top 100 (Internet Core) | 51 |
+
+| B) Top 101-500 (Major) | 187 |
+
+| C) Top 501-2000 (Important) | 417 |
+
+| D) Beyond 2000 (Regional/Niche) | 2429 |
+
+| E) Unranked | 74 |
+
+
+**Tier Definitions:**
+
+- **Tier A (Top 100)**: Internet Core — largest, most influential global providers
+- **Tier B (101-500)**: Major providers — significant regional and global presence
+- **Tier C (501-2000)**: Important providers — regional influence and niche markets
+- **Tier D (Beyond 2000)**: Regional/Niche — smaller, specialized providers
+
+**Interpretation:**
+
+A healthy distribution includes providers from multiple tiers, indicating diversity and reduced dependency on any single provider. Over-reliance on Tier D providers may indicate limited access to quality upstream connectivity, while concentration in Tier A/B indicates strong but potentially centralized international links.
 
 **Query 3 — Concentration of upstream providers**
 
@@ -4131,62 +4097,58 @@ ORDER BY connectedDomesticClients DESC
 LIMIT 10
 ```
 
-> **Output (10 record(s)):**
+> **Output**
 
-```json
-[
-  {
-    "upstreamAS": 174,
-    "upstreamCountry": "US",
-    "connectedDomesticClients": 343
-  },
-  {
-    "upstreamAS": 6939,
-    "upstreamCountry": "US",
-    "connectedDomesticClients": 311
-  },
-  {
-    "upstreamAS": 25091,
-    "upstreamCountry": "CH",
-    "connectedDomesticClients": 296
-  },
-  {
-    "upstreamAS": 24482,
-    "upstreamCountry": "SG",
-    "connectedDomesticClients": 272
-  },
-  {
-    "upstreamAS": 49544,
-    "upstreamCountry": "NL",
-    "connectedDomesticClients": 268
-  },
-  {
-    "upstreamAS": 1828,
-    "upstreamCountry": "US",
-    "connectedDomesticClients": 261
-  },
-  {
-    "upstreamAS": 36236,
-    "upstreamCountry": "US",
-    "connectedDomesticClients": 257
-  },
-  {
-    "upstreamAS": 8298,
-    "upstreamCountry": "CH",
-    "connectedDomesticClients": 251
-  },
-  {
-    "upstreamAS": 1239,
-    "upstreamCountry": "US",
-    "connectedDomesticClients": 246
-  },
-  {
-    "upstreamAS": 39120,
-    "upstreamCountry": "IT",
-    "connectedDomesticClients": 243
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: Upstream Provider Concentration for FR
+
+This analysis identifies which external transit providers serve the most local ASes in the country, highlighting potential concentration risks. High concentration among few providers indicates vulnerability to outages or policy changes affecting those providers.
+
+
+**Analysis Results:**
+
+Top 10 upstream providers by number of connected local clients:
+
+| Upstream ASN | Upstream Country | Connected Local ASes |
+|--------------|------------------|---------------------|
+
+| 174 | US | 343 |
+
+| 6939 | US | 311 |
+
+| 25091 | CH | 296 |
+
+| 24482 | SG | 272 |
+
+| 49544 | NL | 268 |
+
+| 1828 | US | 261 |
+
+| 36236 | US | 257 |
+
+| 8298 | CH | 251 |
+
+| 1239 | US | 246 |
+
+| 39120 | IT | 243 |
+
+
+**Interpretation:**
+
+The provider serving the most local ASes (343 ASes) represents a potential critical infrastructure dependency. If this provider experiences outages or policy changes, it could significantly impact the country's internet connectivity. A more distributed set of upstream providers indicates greater resilience.
+
+**Recommendations:**
+
+- Monitor the top 3-5 providers for operational health and availability.
+- Encourage local ASes to diversify their upstream connections.
+- Consider geographic and organizational diversity among upstream providers.
+
 
 **Query 4 — Diversity of upstream peers**
 
@@ -4213,17 +4175,36 @@ RETURN c.name AS country,
 ORDER BY uniqueExternalPeers DESC
 ```
 
-> **Output (1 record(s)):**
+> **Output**
 
-```json
-[
-  {
-    "country": "France",
-    "domesticOperators": 1015,
-    "uniqueExternalPeers": 10675
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: External Peer Diversity for FR
+
+This analysis measures the diversity of external peering relationships for local ASes in the country. High peer diversity indicates a well-connected internet ecosystem with multiple pathways for traffic exchange.
+
+
+**Analysis Results:**
+
+- Total domestic operators: **1015**
+- Unique external peer ASes: **10675**
+- Average external peers per domestic operator: **10.52**
+
+
+**Interpretation:**
+
+The country has **1015** domestic ASes that peer with **10675** external ASes. A higher number of unique external peers indicates greater connectivity diversity and redundancy. The ratio of external peers to domestic operators shows how interconnected the local ecosystem is with the global internet.
+
+**Recommendations:**
+
+- Encourage underconnected ASes to establish additional peering relationships.
+- Facilitate local peering through Internet Exchange Points (IXPs).
+- Monitor for excessive dependency on single external peers.
 
 **Query 5 — Presence in international IXPs**
 
@@ -4250,17 +4231,41 @@ RETURN c.name AS country,
 ORDER BY connectedInternationalOperators DESC
 ```
 
-> **Output (1 record(s)):**
+> **Output**
 
-```json
-[
-  {
-    "country": "France",
-    "uniqueInternationalIXPs": 177,
-    "connectedInternationalOperators": 137
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: International IXP Presence for FR
+
+This analysis identifies international Internet Exchange Points (IXPs) where local ASes from the country maintain a presence. Participation in international IXPs indicates strategic positioning for global traffic exchange and reduced reliance on geographic proximity.
+
+
+**Analysis Results:**
+
+
+- Country: **France**
+- Unique international IXPs with local participation: **177**
+- Domestic operators participating internationally: **137**
+
+
+**Interpretation:**
+
+Local ASes from the country are present in **177** international IXPs, with **137** operators actively participating. This indicates:
+
+- **Global reach**: Local operators have direct connections to major internet hubs worldwide.
+- **Traffic optimization**: Direct peering at international IXPs reduces latency and improves performance.
+- **Geopolitical resilience**: Reduced dependency on single geographic region for connectivity.
+
+**Recommendations:**
+
+- Encourage additional local operators to establish presence in key international IXPs.
+- Prioritize major IXPs in strategic regions (Europe, Asia, Americas).
+- Monitor participation trends to ensure sustained global connectivity.
 
 ---
 
@@ -4292,18 +4297,30 @@ RETURN c.name AS country,
 ORDER BY rpkiCoveragePercentage DESC
 ```
 
-> **Output (1 record(s)):**
+> **Output**
 
-```json
-[
-  {
-    "country": "France",
-    "totalPrefixes": 15996,
-    "rpkiValidPrefixes": 12106,
-    "rpkiCoveragePercentage": 75.68
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: RPKI Prefix Coverage Rate for FR
+
+This analysis calculates the percentage of BGP prefixes originated by the country's Autonomous Systems that are covered by a valid RPKI Route Origin Authorization (ROA). A prefix is RPKI-valid when a certificate authority has explicitly authorized the originating AS to announce it, making the announcement cryptographically verifiable and preventing route hijacking.
+
+
+**Analysis Results:**
+
+- Country: **France**
+- Total BGP prefixes originated: **15996**
+- RPKI-valid prefixes: **12106**
+- RPKI coverage rate: **75.68%**
+
+**Interpretation:**
+
+An RPKI coverage rate of **75.68%** means that 12106 out of 15996 prefixes are protected against route origin hijacking. Unprotected prefixes (RPKI NotFound or RPKI Invalid) remain vulnerable to BGP hijacks — a significant cybersecurity risk for the country's internet infrastructure.
 
 **Query 2 — PeeringDB presence rate (coordination metric)**
 
@@ -4334,18 +4351,30 @@ RETURN c.name AS country,
 ORDER BY coordinationPercentage DESC
 ```
 
-> **Output (1 record(s)):**
+> **Output**
 
-```json
-[
-  {
-    "country": "France",
-    "totalAS": 2238,
-    "asWithPeeringDB": 556,
-    "coordinationPercentage": 24.84361036639857
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: PeeringDB Presence Rate for FR
+
+This analysis calculates the percentage of Autonomous Systems (ASes) in the country that have a presence in PeeringDB. PeeringDB is a key resource for interconnection coordination, and a high presence rate indicates strong participation in global peering ecosystems.
+
+
+**Analysis Results:**
+
+- Country: **France**
+- Total ASes: **2238**
+- ASes with PeeringDB presence: **556**
+- PeeringDB presence rate: **24.84%**
+
+**Interpretation:**
+
+A PeeringDB presence rate of **24.84%** indicates that approximately 556 out of 2238 ASes in the country are listed in PeeringDB. This reflects the country's level of coordination and transparency in interconnection practices.
 
 **Query 3 — Internet hegemony concentration**
 
@@ -4386,92 +4415,51 @@ ORDER BY dependentLocalASes DESC,
 LIMIT 10
 ```
 
-> **Output (10 record(s)):**
+> **Output**
 
-```json
-[
-  {
-    "providerASN": 6939,
-    "providerName": "HURRICANE - Hurricane Electric LLC",
-    "providerCountry": "US",
-    "dependentLocalASes": 768,
-    "avgHegemonyScore": 0.3594,
-    "maxHegemonyScore": 1.0
-  },
-  {
-    "providerASN": 174,
-    "providerName": "COGENT-174 - Cogent Communications, LLC",
-    "providerCountry": "US",
-    "dependentLocalASes": 448,
-    "avgHegemonyScore": 0.4225,
-    "maxHegemonyScore": 1.0
-  },
-  {
-    "providerASN": 3356,
-    "providerName": "LEVEL3 - Level 3 Parent, LLC",
-    "providerCountry": "US",
-    "dependentLocalASes": 256,
-    "avgHegemonyScore": 0.2509,
-    "maxHegemonyScore": 1.0
-  },
-  {
-    "providerASN": 6762,
-    "providerName": "SEABONE-NET TELECOM ITALIA SPARKLE S.p.A.",
-    "providerCountry": "IT",
-    "dependentLocalASes": 235,
-    "avgHegemonyScore": 0.1929,
-    "maxHegemonyScore": 1.0
-  },
-  {
-    "providerASN": 6461,
-    "providerName": "ZAYO-6461 - Zayo Bandwidth",
-    "providerCountry": "US",
-    "dependentLocalASes": 138,
-    "avgHegemonyScore": 0.3714,
-    "maxHegemonyScore": 1.0
-  },
-  {
-    "providerASN": 8220,
-    "providerName": "COLT COLT Technology Services Group Limited",
-    "providerCountry": "GB",
-    "dependentLocalASes": 103,
-    "avgHegemonyScore": 0.6608,
-    "maxHegemonyScore": 1.0
-  },
-  {
-    "providerASN": 137409,
-    "providerName": "GSLNETWORKS-AS-AP GSL Networks Pty LTD",
-    "providerCountry": "AU",
-    "dependentLocalASes": 95,
-    "avgHegemonyScore": 0.33,
-    "maxHegemonyScore": 0.85
-  },
-  {
-    "providerASN": 3257,
-    "providerName": "GTT-BACKBONE GTT Communications Inc.",
-    "providerCountry": "US",
-    "dependentLocalASes": 90,
-    "avgHegemonyScore": 0.3257,
-    "maxHegemonyScore": 1.0
-  },
-  {
-    "providerASN": 2914,
-    "providerName": "NTT-DATA-2914 - NTT America, Inc.",
-    "providerCountry": "US",
-    "dependentLocalASes": 75,
-    "avgHegemonyScore": 0.1849,
-    "maxHegemonyScore": 1.0
-  },
-  {
-    "providerASN": 29222,
-    "providerName": "Infomaniak-AS Infomaniak Network SA",
-    "providerCountry": "CH",
-    "dependentLocalASes": 64,
-    "avgHegemonyScore": 0.1167,
-    "maxHegemonyScore": 0.125
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: Internet Hegemony Concentration for FR
+
+This analysis identifies which external upstream providers the country's Autonomous Systems are most dependent on, using the IHR (Internet Health Report) hegemony score. A hegemony score close to 1.0 for a single external provider means the country's internet traffic is critically dependent on that one AS — a major cybersecurity and resilience risk. Diverse, low-hegemony upstreams indicate a resilient internet topology.
+
+
+**Top Upstream Providers by Hegemony Score:**
+
+| Provider ASN | Provider Name | Provider Country | Dependent Local ASes | Avg Hegemony | Max Hegemony |
+|--------------|---------------|------------------|----------------------|--------------|--------------|
+
+| AS6939 | HURRICANE - Hurricane Electric LLC | US | 768 | 0.3594 | 1.0 |
+
+| AS174 | COGENT-174 - Cogent Communications, LLC | US | 448 | 0.4225 | 1.0 |
+
+| AS3356 | LEVEL3 - Level 3 Parent, LLC | US | 256 | 0.2509 | 1.0 |
+
+| AS6762 | SEABONE-NET TELECOM ITALIA SPARKLE S.p.A. | IT | 235 | 0.1929 | 1.0 |
+
+| AS6461 | ZAYO-6461 - Zayo Bandwidth | US | 138 | 0.3714 | 1.0 |
+
+| AS8220 | COLT COLT Technology Services Group Limited | GB | 103 | 0.6608 | 1.0 |
+
+| AS137409 | GSLNETWORKS-AS-AP GSL Networks Pty LTD | AU | 95 | 0.33 | 0.85 |
+
+| AS3257 | GTT-BACKBONE GTT Communications Inc. | US | 90 | 0.3257 | 1.0 |
+
+| AS2914 | NTT-DATA-2914 - NTT America, Inc. | US | 75 | 0.1849 | 1.0 |
+
+| AS29222 | Infomaniak-AS Infomaniak Network SA | CH | 64 | 0.1167 | 0.125 |
+
+
+**Interpretation:**
+
+- **Avg Hegemony > 0.3**: This upstream provider carries a critical share of the country's traffic. A disruption or attack targeting this AS would significantly impact the country's internet connectivity.
+- **Avg Hegemony 0.1–0.3**: Significant dependency — warrants monitoring and diversification strategy.
+- **Avg Hegemony < 0.1**: Healthy level — country has diverse enough routing to withstand loss of this provider.
 
 ---
 
@@ -4517,24 +4505,35 @@ RETURN
 ORDER BY cdnName;
 ```
 
-> **Output (3 record(s)):**
+> **Output**
 
-```json
-[
-  {
-    "cdnASN": 29264,
-    "cdnName": "CDN-CANAL-PLUS"
-  },
-  {
-    "cdnASN": 49477,
-    "cdnName": "E-TF1 E-TF1 SAS"
-  },
-  {
-    "cdnASN": 16276,
-    "cdnName": "OVH OVH SAS"
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: CDN ASes in FR
+
+This analysis identifies Autonomous Systems (ASes) in the country that are categorized as Content Delivery Networks (CDNs). CDNs play a critical role in mitigating DDoS attacks by distributing traffic and providing caching services.
+
+
+**Analysis Results:**
+
+| CDN ASN | CDN Name |
+|---------|----------|
+
+| 29264 | CDN-CANAL-PLUS |
+
+| 49477 | E-TF1 E-TF1 SAS |
+
+| 16276 | OVH OVH SAS |
+
+
+**Interpretation:**
+
+The presence of CDN ASes in the country indicates the availability of infrastructure to handle high traffic loads and mitigate DDoS attacks. A higher number of CDN ASes suggests better resilience against large-scale attacks.
 
 **Query 2 — CDN population coverage**
 
@@ -4561,42 +4560,41 @@ RETURN
 ORDER BY populationServedPercentage DESC;
 ```
 
-> **Output (6 record(s)):**
+> **Output**
 
-```json
-[
-  {
-    "cdnASN": 16276,
-    "cdnName": "OVH OVH SAS",
-    "populationServedPercentage": 0.8547753793962675
-  },
-  {
-    "cdnASN": 13335,
-    "cdnName": "CLOUDFLARENET - Cloudflare, Inc.",
-    "populationServedPercentage": 0.21004564387110403
-  },
-  {
-    "cdnASN": 21859,
-    "cdnName": "ZEN-ECN",
-    "populationServedPercentage": 0.1690633040975202
-  },
-  {
-    "cdnASN": 16509,
-    "cdnName": "AMAZON-02 - Amazon.com, Inc.",
-    "populationServedPercentage": 0.13970076797768416
-  },
-  {
-    "cdnASN": 60068,
-    "cdnName": "CDN77 Datacamp Limited",
-    "populationServedPercentage": 0.03531609767433955
-  },
-  {
-    "cdnASN": 15169,
-    "cdnName": "GOOGLE - Google LLC",
-    "populationServedPercentage": 0.01993543357201414
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: CDN Coverage for FR
+
+This analysis calculates the percentage of the country's population served by Autonomous Systems (ASes) categorized as CDNs. This metric reflects the reach and impact of CDN infrastructure in the country.
+
+
+**Analysis Results:**
+
+| CDN ASN | CDN Name | Population Served (%) |
+|---------|----------|-----------------------|
+
+| 16276 | OVH OVH SAS | 0.85 |
+
+| 13335 | CLOUDFLARENET - Cloudflare, Inc. | 0.21 |
+
+| 21859 | ZEN-ECN | 0.17 |
+
+| 16509 | AMAZON-02 - Amazon.com, Inc. | 0.14 |
+
+| 60068 | CDN77 Datacamp Limited | 0.04 |
+
+| 15169 | GOOGLE - Google LLC | 0.02 |
+
+
+**Interpretation:**
+
+A higher percentage of the population served by CDN ASes indicates better access to CDN services, which can improve performance and resilience against DDoS attacks. Gaps in coverage may highlight areas for infrastructure improvement.
 
 **Query 3 — CDN/DDoS protection of popular domains**
 
@@ -4634,202 +4632,69 @@ ORDER BY queryPercentage DESC
 LIMIT 20;
 ```
 
-> **Output (20 record(s)):**
+> **Output**
 
-```json
-[
-  {
-    "popularDomain": "tik.porn",
-    "hostingASN": 13335,
-    "hostingName": "CLOUDFLARENET - Cloudflare, Inc.",
-    "protections": [
-      "Content Delivery Network",
-      "DDoS Mitigation"
-    ],
-    "queryPercentage": 95.66787
-  },
-  {
-    "popularDomain": "tik.porn",
-    "hostingASN": 199524,
-    "hostingName": "GCORE G-Core Labs S.A.",
-    "protections": [
-      "DDoS Mitigation",
-      "Content Delivery Network"
-    ],
-    "queryPercentage": 95.66787
-  },
-  {
-    "popularDomain": "ameli.fr",
-    "hostingASN": 16276,
-    "hostingName": "OVH OVH SAS",
-    "protections": [
-      "DDoS Mitigation",
-      "Content Delivery Network"
-    ],
-    "queryPercentage": 91.973244
-  },
-  {
-    "popularDomain": "ameli.fr",
-    "hostingASN": 13335,
-    "hostingName": "CLOUDFLARENET - Cloudflare, Inc.",
-    "protections": [
-      "Content Delivery Network",
-      "DDoS Mitigation"
-    ],
-    "queryPercentage": 91.973244
-  },
-  {
-    "popularDomain": "louvre.fr",
-    "hostingASN": 16276,
-    "hostingName": "OVH OVH SAS",
-    "protections": [
-      "DDoS Mitigation",
-      "Content Delivery Network"
-    ],
-    "queryPercentage": 87.40458
-  },
-  {
-    "popularDomain": "louvre.fr",
-    "hostingASN": 13335,
-    "hostingName": "CLOUDFLARENET - Cloudflare, Inc.",
-    "protections": [
-      "Content Delivery Network",
-      "DDoS Mitigation"
-    ],
-    "queryPercentage": 87.40458
-  },
-  {
-    "popularDomain": "huffingtonpost.fr",
-    "hostingASN": 270014,
-    "hostingName": "GRUPO CG LIMITADA",
-    "protections": [
-      "Content Delivery Network"
-    ],
-    "queryPercentage": 86.813187
-  },
-  {
-    "popularDomain": "huffingtonpost.fr",
-    "hostingASN": 20764,
-    "hostingName": "RASCOM-AS CJSC RASCOM",
-    "protections": [
-      "DDoS Mitigation"
-    ],
-    "queryPercentage": 86.813187
-  },
-  {
-    "popularDomain": "huffingtonpost.fr",
-    "hostingASN": 1299,
-    "hostingName": "TWELVE99 Arelion Sweden AB",
-    "protections": [
-      "DDoS Mitigation"
-    ],
-    "queryPercentage": 86.813187
-  },
-  {
-    "popularDomain": "huffingtonpost.fr",
-    "hostingASN": 30844,
-    "hostingName": "LIQUID-AS Liquid Telecommunications Ltd",
-    "protections": [
-      "DDoS Mitigation"
-    ],
-    "queryPercentage": 86.813187
-  },
-  {
-    "popularDomain": "huffingtonpost.fr",
-    "hostingASN": 14840,
-    "hostingName": "BR.Digital Telecom",
-    "protections": [
-      "Content Delivery Network",
-      "DDoS Mitigation"
-    ],
-    "queryPercentage": 86.813187
-  },
-  {
-    "popularDomain": "huffingtonpost.fr",
-    "hostingASN": 24482,
-    "hostingName": "SGGS-AS-AP SG.GS",
-    "protections": [
-      "DDoS Mitigation"
-    ],
-    "queryPercentage": 86.813187
-  },
-  {
-    "popularDomain": "huffingtonpost.fr",
-    "hostingASN": 9002,
-    "hostingName": "RETN-AS RETN Limited",
-    "protections": [
-      "DDoS Mitigation"
-    ],
-    "queryPercentage": 86.813187
-  },
-  {
-    "popularDomain": "doctolib.fr",
-    "hostingASN": 16509,
-    "hostingName": "AMAZON-02 - Amazon.com, Inc.",
-    "protections": [
-      "Content Delivery Network",
-      "DDoS Mitigation"
-    ],
-    "queryPercentage": 82.938389
-  },
-  {
-    "popularDomain": "bigcartel.com",
-    "hostingASN": 13335,
-    "hostingName": "CLOUDFLARENET - Cloudflare, Inc.",
-    "protections": [
-      "Content Delivery Network",
-      "DDoS Mitigation"
-    ],
-    "queryPercentage": 82.141071
-  },
-  {
-    "popularDomain": "leroymerlin.fr",
-    "hostingASN": 30844,
-    "hostingName": "LIQUID-AS Liquid Telecommunications Ltd",
-    "protections": [
-      "DDoS Mitigation"
-    ],
-    "queryPercentage": 81.426814
-  },
-  {
-    "popularDomain": "leroymerlin.fr",
-    "hostingASN": 14840,
-    "hostingName": "BR.Digital Telecom",
-    "protections": [
-      "Content Delivery Network",
-      "DDoS Mitigation"
-    ],
-    "queryPercentage": 81.426814
-  },
-  {
-    "popularDomain": "leroymerlin.fr",
-    "hostingASN": 24482,
-    "hostingName": "SGGS-AS-AP SG.GS",
-    "protections": [
-      "DDoS Mitigation"
-    ],
-    "queryPercentage": 81.426814
-  },
-  {
-    "popularDomain": "leroymerlin.fr",
-    "hostingASN": 9002,
-    "hostingName": "RETN-AS RETN Limited",
-    "protections": [
-      "DDoS Mitigation"
-    ],
-    "queryPercentage": 81.426814
-  },
-  {
-    "popularDomain": "leroymerlin.fr",
-    "hostingASN": 270014,
-    "hostingName": "GRUPO CG LIMITADA",
-    "protections": [
-      "Content Delivery Network"
-    ],
-    "queryPercentage": 81.426814
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: Popular Domains Protected by CDN/DDoS Infrastructure in FR
+
+This analysis identifies the most queried domains in the country and checks if they are hosted by Content Delivery Networks (CDNs) or DDoS Mitigation providers. Both categories provide scrubbing capacity and traffic distribution that protect services during volumetric attacks.
+
+
+**Analysis Results:**
+
+| Domain Name | Hosting ASN | Hosting AS Name | Hosting Type | Query Percentage |
+|-------------|-------------|-----------------|--------------|------------------|
+
+| tik.porn | 13335 | CLOUDFLARENET - Cloudflare, Inc. | Content Delivery Network, DDoS Mitigation | 95.67 |
+
+| tik.porn | 199524 | GCORE G-Core Labs S.A. | DDoS Mitigation, Content Delivery Network | 95.67 |
+
+| ameli.fr | 16276 | OVH OVH SAS | DDoS Mitigation, Content Delivery Network | 91.97 |
+
+| ameli.fr | 13335 | CLOUDFLARENET - Cloudflare, Inc. | Content Delivery Network, DDoS Mitigation | 91.97 |
+
+| louvre.fr | 16276 | OVH OVH SAS | DDoS Mitigation, Content Delivery Network | 87.40 |
+
+| louvre.fr | 13335 | CLOUDFLARENET - Cloudflare, Inc. | Content Delivery Network, DDoS Mitigation | 87.40 |
+
+| huffingtonpost.fr | 270014 | GRUPO CG LIMITADA | Content Delivery Network | 86.81 |
+
+| huffingtonpost.fr | 20764 | RASCOM-AS CJSC RASCOM | DDoS Mitigation | 86.81 |
+
+| huffingtonpost.fr | 1299 | TWELVE99 Arelion Sweden AB | DDoS Mitigation | 86.81 |
+
+| huffingtonpost.fr | 30844 | LIQUID-AS Liquid Telecommunications Ltd | DDoS Mitigation | 86.81 |
+
+| huffingtonpost.fr | 14840 | BR.Digital Telecom | Content Delivery Network, DDoS Mitigation | 86.81 |
+
+| huffingtonpost.fr | 24482 | SGGS-AS-AP SG.GS | DDoS Mitigation | 86.81 |
+
+| huffingtonpost.fr | 9002 | RETN-AS RETN Limited | DDoS Mitigation | 86.81 |
+
+| doctolib.fr | 16509 | AMAZON-02 - Amazon.com, Inc. | Content Delivery Network, DDoS Mitigation | 82.94 |
+
+| bigcartel.com | 13335 | CLOUDFLARENET - Cloudflare, Inc. | Content Delivery Network, DDoS Mitigation | 82.14 |
+
+| leroymerlin.fr | 30844 | LIQUID-AS Liquid Telecommunications Ltd | DDoS Mitigation | 81.43 |
+
+| leroymerlin.fr | 14840 | BR.Digital Telecom | Content Delivery Network, DDoS Mitigation | 81.43 |
+
+| leroymerlin.fr | 24482 | SGGS-AS-AP SG.GS | DDoS Mitigation | 81.43 |
+
+| leroymerlin.fr | 9002 | RETN-AS RETN Limited | DDoS Mitigation | 81.43 |
+
+| leroymerlin.fr | 270014 | GRUPO CG LIMITADA | Content Delivery Network | 81.43 |
+
+
+**Interpretation:**
+
+Domains hosted by CDN or DDoS mitigation infrastructure benefit from traffic scrubbing and distributed caching, making them significantly more resilient to volumetric attacks. A country where most popular domains rely on such infrastructure has better baseline DDoS resistance for its critical services.
 
 **Query 4 — IXP diversity in the country**
 
@@ -4851,17 +4716,31 @@ RETURN c.name AS country,
 ORDER BY numberOfIXPs DESC
 ```
 
-> **Output (1 record(s)):**
+> **Output**
 
-```json
-[
-  {
-    "country": "France",
-    "numberOfIXPs": 23,
-    "numberOfASMembers": 754
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: IXP Diversity in FR
+
+This analysis measures the diversity of Internet Exchange Points (IXPs) in the country and the number of Autonomous Systems (ASes) connected to these IXPs. A higher number of IXPs and connected ASes indicates better resilience and redundancy in the country's internet infrastructure.
+
+
+**Analysis Results:**
+
+| Country | Number of IXPs | Number of AS Members |
+|---------|----------------|----------------------|
+
+| France | 23 | 754 |
+
+
+**Interpretation:**
+
+A diverse set of IXPs and connected ASes improves the country's ability to handle traffic surges and mitigate DDoS attacks. Limited IXP diversity may indicate potential bottlenecks in the network.
 
 **Query 5 — Network monitoring density (RIPE Atlas probes)**
 
@@ -4879,16 +4758,31 @@ RETURN c.name AS country,
 ORDER BY numberOfAtlasProbes DESC
 ```
 
-> **Output (1 record(s)):**
+> **Output**
 
-```json
-[
-  {
-    "country": "France",
-    "numberOfAtlasProbes": 2668
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: Network Monitoring Density in FR
+
+This analysis calculates the number of Atlas Probes deployed in the country. Atlas Probes are critical for monitoring network performance and detecting anomalies, including DDoS attacks.
+
+
+**Analysis Results:**
+
+| Country | Number of Atlas Probes |
+|---------|------------------------|
+
+| France | 2668 |
+
+
+**Interpretation:**
+
+A higher number of Atlas Probes indicates better network monitoring coverage, which is essential for detecting and mitigating DDoS attacks. Countries with fewer probes may have limited visibility into network performance.
 
 **Query 6 — RPKI coverage via ROA prefixes**
 
@@ -4916,18 +4810,31 @@ RETURN
        ) AS rpkiCoveragePercentage;
 ```
 
-> **Output (1 record(s)):**
+> **Output**
 
-```json
-[
-  {
-    "country": "France",
-    "totalPrefixes": 15996,
-    "coveredPrefixes": 10352,
-    "rpkiCoveragePercentage": 64.72
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: RPKI Coverage in FR
+
+This analysis calculates the percentage of BGP prefixes in the country that are covered by RPKI (Resource Public Key Infrastructure). RPKI coverage is a key indicator of routing security and resilience against DDoS attacks.
+
+
+**Analysis Results:**
+
+| Country | Total Prefixes | Covered Prefixes | RPKI Coverage (%) |
+|---------|----------------|------------------|-------------------|
+
+| France | 15996 | 10352 | 64.72 |
+
+
+**Interpretation:**
+
+A higher RPKI coverage percentage indicates better routing security and resilience against route hijacking and DDoS attacks. Countries with low RPKI coverage may be more vulnerable to these threats.
 
 ---
 
@@ -4976,18 +4883,32 @@ RETURN c.name AS country,
 ORDER BY rpkiCoveragePercentage DESC;
 ```
 
-> **Output (1 record(s)):**
+> **Output**
 
-```json
-[
-  {
-    "country": "France",
-    "totalPrefixes": 5418,
-    "coveredPrefixes": 3667,
-    "rpkiCoveragePercentage": 67.68
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: RPKI Coverage for Server Prefixes in FR
+
+This analysis calculates the percentage of BGP prefixes hosting servers in the country that are covered by RPKI (Resource Public Key Infrastructure). RPKI coverage ensures routing security and reduces the risk of route hijacking for server prefixes.
+
+
+**Analysis Results:**
+
+| Country | Total Prefixes | Covered Prefixes | RPKI Coverage (%) |
+|---------|----------------|------------------|-------------------|
+
+| France | 5418 | 3667 | 67.68 |
+
+
+**Interpretation:**
+
+A higher RPKI coverage percentage indicates better routing security for server prefixes in the country. Countries with low RPKI coverage may be more vulnerable to routing attacks targeting server infrastructure.
+
 
 **Query 2 — DNS infrastructure density**
 
@@ -5014,17 +4935,31 @@ RETURN c.name          AS country,
 ORDER BY dnsInfrastructureNodes DESC
 ```
 
-> **Output (1 record(s)):**
+> **Output**
 
-```json
-[
-  {
-    "country": "France",
-    "dnsInfrastructureNodes": 1197343,
-    "numberOfHostingOperators": 1238
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: Internet Server Infrastructure Density for FR
+
+This analysis measures the density of internet server infrastructure in the country by counting the number of distinct HostName nodes resolved to IPs within the country's BGP prefixes, and the number of distinct operators (Autonomous Systems) hosting them. This provides an approximation of the "Secure Internet Servers" indicator using the IYP graph topology.
+
+
+**Analysis Results:**
+
+| Country | DNS Infrastructure Nodes | Hosting Operators (ASes) |
+|---------|--------------------------|--------------------------|
+
+| France | 1197343 | 1238 |
+
+
+**Interpretation:**
+
+A higher number of infrastructure nodes spread across many hosting operators indicates a resilient, distributed server ecosystem. Countries where most nodes are concentrated in a single operator face a single-point-of-failure risk. This metric complements the official "Secure Internet Servers per million inhabitants" score from the World Bank.
 
 **Query 3 — Diversity of operators hosting servers**
 
@@ -5049,17 +4984,31 @@ RETURN c.name AS country,
 ORDER BY numberOfASOperators DESC
 ```
 
-> **Output (1 record(s)):**
+> **Output**
 
-```json
-[
-  {
-    "country": "France",
-    "numberOfServers": 1197343,
-    "numberOfASOperators": 1238
-  }
-]
-```
+==================================================
+✅ RAW RESULT RECEIVED FROM NEO4J
+==================================================
+
+==================================================
+✨ RESULT FORMATTED FOR THE LLM (via query_templates.yaml)
+==================================================
+Title: Diversity of Server Hosting Operators in FR
+
+This analysis identifies the diversity of Autonomous Systems (ASes) hosting servers in the country. A higher diversity of operators indicates better resilience and reduced dependency on a few providers.
+
+
+**Analysis Results:**
+
+| Country | Number of Servers | Number of AS Operators |
+|---------|-------------------|------------------------|
+
+| France | 1197343 | 1238 |
+
+
+**Interpretation:**
+
+A higher number of AS operators hosting servers indicates a more distributed and resilient server infrastructure. Countries with fewer operators may face risks of centralization and reduced redundancy.
 
 ---
 
