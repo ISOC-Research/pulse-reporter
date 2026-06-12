@@ -35,6 +35,7 @@ from request_for_YPI.pulse_service import (
     get_data_from_year,
     get_indicator_value,
 )
+from request_for_YPI import apnic_service
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -760,67 +761,20 @@ def get_web_ipv6_readiness(country_code: str,
                            sample_limit: int = 1000) -> dict:
     """
     Section 4.1 / 4.1.2
-
-    Analyze IPv6 reachability of popular web domains.
+    Analyze IPv6 reachability of popular web domains using Google CRUX.
     """
-
-    tld = country_code.lower()
-
-    query = f"""
-    MATCH (d:DomainName)-[:RANK]->(:Ranking)
-
-    WHERE d.name ENDS WITH '.{tld}'
-
-    WITH DISTINCT d
-    LIMIT {sample_limit}
-
-    OPTIONAL MATCH (d)-[:PART_OF]-(h:HostName)
-
-    OPTIONAL MATCH (h)-[:RESOLVES_TO]->(ip4:IP {{af: 4}})
-    OPTIONAL MATCH (h)-[:RESOLVES_TO]->(ip6:IP {{af: 6}})
-
-    WITH
-        d,
-
-        COUNT(DISTINCT ip4) > 0 AS has_ipv4,
-        COUNT(DISTINCT ip6) > 0 AS has_ipv6
-
-    RETURN
-        COUNT(DISTINCT d) AS total_domains,
-
-        SUM(
-            CASE WHEN has_ipv6 THEN 1 ELSE 0 END
-        ) AS ipv6_capable,
-
-        SUM(
-            CASE
-                WHEN has_ipv4 = true AND has_ipv6 = false
-                THEN 1
-                ELSE 0
-            END
-        ) AS ipv4_only
-    """
-
-    result = execute_cypher_test(query)
-
-    if not result["success"]:
+    from request_for_YPI import crux_service
+    
+    result = crux_service.get_crux_web_readiness(country_code, sample_limit)
+    
+    if result.get("error"):
         return {"error": result["error"]}
-
-    row = result["data"][0]
-
-    total = row.get("total_domains", 0) or 0
-    ipv6 = row.get("ipv6_capable", 0) or 0
-    ipv4_only = row.get("ipv4_only", 0) or 0
-
-    ipv6_pct = round((ipv6 / total) * 100, 2) if total else 0.0
-
+        
     return {
-        "country": country_code.upper(),
-        "total_domains": total,
-        "ipv6_capable": ipv6,
-        "ipv4_only": ipv4_only,
-        "ipv6_percentage": ipv6_pct,
-        "error": None
+        "total_domains": result["total_domains"],
+        "ipv6_capable":  result["ipv6_capable"],
+        "ipv4_only":     result["ipv4_only"],
+        "ipv6_percentage": result.get("ipv6_percentage", 0)
     }
 
 def get_government_ipv6_readiness(country_code: str,
@@ -1215,14 +1169,13 @@ def build_scorecard(country_code: str, year: int = 2024) -> dict:
     """
     country_code = country_code.upper()
 
-    # ── 1. National IPv6 adoption from Pulse API ─────────────────────────
-    all_ipv6 = extract_all_countries_indicator(year, "ipv6")
-    nat_entry = next((x for x in all_ipv6 if x["country"] == country_code), None)
+    # ── 1. National IPv6 adoption from APNIC ─────────────────────────
+    apnic_data = apnic_service.get_apnic_country_adoption(country_code)
+    
+    if apnic_data.get("error"):
+        return {"error": f"No APNIC data for {country_code}: {apnic_data['error']}"}
 
-    if nat_entry is None:
-        return {"error": f"No Pulse API data for {country_code} in {year}"}
-
-    national_adoption = nat_entry["average"]   # already 0–1 float
+    national_adoption = apnic_data["adoption_pct"] / 100.0   # convert to 0–1 float
 
     # ── 2. IYP: per-ASN prefix + market share data ───────────────────────
     result = _query_asn_ipv6_prefixes(country_code)
@@ -1569,8 +1522,7 @@ def generate_executive_summary(scorecard: dict) -> str:
             f"PRIORITY ACTION — {len(bottlenecks)} high-impact "
             f"bottleneck provider(s) identified: " + "; ".join(d_parts) + "."
         )
-
-    # Category A — Ghost ISPs
+                # Category A — Ghost ISPs
     if ghosts:
         ghost_share = sum(x["market_share_pct"] for x in ghosts)
         lines.append(
@@ -1608,6 +1560,7 @@ def get_adoption_trend(country_code: str,
                        end_year:   int = 2024) -> list:
     """
     Section 3.1.2 — IPv6 adoption trend over multiple years.
+    Uses Pulse API for historical data.
     """
 
     country_code = country_code.upper()
@@ -1649,70 +1602,38 @@ def get_adoption_trend(country_code: str,
 def get_regional_comparison(country_code: str,
                              year: int = 2024,
                              top_n: int = 5) -> dict:
-    """
-    Section 3.1.3 — Position the country vs. regional peers and global avg.
-
-    Returns:
-    {
-        "reference": {"country": str, "adoption": float, "adoption_pct": float},
-        "global_average": float,
-        "global_rank": int,           # 1 = best
-        "total_countries": int,
-        "above_global_avg": bool,
-        "closest_peers": [            # top_n countries nearest in adoption score
-            {"country": str, "adoption": float, "distance": float},
-            ...
-        ]
-    }
-    """
     country_code = country_code.upper()
-    all_data = extract_all_countries_indicator(year, "ipv6")
+    from request_for_YPI import apnic_service
+    ranking = apnic_service.get_apnic_global_ranking(country_code)
 
-    ref = next((x for x in all_data if x["country"] == country_code), None)
-    if not ref:
-        return {"error": f"No data for {country_code} in {year}"}
+    if ranking.get("error"):
+        return {"error": ranking["error"]}
 
-    ref_val = ref["average"]
+    ref_val = ranking["adoption_pct"] / 100.0
 
-    valid = [x for x in all_data if x["average"] is not None]
-    valid_sorted = sorted(valid, key=lambda x: x["average"], reverse=True)
-
-    global_avg = sum(x["average"] for x in valid) / len(valid) if valid else 0.0
-
-    # Rank (1-indexed, 1 = highest adoption)
-    rank = next(
-        (i + 1 for i, x in enumerate(valid_sorted) if x["country"] == country_code),
-        None
-    )
-
-    # Closest peers by adoption distance (excluding self)
-    peers = sorted(
-        [x for x in valid if x["country"] != country_code],
-        key=lambda x: abs(x["average"] - ref_val)
-    )[:top_n]
+    peers = [
+        {
+            "country": p["country"],
+            "adoption": p["adoption"]/100.0,
+            "adoption_pct": p["adoption"],
+            "distance": abs(p["gap"])/100.0
+        }
+        for p in ranking["peers"]
+    ]
 
     return {
         "reference": {
             "country":      country_code,
             "adoption":     round(ref_val, 4),
-            "adoption_pct": round(ref_val * 100, 1),
+            "adoption_pct": round(ranking["adoption_pct"], 1),
         },
-        "global_average":     round(global_avg, 4),
-        "global_average_pct": round(global_avg * 100, 1),
-        "global_rank":        rank,
-        "total_countries":    len(valid),
-        "above_global_avg":   ref_val > global_avg,
-        "closest_peers": [
-            {
-                "country":    p["country"],
-                "adoption":   round(p["average"], 4),
-                "adoption_pct": round(p["average"] * 100, 1),
-                "distance":   round(abs(p["average"] - ref_val), 4),
-            }
-            for p in peers
-        ],
+        "global_average":     round(ranking["global_avg"] / 100.0, 4),
+        "global_average_pct": round(ranking["global_avg"], 1),
+        "global_rank":        ranking["rank"],
+        "total_countries":    ranking["total_countries"],
+        "above_global_avg":   ranking["adoption_pct"] > ranking["global_avg"],
+        "closest_peers":      peers
     }
-
 
 # ═══════════════════════════════════════════════════════════════════════════
 # EXPORT — POLICY BRIEF (Markdown)

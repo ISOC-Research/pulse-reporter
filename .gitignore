@@ -6,6 +6,10 @@ api_key_mistral
 /env
 /.env
 
+# Google Cloud credentials (NEVER commit these)
+*.json
+!package.json
+
 # Temporary testing files
 request_for_YPI/test_new.py
 
