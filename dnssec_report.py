@@ -9,15 +9,35 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from request_for_YPI.dnssec_engine import (
-    get_ccTLD_nameserver_count,
-    get_ccTLD_ipv6_enablement,
-    get_ccTLD_asn_diversity
+get_ccTLD_nameserver_count,
+get_ccTLD_ipv6_enablement,
+get_ccTLD_asn_diversity
 )
 
+from request_for_YPI.dnssec_radar_engine import (
+get_dnssec_validation_status,
+get_top_asn_dnssec_validation
+)
 
-def generate_markdown_report(country, ns_data, ipv6_data, asn_data):
-
+def generate_markdown_report(
+    country,
+    ns_data,
+    ipv6_data,
+    asn_data,
+    validation_data,
+    asn_validation_data
+):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
+
+    best_asn = max(
+        asn_validation_data,
+        key=lambda x: x["secure"]
+    )
+
+    worst_asn = min(
+        asn_validation_data,
+        key=lambda x: x["secure"]
+    )
 
     report = f"""# DNSSEC Policy Brief — {country}
 
@@ -26,7 +46,7 @@ def generate_markdown_report(country, ns_data, ipv6_data, asn_data):
 *Team: Rahul Rajesh, Ron Prajoth, Aditya Menon | Mentor: Amreesh Phokeer (ISOC)*
 
 **Generated:** {timestamp}
-**Data Sources:** Internet Yellow Pages (IYP) Neo4j
+**Data Sources:** Internet Yellow Pages (IYP) Neo4j + Cloudflare Radar
 **Framework:** ISOC Internet Resilience Index — Security Pillar (DNS Security)
 
 ---
@@ -39,6 +59,10 @@ The .{country.lower()} ccTLD is currently served by {ns_data['nameserver_count']
 
 The authoritative DNS infrastructure is distributed across {asn_data['distinct_asns']} distinct Autonomous Systems, improving resilience against network and routing failures.
 
+According to Cloudflare Radar, {validation_data['secure']:.2f}% of DNS queries were successfully validated using DNSSEC.
+
+DNSSEC validation rates vary across major networks, ranging from {worst_asn['secure']:.2f}% to {best_asn['secure']:.2f}%.
+
 ---
 
 ## Section 1 — Core Infrastructure (ccTLD Health)
@@ -50,14 +74,12 @@ The authoritative DNS infrastructure is distributed across {asn_data['distinct_a
 **Authoritative Nameservers:** {ns_data['nameserver_count']}
 
 | Nameserver |
-|------------|
-"""
-
+| ---------- |
+| """    
     for ns in ipv6_data["nameservers"]:
         report += f"| {ns['nameserver']} |\n"
 
     report += f"""
-
 ---
 
 ### 1.2.1 IPv6 Enablement
@@ -69,15 +91,14 @@ The authoritative DNS infrastructure is distributed across {asn_data['distinct_a
 **IPv6 Enablement Rate:** {ipv6_data['ipv6_percentage']}%
 
 | Nameserver | IPv6 Enabled |
-|------------|--------------|
-"""
+| ---------- | ------------ |
+| """
 
     for ns in ipv6_data["nameservers"]:
         status = "Yes" if ns["ipv6_enabled"] else "No"
         report += f"| {ns['nameserver']} | {status} |\n"
 
     report += f"""
-
 ---
 
 ### 1.2.2 ASN Diversity
@@ -85,26 +106,105 @@ The authoritative DNS infrastructure is distributed across {asn_data['distinct_a
 **Distinct Hosting ASNs:** {asn_data['distinct_asns']}
 
 | ASN |
-|-----|
-"""
+| --- |
+| """
 
     for asn in asn_data["asns"]:
         report += f"| AS{asn} |\n"
 
     report += """
+---
 
 > Distribution across multiple autonomous systems improves resilience
 > against ASN-specific outages, routing incidents, and infrastructure
 > concentration risks.
 
 ---
+
+## Section 3 — DNSSEC Validation Scorecard
+
+### 3.1 DNSSEC Validation Status
+
+| Status | Percentage |
+| ------ | ---------: |
+| """
+
+    report += f"| Secure | {validation_data['secure']:.2f}% |\n"
+    report += f"| Insecure | {validation_data['insecure']:.2f}% |\n"
+    report += f"| Invalid | {validation_data['invalid']:.2f}% |\n"
+    report += f"| Other | {validation_data['other']:.2f}% |\n"
+
+    report += """
+### 3.2 DNSSEC Validation by ASN
+
+| ASN | Network | Query Share | Secure Validation |
+|------|---------|------------:|------------------:|
+"""
+
+    for item in asn_validation_data:
+
+        network_name = item.get("aka") or item.get("name") or "Unknown"
+
+        report += (
+            f"| AS{item['asn']} "
+            f"| {network_name} "
+            f"| {item['query_share']:.2f}% "
+            f"| {item['secure']:.2f}% |\n"
+    )
+
+    best_asn = max(
+        asn_validation_data,
+        key=lambda x: x["secure"]
+    )
+
+    worst_asn = min(
+        asn_validation_data,
+        key=lambda x: x["secure"]
+    )
+
+    best_name = (
+        best_asn.get("aka")
+        or best_asn.get("name")
+        or f"AS{best_asn['asn']}"
+    )
+
+    worst_name = (
+        worst_asn.get("aka")
+        or worst_asn.get("name")
+        or f"AS{worst_asn['asn']}"
+    )
+
+
+    report += f"""
+---
+
+### 3.3 Best and Worst Performing Networks
+
+**Highest DNSSEC Validation**
+
+* Network: {best_name}
+* ASN: AS{best_asn['asn']}
+* Secure Validation: {best_asn['secure']:.2f}%
+* DNS Query Share: {best_asn['query_share']:.2f}%
+
+**Lowest DNSSEC Validation**
+
+* Network: {worst_name}
+* ASN: AS{worst_asn['asn']}
+* Secure Validation: {worst_asn['secure']:.2f}%
+* DNS Query Share: {worst_asn['query_share']:.2f}%
+
+> Significant variation between networks suggests that DNSSEC adoption
+> and validation practices are not uniform across the country's DNS
+> ecosystem.
+
+---
+
 """
 
     return report
 
-
 def main():
-
     if len(sys.argv) < 2:
         print("Usage: python dnssec_report.py IN")
         sys.exit(1)
@@ -117,11 +217,19 @@ def main():
     ipv6_data = get_ccTLD_ipv6_enablement(country)
     asn_data = get_ccTLD_asn_diversity(country)
 
+    validation_data = get_dnssec_validation_status(country)
+
+    asn_validation_data = get_top_asn_dnssec_validation(
+        country
+    )
+
     report_text = generate_markdown_report(
         country,
         ns_data,
         ipv6_data,
-        asn_data
+        asn_data,
+        validation_data,
+        asn_validation_data
     )
 
     reports_dir = Path("reports")
@@ -134,7 +242,7 @@ def main():
     with open(output_file, "w", encoding="utf-8") as f:
         f.write(report_text)
 
-    print(f"\n✅ Report generated successfully")
+    print("\n✅ Report generated successfully")
     print(f"📄 {output_file.resolve()}")
 
 
