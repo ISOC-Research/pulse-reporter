@@ -16,10 +16,4 @@ request_for_YPI/test_radar.py
 
 report_*.md
 # Local IPv6 test reports
-reports/
-
-# Local IPv6 test reports
-reports/
-
-# Local IPv6 test reports
-reports/
+# reports/

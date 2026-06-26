@@ -18,3 +18,10 @@ PyMuPDF
 pymupdf
 langchain-text-splitters
 langfuse
+google-generativeai
+diagrams
+flask
+flask-cors
+langchain-community
+langchain-openai
+rich

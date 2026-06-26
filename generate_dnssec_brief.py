@@ -1,11 +1,31 @@
+"""
+generate_dnssec_brief.py
+========================
+
+Generates a styled HTML Policy Brief from DNSSEC raw report data
+using Google Gemini. Mirrors the IPv6 brief generator architecture.
+
+Usage:
+    python generate_dnssec_brief.py FR
+
+Prerequisites:
+    1. Run `python dnssec_report.py FR` first to generate the raw data.
+    2. Set REPORT_GEN_KEY in your .env file (Google Gemini API key).
+
+Future: This will be merged into a unified report generator with
+dropdown-based story selection (IPv6 / DNSSEC / combined) and
+audience-tier formatting (Head of State / Minister / Regulator / Technical).
+"""
+
 import os
 import sys
+import re
 import argparse
 import google.generativeai as genai
 from dotenv import load_dotenv
 
 # Ensure stdout supports UTF-8 for emojis on Windows
-if sys.stdout.encoding.lower() != 'utf-8':
+if sys.stdout.encoding and sys.stdout.encoding.lower() != 'utf-8':
     sys.stdout.reconfigure(encoding='utf-8')
 
 load_dotenv()
@@ -27,21 +47,21 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IPv6 Policy Brief — {country}</title>
+    <title>DNSSEC Policy Brief — {country}</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-    <script>mermaid.initialize({{startOnLoad: true, theme: 'default', themeVariables: {{ 'pie1': '#1e88e5', 'pie2': '#43a047', 'pie3': '#fb8c00', 'pie4': '#e53935', 'pie5': '#8e24aa', 'pie6': '#00acc1', 'pie7': '#f4511e', 'pie8': '#3949ab', 'pie9': '#7cb342', 'pie10': '#c0ca33', 'pie11': '#039be5', 'pie12': '#d81b60', 'xyChart': {{ 'backgroundColor': '#ffffff', 'titleColor': '#1a237e', 'xAxisLabelColor': '#333333', 'yAxisLabelColor': '#333333', 'plotColorPalette': '#1e88e5, #43a047, #fb8c00, #e53935, #8e24aa' }} }} }});</script>
+    <script>mermaid.initialize({{startOnLoad: true, theme: 'default', themeVariables: {{ 'pie1': '#43a047', 'pie2': '#e53935', 'pie3': '#fb8c00', 'pie4': '#b71c1c', 'pie5': '#1e88e5', 'pie6': '#8e24aa', 'pie7': '#00acc1', 'pie8': '#f4511e', 'pie9': '#3949ab', 'pie10': '#7cb342', 'pie11': '#039be5', 'pie12': '#d81b60', 'xyChart': {{ 'backgroundColor': '#ffffff', 'titleColor': '#0d47a1', 'xAxisLabelColor': '#333333', 'yAxisLabelColor': '#333333', 'plotColorPalette': '#43a047, #e53935, #fb8c00, #1e88e5, #8e24aa' }} }} }});</script>
     <style>
         :root {{
-            --primary: #1a237e;
-            --primary-light: #3949ab;
-            --accent: #00bcd4;
+            --primary: #0d47a1;
+            --primary-light: #1565c0;
+            --accent: #00e676;
             --accent-warm: #ff6f00;
-            --bg: #f8f9fa;
+            --bg: #f5f7fa;
             --card-bg: #ffffff;
             --text: #212529;
             --text-muted: #6c757d;
-            --border: #e9ecef;
+            --border: #e0e4ea;
             --green: #2e7d32;
             --red: #c62828;
             --yellow: #f57f17;
@@ -60,7 +80,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         /* ── COVER PAGE ── */
         .cover {{
             min-height: 100vh;
-            background: linear-gradient(135deg, #0d1b3e 0%, #1a237e 40%, #283593 70%, #3949ab 100%);
+            background: linear-gradient(135deg, #0a1628 0%, #0d47a1 35%, #1565c0 65%, #1976d2 100%);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -79,7 +99,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             right: -30%;
             width: 80%;
             height: 200%;
-            background: radial-gradient(ellipse, rgba(0, 188, 212, 0.12) 0%, transparent 70%);
+            background: radial-gradient(ellipse, rgba(0, 230, 118, 0.1) 0%, transparent 70%);
             pointer-events: none;
         }}
         .cover-badge {{
@@ -215,8 +235,8 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             padding: 12px 16px;
             border-bottom: 1px solid var(--border);
         }}
-        tbody tr:nth-child(even) {{ background: #f8f9ff; }}
-        tbody tr:hover {{ background: #eef0ff; }}
+        tbody tr:nth-child(even) {{ background: #f0f4ff; }}
+        tbody tr:hover {{ background: #e3eaff; }}
 
         /* ── SWOT GRID ── */
         .swot-grid {{
@@ -249,7 +269,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
         /* ── CALLOUT BOXES ── */
         .callout {{
-            background: #e8eaf6;
+            background: #e3f2fd;
             border-left: 4px solid var(--primary);
             border-radius: 0 10px 10px 0;
             padding: 20px 24px;
@@ -267,7 +287,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
         /* ── VERDICT BOX ── */
         .verdict {{
-            background: linear-gradient(135deg, #1a237e, #283593);
+            background: linear-gradient(135deg, #0d47a1, #1565c0);
             color: white;
             border-radius: 16px;
             padding: 40px;
@@ -372,7 +392,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             .swot-grid {{ break-inside: avoid; }}
         }}
 
-        strong {{ color: #1a237e; }}
+        strong {{ color: #0d47a1; }}
     </style>
 </head>
 <body>
@@ -381,12 +401,12 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 <div class="cover">
     <div class="cover-badge">Internet Society · Pulse Platform</div>
     <div class="cover-country">{country}</div>
-    <div class="cover-title">IPv6 Readiness & Policy Brief</div>
+    <div class="cover-title">DNSSEC Readiness & Policy Brief</div>
     <div class="cover-line"></div>
     <div class="cover-meta">
         Generated: {date}<br>
-        Data Sources: ISOC Pulse API · Internet Yellow Pages (IYP) Neo4j<br>
-        Framework: ISOC Internet Resilience Index — Security Pillar
+        Data Sources: Internet Yellow Pages (IYP) Neo4j · Cloudflare Radar<br>
+        Framework: ISOC Internet Resilience Index — Security Pillar (DNS Security)
     </div>
 </div>
 
@@ -395,7 +415,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 {llm_content}
 
     <div class="footer">
-        <p>Report generated by ISOC Pulse × IYP IPv6 Policy Engine</p>
+        <p>Report generated by ISOC Pulse × IYP DNSSEC Policy Engine</p>
         <p>Team: Rahul Rajesh, Ron Prajoth, Aditya Menon | Mentor: Amreesh Phokeer (ISOC)</p>
     </div>
 </div>
@@ -411,8 +431,9 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
 def build_system_prompt():
     """
-    Load the French team's synthesis prompt if available,
-    then add our strict HTML-output rules.
+    Build the system prompt for DNSSEC policy brief generation.
+    Uses the same synthesis prompt as IPv6 if available,
+    then adds DNSSEC-specific HTML output rules.
     """
     prompt_dir = os.path.join("request_for_YPI", "prompt", "report_generation")
     synthesis_path = os.path.join(prompt_dir, "part_7_synthesis.md")
@@ -427,6 +448,7 @@ def build_system_prompt():
 
 ## OUTPUT FORMAT (CRITICAL — READ CAREFULLY)
 
+You are generating a DNSSEC (DNS Security Extensions) Policy Brief.
 You MUST output raw HTML content (NOT markdown). Your output will be injected directly into an HTML page.
 Follow these rules strictly:
 
@@ -434,7 +456,13 @@ Follow these rules strictly:
 - Do NOT address the reader as "Mr. President", "Prime Minister", "Your Excellency", or any specific title.
 - If you need to address the reader, use "Sir/Ma'am" or simply say "Decision-Makers".
 - Write in a professional but neutral tone suitable for any senior government or regulatory official.
-- NOTE: Audience-specific formatting tiers (Head of State, Minister, Regulator, Technical) will be added in a future version.
+
+### DNSSEC CONTEXT
+DNSSEC is the security extension for the Domain Name System. It ensures that DNS responses
+are authenticated and have not been tampered with. The report covers:
+- Core Infrastructure: ccTLD nameserver count, IPv6 enablement, and ASN diversity
+- DNSSEC Validation: What percentage of DNS queries are cryptographically validated
+- Per-ASN Validation: Which ISPs/networks are validating DNSSEC and which are not
 
 ### Text & Structure
 - Use <h1> for major section titles (e.g., "Executive Summary", "SWOT Analysis", "Strategic Roadmap").
@@ -446,8 +474,9 @@ Follow these rules strictly:
 ### Stat Cards
 For key metrics, output this exact HTML structure:
 <div class="stat-grid">
-  <div class="stat-card"><span class="number">86.9%</span><span class="label">National IPv6 Adoption</span></div>
-  <div class="stat-card"><span class="number">#3</span><span class="label">Global Ranking</span></div>
+  <div class="stat-card"><span class="number">7</span><span class="label">Authoritative Nameservers</span></div>
+  <div class="stat-card"><span class="number">85.7%</span><span class="label">IPv6 Enabled</span></div>
+  <div class="stat-card"><span class="number">62.4%</span><span class="label">DNSSEC Secure Queries</span></div>
 </div>
 
 ### Tables
@@ -474,36 +503,43 @@ For important warnings or highlights:
 <div class="phase"><span class="phase-badge long">Phase 3 — Vision</span><ol><li>...</li></ol></div>
 
 ### Charts (Mermaid) — MUST BE COLORFUL
-Wrap mermaid charts inside a container. The page uses a vibrant Mermaid color palette — charts will render with rich blues, greens, oranges, and reds automatically.
+Wrap mermaid charts inside a container. The page uses a SEMANTIC color palette for DNSSEC:
+- 1st entry (green) = Secure
+- 2nd entry (red) = Insecure
+- 3rd entry (amber) = Other
+- 4th entry (dark red) = Invalid
+
+You MUST always list pie chart entries in this exact order: Secure FIRST, then Insecure, then Other, then Invalid.
 <div class="chart-container">
   <h3>Chart Title</h3>
   <div class="mermaid">
-pie title ISP Market Share
-    "Orange" : 35.4
-    "Free SAS" : 18.6
+pie title DNSSEC Validation Status
+    "Secure" : 9.0
+    "Insecure" : 78.0
+    "Other" : 13.5
+    "Invalid" : 0.1
   </div>
 </div>
 
 Include at LEAST:
-1. A Pie Chart for ISP Market Share (use the top 5-8 ISPs for readability — do NOT include every single ISP).
-2. A Bar Chart (xychart-beta) for the 5-Year Adoption Trend. You MUST use xychart-beta syntax, NEVER use "lineChart". Example:
+1. A Pie Chart for DNSSEC Validation Status. CRITICAL: Always list "Secure" FIRST so it renders in green, then "Insecure" in red, then "Other" in amber, then "Invalid" in dark red.
+2. A Bar Chart (xychart-beta) comparing DNSSEC Secure Validation rates across the top ISPs/ASNs. You MUST use xychart-beta syntax, NEVER use "lineChart". Example:
 <div class="mermaid">
 xychart-beta
-    title "National IPv6 Adoption Trend"
-    x-axis [2020, 2021, 2022, 2023, 2024]
-    y-axis "Adoption (%)" 0 --> 100
-    bar [67.7, 71.9, 89.1, 87.0, 86.9]
+    title "DNSSEC Validation by Top Networks"
+    x-axis ["ISP A", "ISP B", "ISP C", "ISP D"]
+    y-axis "Secure Validation (%)" 0 --> 100
+    bar [85.2, 62.4, 45.1, 30.0]
 </div>
-3. A Pie Chart or Bar Chart for Sector IPv6 Readiness (Banking, News, Education, Ecommerce).
-4. A Bar Chart comparing Web IPv6 Readiness across categories (Government, CDN-backed, Self-hosted, etc.) if the data is available.
+3. A Pie Chart showing DNS Query Share distribution among top ASNs.
 
 ### Final Verdict
 <div class="verdict">
   <h2>Final Verdict</h2>
-  <p>Summary paragraph.</p>
+  <p>Summary paragraph about overall DNSSEC posture.</p>
   <div class="verdict-scores">
-    <div class="verdict-item"><div class="score">High</div><div class="score-label">Investability</div></div>
-    <div class="verdict-item"><div class="score">Developing</div><div class="score-label">Maturity</div></div>
+    <div class="verdict-item"><div class="score">Medium</div><div class="score-label">DNSSEC Maturity</div></div>
+    <div class="verdict-item"><div class="score">Developing</div><div class="score-label">Infrastructure Resilience</div></div>
   </div>
 </div>
 
@@ -518,20 +554,20 @@ xychart-beta
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Generate an LLM Policy Brief from an IPv6 Report.")
+    parser = argparse.ArgumentParser(description="Generate an LLM Policy Brief from a DNSSEC Report.")
     parser.add_argument("country", type=str, help="Country code (e.g., FR, IN)")
     args = parser.parse_args()
 
     country = args.country.upper()
-    report_path = os.path.join("reports", f"IPv6_Report_{country}.md")
-    output_path = os.path.join("reports", f"IPv6_Policy_Brief_{country}.html")
+    report_path = os.path.join("reports", f"DNSSEC_Report_{country}.md")
+    output_path = os.path.join("reports", f"DNSSEC_Policy_Brief_{country}.html")
 
     if not os.path.exists(report_path):
         print(f"❌ ERROR: Could not find report file at {report_path}")
-        print(f"   Please run `python ipv6_report.py {country}` first to generate the data.")
+        print(f"   Please run `python dnssec_report.py {country}` first to generate the data.")
         sys.exit(1)
 
-    print(f"📄 Reading raw data from {report_path}...")
+    print(f"📄 Reading raw DNSSEC data from {report_path}...")
     with open(report_path, "r", encoding="utf-8") as f:
         report_data = f.read()
 
@@ -546,8 +582,8 @@ def main():
         )
 
         prompt = (
-            f"Here is the complete raw IPv6 data report for country code {country}. "
-            f"Generate the Executive Policy Brief as raw HTML following your system instructions.\n\n"
+            f"Here is the complete raw DNSSEC data report for country code {country}. "
+            f"Generate the DNSSEC Executive Policy Brief as raw HTML following your system instructions.\n\n"
             f"{report_data}"
         )
 
@@ -563,8 +599,6 @@ def main():
             llm_html = llm_html[:-3]
         llm_html = llm_html.strip()
 
-        # Convert any leftover markdown **bold** to <strong> tags
-        import re
         llm_html = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', llm_html)
 
         # Fix xychart-beta x-axis labels with unquoted spaces/parentheses
@@ -576,15 +610,37 @@ def main():
                 quoted = []
                 for x in items:
                     clean_x = x.strip('"\'')
-                    # Remove parentheses content to save space (e.g. ASNs, "(Overall)")
                     clean_x = re.sub(r'\s*\(.*?\)', '', clean_x)
-                    # Truncate if still too long
                     if len(clean_x) > 15:
                         clean_x = clean_x[:13] + '..'
                     quoted.append(f'"{clean_x}"')
                 return prefix + '[' + ', '.join(quoted) + ']'
             return re.sub(r'(x-axis.*?)(?:\[(.*?)\])', quote_xaxis, block)
         llm_html = re.sub(r'xychart-beta.*?(?:</div>|</pre>)', fix_xychart, llm_html, flags=re.DOTALL)
+
+        # Force pie chart ordering to match semantic colors
+        def reorder_pie(match):
+            block = match.group(0)
+            lines = block.split('\n')
+            new_lines = []
+            entries = {}
+            for line in lines:
+                if '"Secure"' in line: entries['Secure'] = line
+                elif '"Insecure"' in line: entries['Insecure'] = line
+                elif '"Other"' in line: entries['Other'] = line
+                elif '"Invalid"' in line: entries['Invalid'] = line
+                else: new_lines.append(line)
+            
+            # Insert in precise order before the closing </div>
+            insert_idx = len(new_lines) - 1 # before </div>
+            if 'Invalid' in entries: new_lines.insert(insert_idx, entries['Invalid'])
+            if 'Other' in entries: new_lines.insert(insert_idx, entries['Other'])
+            if 'Insecure' in entries: new_lines.insert(insert_idx, entries['Insecure'])
+            if 'Secure' in entries: new_lines.insert(insert_idx, entries['Secure'])
+            
+            return '\n'.join(new_lines)
+            
+        llm_html = re.sub(r'pie title DNSSEC Validation Status.*?</div>', reorder_pie, llm_html, flags=re.DOTALL)
 
         # Fix pie charts rendering a leftover 0% slice when sum != 100
         def fix_pie_sum(match):
@@ -633,7 +689,7 @@ def main():
         with open(output_path, "w", encoding="utf-8") as f:
             f.write(final_html)
 
-        print(f"✅ Success! Policy Brief saved to: {output_path}")
+        print(f"✅ Success! DNSSEC Policy Brief saved to: {output_path}")
         print(f"   Open it in Chrome and press Ctrl+P to save as PDF.")
 
     except Exception as e:

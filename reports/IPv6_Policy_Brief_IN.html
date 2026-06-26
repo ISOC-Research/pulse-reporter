@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPv6 Policy Brief — IN</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad: true, theme: 'default', themeVariables: { 'pie1': '#1e88e5', 'pie2': '#43a047', 'pie3': '#fb8c00', 'pie4': '#e53935', 'pie5': '#8e24aa', 'pie6': '#00acc1', 'pie7': '#f4511e', 'pie8': '#3949ab', 'pie9': '#7cb342', 'pie10': '#c0ca33', 'pie11': '#039be5', 'pie12': '#d81b60', 'xyChart': { 'backgroundColor': '#ffffff', 'titleColor': '#1a237e', 'xAxisLabelColor': '#333333', 'yAxisLabelColor': '#333333', 'plotColorPalette': '#1e88e5, #43a047, #fb8c00, #e53935, #8e24aa' } } });</script>
+    <style>
+        :root {
+            --primary: #1a237e;
+            --primary-light: #3949ab;
+            --accent: #00bcd4;
+            --accent-warm: #ff6f00;
+            --bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --text: #212529;
+            --text-muted: #6c757d;
+            --border: #e9ecef;
+            --green: #2e7d32;
+            --red: #c62828;
+            --yellow: #f57f17;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            font-size: 15px;
+        }
+
+        /* ── COVER PAGE ── */
+        .cover {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0d1b3e 0%, #1a237e 40%, #283593 70%, #3949ab 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 60px 40px;
+            position: relative;
+            overflow: hidden;
+            page-break-after: always;
+        }
+        .cover::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -30%;
+            width: 80%;
+            height: 200%;
+            background: radial-gradient(ellipse, rgba(0, 188, 212, 0.12) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .cover-badge {
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 50px;
+            padding: 8px 24px;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            backdrop-filter: blur(10px);
+        }
+        .cover-country {
+            font-size: 96px;
+            font-weight: 800;
+            letter-spacing: 8px;
+            margin-bottom: 16px;
+            text-shadow: 0 4px 30px rgba(0,0,0,0.3);
+        }
+        .cover-title {
+            font-size: 28px;
+            font-weight: 300;
+            opacity: 0.9;
+            margin-bottom: 60px;
+            max-width: 600px;
+        }
+        .cover-meta {
+            font-size: 13px;
+            opacity: 0.6;
+            line-height: 2;
+        }
+        .cover-line {
+            width: 80px;
+            height: 3px;
+            background: var(--accent);
+            margin: 30px auto;
+            border-radius: 2px;
+        }
+
+        /* ── MAIN CONTENT ── */
+        .content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        /* ── SECTION HEADERS ── */
+        h1 {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 50px 0 24px 0;
+            padding-bottom: 12px;
+            border-bottom: 3px solid var(--accent);
+            page-break-before: always;
+        }
+        h1:first-child { page-break-before: avoid; }
+
+        h2 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary-light);
+            margin: 40px 0 16px 0;
+            padding-left: 16px;
+            border-left: 4px solid var(--accent);
+        }
+
+        h3 {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--text);
+            margin: 28px 0 12px 0;
+        }
+
+        p {
+            margin-bottom: 16px;
+            color: #333;
+        }
+
+        /* ── STAT CARDS ── */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+        }
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border: 1px solid var(--border);
+        }
+        .stat-card .number {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--primary);
+            display: block;
+        }
+        .stat-card .label {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+
+        /* ── TABLES ── */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 14px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        thead th {
+            background: var(--primary);
+            color: white;
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        tbody td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+        tbody tr:nth-child(even) { background: #f8f9ff; }
+        tbody tr:hover { background: #eef0ff; }
+
+        /* ── SWOT GRID ── */
+        .swot-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 24px 0;
+        }
+        .swot-card {
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid var(--border);
+        }
+        .swot-card h3 {
+            margin: 0 0 12px 0;
+            font-size: 16px;
+            border: none;
+            padding: 0;
+        }
+        .swot-card ul { padding-left: 20px; }
+        .swot-card li { margin-bottom: 8px; font-size: 14px; }
+        .swot-strengths { background: #e8f5e9; border-color: #a5d6a7; }
+        .swot-strengths h3 { color: var(--green); }
+        .swot-weaknesses { background: #fce4ec; border-color: #ef9a9a; }
+        .swot-weaknesses h3 { color: var(--red); }
+        .swot-opportunities { background: #e3f2fd; border-color: #90caf9; }
+        .swot-opportunities h3 { color: #1565c0; }
+        .swot-threats { background: #fff3e0; border-color: #ffcc80; }
+        .swot-threats h3 { color: var(--accent-warm); }
+
+        /* ── CALLOUT BOXES ── */
+        .callout {
+            background: #e8eaf6;
+            border-left: 4px solid var(--primary);
+            border-radius: 0 10px 10px 0;
+            padding: 20px 24px;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+        .callout-warning {
+            background: #fff3e0;
+            border-left-color: var(--accent-warm);
+        }
+        .callout-success {
+            background: #e8f5e9;
+            border-left-color: var(--green);
+        }
+
+        /* ── VERDICT BOX ── */
+        .verdict {
+            background: linear-gradient(135deg, #1a237e, #283593);
+            color: white;
+            border-radius: 16px;
+            padding: 40px;
+            margin: 40px 0;
+            text-align: center;
+        }
+        .verdict h2 {
+            color: white;
+            border: none;
+            padding: 0;
+            margin: 0 0 24px 0;
+            font-size: 24px;
+        }
+        .verdict-scores {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-top: 24px;
+        }
+        .verdict-item .score {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--accent);
+        }
+        .verdict-item .score-label {
+            font-size: 13px;
+            opacity: 0.7;
+            margin-top: 4px;
+        }
+        .verdict p, .verdict li {
+            color: rgba(255, 255, 255, 0.92);
+        }
+        .verdict strong {
+            color: #ffffff;
+        }
+
+        /* ── MERMAID CHARTS ── */
+        .chart-container {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 30px;
+            margin: 24px 0;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+        .chart-container h3 {
+            margin: 0 0 20px 0;
+            text-align: center;
+        }
+        .mermaid { margin: 0 auto; }
+
+        /* ── PHASE CARDS ── */
+        .phase {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 28px;
+            margin: 16px 0;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .phase-badge {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .phase-badge.medium { background: var(--primary-light); }
+        .phase-badge.long { background: #455a64; }
+        .phase ol { padding-left: 20px; }
+        .phase li { margin-bottom: 10px; font-size: 14px; }
+
+        /* ── LISTS ── */
+        ul, ol { padding-left: 24px; margin-bottom: 16px; }
+        li { margin-bottom: 8px; }
+
+        /* ── FOOTER ── */
+        .footer {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+            font-size: 12px;
+            border-top: 1px solid var(--border);
+            margin-top: 60px;
+        }
+
+        /* ── PRINT ── */
+        @media print {
+            body { background: white; font-size: 13px; }
+            .cover { min-height: 100vh; }
+            .content { padding: 40px 30px; }
+            h1 { page-break-before: always; font-size: 26px; }
+            h1:first-child { page-break-before: avoid; }
+            .stat-card, .phase, .chart-container { break-inside: avoid; }
+            table { break-inside: avoid; }
+            .swot-grid { break-inside: avoid; }
+        }
+
+        strong { color: #1a237e; }
+    </style>
+</head>
+<body>
+
+<!-- ═══ COVER PAGE ═══ -->
+<div class="cover">
+    <div class="cover-badge">Internet Society · Pulse Platform</div>
+    <div class="cover-country">IN</div>
+    <div class="cover-title">IPv6 Readiness & Policy Brief</div>
+    <div class="cover-line"></div>
+    <div class="cover-meta">
+        Generated: 2026-06-26<br>
+        Data Sources: ISOC Pulse API · Internet Yellow Pages (IYP) Neo4j<br>
+        Framework: ISOC Internet Resilience Index — Security Pillar
+    </div>
+</div>
+
+<!-- ═══ REPORT BODY (LLM-generated) ═══ -->
+<div class="content">
+<h1>Executive Summary: The "Big Picture" Diagnosis</h1>
+<p>Sir/Ma'am,</p>
+<p>This report synthesizes the state of IPv6 deployment and associated security posture for our nation. We stand at a critical juncture: our country has achieved a remarkable <strong>national IPv6 adoption rate of 78.4%</strong>, ranking us <strong>#6 globally</strong>. This positions us as a leader in user-side transition to the next generation of internet protocol. However, this success masks significant vulnerabilities and compliance gaps within our core infrastructure and digital content ecosystem.</p>
+<p>The paradox is clear: while our citizens and many ISPs have embraced IPv6, the foundational security mechanisms and a substantial portion of our national digital content, particularly government services, remain alarmingly reliant on legacy IPv4 or suffer from inadequate IPv6 security. This creates a disconnect where a highly adopted protocol operates on an insecure or incomplete backend, posing risks to national resilience and digital sovereignty.</p>
+<p>Specifically, a mere <strong>28.66% of IPv6 routing prefixes are secured by RPKI</strong>, leaving critical internet routes vulnerable to hijacking. Furthermore, our government digital infrastructure exhibits a concerning <strong>IPv6 readiness of only 13.20%</strong>, and crucial authoritative DNS glue records for our national domain (.in) show a dismal <strong>0.74% IPv6 capability</strong>. These are not merely technical oversights; they represent fundamental security flaws that can be exploited for geopolitical ends, impacting national security, economic stability, and public trust. Urgent, coordinated policy intervention is required to bridge this gap and secure our digital future.</p>
+
+<div class="stat-grid">
+  <div class="stat-card"><span class="number">78.4%</span><span class="label">National IPv6 Adoption</span></div>
+  <div class="stat-card"><span class="number">#6</span><span class="label">Global Ranking</span></div>
+  <div class="stat-card"><span class="number">28.66%</span><span class="label">RPKI Coverage (IPv6 Prefixes)</span></div>
+  <div class="stat-card"><span class="number">13.20%</span><span class="label">Government IPv6 Readiness</span></div>
+</div>
+
+<h1>SWOT Analysis: The Strategic Cheat Sheet</h1>
+<div class="swot-grid">
+  <div class="swot-card swot-strengths"><h3>💪 Strengths</h3><ul><li><strong>High National IPv6 Adoption:</strong> 78.4% places us among global leaders, demonstrating strong user-side readiness and ISP commitment to the transition.</li><li><strong>Global Recognition:</strong> Our #6 global ranking provides a strong platform for regional and international digital leadership.</li><li><strong>Extensive IXP IPv6 LANs:</strong> 85% of domestic IXPs are IPv6-ready, indicating a robust foundation for inter-network peering.</li><li><strong>Early Adopter ISPs:</strong> Major ISPs have significant IPv6 deployment experience, some dating back over a decade.</li></ul></div>
+  <div class="swot-card swot-weaknesses"><h3>⚠️ Weaknesses</h3><ul><li><strong>Alarmingly Low RPKI Coverage:</strong> Only 28.66% of IPv6 prefixes are RPKI-secured, leaving our routing infrastructure highly vulnerable to hijacking and foreign interference.</li><li><strong>Poor Government Website Readiness:</strong> Only 13.20% of government domains are IPv6-capable, severely hindering public service delivery and digital sovereignty in a dual-stack future.</li><li><strong>Critical DNS Vulnerability:</strong> A mere 0.74% IPv6 readiness for ccTLD authoritative DNS glue records represents a profound single point of failure and resilience risk.</li><li><strong>Non-Compliant ISPs:</strong> A small but critical segment (0.2% market share) of ISPs remain without IPv6 prefix allocation, requiring immediate regulatory action.</li><li><strong>Lagging Content Ecosystem:</strong> Overall web IPv6 readiness (26.00%) is significantly lower than user adoption, creating a mismatch in a fully IPv6 environment.</li></ul></div>
+  <div class="swot-card swot-opportunities"><h3>🚀 Opportunities</h3><ul><li><strong>Leverage High User Adoption:</strong> Drive demand for IPv6-native content and services, accelerating ecosystem-wide transition.</li><li><strong>Position for Digital Sovereignty:</strong> Secure our internet infrastructure against external threats, enhancing national control over digital assets.</li><li><strong>Regional Leadership:</strong> Share best practices and offer expertise to peer nations, solidifying our geopolitical standing in the digital sphere.</li><li><strong>Foster Innovation:</strong> Encourage the development of new services and applications designed for an IPv6-native internet.</li><li><strong>AI & Nearshoring Integration:</strong> Future-proof digital infrastructure to support advanced technologies and attract high-value digital investments.</li></ul></div>
+  <div class="swot-card swot-threats"><h3>🛡️ Threats</h3><ul><li><strong>Cyber Warfare & Espionage:</strong> Weak RPKI and DNS security make us susceptible to state-sponsored attacks, data exfiltration, and critical infrastructure disruption.</li><li><strong>Economic Disruption:</strong> Routing insecurities and reliance on legacy protocols can lead to service outages, financial instability, and loss of investor confidence.</li><li><strong>Digital Colonialism:</strong> Continued reliance on foreign-hosted or IPv4-only content and services risks ceding control of our digital economy and data.</li><li><strong>Erosion of Public Trust:</strong> Government's inability to provide secure, modern digital services over IPv6 can undermine citizen confidence in public institutions.</li><li><strong>Technical Debt Accumulation:</strong> Delaying comprehensive IPv6 adoption across all layers increases future costs and complexity, hindering technological agility.</li></ul></div>
+</div>
+
+<h1>Strategic Roadmap: The Policy Agenda</h1>
+
+<div class="phase"><span class="phase-badge">Phase 1 — Quick Wins</span><ol><li><strong>Mandate RPKI Adoption:</strong> Issue a regulatory decree requiring all major ISPs (e.g., those with >0.5% market share) to achieve at least 80% RPKI coverage for their IPv6 prefixes within 6 months. Implement strict penalties for non-compliance.</li><li><strong>Address "Ghost" ISPs:</strong> Immediately engage the ISP identified as "Ghost (No Allocation)" (e.g., AS133287 - APSFL-AS) to ensure RIR membership and IPv6 prefix acquisition, bringing 0.2% of the market online.</li><li><strong>Critical Infrastructure Security Audit:</strong> Conduct an immediate, focused audit of the national ccTLD (.in) DNS authoritative nameservers, prioritizing the remediation of IPv6 glue record readiness (currently 0.74%).</li><li><strong>Secure Government DNS:</strong> Implement an executive order mandating that all new and renewed government domain registrations (.gov.in) must be dual-stack with correctly configured IPv6 glue records and AAAA records.</li></ol></div>
+<div class="phase"><span class="phase-badge medium">Phase 2 — Structural</span><ol><li><strong>Incentivize Government IPv6 Transition:</strong> Launch a nationwide program to accelerate IPv6 adoption for all government digital services and websites, targeting 75% readiness within 24 months. Provide technical assistance and funding.</li><li><strong>Regulatory Framework Update:</strong> Review and update existing telecommunications and internet policy frameworks to embed IPv6-only readiness as a baseline for new services and infrastructure, moving beyond dual-stack as the ultimate goal.</li><li><strong>Promote CDN & Cloud Adoption:</strong> Encourage domestic content providers, particularly those currently self-hosting, to leverage IPv6-capable CDN and cloud platforms to rapidly improve web IPv6 readiness.</li><li><strong>Cybersecurity Capacity Building:</strong> Invest in national cybersecurity training programs focusing on IPv6-specific threats, RPKI management, and DNS security for network operators, government IT staff, and critical infrastructure providers.</li><li><strong>Market Diversification for IXPs:</strong> Encourage greater competition and peering at IXPs, particularly for networks with lower IPv6 peering percentages, to enhance routing resilience.</li></ol></div>
+<div class="phase"><span class="phase-badge long">Phase 3 — Vision</span><ol><li><strong>National IPv6 Education & Skill Development:</strong> Establish long-term educational initiatives at universities and vocational training centers to cultivate a skilled workforce proficient in IPv6 network design, security, and application development.</li><li><strong>Global Digital Leadership:</strong> Champion IPv6 adoption and internet resilience standards on international forums, showcasing our nation's progress and offering expertise to developing countries.</li><li><strong>IPv6-Native Content Ecosystem:</strong> Implement policies to incentivize the creation and hosting of IPv6-native national digital content, including cultural, educational, and commercial services, reducing reliance on foreign platforms.</li><li><strong>Long-Term Resilience Strategy:</strong> Develop a comprehensive national internet resilience strategy that integrates IPv6, RPKI, DNSSEC, and other advanced security protocols as core tenets of digital sovereignty and national security.</li></ol></div>
+
+<h2>Key Metrics & Visualizations</h2>
+
+<div class="chart-container">
+  <h3>Top ISP Market Share by Adoption Impact</h3>
+  <div class="mermaid">
+pie title ISP Market Share (Estimated)
+    "RELIANCEJIO-IN (46.3%)" : 46.3
+    "BHARTI-MOBILITY-AS-AP (22%)" : 22.0
+    "AIRTELBROADBAND-AS-AP (8.3%)" : 8.3
+    "BSNL-NIB (3%)" : 3.0
+    "VIL-AS-AP (1.4%)" : 1.4
+    "EXCITEL-AS-IN (0.9%)" : 0.9
+    "CABLELITE-AS-AP (0.9%)" : 0.9
+    "Others (17.2%)" : 17.2
+  </div>
+</div>
+
+<div class="chart-container">
+  <h3>National IPv6 Adoption Trend (5-Year)</h3>
+  <p><em>Note: Historical 5-year trend data for national IPv6 adoption was not available in the provided report. Therefore, this chart cannot be generated to avoid hallucinating data.</em></p>
+  <div class="mermaid">
+xychart-beta
+    title "National IPv6 Adoption Trend"
+    x-axis ["2020", "2021", "2022", "2023", "2024"]
+    y-axis "Adoption (%)" 0 --> 100
+    bar [0, 0, 0, 0, 0]
+  </div>
+</div>
+
+<div class="chart-container">
+  <h3>Sectoral IPv6 Readiness Comparison</h3>
+  <div class="mermaid">
+xychart-beta
+    title "Sectoral IPv6 Readiness"
+    x-axis "Sector" ["Banking", "News", "Education", "Ecommerce", "Government"]
+    y-axis "Readiness (%)" 0 --> 100
+    bar [53.85, 53.97, 39.45, 43.17, 13.20]
+  </div>
+</div>
+
+<div class="chart-container">
+  <h3>Web IPv6 Readiness by Hosting Type</h3>
+  <div class="mermaid">
+xychart-beta
+    title "Web IPv6 Readiness Categories"
+    x-axis "Category" ["CDN-Backed", "Self-Hosted", "Popular Domains", "Government Do.."]
+    y-axis "Readiness (%)" 0 --> 100
+    bar [83.82, 45.06, 26.00, 13.20]
+  </div>
+</div>
+
+<div class="verdict">
+  <h2>Final Verdict</h2>
+  <p>Our nation has made impressive strides in user-side IPv6 adoption, placing us among global leaders. This demonstrates a strong national appetite and capability for digital evolution. However, underlying vulnerabilities in routing security (RPKI), critical DNS infrastructure (glue records), and pervasive lagging readiness within government and general web content present significant risks. While the foundation for a fully IPv6-native future is strong, unaddressed security and content gaps create an insecure and incomplete digital landscape.</p>
+  <div class="verdict-scores">
+    <div class="verdict-item"><div class="score">High</div><div class="score-label">Investability</div></div>
+    <div class="verdict-item"><div class="score">Developing</div><div class="score-label">Maturity</div></div>
+  </div>
+</div>
+
+    <div class="footer">
+        <p>Report generated by ISOC Pulse × IYP IPv6 Policy Engine</p>
+        <p>Team: Rahul Rajesh, Ron Prajoth, Aditya Menon | Mentor: Amreesh Phokeer (ISOC)</p>
+    </div>
+</div>
+
+</body>
+</html>

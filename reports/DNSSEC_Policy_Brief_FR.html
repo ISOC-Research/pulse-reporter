@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNSSEC Policy Brief — FR</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad: true, theme: 'default', themeVariables: { 'pie1': '#43a047', 'pie2': '#e53935', 'pie3': '#fb8c00', 'pie4': '#b71c1c', 'pie5': '#1e88e5', 'pie6': '#8e24aa', 'pie7': '#00acc1', 'pie8': '#f4511e', 'pie9': '#3949ab', 'pie10': '#7cb342', 'pie11': '#039be5', 'pie12': '#d81b60', 'xyChart': { 'backgroundColor': '#ffffff', 'titleColor': '#0d47a1', 'xAxisLabelColor': '#333333', 'yAxisLabelColor': '#333333', 'plotColorPalette': '#43a047, #e53935, #fb8c00, #1e88e5, #8e24aa' } } });</script>
+    <style>
+        :root {
+            --primary: #0d47a1;
+            --primary-light: #1565c0;
+            --accent: #00e676;
+            --accent-warm: #ff6f00;
+            --bg: #f5f7fa;
+            --card-bg: #ffffff;
+            --text: #212529;
+            --text-muted: #6c757d;
+            --border: #e0e4ea;
+            --green: #2e7d32;
+            --red: #c62828;
+            --yellow: #f57f17;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            font-size: 15px;
+        }
+
+        /* ── COVER PAGE ── */
+        .cover {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a1628 0%, #0d47a1 35%, #1565c0 65%, #1976d2 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 60px 40px;
+            position: relative;
+            overflow: hidden;
+            page-break-after: always;
+        }
+        .cover::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -30%;
+            width: 80%;
+            height: 200%;
+            background: radial-gradient(ellipse, rgba(0, 230, 118, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .cover-badge {
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 50px;
+            padding: 8px 24px;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            backdrop-filter: blur(10px);
+        }
+        .cover-country {
+            font-size: 96px;
+            font-weight: 800;
+            letter-spacing: 8px;
+            margin-bottom: 16px;
+            text-shadow: 0 4px 30px rgba(0,0,0,0.3);
+        }
+        .cover-title {
+            font-size: 28px;
+            font-weight: 300;
+            opacity: 0.9;
+            margin-bottom: 60px;
+            max-width: 600px;
+        }
+        .cover-meta {
+            font-size: 13px;
+            opacity: 0.6;
+            line-height: 2;
+        }
+        .cover-line {
+            width: 80px;
+            height: 3px;
+            background: var(--accent);
+            margin: 30px auto;
+            border-radius: 2px;
+        }
+
+        /* ── MAIN CONTENT ── */
+        .content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        /* ── SECTION HEADERS ── */
+        h1 {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 50px 0 24px 0;
+            padding-bottom: 12px;
+            border-bottom: 3px solid var(--accent);
+            page-break-before: always;
+        }
+        h1:first-child { page-break-before: avoid; }
+
+        h2 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary-light);
+            margin: 40px 0 16px 0;
+            padding-left: 16px;
+            border-left: 4px solid var(--accent);
+        }
+
+        h3 {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--text);
+            margin: 28px 0 12px 0;
+        }
+
+        p {
+            margin-bottom: 16px;
+            color: #333;
+        }
+
+        /* ── STAT CARDS ── */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+        }
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border: 1px solid var(--border);
+        }
+        .stat-card .number {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--primary);
+            display: block;
+        }
+        .stat-card .label {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+
+        /* ── TABLES ── */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 14px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        thead th {
+            background: var(--primary);
+            color: white;
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        tbody td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+        tbody tr:nth-child(even) { background: #f0f4ff; }
+        tbody tr:hover { background: #e3eaff; }
+
+        /* ── SWOT GRID ── */
+        .swot-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 24px 0;
+        }
+        .swot-card {
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid var(--border);
+        }
+        .swot-card h3 {
+            margin: 0 0 12px 0;
+            font-size: 16px;
+            border: none;
+            padding: 0;
+        }
+        .swot-card ul { padding-left: 20px; }
+        .swot-card li { margin-bottom: 8px; font-size: 14px; }
+        .swot-strengths { background: #e8f5e9; border-color: #a5d6a7; }
+        .swot-strengths h3 { color: var(--green); }
+        .swot-weaknesses { background: #fce4ec; border-color: #ef9a9a; }
+        .swot-weaknesses h3 { color: var(--red); }
+        .swot-opportunities { background: #e3f2fd; border-color: #90caf9; }
+        .swot-opportunities h3 { color: #1565c0; }
+        .swot-threats { background: #fff3e0; border-color: #ffcc80; }
+        .swot-threats h3 { color: var(--accent-warm); }
+
+        /* ── CALLOUT BOXES ── */
+        .callout {
+            background: #e3f2fd;
+            border-left: 4px solid var(--primary);
+            border-radius: 0 10px 10px 0;
+            padding: 20px 24px;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+        .callout-warning {
+            background: #fff3e0;
+            border-left-color: var(--accent-warm);
+        }
+        .callout-success {
+            background: #e8f5e9;
+            border-left-color: var(--green);
+        }
+
+        /* ── VERDICT BOX ── */
+        .verdict {
+            background: linear-gradient(135deg, #0d47a1, #1565c0);
+            color: white;
+            border-radius: 16px;
+            padding: 40px;
+            margin: 40px 0;
+            text-align: center;
+        }
+        .verdict h2 {
+            color: white;
+            border: none;
+            padding: 0;
+            margin: 0 0 24px 0;
+            font-size: 24px;
+        }
+        .verdict-scores {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-top: 24px;
+        }
+        .verdict-item .score {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--accent);
+        }
+        .verdict-item .score-label {
+            font-size: 13px;
+            opacity: 0.7;
+            margin-top: 4px;
+        }
+        .verdict p, .verdict li {
+            color: rgba(255, 255, 255, 0.92);
+        }
+        .verdict strong {
+            color: #ffffff;
+        }
+
+        /* ── MERMAID CHARTS ── */
+        .chart-container {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 30px;
+            margin: 24px 0;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+        .chart-container h3 {
+            margin: 0 0 20px 0;
+            text-align: center;
+        }
+        .mermaid { margin: 0 auto; }
+
+        /* ── PHASE CARDS ── */
+        .phase {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 28px;
+            margin: 16px 0;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .phase-badge {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .phase-badge.medium { background: var(--primary-light); }
+        .phase-badge.long { background: #455a64; }
+        .phase ol { padding-left: 20px; }
+        .phase li { margin-bottom: 10px; font-size: 14px; }
+
+        /* ── LISTS ── */
+        ul, ol { padding-left: 24px; margin-bottom: 16px; }
+        li { margin-bottom: 8px; }
+
+        /* ── FOOTER ── */
+        .footer {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+            font-size: 12px;
+            border-top: 1px solid var(--border);
+            margin-top: 60px;
+        }
+
+        /* ── PRINT ── */
+        @media print {
+            body { background: white; font-size: 13px; }
+            .cover { min-height: 100vh; }
+            .content { padding: 40px 30px; }
+            h1 { page-break-before: always; font-size: 26px; }
+            h1:first-child { page-break-before: avoid; }
+            .stat-card, .phase, .chart-container { break-inside: avoid; }
+            table { break-inside: avoid; }
+            .swot-grid { break-inside: avoid; }
+        }
+
+        strong { color: #0d47a1; }
+    </style>
+</head>
+<body>
+
+<!-- ═══ COVER PAGE ═══ -->
+<div class="cover">
+    <div class="cover-badge">Internet Society · Pulse Platform</div>
+    <div class="cover-country">FR</div>
+    <div class="cover-title">DNSSEC Readiness & Policy Brief</div>
+    <div class="cover-line"></div>
+    <div class="cover-meta">
+        Generated: 2026-06-26<br>
+        Data Sources: Internet Yellow Pages (IYP) Neo4j · Cloudflare Radar<br>
+        Framework: ISOC Internet Resilience Index — Security Pillar (DNS Security)
+    </div>
+</div>
+
+<!-- ═══ REPORT BODY (LLM-generated) ═══ -->
+<div class="content">
+<h1>Executive Policy Brief: Strengthening .fr DNS Security</h1>
+
+<p>Sir/Ma'am,</p>
+
+<p>This brief provides a strategic overview of the Domain Name System Security Extensions (DNSSEC) posture for the .fr country code Top-Level Domain (ccTLD). It synthesizes findings on core infrastructure resilience and current DNSSEC validation rates, offering actionable recommendations to bolster national cybersecurity.</p>
+
+<div class="callout">
+  Key insight: While France boasts a robust and modern core DNS infrastructure, its adoption and enforcement of critical DNSSEC validation remain significantly low, exposing the nation to considerable cyber risks.
+</div>
+
+<h2>Executive Summary: The "Big Picture" Diagnosis</h2>
+
+<p>France’s digital foundation, particularly for the critical <strong>.fr ccTLD</strong>, demonstrates strong technical capabilities. With <strong>3 authoritative nameservers</strong>, all <strong>100.0% IPv6 enabled</strong>, and infrastructure distributed across <strong>4 distinct Autonomous Systems (ASNs)</strong>, the underlying network is designed for resilience and modern connectivity. This robust core infrastructure is a national asset, providing a strong platform for future digital growth.</p>
+
+<p><strong>The Paradox: Strong Infrastructure but Weak Security.</strong> Despite these foundational strengths, the country faces a critical security vulnerability: a mere <strong>8.75% of DNS queries are successfully validated using DNSSEC</strong>. This low validation rate means that the vast majority of DNS queries within France are susceptible to spoofing, cache poisoning, and man-in-the-middle attacks, undermining the security and integrity of online communications and transactions. Furthermore, the significant variance in DNSSEC adoption among major networks – ranging from a concerning <strong>1.37% to a commendable 16.64%</strong> – highlights a fragmented security landscape that requires immediate, harmonized intervention.</p>
+
+<p>This gap between a resilient infrastructure and a vulnerable security posture represents a strategic risk that, if unaddressed, could compromise national security, economic stability, and citizen trust in digital services. Our recommendations outline a clear path to rectify this critical imbalance.</p>
+
+<div class="stat-grid">
+  <div class="stat-card"><span class="number">3</span><span class="label">Authoritative Nameservers</span></div>
+  <div class="stat-card"><span class="number">100.0%</span><span class="label">IPv6 Enabled</span></div>
+  <div class="stat-card"><span class="number">8.75%</span><span class="label">DNSSEC Secure Queries</span></div>
+</div>
+
+<h2>SWOT Analysis: The Strategic Cheat Sheet</h2>
+
+<div class="swot-grid">
+  <div class="swot-card swot-strengths"><h3>💪 Strengths</h3><ul><li><strong>Robust Core Infrastructure:</strong> 3 authoritative nameservers, 100% IPv6 enabled, ensuring modern connectivity and resilience.</li><li><strong>High ASN Diversity:</strong> Infrastructure distributed across 4 distinct ASNs, enhancing resilience against single points of failure.</li><li><strong>Leading Networks:</strong> Some ISPs (e.g., Renater, SFR Group) demonstrate relatively higher DNSSEC validation, serving as potential champions for wider adoption.</li></ul></div>
+  <div class="swot-card swot-weaknesses"><h3>⚠️ Weaknesses</h3><ul><li><strong>Alarmingly Low DNSSEC Validation:</strong> Only 8.75% of queries are secure, leaving the vast majority vulnerable to critical DNS attacks.</li><li><strong>Fragmented Security Posture:</strong> Wide disparity in validation rates among ISPs (1.37% to 16.64%) indicates a lack of unified security standards.</li><li><strong>Significant Vulnerability:</strong> Networks with very low validation rates (e.g., JASHORE COLO at 1.37%) pose a systemic risk to user trust and data integrity.</li></ul></div>
+  <div class="swot-card swot-opportunities"><h3>🚀 Opportunities</h3><ul><li><strong>Leverage IPv6 Enablement:</strong> Utilize the modern network foundation to deploy advanced security protocols like DNSSEC more efficiently.</li><li><strong>National Cybersecurity Strategy:</strong> Integrate strong DNS security as a cornerstone of broader national digital sovereignty and cybersecurity initiatives.</li><li><strong>Economic Incentives:</strong> Introduce policies to encourage ISPs to invest in DNSSEC validation, potentially through grants or regulatory advantages.</li><li><strong>Education and Awareness:</strong> Launch public and industry campaigns to highlight the importance of DNSSEC for secure internet usage.</li></ul></div>
+  <div class="swot-card swot-threats"><h3>🛡️ Threats</h3><ul><li><strong>Increased Cyberattack Surface:</strong> Low DNSSEC adoption makes the nation highly susceptible to DNS spoofing, cache poisoning, and denial-of-service attacks.</li><li><strong>Erosion of Trust:</strong> Repeated security incidents stemming from DNS vulnerabilities could undermine public and business confidence in digital services.</li><li><strong>Geopolitical Exploitation:</strong> Unsecured DNS infrastructure can be exploited by state-sponsored actors for espionage, surveillance, or critical infrastructure disruption.</li><li><strong>Regulatory Pressure:</strong> Failure to address these vulnerabilities could lead to international scrutiny or impact data transfer agreements.</li></ul></div>
+</div>
+
+<h2>Strategic Roadmap: The Policy Agenda</h2>
+
+<p>To transition France from a state of foundational strength with security vulnerabilities to a position of leadership in DNS security, a phased strategic roadmap is essential. This plan outlines immediate, medium-term, and long-term actions to enhance the nation's DNS resilience and security posture.</p>
+
+<div class="phase"><span class="phase-badge">Phase 1 — Quick Wins</span><ol><li><strong>Mandate DNSSEC Validation for Government and Critical Infrastructure:</strong> Issue regulatory decrees requiring all government agencies and critical national infrastructure providers to enable DNSSEC validation on their networks within 6 months. This sets an immediate standard.</li><li><strong>Publish DNSSEC Best Practices & Guidelines:</strong> Develop and disseminate clear, concise technical and policy guidelines for ISPs on implementing and monitoring DNSSEC validation.</li><li><strong>Launch Public & Industry Awareness Campaign:</strong> Initiate a national campaign to educate citizens and businesses on the importance of DNSSEC, and for ISPs, offer technical workshops and support for immediate deployment.</li><li><strong>Identify and Engage Underperforming Networks:</strong> Directly engage networks with exceptionally low DNSSEC validation rates (e.g., JASHORE COLO) to understand their challenges and provide targeted assistance.</li></ol></div>
+
+<div class="phase"><span class="phase-badge medium">Phase 2 — Structural</span><ol><li><strong>Incentivize ISP DNSSEC Adoption:</strong> Introduce financial incentives (e.g., tax credits, grants for security upgrades) for ISPs that achieve and maintain specific DNSSEC validation targets across their customer base.</li><li><strong>Integrate DNSSEC into Regulatory Frameworks:</strong> Amend telecommunications and cybersecurity regulations to formally include DNSSEC validation as a mandatory requirement for ISPs above a certain size or for specific service tiers.</li><li><strong>Develop National DNSSEC Monitoring & Reporting System:</strong> Establish a centralized system to continuously monitor DNSSEC validation rates across major ASNs, providing transparent reporting and benchmarking.</li><li><strong>Promote Local Secure DNS Resolver Deployment:</strong> Encourage and potentially subsidize the deployment of local, DNSSEC-validating recursive DNS resolvers to reduce reliance on foreign services and enhance national control over DNS resolution.</li></ol></div>
+
+<div class="phase"><span class="phase-badge long">Phase 3 — Vision</span><ol><li><strong>Establish a National DNS Security Centre of Excellence:</strong> Create a dedicated institution for R&D, threat intelligence sharing, and expertise in advanced DNS security, including emerging protocols.</li><li><strong>Foster DNSSEC-Aware Application Development:</strong> Integrate DNSSEC validation awareness into national software development guidelines and encourage developers to build applications that leverage secure DNS.</li><li><strong>Position France as a Regional Leader in DNS Security:</strong> Share best practices and offer technical assistance to neighboring countries, enhancing regional internet security and strengthening France's international digital diplomacy.</li><li><strong>Explore Advanced DNS Security Protocols:</strong> Invest in research and pilot programs for next-generation DNS security technologies beyond current DNSSEC standards, preparing for future threats.</li></ol></div>
+
+<h2>DNSSEC Validation Scorecard: Detailed Analysis</h2>
+
+<div class="chart-container">
+  <h3>DNSSEC Validation Status (Overall)</h3>
+  <div class="mermaid">
+pie title DNSSEC Validation Status
+    "Secure (8.75%)" : 8.75
+    "Insecure (77.55%)" : 77.55
+    "Other (13.7%)" : 13.70
+  </div>
+</div>
+
+<div class="callout callout-warning">
+  The low percentage of "Secure" queries, contrasted with a high "Insecure" rate, indicates a significant national vulnerability to DNS-based attacks.
+</div>
+
+<div class="chart-container">
+  <h3>DNSSEC Secure Validation by Top Networks</h3>
+  <div class="mermaid">
+xychart-beta
+    title "DNSSEC Secure Validation by Top Networks"
+    x-axis ["JASHORE COLO", "Contabo GmbH", "Space Explora..", "ONLINE DEDIBO..", "OVHcloud", "Free SAS", "Orange France", "SFR Group", "Renater"]
+    y-axis "Secure Validation (%)" 0 --> 20
+    bar [1.37, 4.13, 5.64, 7.58, 10.33, 10.93, 13.42, 14.77, 16.64]
+  </div>
+</div>
+
+<p>The bar chart above clearly illustrates the disparity in DNSSEC adoption across major networks. While Renater and SFR Group show promising rates, providers like JASHORE COLO present critical weaknesses that demand immediate attention.</p>
+
+<div class="chart-container">
+  <h3>DNS Query Share Distribution by Top ASNs</h3>
+  <div class="mermaid">
+pie title DNS Query Share by Top ASNs
+    "Contabo GmbH (18.57%)" : 18.57
+    "OVHcloud (10.88%)" : 10.88
+    "JASHORE COLO (7.64%)" : 7.64
+    "Renater (7.45%)" : 7.45
+    "Orange France (6.87%)" : 6.87
+    "Free SAS (5.49%)" : 5.49
+    "Space Exploration Technologies Corporation (5.37%)" : 5.37
+    "ONLINE DEDIBOX ISDNET TIF PONEY-TELECOM (4.51%)" : 4.51
+    "SFR Group (3.01%)" : 3.01
+    "Other (30.21%)" : 30.21
+  </div>
+</div>
+
+<p>This pie chart highlights the significant market influence of several networks. Notably, <strong>Contabo GmbH</strong> holds the largest query share among the top networks (18.57%) but has a moderate secure validation rate (4.13%), indicating a large area for improvement.</p>
+
+<div class="verdict">
+  <h2>Final Verdict</h2>
+  <p>France possesses a robust core internet infrastructure with excellent IPv6 enablement and ASN diversity, which are significant assets for digital resilience. However, the nation's DNSSEC validation posture is critically underdeveloped, exposing its citizens, businesses, and government to severe cybersecurity risks. Strategic, phased intervention is required to translate infrastructure strength into effective security.</p>
+  <div class="verdict-scores">
+    <div class="verdict-item"><div class="score">Developing</div><div class="score-label">DNSSEC Maturity</div></div>
+    <div class="verdict-item"><div class="score">Medium</div><div class="score-label">Investability Score</div></div>
+  </div>
+  <p>The "Developing" DNSSEC Maturity reflects a foundational infrastructure that is ready but security implementation that is nascent. The "Medium" Investability Score signifies that while there are clear risks, the strong underlying infrastructure and potential for quick policy wins make investment in DNS security highly impactful and strategically sound for national interests.</p>
+</div>
+
+    <div class="footer">
+        <p>Report generated by ISOC Pulse × IYP DNSSEC Policy Engine</p>
+        <p>Team: Rahul Rajesh, Ron Prajoth, Aditya Menon | Mentor: Amreesh Phokeer (ISOC)</p>
+    </div>
+</div>
+
+</body>
+</html>

@@ -3,6 +3,10 @@ from pathlib import Path
 import sys
 import pathlib
 
+# Ensure stdout supports UTF-8 for emojis on Windows
+if sys.stdout.encoding and sys.stdout.encoding.lower() != 'utf-8':
+    sys.stdout.reconfigure(encoding='utf-8')
+
 ROOT = pathlib.Path(__file__).resolve().parent
 
 if str(ROOT) not in sys.path:
@@ -235,9 +239,7 @@ def main():
     reports_dir = Path("reports")
     reports_dir.mkdir(exist_ok=True)
 
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M")
-
-    output_file = reports_dir / f"DNSSEC_{country}_{timestamp}.md"
+    output_file = reports_dir / f"DNSSEC_Report_{country}.md"
 
     with open(output_file, "w", encoding="utf-8") as f:
         f.write(report_text)
