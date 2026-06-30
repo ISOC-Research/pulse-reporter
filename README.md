@@ -15,33 +15,60 @@ The Internet Resilience Index (IRI) measures a country's internet resilience acr
 
 ## Architecture
 ```
-request_for_YPI/
-├── generate_report.py        # Main orchestrator (two-phase agentic workflow)
-├── src/
-│   ├── agents/
-│   │   └── graph.py          # LangGraph agent definition with tool routing
-│   ├── tools/
-│   │   ├── google.py         # Google Custom Search integration
-│   │   ├── scraper.py        # Web page and PDF content extraction
-│   │   └── neo4j.py          # Database query execution tool
-│   └── utils/
-│       ├── llm.py            # LLM configuration (fast/smart/reasoning modes)
-│       ├── formatting.py     # Neo4j result formatting with Jinja2
-│       ├── loaders.py        # File and YAML loaders
-│       └── pdf_extractor.py  # PDF text extraction with PyMuPDF
-├── prompt/
-│   ├── render_document_thinking.txt  # Expert system prompt for reasoning phase
-│   └── render_document_based.txt     # Legacy prompt template
-├── infrastructure/           # Pillar 1: IXPs, data centers
-├── preparation_marche/       # Pillar 2: Peering, competition, domains
-├── performance/              # Pillar 3: Speed metrics
-└── securite/                 # Pillar 4: MANRS, IPv6, DNSSEC, DDoS
+pulse-reporter/
+├── dnssec_report.py              # DNSSEC analysis report generator
+├── ipv6_report.py                # IPv6 deployment analysis
+├── generate_llm_brief.py         # LLM-based brief generation
+├── data/
+│   └── tld_trend_history.json   # Historical TLD trend data
+├── reports/                      # Generated analysis reports
+│   ├── DNSSEC_*.md
+│   └── IPv6_*.md
+├── request_for_YPI/              # Main agentic engine
+│   ├── generate_report.py        # Main orchestrator (two-phase workflow)
+│   ├── gene_report_v2.py         # Report generation v2
+│   ├── pulse_service.py          # Pulse data service
+│   ├── dnssec_engine.py          # DNSSEC-specific engine
+│   ├── dnssec_radar_engine.py    # DNSSEC radar integration
+│   ├── ipv6_engine.py            # IPv6-specific engine
+│   ├── apnic_service.py          # APNIC data service
+│   ├── crux_service.py           # Chrome UX Report service
+│   ├── src/
+│   │   ├── agents/               # LangGraph agent definitions
+│   │   ├── tools/                # Tool implementations (Neo4j, Google Search, etc.)
+│   │   ├── RAG/                  # RAG pipeline components
+│   │   └── utils/                # Utilities (LLM config, formatters, loaders)
+│   ├── prompt/                   # LLM prompt templates
+│   │   ├── IYP/                  # IYP-specific prompts
+│   │   ├── report_generation/    # Report generation prompts
+│   │   └── *.txt                 # Prompt strategies
+│   ├── infrastructure/           # Pillar 1: IXPs, data centers, fiber
+│   ├── market_readiness/         # Pillar 2: Market structure, peering
+│   ├── performance/              # Pillar 3: Speed & consistency metrics
+│   ├── security/                 # Pillar 4: DNS, routing, threat analysis
+│   └── schema_rapport/           # Report schema definitions
+├── schema_rapport/
+│   └── schema_global.py          # Global report schema
+├── testfiles/                    # Testing utilities
+│   ├── request_testing.py        # Query testing framework
+│   ├── run_query.py              # Query execution tool
+│   ├── run_radar.py              # Radar query testing
+│   └── unit_test_request.py      # Validation suite
+├── web/
+│   └── back.py                   # Web backend API
+└── requirements.txt              # Project dependencies
 ```
 
-Each indicator directory contains:
-- `*.cypher` - Progressive queries building complete analysis
+Each indicator directory (under infrastructure/, market_readiness/, performance/, security/) contains:
+- `*.cypher` - Progressive Cypher queries building complete analysis
 - `*.md` - Technical documentation and analysis plans
 - `query_templates.yaml` - Jinja2 templates for formatting Neo4j results
+
+## Report Generators
+
+- **dnssec_report.py** - Generates DNSSEC deployment and security analysis reports
+- **ipv6_report.py** - Analyzes IPv6 infrastructure adoption and readiness
+- **generate_llm_brief.py** - Creates AI-powered executive briefs from analysis data
 
 ## Two-Phase Agentic Architecture
 
@@ -53,7 +80,7 @@ Uses LangGraph to orchestrate an autonomous agent that:
 - Reads and extracts content from web pages and PDFs via `read_web_page`
 - Decides autonomously which tools to use and when to stop researching
 
-Model: Configurable (fast=Mistral Small, smart=Mistral Large)
+Model: Google Gemini Flash (2.0)
 
 ### Phase 2: Strategic Synthesis (Reasoning Mode)
 
@@ -64,7 +91,7 @@ Uses a reasoning model to:
 - Generate comprehensive reports following expert prompt structure
 - Provide prioritized, actionable recommendations
 
-Model: Magistral (Mistral's reasoning model)
+Model: Google Gemini Pro 2.0 (with extended thinking)
 
 ## IRI Coverage
 
@@ -99,7 +126,6 @@ AUTH = None
 
 Create a `.env` file:
 ```bash
-MISTRAL_API_KEY=your_key
 GOOGLE_API_KEY=your_key
 GOOGLE_CX_ID=your_key
 LANGCHAIN_API_KEY=your_key
@@ -109,7 +135,7 @@ LANGCHAIN_TRACING_V2="True"
 ```
 ### Obtaining API Keys
 
-**Mistral AI**: Create an account at https://console.mistral.ai and generate an API key from the dashboard. Requires a payment method for production use.
+**Google Gemini API**: Visit https://console.cloud.google.com to create a project, enable the Gemini API, and generate an API key from the Credentials page.
 
 **Google Custom Search**: Visit https://console.cloud.google.com to create a project, enable the Custom Search API, and generate credentials. Then create a Custom Search Engine at https://programmablesearchengine.google.com to obtain your CX ID.
 
@@ -118,31 +144,53 @@ LANGCHAIN_TRACING_V2="True"
 
 ### Usage
 
-Generate a comprehensive report for an indicator:
+#### Generate Full Analysis Reports
+
+DNSSEC analysis:
+```bash
+python dnssec_report.py --country=FR
+```
+
+IPv6 analysis:
+```bash
+python ipv6_report.py --country=IN
+```
+
+Generate comprehensive IRI indicator report:
 ```bash
 python request_for_YPI/generate_report.py infrastructure/ixp_coverage --country=FR --mode=smart
 ```
 
-Parameters:
+Report parameters:
 - `indicator_input`: Partial or full path to indicator folder
 - `--country`: ISO country code (default: FR)
 - `--domain`: Domain name for analysis (default: gouv.fr)
 - `--asn`: AS number (default: 16276)
 - `--mode`: Research phase model - 'fast' or 'smart' (default: smart)
 
-### Testing Queries
-
-Test a single query:
+Generate AI brief:
 ```bash
-python testfiles/request_testing.py request_for_YPI/securite/hygiene_routage/score_manrs/1.cypher --country=FR
+python generate_llm_brief.py --report=reports/DNSSEC_FR_20260620_1623.md
+```
+
+### Testing & Validation
+
+Test a single Neo4j query:
+```bash
+python testfiles/request_testing.py request_for_YPI/security/dns_security/dnssec/1.cypher --country=FR
 ```
 
 Test query with LLM formatting preview:
 ```bash
-python testfiles/run_query.py request_for_YPI/preparation_marche/localisation_trafic/efficacite_peering/1.cypher --country=FR
+python testfiles/run_query.py request_for_YPI/performance/fixed_networks/vitesses_download/1.cypher --country=FR
 ```
 
-Run all queries validation suite:
+Test radar data queries:
+```bash
+python testfiles/run_radar.py --country=IN
+```
+
+Run full validation suite:
 ```bash
 python testfiles/unit_test_request.py
 ```
@@ -176,11 +224,10 @@ Generated reports include:
 
 ## LLM Modes
 
-The system supports three operational modes:
+The system supports two operational modes:
 
-- **fast**: Mistral Small - Quick processing for web scraping and summarization
-- **smart**: Mistral Large - Balanced performance for research and analysis
-- **reasoning**: Magistral - Advanced reasoning for strategic synthesis (Phase 2 only)
+- **fast**: Google Gemini Flash 2.0 - Quick processing for web scraping and summarization
+- **reasoning**: Google Gemini Pro 2.0 - Advanced reasoning for strategic synthesis (Phase 2 only)
 
 ## Development
 
@@ -194,22 +241,41 @@ Adding new indicators:
 
 ## Output
 
-Reports are saved in Markdown format in the indicator directory:
-```
-report_{indicator_name}_countryCode-{CC}_domainName-{domain}_hostingASN-{asn}.md
-```
+Reports are generated in multiple formats:
+
+1. **Analysis Reports** - Saved in `reports/` directory:
+   - DNSSEC analysis: `DNSSEC_{CC}_{timestamp}.md`
+   - IPv6 analysis: `IPv6_{CC}_{timestamp}.md`
+
+2. **IRI Indicator Reports** - Saved in indicator directories:
+   - Format: `report_{indicator_name}_countryCode-{CC}_domainName-{domain}_hostingASN-{asn}.md`
+
+3. **Web Interface** - Viewable via web backend:
+   - HTML report preview: `web/result.html`
+   - Markdown rendering: `web/result_markdown.html`
 
 ## Dependencies
 
 Core libraries:
 - neo4j - Database connectivity
 - langchain / langgraph - Agentic framework
-- langchain-mistralai - LLM integration
+- langchain-google-genai - LLM integration
 - trafilatura - Web content extraction
 - PyMuPDF - PDF text extraction
 - Jinja2 / PyYAML - Template rendering
 - requests / beautifulsoup4 - HTTP and parsing
 
+## Key Features
+
+- **Multi-pillar Analysis**: Covers Infrastructure, Market Readiness, Performance, and Security
+- **Neo4j Integration**: Direct connectivity to Internet Yellow Pages database
+- **Web Research**: Autonomous agent conducts Google searches for policy context
+- **PDF Processing**: Extracts and analyzes policy documents and technical papers
+- **LLM-powered Synthesis**: Reasoning models generate strategic recommendations
+- **DNSSEC & IPv6 Focus**: Specialized engines for DNS security and IPv6 deployment analysis
+- **Radar Integration**: Cloudflare Radar for DNS and threat analysis data
+- **Web Interface**: Visual browsing of generated reports
+
 ## Status
 
-Active Development | Version 0.3 | Last Updated: January 2026
+Active Development | Version 0.4 | Last Updated: June 2026
