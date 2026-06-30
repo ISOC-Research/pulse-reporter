@@ -1,11 +1,11 @@
 # Section 7: Strategic Synthesis & Roadmap
 
-**Role:** Chief Strategy Officer to the Head of State.
+**Role:** Chief Strategy Officer advising on Telecommunications and Internet Policy.
 
-## 1. Target Audience: "The Policy Maker"
-* **Who:** The President / Prime Minister.
+## 1. Target Audience: "The Decision-Maker"
+* **Who:** A senior government or regulatory official (address them as "Sir/Ma'am" — do NOT use "Mr. President", "Prime Minister", or any specific title).
 * **Requirement:** Connect the dots. How does a Security flaw (Part 5) impact Geopolitics (Part 1)? Provide **Actionable Recommendations**.
-* **Tone:** Decisive, Forward-looking, Executive.
+* **Tone:** Decisive, Forward-looking, Executive. Professional but not overly formal.
 
 ## 2. Deep-Dive Analysis Requirements
 

@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNSSEC Policy Brief — MA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad: true, theme: 'default', themeVariables: { 'pie1': '#43a047', 'pie2': '#e53935', 'pie3': '#fb8c00', 'pie4': '#b71c1c', 'pie5': '#1e88e5', 'pie6': '#8e24aa', 'pie7': '#00acc1', 'pie8': '#f4511e', 'pie9': '#3949ab', 'pie10': '#7cb342', 'pie11': '#039be5', 'pie12': '#d81b60', 'xyChart': { 'backgroundColor': '#ffffff', 'titleColor': '#0d47a1', 'xAxisLabelColor': '#333333', 'yAxisLabelColor': '#333333', 'plotColorPalette': '#43a047, #e53935, #fb8c00, #1e88e5, #8e24aa' } } });</script>
+    <style>
+        :root {
+            --primary: #0d47a1;
+            --primary-light: #1565c0;
+            --accent: #00e676;
+            --accent-warm: #ff6f00;
+            --bg: #f5f7fa;
+            --card-bg: #ffffff;
+            --text: #212529;
+            --text-muted: #6c757d;
+            --border: #e0e4ea;
+            --green: #2e7d32;
+            --red: #c62828;
+            --yellow: #f57f17;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            font-size: 15px;
+        }
+
+        /* ── COVER PAGE ── */
+        .cover {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a1628 0%, #0d47a1 35%, #1565c0 65%, #1976d2 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 60px 40px;
+            position: relative;
+            overflow: hidden;
+            page-break-after: always;
+        }
+        .cover::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -30%;
+            width: 80%;
+            height: 200%;
+            background: radial-gradient(ellipse, rgba(0, 230, 118, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .cover-badge {
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 50px;
+            padding: 8px 24px;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            backdrop-filter: blur(10px);
+        }
+        .cover-country {
+            font-size: 96px;
+            font-weight: 800;
+            letter-spacing: 8px;
+            margin-bottom: 16px;
+            text-shadow: 0 4px 30px rgba(0,0,0,0.3);
+        }
+        .cover-title {
+            font-size: 28px;
+            font-weight: 300;
+            opacity: 0.9;
+            margin-bottom: 60px;
+            max-width: 600px;
+        }
+        .cover-meta {
+            font-size: 13px;
+            opacity: 0.6;
+            line-height: 2;
+        }
+        .cover-line {
+            width: 80px;
+            height: 3px;
+            background: var(--accent);
+            margin: 30px auto;
+            border-radius: 2px;
+        }
+
+        /* ── MAIN CONTENT ── */
+        .content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        /* ── SECTION HEADERS ── */
+        h1 {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 50px 0 24px 0;
+            padding-bottom: 12px;
+            border-bottom: 3px solid var(--accent);
+            page-break-before: always;
+        }
+        h1:first-child { page-break-before: avoid; }
+
+        h2 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary-light);
+            margin: 40px 0 16px 0;
+            padding-left: 16px;
+            border-left: 4px solid var(--accent);
+        }
+
+        h3 {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--text);
+            margin: 28px 0 12px 0;
+        }
+
+        p {
+            margin-bottom: 16px;
+            color: #333;
+        }
+
+        /* ── STAT CARDS ── */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+        }
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border: 1px solid var(--border);
+        }
+        .stat-card .number {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--primary);
+            display: block;
+        }
+        .stat-card .label {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+
+        /* ── TABLES ── */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 14px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        thead th {
+            background: var(--primary);
+            color: white;
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        tbody td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+        tbody tr:nth-child(even) { background: #f0f4ff; }
+        tbody tr:hover { background: #e3eaff; }
+
+        /* ── SWOT GRID ── */
+        .swot-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 24px 0;
+        }
+        .swot-card {
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid var(--border);
+        }
+        .swot-card h3 {
+            margin: 0 0 12px 0;
+            font-size: 16px;
+            border: none;
+            padding: 0;
+        }
+        .swot-card ul { padding-left: 20px; }
+        .swot-card li { margin-bottom: 8px; font-size: 14px; }
+        .swot-strengths { background: #e8f5e9; border-color: #a5d6a7; }
+        .swot-strengths h3 { color: var(--green); }
+        .swot-weaknesses { background: #fce4ec; border-color: #ef9a9a; }
+        .swot-weaknesses h3 { color: var(--red); }
+        .swot-opportunities { background: #e3f2fd; border-color: #90caf9; }
+        .swot-opportunities h3 { color: #1565c0; }
+        .swot-threats { background: #fff3e0; border-color: #ffcc80; }
+        .swot-threats h3 { color: var(--accent-warm); }
+
+        /* ── CALLOUT BOXES ── */
+        .callout {
+            background: #e3f2fd;
+            border-left: 4px solid var(--primary);
+            border-radius: 0 10px 10px 0;
+            padding: 20px 24px;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+        .callout-warning {
+            background: #fff3e0;
+            border-left-color: var(--accent-warm);
+        }
+        .callout-success {
+            background: #e8f5e9;
+            border-left-color: var(--green);
+        }
+
+        /* ── VERDICT BOX ── */
+        .verdict {
+            background: linear-gradient(135deg, #0d47a1, #1565c0);
+            color: white;
+            border-radius: 16px;
+            padding: 40px;
+            margin: 40px 0;
+            text-align: center;
+        }
+        .verdict h2 {
+            color: white;
+            border: none;
+            padding: 0;
+            margin: 0 0 24px 0;
+            font-size: 24px;
+        }
+        .verdict-scores {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-top: 24px;
+        }
+        .verdict-item .score {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--accent);
+        }
+        .verdict-item .score-label {
+            font-size: 13px;
+            opacity: 0.7;
+            margin-top: 4px;
+        }
+        .verdict p, .verdict li {
+            color: rgba(255, 255, 255, 0.92);
+        }
+        .verdict strong {
+            color: #ffffff;
+        }
+
+        /* ── MERMAID CHARTS ── */
+        .chart-container {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 30px;
+            margin: 24px 0;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+        .chart-container h3 {
+            margin: 0 0 20px 0;
+            text-align: center;
+        }
+        .mermaid { margin: 0 auto; }
+
+        /* ── PHASE CARDS ── */
+        .phase {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 28px;
+            margin: 16px 0;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .phase-badge {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .phase-badge.medium { background: var(--primary-light); }
+        .phase-badge.long { background: #455a64; }
+        .phase ol { padding-left: 20px; }
+        .phase li { margin-bottom: 10px; font-size: 14px; }
+
+        /* ── LISTS ── */
+        ul, ol { padding-left: 24px; margin-bottom: 16px; }
+        li { margin-bottom: 8px; }
+
+        /* ── FOOTER ── */
+        .footer {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+            font-size: 12px;
+            border-top: 1px solid var(--border);
+            margin-top: 60px;
+        }
+
+        /* ── PRINT ── */
+        @media print {
+            body { background: white; font-size: 13px; }
+            .cover { min-height: 100vh; }
+            .content { padding: 40px 30px; }
+            h1 { page-break-before: always; font-size: 26px; }
+            h1:first-child { page-break-before: avoid; }
+            .stat-card, .phase, .chart-container { break-inside: avoid; }
+            table { break-inside: avoid; }
+            .swot-grid { break-inside: avoid; }
+        }
+
+        strong { color: #0d47a1; }
+    </style>
+</head>
+<body>
+
+<!-- ═══ COVER PAGE ═══ -->
+<div class="cover">
+    <div class="cover-badge">Internet Society · Pulse Platform</div>
+    <div class="cover-country">MA</div>
+    <div class="cover-title">DNSSEC Readiness & Policy Brief</div>
+    <div class="cover-line"></div>
+    <div class="cover-meta">
+        Generated: 2026-06-26<br>
+        Data Sources: Internet Yellow Pages (IYP) Neo4j · Cloudflare Radar<br>
+        Framework: ISOC Internet Resilience Index — Security Pillar (DNS Security)
+    </div>
+</div>
+
+<!-- ═══ REPORT BODY (LLM-generated) ═══ -->
+<div class="content">
+<h1>Executive Summary: The "Big Picture" Diagnosis</h1>
+<p>Sir/Ma'am,</p>
+<p>This report synthesizes critical findings regarding the Domain Name System Security Extensions (DNSSEC) posture for .ma, providing a strategic overview for decision-makers. While <strong>Morocco demonstrates foundational strengths in its core internet infrastructure</strong>, particularly in the distribution of its ccTLD nameservers, a significant vulnerability exists in the widespread lack of DNSSEC validation. This paradox — <strong>strong underlying architecture but weak security implementation</strong> — leaves the nation's digital communications susceptible to manipulation and attack, undermining trust and exposing users to cyber threats.</p>
+<p>The .ma ccTLD is served by <strong>8 authoritative nameservers</strong>, with a commendable <strong>75.0% IPv6 enablement rate</strong> and distribution across <strong>6 distinct Autonomous Systems</strong>. These factors contribute positively to the resilience and accessibility of the domain. However, a concerning <strong>4.16% DNSSEC secure query rate</strong> indicates that the vast majority of DNS queries are not cryptographically validated, making them vulnerable to "man-in-the-middle" attacks that can redirect traffic to malicious sites, compromise data, and erode user confidence.</p>
+<p>The stark variation in DNSSEC validation rates among major local networks, ranging from a mere 0.57% to 12.87%, highlights a disjointed approach to cybersecurity implementation within the telecommunications sector. This inconsistency creates weak points that hostile actors can exploit, impacting national security, economic stability, and the privacy of citizens.</p>
+
+<div class="stat-grid">
+  <div class="stat-card"><span class="number">8</span><span class="label">Authoritative Nameservers</span></div>
+  <div class="stat-card"><span class="number">75.0%</span><span class="label">IPv6 Enabled</span></div>
+  <div class="stat-card"><span class="number">6</span><span class="label">Distinct Hosting ASNs</span></div>
+  <div class="stat-card"><span class="number">4.16%</span><span class="label">DNSSEC Secure Queries</span></div>
+</div>
+
+<h1>SWOT Analysis: The Strategic Cheat Sheet</h1>
+<div class="swot-grid">
+  <div class="swot-card swot-strengths"><h3>💪 Strengths</h3><ul><li><strong>Distributed ccTLD Infrastructure:</strong> 8 authoritative nameservers spread across 6 distinct ASNs enhance resilience against single points of failure.</li><li><strong>Solid IPv6 Adoption at ccTLD:</strong> 75.0% IPv6 enablement among authoritative nameservers ensures future-readiness and improved routing efficiency for the core domain.</li><li><strong>Foundational Network Diversity:</strong> The distribution of critical DNS infrastructure across multiple ASNs provides a stronger basis for network stability.</li></ul></div>
+  <div class="swot-card swot-weaknesses"><h3>⚠️ Weaknesses</h3><ul><li><strong>Critically Low DNSSEC Validation:</strong> Only 4.16% of DNS queries are securely validated, leaving the vast majority vulnerable to DNS hijacking and spoofing.</li><li><strong>Inconsistent ISP Security Posture:</strong> Wide disparities in DNSSEC validation rates (0.57% to 12.87%) among major ISPs indicate a lack of uniform security standards and enforcement.</li><li><strong>Monopolistic Market Concentration:</strong> A single ISP (Orange Morocco) commands over 84% of the query share, creating a significant single point of failure and potential control risk if its security is compromised.</li><li><strong>External Dependency for DNS Services:</strong> Some critical nameservers for .ma are hosted externally (e.g., inria.fr, nic.fr), introducing potential sovereignty and latency concerns.</li></ul></div>
+  <div class="swot-card swot-opportunities"><h3>🚀 Opportunities</h3><ul><li><strong>Mandate DNSSEC Validation:</strong> Leverage existing regulatory frameworks to enforce DNSSEC validation across all major ISPs and government networks, significantly boosting national cybersecurity.</li><li><strong>Public-Private Partnerships:</strong> Collaborate with leading ISPs and internet exchange points (IXPs) to implement best practices, share threat intelligence, and deploy DNSSEC validation infrastructure.</li><li><strong>Cybersecurity Awareness Campaigns:</strong> Educate businesses and end-users on the importance of DNSSEC and secure internet practices, fostering a culture of cybersecurity.</li><li><strong>Regional Leadership:</strong> Position Morocco as a leader in internet security within the region by achieving high DNSSEC adoption rates and sharing expertise.</li></ul></div>
+  <div class="swot-card swot-threats"><h3>🛡️ Threats</h3><ul><li><strong>Increased Cyber Warfare Risk:</strong> Low DNSSEC validation makes the nation highly susceptible to state-sponsored attacks, data interception, and disinformation campaigns via DNS spoofing.</li><li><strong>Economic Disruption:</strong> Successful DNS attacks can cripple critical infrastructure, financial services, and e-commerce platforms, leading to severe economic losses and reputational damage.</li><li><strong>Erosion of Trust:</strong> Repeated security incidents stemming from DNS vulnerabilities will erode public trust in digital services and government institutions.</li><li><strong>Foreign Control and Influence:</strong> Dependence on external entities for critical DNS infrastructure, combined with weak internal security, presents a geopolitical risk of foreign entities manipulating internet traffic.</li></ul></div>
+</div>
+
+<div class="callout callout-warning">
+  <strong>Urgent Action Required:</strong> The current low DNSSEC validation rate represents a critical national security vulnerability. Without immediate and decisive action, Morocco's digital infrastructure remains exposed to significant cyber threats.
+</div>
+
+<h1>Strategic Roadmap: The Policy Agenda</h1>
+<p>Decision-Makers, a multi-phased approach is essential to fortify Morocco's DNS security posture and protect its digital sovereignty.</p>
+
+<div class="phase"><span class="phase-badge">Phase 1 — Quick Wins</span><ol><li><strong>Mandate DNSSEC Validation for Critical Infrastructure:</strong> Issue immediate regulatory decrees requiring all government agencies, critical national infrastructure operators, and major ISPs (especially those with high query shares) to enable DNSSEC validation on their recursive DNS resolvers within 6-12 months. This includes configuring their DNS servers to reject invalid DNSSEC responses.</li><li><strong>Secure Government Domains:</strong> Mandate the signing of all government (.gov.ma) and essential services domains with DNSSEC and ensure their records are correctly published.</li><li><strong>Launch DNSSEC Awareness Initiative:</strong> Initiate a targeted campaign to inform ISPs, enterprises, and public sector IT departments about the critical importance and implementation of DNSSEC validation.</li><li><strong>Audit and Report:</strong> Establish a continuous auditing mechanism for DNSSEC validation rates across all major ISPs, with public reporting of compliance to foster accountability and competition.</li></ol></div>
+<div class="phase"><span class="phase-badge medium">Phase 2 — Structural</span><ol><li><strong>Incentivize ISP Adoption:</strong> Implement financial or regulatory incentives (e.g., tax breaks, preferential licensing) for ISPs that achieve and maintain high DNSSEC validation rates. Conversely, introduce penalties for persistent non-compliance.</li><li><strong>Build Local DNS Expertise:</strong> Invest in training programs and certifications for network engineers and cybersecurity professionals in DNSSEC implementation and management. Foster a domestic talent pool.</li><li><strong>Enhance National IXP Resilience:</strong> Promote the establishment and growth of neutral Internet Exchange Points (IXPs) within Morocco, encouraging local peering and the hosting of authoritative DNS servers for the .ma ccTLD exclusively within national borders where feasible, reducing reliance on foreign infrastructure.</li><li><strong>Review Regulatory Frameworks:</strong> Update telecommunications and cybersecurity regulations to explicitly address DNSSEC adoption, enforcement, and incident response protocols.</li></ol></div>
+<div class="phase"><span class="phase-badge long">Phase 3 — Vision</span><ol><li><strong>Achieve Digital Sovereignty:</strong> Aim to host all critical national infrastructure, including the entire authoritative DNS for .ma, within Morocco’s territorial boundaries, managed by national entities.</li><li><strong>Regional Cybersecurity Hub:</strong> Position Morocco as a leading hub for internet security expertise and DNSSEC adoption in North Africa and beyond, offering technical assistance and best practices to neighboring countries.</li><li><strong>Integrate DNSSEC into National Cybersecurity Strategy:</strong> Embed DNSSEC as a fundamental pillar within the broader national cybersecurity strategy, ensuring its continuous monitoring, adaptation, and enforcement as technology evolves.</li><li><strong>Foster Research & Development:</strong> Support local R&D into advanced DNS security technologies and threat intelligence, reducing reliance on foreign vendors and enhancing indigenous capabilities.</li></ol></div>
+
+<h2>Key Performance Indicators (KPIs)</h2>
+<p>To measure progress effectively, Sir/Ma'am, we recommend tracking the following KPIs:</p>
+<ul>
+    <li><strong>DNSSEC Secure Query Rate:</strong> Aim for 50% within 2 years, 80% within 5 years.</li>
+    <li><strong>ISP Compliance Rate:</strong> 100% of top 5 ISPs by query share achieving >75% secure validation within 3 years.</li>
+    <li><strong>Local DNSSEC Expert Count:</strong> Increase certified professionals by 200% within 5 years.</li>
+</ul>
+
+<div class="callout callout-success">
+  By implementing this roadmap, Morocco can transform a critical vulnerability into a strategic advantage, bolstering its national security, fostering digital trust, and paving the way for a resilient digital future.
+</div>
+
+<h1>DNSSEC Performance Overview</h1>
+
+<div class="chart-container">
+  <h3>DNSSEC Validation Status Across .ma</h3>
+  <div class="mermaid">
+pie title DNSSEC Validation Status
+    "Secure (4.16%)" : 4.16
+    "Insecure (91.08%)" : 91.08
+    "Other (4.76%)" : 4.76
+  </div>
+</div>
+
+<p>The chart above starkly illustrates the challenge: only a tiny fraction of DNS queries benefit from DNSSEC protection. This leaves the vast majority of internet traffic vulnerable to various forms of manipulation and cyberattack.</p>
+
+<div class="chart-container">
+  <h3>DNSSEC Secure Validation by Top Networks</h3>
+  <div class="mermaid">
+xychart-beta
+    title "DNSSEC Secure Validation by Top Networks"
+    x-axis ["Orange Morocco", "ONPT/IAM", "ONPT/IAM", "Wana Corporate"]
+    y-axis "Secure Validation (%)" 0 --> 100
+    bar [3.37, 8.01, 9.46, 8.38]
+  </div>
+</div>
+<p>This bar chart highlights the performance of the largest networks by query share. While some networks show slightly better validation rates, even the highest performing major ISP is still below 10%, indicating a systemic issue.</p>
+
+<div class="chart-container">
+  <h3>DNS Query Share Distribution by Top Networks</h3>
+  <div class="mermaid">
+pie title DNS Query Share Distribution by Top Networks
+    "Orange Morocco (AS36925) (84.59%)" : 84.59
+    "ONPT/IAM (AS36903) (9.3%)" : 9.30
+    "ONPT/IAM (AS6713) (3.18%)" : 3.18
+    "Wana Corporate (AS36884) (2.93%)" : 2.93
+  </div>
+</div>
+<p>The pie chart demonstrates the significant market concentration within the telecommunications sector. <strong>Orange Morocco alone accounts for over 84% of DNS queries</strong>, making its DNSSEC adoption critically important for national security. The failure of such a dominant player to implement robust DNSSEC validation impacts the entire ecosystem.</p>
+
+<h2>Detailed DNSSEC Validation by ASN</h2>
+<table>
+  <thead>
+    <tr>
+      <th>ASN</th>
+      <th>Network</th>
+      <th>Query Share</th>
+      <th>Secure Validation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>AS36925</td><td>Orange Morocco</td><td>84.11%</td><td>3.37%</td></tr>
+    <tr><td>AS36903</td><td>Office National des Postes et Telecommunications ONPT (Maroc Telecom) / IAM</td><td>9.30%</td><td>8.01%</td></tr>
+    <tr><td>AS6713</td><td>Office National des Postes et Telecommunications ONPT (Maroc Telecom) / IAM</td><td>3.18%</td><td>9.46%</td></tr>
+    <tr><td>AS36884</td><td>Wana Corporate (AS36884)</td><td>2.93%</td><td>8.38%</td></tr>
+    <tr><td>AS16276</td><td>OVHcloud</td><td>0.23%</td><td>2.36%</td></tr>
+    <tr><td>AS213541</td><td>WS Telecom Inc</td><td>0.12%</td><td>10.03%</td></tr>
+    <tr><td>AS138627</td><td>Cato Networks, Inc.</td><td>0.05%</td><td>12.87%</td></tr>
+    <tr><td>AS198335</td><td>TRANSATEL EUROPE</td><td>0.02%</td><td>0.57%</td></tr>
+    <tr><td>AS328709</td><td>Universite Mohammed VI POLYTECHNIQUE - UM6P</td><td>0.01%</td><td>10.52%</td></tr>
+  </tbody>
+</table>
+<p>This granular view underscores the wide discrepancies in DNSSEC adoption. Even networks with smaller query shares can achieve significantly higher validation rates, demonstrating that higher adoption is technically feasible.</p>
+
+<div class="verdict">
+  <h2>Final Verdict</h2>
+  <p>Morocco's core ccTLD infrastructure exhibits commendable resilience and an acceptable level of IPv6 adoption. However, the nation's overall DNSSEC posture is critically underdeveloped. The extremely low rate of DNSSEC validation across the country, particularly within the dominant ISP, presents a severe and immediate national security risk. This vulnerability undermines trust in the internet, exposes citizens and critical services to cyberattacks, and impedes the nation's digital growth ambitions.</p>
+  <p>While the foundational elements are present, the lack of widespread security implementation suggests a gap in policy enforcement, technical expertise, or strategic priority. Urgent and decisive action is required to mature the nation's DNS security landscape.</p>
+  <div class="verdict-scores">
+    <div class="verdict-item"><div class="score">Low</div><div class="score-label">DNSSEC Maturity</div></div>
+    <div class="verdict-item"><div class="score">Developing</div><div class="score-label">Infrastructure Resilience</div></div>
+  </div>
+</div>
+
+    <div class="footer">
+        <p>Report generated by ISOC Pulse × IYP DNSSEC Policy Engine</p>
+        <p>Team: Rahul Rajesh, Ron Prajoth, Aditya Menon | Mentor: Amreesh Phokeer (ISOC)</p>
+    </div>
+</div>
+
+</body>
+</html>

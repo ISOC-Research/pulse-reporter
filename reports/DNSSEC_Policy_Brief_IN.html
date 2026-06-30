@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNSSEC Policy Brief — IN</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad: true, theme: 'default', themeVariables: { 'pie1': '#43a047', 'pie2': '#e53935', 'pie3': '#fb8c00', 'pie4': '#b71c1c', 'pie5': '#1e88e5', 'pie6': '#8e24aa', 'pie7': '#00acc1', 'pie8': '#f4511e', 'pie9': '#3949ab', 'pie10': '#7cb342', 'pie11': '#039be5', 'pie12': '#d81b60', 'xyChart': { 'backgroundColor': '#ffffff', 'titleColor': '#0d47a1', 'xAxisLabelColor': '#333333', 'yAxisLabelColor': '#333333', 'plotColorPalette': '#43a047, #e53935, #fb8c00, #1e88e5, #8e24aa' } } });</script>
+    <style>
+        :root {
+            --primary: #0d47a1;
+            --primary-light: #1565c0;
+            --accent: #00e676;
+            --accent-warm: #ff6f00;
+            --bg: #f5f7fa;
+            --card-bg: #ffffff;
+            --text: #212529;
+            --text-muted: #6c757d;
+            --border: #e0e4ea;
+            --green: #2e7d32;
+            --red: #c62828;
+            --yellow: #f57f17;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            font-size: 15px;
+        }
+
+        /* ── COVER PAGE ── */
+        .cover {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a1628 0%, #0d47a1 35%, #1565c0 65%, #1976d2 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 60px 40px;
+            position: relative;
+            overflow: hidden;
+            page-break-after: always;
+        }
+        .cover::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -30%;
+            width: 80%;
+            height: 200%;
+            background: radial-gradient(ellipse, rgba(0, 230, 118, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .cover-badge {
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 50px;
+            padding: 8px 24px;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            backdrop-filter: blur(10px);
+        }
+        .cover-country {
+            font-size: 96px;
+            font-weight: 800;
+            letter-spacing: 8px;
+            margin-bottom: 16px;
+            text-shadow: 0 4px 30px rgba(0,0,0,0.3);
+        }
+        .cover-title {
+            font-size: 28px;
+            font-weight: 300;
+            opacity: 0.9;
+            margin-bottom: 60px;
+            max-width: 600px;
+        }
+        .cover-meta {
+            font-size: 13px;
+            opacity: 0.6;
+            line-height: 2;
+        }
+        .cover-line {
+            width: 80px;
+            height: 3px;
+            background: var(--accent);
+            margin: 30px auto;
+            border-radius: 2px;
+        }
+
+        /* ── MAIN CONTENT ── */
+        .content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        /* ── SECTION HEADERS ── */
+        h1 {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 50px 0 24px 0;
+            padding-bottom: 12px;
+            border-bottom: 3px solid var(--accent);
+            page-break-before: always;
+        }
+        h1:first-child { page-break-before: avoid; }
+
+        h2 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary-light);
+            margin: 40px 0 16px 0;
+            padding-left: 16px;
+            border-left: 4px solid var(--accent);
+        }
+
+        h3 {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--text);
+            margin: 28px 0 12px 0;
+        }
+
+        p {
+            margin-bottom: 16px;
+            color: #333;
+        }
+
+        /* ── STAT CARDS ── */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+        }
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border: 1px solid var(--border);
+        }
+        .stat-card .number {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--primary);
+            display: block;
+        }
+        .stat-card .label {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+
+        /* ── TABLES ── */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 14px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        thead th {
+            background: var(--primary);
+            color: white;
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        tbody td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+        tbody tr:nth-child(even) { background: #f0f4ff; }
+        tbody tr:hover { background: #e3eaff; }
+
+        /* ── SWOT GRID ── */
+        .swot-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 24px 0;
+        }
+        .swot-card {
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid var(--border);
+        }
+        .swot-card h3 {
+            margin: 0 0 12px 0;
+            font-size: 16px;
+            border: none;
+            padding: 0;
+        }
+        .swot-card ul { padding-left: 20px; }
+        .swot-card li { margin-bottom: 8px; font-size: 14px; }
+        .swot-strengths { background: #e8f5e9; border-color: #a5d6a7; }
+        .swot-strengths h3 { color: var(--green); }
+        .swot-weaknesses { background: #fce4ec; border-color: #ef9a9a; }
+        .swot-weaknesses h3 { color: var(--red); }
+        .swot-opportunities { background: #e3f2fd; border-color: #90caf9; }
+        .swot-opportunities h3 { color: #1565c0; }
+        .swot-threats { background: #fff3e0; border-color: #ffcc80; }
+        .swot-threats h3 { color: var(--accent-warm); }
+
+        /* ── CALLOUT BOXES ── */
+        .callout {
+            background: #e3f2fd;
+            border-left: 4px solid var(--primary);
+            border-radius: 0 10px 10px 0;
+            padding: 20px 24px;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+        .callout-warning {
+            background: #fff3e0;
+            border-left-color: var(--accent-warm);
+        }
+        .callout-success {
+            background: #e8f5e9;
+            border-left-color: var(--green);
+        }
+
+        /* ── VERDICT BOX ── */
+        .verdict {
+            background: linear-gradient(135deg, #0d47a1, #1565c0);
+            color: white;
+            border-radius: 16px;
+            padding: 40px;
+            margin: 40px 0;
+            text-align: center;
+        }
+        .verdict h2 {
+            color: white;
+            border: none;
+            padding: 0;
+            margin: 0 0 24px 0;
+            font-size: 24px;
+        }
+        .verdict-scores {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-top: 24px;
+        }
+        .verdict-item .score {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--accent);
+        }
+        .verdict-item .score-label {
+            font-size: 13px;
+            opacity: 0.7;
+            margin-top: 4px;
+        }
+        .verdict p, .verdict li {
+            color: rgba(255, 255, 255, 0.92);
+        }
+        .verdict strong {
+            color: #ffffff;
+        }
+
+        /* ── MERMAID CHARTS ── */
+        .chart-container {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 30px;
+            margin: 24px 0;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+        .chart-container h3 {
+            margin: 0 0 20px 0;
+            text-align: center;
+        }
+        .mermaid { margin: 0 auto; }
+
+        /* ── PHASE CARDS ── */
+        .phase {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 28px;
+            margin: 16px 0;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .phase-badge {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .phase-badge.medium { background: var(--primary-light); }
+        .phase-badge.long { background: #455a64; }
+        .phase ol { padding-left: 20px; }
+        .phase li { margin-bottom: 10px; font-size: 14px; }
+
+        /* ── LISTS ── */
+        ul, ol { padding-left: 24px; margin-bottom: 16px; }
+        li { margin-bottom: 8px; }
+
+        /* ── FOOTER ── */
+        .footer {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+            font-size: 12px;
+            border-top: 1px solid var(--border);
+            margin-top: 60px;
+        }
+
+        /* ── PRINT ── */
+        @media print {
+            body { background: white; font-size: 13px; }
+            .cover { min-height: 100vh; }
+            .content { padding: 40px 30px; }
+            h1 { page-break-before: always; font-size: 26px; }
+            h1:first-child { page-break-before: avoid; }
+            .stat-card, .phase, .chart-container { break-inside: avoid; }
+            table { break-inside: avoid; }
+            .swot-grid { break-inside: avoid; }
+        }
+
+        strong { color: #0d47a1; }
+    </style>
+</head>
+<body>
+
+<!-- ═══ COVER PAGE ═══ -->
+<div class="cover">
+    <div class="cover-badge">Internet Society · Pulse Platform</div>
+    <div class="cover-country">IN</div>
+    <div class="cover-title">DNSSEC Readiness & Policy Brief</div>
+    <div class="cover-line"></div>
+    <div class="cover-meta">
+        Generated: 2026-06-26<br>
+        Data Sources: Internet Yellow Pages (IYP) Neo4j · Cloudflare Radar<br>
+        Framework: ISOC Internet Resilience Index — Security Pillar (DNS Security)
+    </div>
+</div>
+
+<!-- ═══ REPORT BODY (LLM-generated) ═══ -->
+<div class="content">
+<h1>Executive Summary: The "Big Picture" Diagnosis</h1>
+<p>Sir/Ma'am,</p>
+<p>This brief synthesizes our analysis of the nation's DNS infrastructure, focusing on its resilience and security posture, particularly through the lens of DNSSEC adoption. While our foundational infrastructure, specifically the <strong>.in ccTLD</strong>, demonstrates commendable strengths in core setup and modern protocol adoption, the critical layer of DNSSEC validation among end-users and service providers presents a significant and immediate vulnerability.</p>
+<p>The paradox is clear: we possess a robust, IPv6-enabled, and geographically diverse core DNS infrastructure, yet the widespread adoption of cryptographic validation (DNSSEC) by major Internet Service Providers and enterprise networks remains critically low. This leaves a vast majority of internet users susceptible to DNS hijacking, phishing, and other forms of man-in-the-middle attacks, undermining trust and digital sovereignty despite the strength of the underlying system.</p>
+
+<div class="stat-grid">
+  <div class="stat-card"><span class="number">4</span><span class="label">Authoritative Nameservers</span></div>
+  <div class="stat-card"><span class="number">100.0%</span><span class="label">IPv6 Enabled</span></div>
+  <div class="stat-card"><span class="number">3</span><span class="label">Distinct Hosting ASNs</span></div>
+  <div class="stat-card"><span class="number">8.21%</span><span class="label">DNSSEC Secure Queries</span></div>
+</div>
+
+<div class="callout callout-warning">
+  Only <strong>8.21% of DNS queries are securely validated</strong>, indicating a profound lack of protection against critical DNS-based threats for the vast majority of users.
+</div>
+
+<h1>SWOT Analysis: The Strategic Cheat Sheet</h1>
+<div class="swot-grid">
+  <div class="swot-card swot-strengths"><h3>💪 Strengths</h3><ul><li><strong>Robust ccTLD Infrastructure:</strong> The .in ccTLD boasts <strong>4 authoritative nameservers</strong> with <strong>100.0% IPv6 enablement</strong>.</li><li><strong>High ASN Diversity:</strong> Authoritative infrastructure distributed across <strong>3 distinct Autonomous Systems</strong>, enhancing resilience against network failures.</li><li><strong>Emerging Digital Economy:</strong> A large, tech-savvy population and a rapidly expanding digital sector provide a fertile ground for advanced internet services.</li><li><strong>Government Focus on Digitalization:</strong> Existing policy directives pushing for digital inclusion and transformation can be leveraged for security initiatives.</li></ul></div>
+  <div class="swot-card swot-weaknesses"><h3>⚠️ Weaknesses</h3><ul><li><strong>Critically Low DNSSEC Validation:</strong> Only <strong>8.21% of DNS queries are DNSSEC-validated</strong>, leaving most users vulnerable to spoofing and hijacking.</li><li><strong>Inconsistent ISP Adoption:</strong> Significant disparities in validation rates among major ISPs, from <strong>0.90% to 13.95%</strong>, indicating a lack of uniform security standards.</li><li><strong>Regulatory Gaps:</strong> Absence of clear mandates or incentives for ISPs to deploy DNSSEC validation for end-users.</li><li><strong>User Awareness:</strong> Limited public understanding of DNSSEC and its importance, hindering demand for secure services.</li></ul></div>
+  <div class="swot-card swot-opportunities"><h3>🚀 Opportunities</h3><ul><li><strong>Leverage Digital India Initiative:</strong> Integrate DNSSEC adoption as a cornerstone of digital trust and security within national digital programs.</li><li><strong>Regional Leadership:</strong> Position the nation as a leader in internet security and resilience within the region by championing advanced standards.</li><li><strong>Partnerships with ISPs:</strong> Collaborate with major network operators (e.g., Bharti Airtel, Jio Platforms) to drive widespread DNSSEC adoption.</li><li><strong>Cybersecurity Skill Development:</strong> Build capacity in DNSSEC deployment and management within government, enterprise, and academic sectors.</li><li><strong>Global Trends:</strong> Align with global best practices and standards for internet security, enhancing international reputation and trust.</li></ul></div>
+  <div class="swot-card swot-threats"><h3>🛡️ Threats</h3><ul><li><strong>Increased Cyber Attacks:</strong> Low DNSSEC validation makes the nation highly susceptible to sophisticated state-sponsored and criminal DNS attacks (e.g., cache poisoning, DNS hijacking).</li><li><strong>Erosion of Digital Trust:</strong> Lack of fundamental security measures can lead to loss of public and enterprise confidence in online services.</li><li><strong>Foreign Interference:</strong> Unsecured DNS infrastructure can be exploited for geopolitical motives, allowing foreign entities to redirect traffic or censor information.</li><li><strong>Economic Disruption:</strong> Successful DNS attacks can disrupt critical online services, leading to significant economic losses and operational paralysis.</li><li><strong>Data Breaches:</strong> DNS vulnerabilities can be precursors to larger data breaches, compromising sensitive national and personal information.</li></ul></div>
+</div>
+
+<h2>Deep-Dive Analysis: Security Posture</h2>
+<p>The current state of DNSSEC validation presents a critical security vulnerability that demands immediate attention. While the .in ccTLD's foundational infrastructure is strong, the lack of widespread DNSSEC validation means that these robust foundations are not translating into end-user protection.</p>
+
+<div class="chart-container">
+  <h3>DNSSEC Validation Status Across All Queries</h3>
+  <div class="mermaid">
+    pie title DNSSEC Validation Status
+        "Secure (8.21%)" : 8.21
+        "Insecure (73.71%)" : 73.71
+        "Other (18.08%)" : 18.08
+  </div>
+</div>
+
+<p>As evident, a staggering <strong>73.68% of queries are insecure</strong>, and nearly a fifth fall into the 'Other' category, indicating potential issues or lack of clear validation. This puts citizens and critical infrastructure at constant risk of various DNS-based attacks.</p>
+
+<h3>DNSSEC Validation by Major Networks</h3>
+<p>Analysis of major networks reveals a stark inconsistency in security practices. Addressing this disparity is key to improving national DNS resilience.</p>
+
+<div class="chart-container">
+  <h3>DNSSEC Secure Validation (%) by Top Networks</h3>
+  <div class="mermaid">
+    xychart-beta
+        title "DNSSEC Secure Validation (%) by Top Networks"
+        x-axis ["Bharti Airtel", "Digital Ocean", "Bharti Airtel", "Jio Platforms", "Bharti Airtel", "National Inte..", "Akamai"]
+        y-axis "Secure Validation (%)" 0 --> 100
+        bar [13.95, 10.78, 10.38, 7.97, 6.69, 3.96, 0.90]
+  </div>
+</div>
+
+<p>While some networks like <strong>Bharti Airtel (AS24560)</strong> show a relatively better (though still critically low) validation rate of <strong>13.95%</strong>, others, including major content delivery networks like <strong>Akamai Connected Cloud (AS63949)</strong>, demonstrate alarmingly low rates of <strong>0.90%</strong>. This fragmented approach creates weak links throughout the national internet ecosystem.</p>
+
+<h3>DNS Query Share Distribution</h3>
+<p>Understanding which networks serve the most queries helps prioritize engagement for DNSSEC rollout to achieve maximum impact rapidly.</p>
+<div class="chart-container">
+  <h3>DNS Query Share Distribution by Top Networks</h3>
+  <div class="mermaid">
+    pie title DNS Query Share by Top ASNs
+        "National Internet Backbone (AS9829) (14.17%)" : 14.17
+        "Jio Platforms Ltd (AS55836) (12.92%)" : 12.92
+        "Akamai Connected Cloud (AS63949) (5.2%)" : 5.20
+        "Bharti Airtel Ltd. (AS24560) (5.03%)" : 5.03
+        "Bharti Airtel Ltd. (AS45609) (3.91%)" : 3.91
+        "Bharti Airtel Limited (AS9498) (3.53%)" : 3.53
+        "Other ASNs (55.24%)" : 55.24
+  </div>
+</div>
+<p>The top few networks command a significant portion of DNS queries. Engaging these major players is paramount for impactful DNSSEC deployment and widespread user protection.</p>
+
+<h1>Strategic Roadmap: The Policy Agenda</h1>
+
+<div class="phase"><span class="phase-badge">Phase 1 — Quick Wins</span><ol><li><strong>Mandate DNSSEC Validation for Government & Critical Infrastructure:</strong> Issue immediate regulatory decrees requiring all government agencies, public sector undertakings, and critical infrastructure providers to enable DNSSEC validation on their recursive DNS resolvers within 6 months.</li><li><strong>Public Awareness Campaign:</strong> Launch a targeted campaign to educate enterprise IT managers, web developers, and subsequently the general public, about DNSSEC's importance and how to verify secure DNS resolution.</li><li><strong>Pilot Program for Top 3 ISPs:</strong> Initiate a pilot program with the top 3 ISPs (based on query share) to demonstrate and document successful DNSSEC validation rollout, offering technical assistance and recognition.</li><li><strong>Review and Update Regulatory Frameworks:</strong> Begin a review of existing telecommunications and internet policy frameworks to identify and remove barriers, and introduce incentives, for DNSSEC adoption.</li></ol></div>
+
+<div class="phase"><span class="phase-badge medium">Phase 2 — Structural</span><ol><li><strong>Nationwide ISP DNSSEC Mandate:</strong> Introduce a phased regulatory mandate requiring all licensed ISPs to enable DNSSEC validation by default for all subscribers, with clear timelines and compliance mechanisms. This should include guidelines for handling invalid responses (e.g., "fail-safe" vs. "warn and proceed").</li><li><strong>Incentivize Enterprise Adoption:</strong> Implement tax incentives or grants for businesses and organizations that deploy DNSSEC on their domains and enable validation internally.</li><li><strong>Build Local DNSSEC Expertise:</strong> Establish national training programs and certifications for DNSSEC deployment, management, and incident response, engaging educational institutions and industry experts.</li><li><strong>Strengthen ccTLD Security:</strong> Conduct regular audits of the .in ccTLD's DNSSEC signing practices and key management, ensuring cryptographic agility and robust operational security.</li></ol></div>
+
+<div class="phase"><span class="phase-badge long">Phase 3 — Vision</span><ol><li><strong>Establish a National DNSSEC Task Force:</strong> Create a permanent, multi-stakeholder body comprising government, industry, academia, and civil society to continually monitor, promote, and evolve national DNSSEC strategy.</li><li><strong>Regional Leadership in DNS Security:</strong> Champion DNSSEC adoption initiatives in regional forums (e.g., SAARC, BIMSTEC) and offer technical assistance to neighboring countries, enhancing regional internet resilience.</li><li><strong>Research and Development:</strong> Invest in R&D for next-generation DNS security protocols and quantum-resistant cryptography, positioning the nation at the forefront of internet security innovation.</li><li><strong>Digital Sovereignty through Secure Foundations:</strong> Fully embed DNSSEC as a fundamental pillar of national digital sovereignty, ensuring that the control and integrity of the nation's online identity are protected at the most basic level.</li></ol></div>
+
+<div class="callout callout-success">
+  By decisively addressing DNSSEC adoption, we can significantly enhance national cybersecurity, protect citizens from online threats, and bolster the nation's digital economy.
+</div>
+
+<h2>Final Verdict</h2>
+<div class="verdict">
+  <p>The current state of DNSSEC validation indicates a critical gap between foundational infrastructure strength and end-user security. While the .in ccTLD is well-managed and resilient in its core, the lack of widespread DNSSEC validation by ISPs and recursive resolvers exposes the entire digital ecosystem to significant risks. Addressing this vulnerability is not merely a technical fix; it is a strategic imperative for national security, economic stability, and digital trust. Focused, phased intervention is required to elevate the nation's DNSSEC posture.</p>
+  <div class="verdict-scores">
+    <div class="verdict-item"><div class="score">Medium</div><div class="score-label">DNSSEC Maturity</div></div>
+    <div class="verdict-item"><div class="score">Developing</div><div class="score-label">Infrastructure Resilience</div></div>
+  </div>
+</div>
+
+    <div class="footer">
+        <p>Report generated by ISOC Pulse × IYP DNSSEC Policy Engine</p>
+        <p>Team: Rahul Rajesh, Ron Prajoth, Aditya Menon | Mentor: Amreesh Phokeer (ISOC)</p>
+    </div>
+</div>
+
+</body>
+</html>

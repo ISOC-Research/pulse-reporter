@@ -3,6 +3,10 @@ from pathlib import Path
 import sys
 import pathlib
 
+# Ensure stdout supports UTF-8 for emojis on Windows
+if sys.stdout.encoding and sys.stdout.encoding.lower() != 'utf-8':
+    sys.stdout.reconfigure(encoding='utf-8')
+
 ROOT = pathlib.Path(__file__).resolve().parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
