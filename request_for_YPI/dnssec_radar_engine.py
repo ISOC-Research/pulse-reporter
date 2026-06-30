@@ -246,6 +246,165 @@ def get_top_asn_dnssec_validation(country: str):
 
     return results
 
+def get_tld_distribution(country: str):
+
+    client = RadarClient()
+
+    result = client._get(
+        "dns/summary/TLD",
+        {
+            "location": country.upper(),
+            "dateRange": "7d"
+        }
+    )
+
+    summary = result.get("summary_0", {})
+
+    tlds = [
+        {
+            "tld": tld,
+            "query_share": float(share)
+        }
+        for tld, share in summary.items()
+        if tld.lower() != "other"
+    ]
+
+    # Sort by query share (highest first)
+    tlds.sort(
+        key=lambda x: x["query_share"],
+        reverse=True
+    )
+
+    return {
+        "country": country.upper(),
+        "tlds": tlds
+    }
+
+def get_query_type_distribution(country: str):
+
+    client = RadarClient()
+
+    result = client._get(
+        "dns/summary/QUERY_TYPE",
+        {
+            "location": country.upper(),
+            "dateRange": "7d"
+        }
+    )
+
+    summary = result.get("summary_0", {})
+
+    query_types = [
+        {
+            "type": record_type,
+            "query_share": float(share)
+        }
+        for record_type, share in summary.items()
+        if record_type.lower() != "other"
+    ]
+
+    query_types.sort(
+        key=lambda x: x["query_share"],
+        reverse=True
+    )
+
+    return {
+        "country": country.upper(),
+        "query_types": query_types
+    }
+
+def get_response_code_distribution(country: str):
+
+    client = RadarClient()
+
+    result = client._get(
+        "dns/summary/RESPONSE_CODE",
+        {
+            "location": country.upper(),
+            "dateRange": "7d"
+        }
+    )
+
+    summary = result.get("summary_0", {})
+
+    response_codes = [
+        {
+            "code": code,
+            "query_share": float(share)
+        }
+        for code, share in summary.items()
+    ]
+
+    response_codes.sort(
+        key=lambda x: x["query_share"],
+        reverse=True
+    )
+
+    return {
+        "country": country.upper(),
+        "response_codes": response_codes
+    }
+
+def get_cache_hit_distribution(country: str):
+
+    client = RadarClient()
+
+    result = client._get(
+        "dns/summary/CACHE_HIT",
+        {
+            "location": country.upper(),
+            "dateRange": "7d"
+        }
+    )
+
+    summary = result.get("summary_0", {})
+
+    return {
+        "country": country.upper(),
+        "positive": float(summary.get("POSITIVE", 0)),
+        "negative": float(summary.get("NEGATIVE", 0))
+    }
+
+def get_ip_version_distribution(country: str):
+
+    client = RadarClient()
+
+    result = client._get(
+        "dns/summary/IP_VERSION",
+        {
+            "location": country.upper(),
+            "dateRange": "7d"
+        }
+    )
+
+    summary = result.get("summary_0", {})
+
+    return {
+        "country": country.upper(),
+        "ipv4": float(summary.get("IPv4", 0)),
+        "ipv6": float(summary.get("IPv6", 0))
+    }
+
+def get_dnssec_e2e(country: str):
+
+    client = RadarClient()
+
+    result = client._get(
+        "dns/summary/DNSSEC_E2E",
+        {
+            "location": country.upper(),
+            "dateRange": "7d"
+        }
+    )
+
+    summary = result.get("summary_0", {})
+
+    return {
+        "country": country.upper(),
+        "positive": float(summary.get("POSITIVE", 0)),
+        "negative": float(summary.get("NEGATIVE", 0))
+    }
+
 def get_asn_details(asn: int):
 
     client = RadarClient()
