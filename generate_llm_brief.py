@@ -1,6 +1,7 @@
+import argparse
 import os
 import sys
-import argparse
+
 import google.generativeai as genai
 from dotenv import load_dotenv
 
@@ -555,12 +556,9 @@ def main():
         llm_html = response.text
 
         # Clean up in case the LLM wraps it in code fences anyway
-        if llm_html.startswith("```html"):
-            llm_html = llm_html[7:]
-        if llm_html.startswith("```"):
-            llm_html = llm_html[3:]
-        if llm_html.endswith("```"):
-            llm_html = llm_html[:-3]
+        llm_html = llm_html.removeprefix("```html")
+        llm_html = llm_html.removeprefix("```")
+        llm_html = llm_html.removesuffix("```")
         llm_html = llm_html.strip()
 
         # Convert any leftover markdown **bold** to <strong> tags

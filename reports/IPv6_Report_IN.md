@@ -1,5 +1,5 @@
 # IPv6 Policy Brief — IN
-**Generated:** 2026-06-26 08:20  
+**Generated:** 2026-07-10 02:40  
 **Data Sources:** ISOC Pulse API 2024 · Internet Yellow Pages (IYP) Neo4j  
 **Framework:** ISOC Internet Resilience Index — Security Pillar (Enabling Technologies)
 
@@ -7,7 +7,7 @@
 
 ## Executive Summary
 
-IN currently has a national IPv6 adoption rate of 78.4%, with 0.2% of the subscriber market served by ISPs classified as non-compliant. 1 ISP(s) (covering 0.2% of the market) have zero IPv6 prefixes in the global routing table and require immediate regulatory intervention for RIR membership.
+IN currently has a national IPv6 adoption rate of 78.9%, with 0.2% of the subscriber market served by ISPs classified as non-compliant. 1 ISP(s) (covering 0.2% of the market) have zero IPv6 prefixes in the global routing table and require immediate regulatory intervention for RIR membership.
 
 ---
 
@@ -81,36 +81,36 @@ IN currently has a national IPv6 adoption rate of 78.4%, with 0.2% of the subscr
 
 ## Section 2 — ISP Compliance Scorecard
 
-**National IPv6 Adoption:** 78.4%  
+**National IPv6 Adoption:** 78.9%  
 **Underserved Market Share:** 0.2%  
 **ISPs Assessed:** 25
 
 | ASN | ISP | Market Share | IPv6 Prefixes | Cone Size | Adoption Est. | Archetype | Severity | Proj. Impact |
 |-----|-----|:------------:|:-------------:|:---------:|:-------------:|:---------:|:--------:|:------------:|
-| AS55836 | RELIANCEJIO-IN Reliance Jio Infocom | 46.3% | 5052 | 18 | 77.3% | **OK** — Compliant | Low | +10.5 pp |
-| AS45609 | BHARTI-MOBILITY-AS-AP Bharti Airtel | 22.0% | 7177 | 1 | 69.7% | **OK** — Compliant | Low | +6.7 pp |
-| AS24560 | AIRTELBROADBAND-AS-AP Bharti Airtel | 8.3% | 1026 | 1 | 65.4% | **OK** — Compliant | Low | +2.9 pp |
-| AS9829 | BSNL-NIB National Internet Backbone | 3.0% | 2137 | 67 | 63.7% | **OK** — Compliant | Medium | +1.1 pp |
-| AS38266 | VIL-AS-AP Vodafone Idea Ltd | 1.4% | 2683 | 1 | 63.2% | **OK** — Compliant | Low | +0.5 pp |
-| AS133982 | EXCITEL-AS-IN Excitel Broadband Pri | 0.9% | 98 | 5 | 63.0% | **OK** — Compliant | Low | +0.3 pp |
-| AS24309 | CABLELITE-AS-AP Atria Convergence T | 0.9% | 220 | 8 | 63.0% | **OK** — Compliant | Low | +0.3 pp |
-| AS138754 | KVBPL-AS-IN Kerala Vision Broad Ban | 0.8% | 38 | 2 | 63.0% | **OK** — Compliant | Low | +0.3 pp |
-| AS133661 | NETPLUS-AS Netplus Broadband Servic | 0.8% | 58 | 6 | 63.0% | **OK** — Compliant | Low | +0.3 pp |
-| AS45916 | GTPL-AS-AP Gujarat Telelink Pvt Ltd | 0.7% | 570 | 10 | 63.0% | **OK** — Compliant | Low | +0.3 pp |
-| AS45271 | VIL-AS-AP Vodafone Idea Ltd | 0.7% | 2271 | 1 | 63.0% | **OK** — Compliant | Low | +0.3 pp |
-| AS17488 | HATHWAY-NET-AP Hathway IP Over Cabl | 0.6% | 100 | 4 | 62.9% | **OK** — Compliant | Low | +0.2 pp |
-| AS24186 | RAILTEL-AS-IN RailTel Corporation o | 0.5% | 273 | 27 | 62.9% | **OK** — Compliant | Low | +0.2 pp |
-| AS23860 | ALLIANCE-GATEWAY-AS-AP Alliance Bro | 0.5% | 605 | 6 | 62.9% | **OK** — Compliant | Low | +0.2 pp |
-| AS17665 | ONEBROADBAND ONEOTT INTERTAINMENT L | 0.5% | 207 | 71 | 62.9% | **OK** — Compliant | Medium | +0.2 pp |
-| AS55577 | CABLELITE-AS-AP Atria Convergence T | 0.4% | 118 | 1 | 62.9% | **OK** — Compliant | Low | +0.2 pp |
-| AS134674 | TATAPLAYBROADBAND-AS-AP TATA PLAY B | 0.3% | 1239 | 7 | 62.9% | **OK** — Compliant | Low | +0.1 pp |
-| AS18209 | CABLELITE-AS-AP Atria Convergence T | 0.3% | 66 | 5 | 62.8% | **OK** — Compliant | Low | +0.1 pp |
-| AS17465 | ASIANET Cable ISP in India | 0.3% | 54 | 5 | 62.8% | **OK** — Compliant | Low | +0.1 pp |
-| AS132116 | ANINETWORK-IN Ani Network Pvt Ltd | 0.2% | 56 | 80 | 62.8% | **OK** — Compliant | Medium | +0.1 pp |
-| AS17917 | QTLTELECOM-AS-AP Quadrant Televentu | 0.2% | 46 | 7 | 62.8% | **OK** — Compliant | Low | +0.1 pp |
-| AS55352 | FIVENET-IN Microscan Internet Limit | 0.2% | 170 | 40 | 62.8% | **OK** — Compliant | Low | +0.1 pp |
-| AS131269 | CABLELITE-AS-AP Atria Convergence T | 0.2% | 30 | 1 | 62.8% | **OK** — Compliant | Low | +0.1 pp |
-| AS150008 | PEL-AS-IN Pioneer Elabs Ltd. | 0.2% | 24 | 20 | 62.8% | **OK** — Compliant | Low | +0.1 pp |
+| AS55836 | RELIANCEJIO-IN Reliance Jio Infocom | 46.3% | 5052 | 18 | 77.8% | **OK** — Compliant | Low | +10.3 pp |
+| AS45609 | BHARTI-MOBILITY-AS-AP Bharti Airtel | 22.0% | 7177 | 1 | 70.1% | **OK** — Compliant | Low | +6.6 pp |
+| AS24560 | AIRTELBROADBAND-AS-AP Bharti Airtel | 8.3% | 1026 | 1 | 65.8% | **OK** — Compliant | Low | +2.9 pp |
+| AS9829 | BSNL-NIB National Internet Backbone | 3.0% | 2137 | 67 | 64.1% | **OK** — Compliant | Medium | +1.1 pp |
+| AS38266 | VIL-AS-AP Vodafone Idea Ltd | 1.4% | 2683 | 1 | 63.6% | **OK** — Compliant | Low | +0.5 pp |
+| AS133982 | EXCITEL-AS-IN Excitel Broadband Pri | 0.9% | 98 | 5 | 63.4% | **OK** — Compliant | Low | +0.3 pp |
+| AS24309 | CABLELITE-AS-AP Atria Convergence T | 0.9% | 220 | 8 | 63.4% | **OK** — Compliant | Low | +0.3 pp |
+| AS138754 | KVBPL-AS-IN Kerala Vision Broad Ban | 0.8% | 38 | 2 | 63.4% | **OK** — Compliant | Low | +0.3 pp |
+| AS133661 | NETPLUS-AS Netplus Broadband Servic | 0.8% | 58 | 6 | 63.4% | **OK** — Compliant | Low | +0.3 pp |
+| AS45916 | GTPL-AS-AP Gujarat Telelink Pvt Ltd | 0.7% | 570 | 10 | 63.4% | **OK** — Compliant | Low | +0.3 pp |
+| AS45271 | VIL-AS-AP Vodafone Idea Ltd | 0.7% | 2271 | 1 | 63.4% | **OK** — Compliant | Low | +0.3 pp |
+| AS17488 | HATHWAY-NET-AP Hathway IP Over Cabl | 0.6% | 100 | 4 | 63.3% | **OK** — Compliant | Low | +0.2 pp |
+| AS24186 | RAILTEL-AS-IN RailTel Corporation o | 0.5% | 273 | 27 | 63.3% | **OK** — Compliant | Low | +0.2 pp |
+| AS23860 | ALLIANCE-GATEWAY-AS-AP Alliance Bro | 0.5% | 605 | 6 | 63.3% | **OK** — Compliant | Low | +0.2 pp |
+| AS17665 | ONEBROADBAND ONEOTT INTERTAINMENT L | 0.5% | 207 | 71 | 63.3% | **OK** — Compliant | Medium | +0.2 pp |
+| AS55577 | CABLELITE-AS-AP Atria Convergence T | 0.4% | 118 | 1 | 63.3% | **OK** — Compliant | Low | +0.2 pp |
+| AS134674 | TATAPLAYBROADBAND-AS-AP TATA PLAY B | 0.3% | 1239 | 7 | 63.3% | **OK** — Compliant | Low | +0.1 pp |
+| AS18209 | CABLELITE-AS-AP Atria Convergence T | 0.3% | 66 | 5 | 63.2% | **OK** — Compliant | Low | +0.1 pp |
+| AS17465 | ASIANET Cable ISP in India | 0.3% | 54 | 5 | 63.2% | **OK** — Compliant | Low | +0.1 pp |
+| AS132116 | ANINETWORK-IN Ani Network Pvt Ltd | 0.2% | 56 | 80 | 63.2% | **OK** — Compliant | Medium | +0.1 pp |
+| AS17917 | QTLTELECOM-AS-AP Quadrant Televentu | 0.2% | 46 | 7 | 63.2% | **OK** — Compliant | Low | +0.1 pp |
+| AS55352 | FIVENET-IN Microscan Internet Limit | 0.2% | 170 | 40 | 63.2% | **OK** — Compliant | Low | +0.1 pp |
+| AS131269 | CABLELITE-AS-AP Atria Convergence T | 0.2% | 30 | 1 | 63.2% | **OK** — Compliant | Low | +0.1 pp |
+| AS150008 | PEL-AS-IN Pioneer Elabs Ltd. | 0.2% | 24 | 20 | 63.2% | **OK** — Compliant | Low | +0.1 pp |
 | AS133287 | APSFL-AS Andhra Pradesh State Fiber | 0.2% | 0 | 1 | 0.0% | **A** — Ghost (No Allocation) | Low | +0.2 pp |
 
 ### Archetype Key
@@ -127,11 +127,11 @@ IN currently has a national IPv6 adoption rate of 78.4%, with 0.2% of the subscr
 
 | ASN | ISP | Market Share | Adoption | First IPv6 Seen | Age (yrs) | Reason |
 |-----|-----|:-----------:|:--------:|:---------------:|:---------:|--------|
-| AS55836 | RELIANCEJIO-IN Reliance Jio Infocomm Limited | 46.3% | 77.3% | 2012-12-10 | 13.5 | Top |
-| AS45609 | BHARTI-MOBILITY-AS-AP Bharti Airtel Ltd. AS for GPRS Service | 22.0% | 69.7% | 2013-12-05 | 12.6 | Top |
-| AS24560 | AIRTELBROADBAND-AS-AP Bharti Airtel Ltd., Telemedia Services | 8.3% | 65.4% | 2018-12-03 | 7.6 | Top |
-| AS9829 | BSNL-NIB National Internet Backbone | 3.0% | 63.7% | 2009-06-29 | 17.0 | Top |
-| AS38266 | VIL-AS-AP Vodafone Idea Ltd | 1.4% | 63.2% | 2016-01-24 | 10.4 | Top |
+| AS55836 | RELIANCEJIO-IN Reliance Jio Infocomm Limited | 46.3% | 77.8% | 2012-12-10 | 13.6 | Top |
+| AS45609 | BHARTI-MOBILITY-AS-AP Bharti Airtel Ltd. AS for GPRS Service | 22.0% | 70.1% | 2013-12-05 | 12.6 | Top |
+| AS24560 | AIRTELBROADBAND-AS-AP Bharti Airtel Ltd., Telemedia Services | 8.3% | 65.8% | 2018-12-03 | 7.6 | Top |
+| AS9829 | BSNL-NIB National Internet Backbone | 3.0% | 64.1% | 2009-06-29 | 17.0 | Top |
+| AS38266 | VIL-AS-AP Vodafone Idea Ltd | 1.4% | 63.6% | 2016-01-24 | 10.5 | Top |
 
 > Source: [RIPEstat](https://stat.ripe.net) — Announced Prefixes endpoint (historical data from 2000–present).  
 > ⭐ Top = queried due to high market share | ⚠ Laggard = queried due to low adoption despite significant market share
@@ -152,29 +152,29 @@ IN currently has a national IPv6 adoption rate of 78.4%, with 0.2% of the subscr
 
 ### Regional Position
 
-- **IN adoption:** 78.4%
+- **IN adoption:** 78.9%
 - **Global average:** 23.6%
-- **Global rank:** #6 of 243 countries
-- **vs Global Average:** +54.8 pp (above average)
+- **Global rank:** #5 of 243 countries
+- **vs Global Average:** +55.3 pp (above average)
 
 **Closest peer countries by adoption score:**
 
 | Country | Adoption | Gap |
 |---------|:--------:|:---:|
-| AX | 79.3% | +0.9 pp |
-| FK | 74.64% | -3.8 pp |
-| FR | 83.31% | +4.9 pp |
-| DE | 73.39% | -5.0 pp |
-| SA | 72.85% | -5.6 pp |
+| FK | 79.85% | +0.9 pp |
+| PN | 77.78% | -1.1 pp |
+| AX | 74.89% | -4.0 pp |
+| FR | 83.09% | +4.2 pp |
+| SH | 83.3% | +4.4 pp |
 
 ---
 
 ## Section 4 — Web Services IPv6 Readiness
 
-**Popular Domains Analyzed:** 835  
-**IPv6-Reachable Domains:** 217  
-**IPv4-Only Domains:** 618  
-**IPv6 Web Readiness:** 26.00%  
+**Popular Domains Analyzed:** 0  
+**IPv6-Reachable Domains:** 0  
+**IPv4-Only Domains:** 0  
+**IPv6 Web Readiness:** 0.00%  
 
 > This analysis measures IPv6 reachability among
 > ranked/popular domains within the national
@@ -273,8 +273,9 @@ IN currently has a national IPv6 adoption rate of 78.4%, with 0.2% of the subscr
 | 2026-06-05 | 5000 | 2045 | 40.9% |
 | 2026-06-12 | 5000 | 2045 | 40.9% |
 | 2026-06-26 | 5000 | 2045 | 40.9% |
+| 2026-07-10 | 5000 | 2045 | 40.9% |
 
-> TLD IPv6 readiness has remained stable by 0.0 pp since 2026-06-05 (3 snapshots recorded).
+> TLD IPv6 readiness has remained stable by 0.0 pp since 2026-06-05 (4 snapshots recorded).
 
 ### Authoritative Nameserver IPv6 Reachability
 

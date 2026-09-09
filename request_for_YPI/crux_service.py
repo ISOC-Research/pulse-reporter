@@ -1,8 +1,9 @@
+import concurrent.futures
 import os
 import socket
-import concurrent.futures
-from google.cloud import bigquery
+
 from dotenv import load_dotenv
+from google.cloud import bigquery
 
 load_dotenv()
 

@@ -12,7 +12,8 @@ Usage:
 """
 
 import os
-import sys
+
+# import sys
 import requests
 from dotenv import load_dotenv
 

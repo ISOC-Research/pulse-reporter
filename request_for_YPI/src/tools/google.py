@@ -1,24 +1,25 @@
 # src/tools/google.py
-import os
-import json
-from src.utils.logger import logger
-import requests
 import concurrent.futures
-from datetime import datetime
-from dotenv import load_dotenv
+import json
+import os
 import re
+from datetime import datetime
 
-from langchain_core.tools import tool
+import requests
+from dotenv import load_dotenv
 from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.tools import tool
 
 # Imports de vos modules
 from src.RAG.input_in_rag import input_in_rag
-from src.utils.pdf_extractor import is_pdf_url
+from src.tools.scraper import read_web_page
+from src.utils.eval_utility import evaluate_document_relevance
+from src.utils.index_information import get_definition
 from src.utils.llm import get_llm
 from src.utils.loaders import load_text_file
-from src.utils.index_information import get_definition
-from src.utils.eval_utility import evaluate_document_relevance
-from src.tools.scraper import read_web_page
+from src.utils.logger import logger
+from src.utils.pdf_extractor import is_pdf_url
+
 
 @tool
 def search_google(query: str, include_pdfs: bool = True,nub_site : int = 5) -> list[dict]:

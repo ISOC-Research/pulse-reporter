@@ -11,11 +11,11 @@ Usage:
     python testfiles/run_radar.py --country SN --date-range 30d
 """
 
-import sys
-import os
-import io
 import argparse
+import io
 import json
+import os
+import sys
 
 # Force UTF-8 output for Windows
 if sys.stdout.encoding != 'utf-8':
@@ -58,8 +58,8 @@ def format_speed_summary(result: dict, country: str) -> str:
         "",
         "**Speed Test Results:**",
         "",
-        f"| Metric | Value |",
-        f"|--------|-------|",
+        "| Metric | Value |",
+        "|--------|-------|",
         f"| Download Speed | {download} Mbps |",
         f"| Upload Speed | {upload} Mbps |",
         f"| Latency (idle) | {latency} ms |",

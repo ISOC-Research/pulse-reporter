@@ -17,10 +17,11 @@ dropdown-based story selection (IPv6 / DNSSEC / combined) and
 audience-tier formatting (Head of State / Minister / Regulator / Technical).
 """
 
-import os
-import sys
-import re
 import argparse
+import os
+import re
+import sys
+
 import google.generativeai as genai
 from dotenv import load_dotenv
 

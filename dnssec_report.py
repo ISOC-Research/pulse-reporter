@@ -1,7 +1,7 @@
+import pathlib
+import sys
 from datetime import datetime
 from pathlib import Path
-import sys
-import pathlib
 
 # Ensure stdout supports UTF-8 for emojis on Windows
 if sys.stdout.encoding and sys.stdout.encoding.lower() != 'utf-8':
@@ -12,18 +12,18 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from request_for_YPI.dnssec_engine import (
-    get_ccTLD_nameserver_count,
+    get_ccTLD_asn_diversity,
     get_ccTLD_ipv6_enablement,
-    get_ccTLD_asn_diversity
+    get_ccTLD_nameserver_count,
 )
 from request_for_YPI.dnssec_radar_engine import (
+    get_cache_hit_distribution,
     get_dnssec_validation_status,
-    get_top_asn_dnssec_validation,
-    get_tld_distribution,
+    get_ip_version_distribution,
     get_query_type_distribution,
     get_response_code_distribution,
-    get_cache_hit_distribution,
-    get_ip_version_distribution
+    get_tld_distribution,
+    get_top_asn_dnssec_validation,
 )
 
 
@@ -40,7 +40,7 @@ def generate_markdown_report(
     cache_hit_data,
     ip_version_data
 ):
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")  # noqa: DTZ005
 
     best_asn = max(asn_validation_data, key=lambda x: x["secure"])
     worst_asn = min(asn_validation_data, key=lambda x: x["secure"])
@@ -135,7 +135,7 @@ networks, ranging from {worst_asn['secure']:.2f}% to {best_asn['secure']:.2f}%.
     report += f"""
 > **Finding:** The majority of observed DNS traffic is directed toward
 > globally registered domains. The national .{country.lower()} ccTLD
-> accounts for {next(x['query_share'] for x in tld_data['tlds'] if x['tld'] == 'in'):.2f}% of
+> accounts for {next((x['query_share'] for x in tld_data['tlds'] if x['tld'].lower() == country.lower()), 0.0):.2f}% of
 > DNS queries, while .com accounts for
 > {tld_data['tlds'][0]['query_share']:.2f}% of observed traffic.
 
@@ -301,7 +301,7 @@ def main():
     reports_dir = Path("reports")
     reports_dir.mkdir(exist_ok=True)
 
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M")
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M") # noqa: DTZ005
     output_file = reports_dir / f"DNSSEC_{country}_{timestamp}.md"
 
     with open(output_file, "w", encoding="utf-8") as f:

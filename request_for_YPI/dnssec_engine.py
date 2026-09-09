@@ -30,7 +30,6 @@ if str(_ROOT) not in sys.path:
 
 from request_for_YPI.src.request_IYP.request_testing import execute_cypher_test
 
-
 # ============================================================
 # SECTION 1.2
 # Number of authoritative nameservers
@@ -154,12 +153,10 @@ def get_ccTLD_asn_diversity(country_code: str) -> dict:
     records = result["data"]
 
     asns = sorted(
-        list(
-            set(
+        {
                 row["asn"]
                 for row in records
-            )
-        )
+            }
     )
 
     return {

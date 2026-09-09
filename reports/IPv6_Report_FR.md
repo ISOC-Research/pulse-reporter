@@ -1,5 +1,5 @@
 # IPv6 Policy Brief — FR
-**Generated:** 2026-06-12 15:12  
+**Generated:** 2026-07-10 02:27  
 **Data Sources:** ISOC Pulse API 2024 · Internet Yellow Pages (IYP) Neo4j  
 **Framework:** ISOC Internet Resilience Index — Security Pillar (Enabling Technologies)
 
@@ -7,7 +7,7 @@
 
 ## Executive Summary
 
-FR currently has a national IPv6 adoption rate of 83.8%, with 0.0% of the subscriber market served by ISPs classified as non-compliant. All major ISPs are currently classified as compliant. Focus should shift to sustaining adoption growth and improving RPKI security hygiene.
+FR currently has a national IPv6 adoption rate of 83.1%, with 0.0% of the subscriber market served by ISPs classified as non-compliant. All major ISPs are currently classified as compliant. Focus should shift to sustaining adoption growth and improving RPKI security hygiene.
 
 ---
 
@@ -81,37 +81,37 @@ FR currently has a national IPv6 adoption rate of 83.8%, with 0.0% of the subscr
 
 ## Section 2 — ISP Compliance Scorecard
 
-**National IPv6 Adoption:** 83.8%  
+**National IPv6 Adoption:** 83.1%  
 **Underserved Market Share:** 0.0%  
 **ISPs Assessed:** 25
 
 | ASN | ISP | Market Share | IPv6 Prefixes | Cone Size | Adoption Est. | Archetype | Severity | Proj. Impact |
 |-----|-----|:------------:|:-------------:|:---------:|:-------------:|:---------:|:--------:|:------------:|
-| AS3215 | AS3215 Orange S.A. | 35.4% | 86 | 203 | 78.9% | **OK** — Compliant | High | +7.5 pp |
-| AS12322 | PROXAD Free SAS | 18.6% | 1054 | 4 | 73.3% | **OK** — Compliant | Low | +5.0 pp |
-| AS5410 | BOUYGTEL-ISP Bouygues Telecom SA | 17.8% | 4 | 16 | 73.0% | **OK** — Compliant | Low | +4.8 pp |
-| AS15557 | LDCOMNET Societe Francaise Du Radio | 17.5% | 24 | 91 | 72.9% | **OK** — Compliant | Medium | +4.8 pp |
-| AS51207 | FREEM Free Mobile SAS | 4.5% | 2 | 1 | 68.6% | **OK** — Compliant | Low | +1.4 pp |
-| AS16276 | OVH OVH SAS | 0.8% | 82 | 119 | 67.3% | **OK** — Compliant | Medium | +0.3 pp |
-| AS63023 | AS-GLOBALTELEHOST - GTHost | 0.8% | 50 | 23 | 67.3% | **OK** — Compliant | Low | +0.2 pp |
-| AS12876 | AS12876 Scaleway SAS | 0.7% | 14 | 1 | 67.3% | **OK** — Compliant | Low | +0.2 pp |
-| AS51167 | CONTABO Contabo GmbH | 0.3% | 10 | 1 | 67.1% | **OK** — Compliant | Low | +0.1 pp |
-| AS31404 | Lycatel-AS LYCATEL DISTRIBUTION UK  | 0.3% | 6 | 1 | 67.1% | **OK** — Compliant | Low | +0.1 pp |
-| AS13335 | CLOUDFLARENET - Cloudflare, Inc. | 0.2% | 6208 | 922 | 67.1% | **OK** — Compliant | High | +0.1 pp |
-| AS30058 | FDCSERVERS - FDCservers.net | 0.2% | 295 | 43 | 67.1% | **OK** — Compliant | Low | +0.1 pp |
-| AS14593 | SPACEX-STARLINK - Space Exploration | 0.2% | 1511 | 14 | 67.1% | **OK** — Compliant | Low | +0.1 pp |
-| AS21859 | ZEN-ECN | 0.2% | 291 | 398 | 67.1% | **OK** — Compliant | High | +0.1 pp |
-| AS29066 | VELIANET-AS velia.net Internetdiens | 0.1% | 20 | 7 | 67.1% | **OK** — Compliant | Low | +0.1 pp |
-| AS16509 | AMAZON-02 - Amazon.com, Inc. | 0.1% | 11016 | 75 | 67.1% | **OK** — Compliant | Medium | +0.1 pp |
-| AS52075 | WIFIRST Wifirst S.A.S. | 0.1% | 16 | 1 | 67.1% | **OK** — Compliant | Low | +0.0 pp |
-| AS62610 | ZEN-DPS - Zenlayer Inc | 0.1% | 158 | 11 | 67.1% | **OK** — Compliant | Low | +0.0 pp |
-| AS212238 | CDNEXT Datacamp Limited | 0.1% | 975 | 1 | 67.1% | **OK** — Compliant | Low | +0.0 pp |
-| AS136787 | PACKETHUBSA-AS-AP PacketHub S.A. | 0.1% | 6 | 1 | 67.1% | **OK** — Compliant | Low | +0.0 pp |
-| AS2200 | FR-RENATER Reseau National de telec | 0.1% | 4 | 49 | 67.1% | **OK** — Compliant | Low | +0.0 pp |
-| AS199636 | FREEBOXPRO Free Pro SAS | 0.1% | 2 | 1 | 67.1% | **OK** — Compliant | Low | +0.0 pp |
-| AS42487 | Vialis-Moselle Vialis SEM | 0.1% | 14 | 2 | 67.1% | **OK** — Compliant | Low | +0.0 pp |
-| AS63949 | AKAMAI-LINODE-AP Akamai Connected C | 0.1% | 191 | 1 | 67.1% | **OK** — Compliant | Low | +0.0 pp |
-| AS16347 | INHERENT ADISTA SAS | 0.1% | 36 | 23 | 67.0% | **OK** — Compliant | Low | +0.0 pp |
+| AS3215 | AS3215 Orange S.A. | 35.4% | 86 | 203 | 78.2% | **OK** — Compliant | High | +7.7 pp |
+| AS12322 | PROXAD Free SAS | 18.6% | 1054 | 4 | 72.7% | **OK** — Compliant | Low | +5.1 pp |
+| AS5410 | BOUYGTEL-ISP Bouygues Telecom SA | 17.8% | 4 | 16 | 72.4% | **OK** — Compliant | Low | +4.9 pp |
+| AS15557 | LDCOMNET Societe Francaise Du Radio | 17.5% | 24 | 91 | 72.3% | **OK** — Compliant | Medium | +4.8 pp |
+| AS51207 | FREEM Free Mobile SAS | 4.5% | 2 | 1 | 68.0% | **OK** — Compliant | Low | +1.5 pp |
+| AS16276 | OVH OVH SAS | 0.8% | 82 | 119 | 66.8% | **OK** — Compliant | Medium | +0.3 pp |
+| AS63023 | AS-GLOBALTELEHOST - GTHost | 0.8% | 50 | 23 | 66.7% | **OK** — Compliant | Low | +0.3 pp |
+| AS12876 | AS12876 Scaleway SAS | 0.7% | 14 | 1 | 66.7% | **OK** — Compliant | Low | +0.2 pp |
+| AS51167 | CONTABO Contabo GmbH | 0.3% | 10 | 1 | 66.6% | **OK** — Compliant | Low | +0.1 pp |
+| AS31404 | Lycatel-AS LYCATEL DISTRIBUTION UK  | 0.3% | 6 | 1 | 66.6% | **OK** — Compliant | Low | +0.1 pp |
+| AS13335 | CLOUDFLARENET - Cloudflare, Inc. | 0.2% | 6208 | 922 | 66.5% | **OK** — Compliant | High | +0.1 pp |
+| AS30058 | FDCSERVERS - FDCservers.net | 0.2% | 295 | 43 | 66.5% | **OK** — Compliant | Low | +0.1 pp |
+| AS14593 | SPACEX-STARLINK - Space Exploration | 0.2% | 1511 | 14 | 66.5% | **OK** — Compliant | Low | +0.1 pp |
+| AS21859 | ZEN-ECN | 0.2% | 291 | 398 | 66.5% | **OK** — Compliant | High | +0.1 pp |
+| AS29066 | VELIANET-AS velia.net Internetdiens | 0.1% | 20 | 7 | 66.5% | **OK** — Compliant | Low | +0.1 pp |
+| AS16509 | AMAZON-02 - Amazon.com, Inc. | 0.1% | 11016 | 75 | 66.5% | **OK** — Compliant | Medium | +0.1 pp |
+| AS52075 | WIFIRST Wifirst S.A.S. | 0.1% | 16 | 1 | 66.5% | **OK** — Compliant | Low | +0.0 pp |
+| AS62610 | ZEN-DPS - Zenlayer Inc | 0.1% | 158 | 11 | 66.5% | **OK** — Compliant | Low | +0.0 pp |
+| AS212238 | CDNEXT Datacamp Limited | 0.1% | 975 | 1 | 66.5% | **OK** — Compliant | Low | +0.0 pp |
+| AS136787 | PACKETHUBSA-AS-AP PacketHub S.A. | 0.1% | 6 | 1 | 66.5% | **OK** — Compliant | Low | +0.0 pp |
+| AS2200 | FR-RENATER Reseau National de telec | 0.1% | 4 | 49 | 66.5% | **OK** — Compliant | Low | +0.0 pp |
+| AS199636 | FREEBOXPRO Free Pro SAS | 0.1% | 2 | 1 | 66.5% | **OK** — Compliant | Low | +0.0 pp |
+| AS42487 | Vialis-Moselle Vialis SEM | 0.1% | 14 | 2 | 66.5% | **OK** — Compliant | Low | +0.0 pp |
+| AS63949 | AKAMAI-LINODE-AP Akamai Connected C | 0.1% | 191 | 1 | 66.5% | **OK** — Compliant | Low | +0.0 pp |
+| AS16347 | INHERENT ADISTA SAS | 0.1% | 36 | 23 | 66.5% | **OK** — Compliant | Low | +0.0 pp |
 
 ### Archetype Key
 | Code | Name | Policy Intervention |
@@ -127,11 +127,11 @@ FR currently has a national IPv6 adoption rate of 83.8%, with 0.0% of the subscr
 
 | ASN | ISP | Market Share | Adoption | First IPv6 Seen | Age (yrs) | Reason |
 |-----|-----|:-----------:|:--------:|:---------------:|:---------:|--------|
-| AS3215 | AS3215 Orange S.A. | 35.4% | 78.9% | 2009-04-18 | 17.1 | Top |
-| AS12322 | PROXAD Free SAS | 18.6% | 73.3% | 2007-11-19 | 18.6 | Top |
-| AS5410 | BOUYGTEL-ISP Bouygues Telecom SA | 17.8% | 73.0% | 2007-04-05 | 19.2 | Top |
-| AS15557 | LDCOMNET Societe Francaise Du Radiotelephone - SFR SA | 17.5% | 72.9% | 2008-05-05 | 18.1 | Top |
-| AS51207 | FREEM Free Mobile SAS | 4.5% | 68.6% | 2020-04-08 | 6.2 | Top |
+| AS3215 | AS3215 Orange S.A. | 35.4% | 78.2% | 2009-04-18 | 17.2 | Top |
+| AS12322 | PROXAD Free SAS | 18.6% | 72.7% | 2007-11-19 | 18.6 | Top |
+| AS5410 | BOUYGTEL-ISP Bouygues Telecom SA | 17.8% | 72.4% | 2007-04-05 | 19.3 | Top |
+| AS15557 | LDCOMNET Societe Francaise Du Radiotelephone - SFR SA | 17.5% | 72.3% | 2008-05-05 | 18.2 | Top |
+| AS51207 | FREEM Free Mobile SAS | 4.5% | 68.0% | 2020-04-08 | 6.3 | Top |
 
 > Source: [RIPEstat](https://stat.ripe.net) — Announced Prefixes endpoint (historical data from 2000–present).  
 > ⭐ Top = queried due to high market share | ⚠ Laggard = queried due to low adoption despite significant market share
@@ -152,29 +152,29 @@ FR currently has a national IPv6 adoption rate of 83.8%, with 0.0% of the subscr
 
 ### Regional Position
 
-- **FR adoption:** 83.8%
+- **FR adoption:** 83.1%
 - **Global average:** 23.6%
 - **Global rank:** #3 of 243 countries
-- **vs Global Average:** +60.2 pp (above average)
+- **vs Global Average:** +59.5 pp (above average)
 
 **Closest peer countries by adoption score:**
 
 | Country | Adoption | Gap |
 |---------|:--------:|:---:|
-| AX | 80.21% | -3.6 pp |
-| BL | 80.09% | -3.7 pp |
-| IN | 78.37% | -5.4 pp |
-| SH | 90.05% | +6.2 pp |
-| DE | 73.92% | -9.9 pp |
+| SH | 83.3% | +0.2 pp |
+| FK | 79.85% | -3.2 pp |
+| IN | 78.94% | -4.2 pp |
+| PN | 77.78% | -5.3 pp |
+| AX | 74.89% | -8.2 pp |
 
 ---
 
 ## Section 4 — Web Services IPv6 Readiness
 
-**Popular Domains Analyzed:** 763  
-**IPv6-Reachable Domains:** 750  
-**IPv4-Only Domains:** 13  
-**IPv6 Web Readiness:** 98.30%  
+**Popular Domains Analyzed:** 0  
+**IPv6-Reachable Domains:** 0  
+**IPv4-Only Domains:** 0  
+**IPv6 Web Readiness:** 0.00%  
 
 > This analysis measures IPv6 reachability among
 > ranked/popular domains within the national
@@ -274,8 +274,9 @@ FR currently has a national IPv6 adoption rate of 83.8%, with 0.0% of the subscr
 | 2026-06-05 | 5000 | 1882 | 37.6% |
 | 2026-06-08 | 5000 | 1882 | 37.6% |
 | 2026-06-12 | 5000 | 1882 | 37.6% |
+| 2026-07-10 | 5000 | 1882 | 37.6% |
 
-> TLD IPv6 readiness has remained stable by 0.0 pp since 2026-06-03 (4 snapshots recorded).
+> TLD IPv6 readiness has remained stable by 0.0 pp since 2026-06-03 (5 snapshots recorded).
 
 ### Authoritative Nameserver IPv6 Reachability
 

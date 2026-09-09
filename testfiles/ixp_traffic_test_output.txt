@@ -1,0 +1,1675 @@
+======================================================================
+2.3 — AGGREGATED IXP TRAFFIC TEST
+======================================================================
+Country: India
+PCH API: https://www.pch.net/api/ixp/directory/Active
+
+HTTP Status: 200
+URL: https://www.pch.net/api/ixp/directory/Active
+
+Total active PCH records: 899
+India IXPs found: 31
+
+======================================================================
+INDIA IXP TRAFFIC RECORDS
+======================================================================
+IXP: National Internet Exchange of India - Mumbai
+City: Mumbai
+PCH ID: 103
+Status: Active
+
+Peak raw: 8400000
+Average raw: 2710000
+
+Peak traffic: 0.008 Gbps
+Average traffic: 0.003 Gbps
+----------------------------------------------------------------------
+IXP: National Internet Exchange of India - New Delhi
+City: New Delhi
+PCH ID: 104
+Status: Active
+
+Peak raw: 49400000
+Average raw: 781000
+
+Peak traffic: 0.049 Gbps
+Average traffic: 0.001 Gbps
+----------------------------------------------------------------------
+IXP: National Internet Exchange of India - Chennai
+City: Chennai
+PCH ID: 105
+Status: Active
+
+Peak raw: 0
+Average raw: 0
+
+Peak traffic: 0.000 Gbps
+Average traffic: 0.000 Gbps
+----------------------------------------------------------------------
+IXP: National Internet Exchange of India - Kolkata
+City: Kolkata
+PCH ID: 106
+Status: Active
+
+Peak raw: 0
+Average raw: 0
+
+Peak traffic: 0.000 Gbps
+Average traffic: 0.000 Gbps
+----------------------------------------------------------------------
+IXP: National Internet Exchange of India - Bangalore
+City: Bangalore
+PCH ID: 1020
+Status: Active
+
+Peak raw: 0
+Average raw: 0
+
+Peak traffic: 0.000 Gbps
+Average traffic: 0.000 Gbps
+----------------------------------------------------------------------
+IXP: National Internet Exchange of India - Hyderabad
+City: Hyderabad
+PCH ID: 1021
+Status: Active
+
+Peak raw: 0
+Average raw: 0
+
+Peak traffic: 0.000 Gbps
+Average traffic: 0.000 Gbps
+----------------------------------------------------------------------
+IXP: National Internet Exchange of India - Ahmedabad
+City: Ahmedabad
+PCH ID: 1022
+Status: Active
+
+Peak raw: 0
+Average raw: 0
+
+Peak traffic: 0.000 Gbps
+Average traffic: 0.000 Gbps
+----------------------------------------------------------------------
+IXP: DE-CIX Mumbai
+City: Mumbai
+PCH ID: 1842
+Status: Active
+
+Peak raw: 0
+Average raw: 0
+
+Peak traffic: 0.000 Gbps
+Average traffic: 0.000 Gbps
+----------------------------------------------------------------------
+IXP: Kolkata IX
+City: Kolkata
+PCH ID: 1947
+Status: Active
+
+Peak raw: 4030000
+Average raw: 2390000
+
+Peak traffic: 0.004 Gbps
+Average traffic: 0.002 Gbps
+----------------------------------------------------------------------
+IXP: AMS-IX Mumbai
+City: Mumbai
+PCH ID: 1948
+Status: Active
+
+Peak raw: 70474134
+Average raw: 42892645
+
+Peak traffic: 0.070 Gbps
+Average traffic: 0.043 Gbps
+----------------------------------------------------------------------
+IXP: Extreme IX New Delhi
+City: New Delhi
+PCH ID: 1975
+Status: Active
+
+Peak raw: 3574251578
+Average raw: 1825860979
+
+Peak traffic: 3.574 Gbps
+Average traffic: 1.826 Gbps
+----------------------------------------------------------------------
+IXP: Extreme IX Mumbai
+City: Mumbai
+PCH ID: 2004
+Status: Active
+
+Peak raw: 4265771074
+Average raw: 2337121026
+
+Peak traffic: 4.266 Gbps
+Average traffic: 2.337 Gbps
+----------------------------------------------------------------------
+IXP: Extreme IX Chennai
+City: Chennai
+PCH ID: 2010
+Status: Active
+
+Peak raw: 1384462056
+Average raw: 752172822
+
+Peak traffic: 1.384 Gbps
+Average traffic: 0.752 Gbps
+----------------------------------------------------------------------
+IXP: Extreme IX Hyderabad
+City: Hyderabad
+PCH ID: 2011
+Status: Active
+
+Peak raw: 196031186
+Average raw: 86018586
+
+Peak traffic: 0.196 Gbps
+Average traffic: 0.086 Gbps
+----------------------------------------------------------------------
+IXP: Amaravati Internet Exchange
+City: Amaravati
+PCH ID: 2037
+Status: Active
+
+Peak raw: 8000000
+Average raw: 6000000
+
+Peak traffic: 0.008 Gbps
+Average traffic: 0.006 Gbps
+----------------------------------------------------------------------
+IXP: ANI Peering Exchange
+City: New Delhi
+PCH ID: 2045
+Status: Active
+
+Peak raw: 0
+Average raw: 0
+
+Peak traffic: 0.000 Gbps
+Average traffic: 0.000 Gbps
+----------------------------------------------------------------------
+IXP: National Internet Exchange of India - Guwahati
+City: Guwahati
+PCH ID: 2046
+Status: Active
+
+Peak raw: 0
+Average raw: 0
+
+Peak traffic: 0.000 Gbps
+Average traffic: 0.000 Gbps
+----------------------------------------------------------------------
+IXP: Extreme IX Kolkata
+City: Kolkata
+PCH ID: 2052
+Status: Active
+
+Peak raw: 81122426
+Average raw: 46254256
+
+Peak traffic: 0.081 Gbps
+Average traffic: 0.046 Gbps
+----------------------------------------------------------------------
+IXP: REDIX Chennai
+City: Chennai
+PCH ID: 2064
+Status: Active
+
+Peak raw: 0
+Average raw: 0
+
+Peak traffic: 0.000 Gbps
+Average traffic: 0.000 Gbps
+----------------------------------------------------------------------
+IXP: DE-CIX Chennai
+City: Chennai
+PCH ID: 2128
+Status: Active
+
+Peak raw: 0
+Average raw: 0
+
+Peak traffic: 0.000 Gbps
+Average traffic: 0.000 Gbps
+----------------------------------------------------------------------
+IXP: DE-CIX Delhi
+City: New Delhi
+PCH ID: 2129
+Status: Active
+
+Peak raw: 0
+Average raw: 0
+
+Peak traffic: 0.000 Gbps
+Average traffic: 0.000 Gbps
+----------------------------------------------------------------------
+IXP: DE-CIX Kolkata
+City: Kolkata
+PCH ID: 2130
+Status: Active
+
+Peak raw: 0
+Average raw: 0
+
+Peak traffic: 0.000 Gbps
+Average traffic: 0.000 Gbps
+----------------------------------------------------------------------
+IXP: Equinix Internet Exchange Mumbai
+City: Mumbai
+PCH ID: 2347
+Status: Active
+
+Peak raw: 3127154
+Average raw: 2972858
+
+Peak traffic: 0.003 Gbps
+Average traffic: 0.003 Gbps
+----------------------------------------------------------------------
+IXP: Extreme IX Bangalore
+City: Bangalore
+PCH ID: 2355
+Status: Active
+
+Peak raw: 497055296
+Average raw: 291635698
+
+Peak traffic: 0.497 Gbps
+Average traffic: 0.292 Gbps
+----------------------------------------------------------------------
+IXP: Extreme IX Pune
+City: Pune
+PCH ID: 2434
+Status: Active
+
+Peak raw: 119085692
+Average raw: 67713233
+
+Peak traffic: 0.119 Gbps
+Average traffic: 0.068 Gbps
+----------------------------------------------------------------------
+IXP: DE-CIX Hyderabad
+City: Hyderabad
+PCH ID: 2449
+Status: Active
+
+Peak raw: 0
+Average raw: 0
+
+Peak traffic: 0.000 Gbps
+Average traffic: 0.000 Gbps
+----------------------------------------------------------------------
+IXP: AMS-IX Hyderabad
+City: Hyderabad
+PCH ID: 2503
+Status: Active
+
+Peak raw: 5996244
+Average raw: 3316416
+
+Peak traffic: 0.006 Gbps
+Average traffic: 0.003 Gbps
+----------------------------------------------------------------------
+IXP: AMS-IX Kolkata
+City: Kolkata
+PCH ID: 2504
+Status: Active
+
+Peak raw: 95506774
+Average raw: 41692262
+
+Peak traffic: 0.096 Gbps
+Average traffic: 0.042 Gbps
+----------------------------------------------------------------------
+IXP: MX-IX Mumbai
+City: Mumbai
+PCH ID: 2550
+Status: Active
+
+Peak raw: 896000000
+Average raw: 750000000
+
+Peak traffic: 0.896 Gbps
+Average traffic: 0.750 Gbps
+----------------------------------------------------------------------
+IXP: MX-IX Delhi
+City: New Delhi
+PCH ID: 2551
+Status: Active
+
+Peak raw: 863700000
+Average raw: 783900000
+
+Peak traffic: 0.864 Gbps
+Average traffic: 0.784 Gbps
+----------------------------------------------------------------------
+IXP: MX-IX Chennai
+City: Chennai
+PCH ID: 2557
+Status: Active
+
+Peak raw: 899600000
+Average raw: 739300000
+
+Peak traffic: 0.900 Gbps
+Average traffic: 0.739 Gbps
+----------------------------------------------------------------------
+
+======================================================================
+AGGREGATED INDIA IXP TRAFFIC
+======================================================================
+IXPs found: 31
+IXPs with peak traffic data: 18
+IXPs with average traffic data: 18
+
+TOTAL PEAK TRAFFIC: 13.022 Gbps
+TOTAL AVERAGE TRAFFIC: 7.783 Gbps
+
+======================================================================
+2.3 METRIC SUMMARY
+======================================================================
+Metric: Aggregated IXP Traffic
+Country: India
+
+Peak traffic: 13.022 Gbps
+Average traffic: 7.783 Gbps
+
+Source: PCH
+Method: Sum of PCH-reported peak and average IPv4 traffic across Indian IXPs
+
+NOTE: PCH traffic values represent reported IPv4 traffic and may not cover every IXP listed by PeeringDB.
+
+======================================================================
+RAW INDIA IXP RECORDS
+======================================================================
+[
+  {
+    "id": "103",
+    "ctry": "India",
+    "cit": "Mumbai",
+    "reg": "Asia-Pacific",
+    "name": "National Internet Exchange of India - Mumbai",
+    "url": "https://ix.nixi.in/",
+    "stat": "Active",
+    "date": "20030719",
+    "prfs": "157736",
+    "lat": "19.10935",
+    "lon": "72.90144",
+    "prts": "181",
+    "traf": "8400000",
+    "avg": "2710000",
+    "trgh": "1380000",
+    "ipv6_avg": "0.000000",
+    "pch": "Yes",
+    "updt": "2022-02-28",
+    "tc_rank": "15",
+    "tw_rank": "462",
+    "pc_rank": "3",
+    "pr_rank": "23",
+    "pw_rank": "92",
+    "tr_rank": "117",
+    "prts_url": "https://ix.nixi.in/noc-url",
+    "q9": "No",
+    "iata": "BOM2",
+    "regct": 192
+  },
+  {
+    "id": "104",
+    "ctry": "India",
+    "cit": "New Delhi",
+    "reg": "Asia-Pacific",
+    "name": "National Internet Exchange of India - New Delhi",
+    "url": "https://ix.nixi.in/",
+    "stat": "Active",
+    "date": "20030719",
+    "prfs": "143204",
+    "lat": "28.58000",
+    "lon": "77.20000",
+    "prts": "117",
+    "traf": "49400000",
+    "avg": "781000",
+    "trgh": "386000",
+    "ipv6_avg": "0.000000",
+    "pch": "Yes",
+    "updt": "2022-02-28",
+    "tc_rank": "13",
+    "tw_rank": "360",
+    "pc_rank": "5",
+    "pr_rank": "35",
+    "pw_rank": "137",
+    "tr_rank": "97",
+    "prts_url": "https://www.peeringdb.com/ix/198",
+    "q9": "No",
+    "iata": "DEL",
+    "regct": 192
+  },
+  {
+    "id": "105",
+    "ctry": "India",
+    "cit": "Chennai",
+    "reg": "Asia-Pacific",
+    "name": "National Internet Exchange of India - Chennai",
+    "url": "https://ix.nixi.in/",
+    "stat": "Active",
+    "date": "20030719",
+    "prfs": "158336",
+    "lat": "13.07000",
+    "lon": "80.20000",
+    "prts": "58",
+    "traf": "0",
+    "avg": "0",
+    "trgh": "0",
+    "ipv6_avg": "0.000000",
+    "pch": "Yes",
+    "updt": "2022-02-28",
+    "tc_rank": "14",
+    "tw_rank": "397",
+    "pc_rank": "9",
+    "pr_rank": "71",
+    "pw_rank": "258",
+    "tr_rank": "107",
+    "prts_url": "https://ix.nixi.in/noc-url",
+    "q9": "No",
+    "iata": "MAA",
+    "regct": 192
+  },
+  {
+    "id": "106",
+    "ctry": "India",
+    "cit": "Kolkata",
+    "reg": "Asia-Pacific",
+    "name": "National Internet Exchange of India - Kolkata",
+    "url": "https://ix.nixi.in/",
+    "stat": "Active",
+    "date": "20030619",
+    "prfs": "0",
+    "lat": "22.57000",
+    "lon": "88.40000",
+    "prts": "19",
+    "traf": "0",
+    "avg": "0",
+    "trgh": "0",
+    "ipv6_avg": "0.000000",
+    "pch": "No",
+    "updt": "2022-02-28",
+    "tc_rank": "20",
+    "tw_rank": "635",
+    "pc_rank": "16",
+    "pr_rank": "110",
+    "pw_rank": "477",
+    "tr_rank": "134",
+    "prts_url": "https://ix.nixi.in/noc-url",
+    "q9": "No",
+    "iata": "",
+    "regct": 192
+  },
+  {
+    "id": "1020",
+    "ctry": "India",
+    "cit": "Bangalore",
+    "reg": "Asia-Pacific",
+    "name": "National Internet Exchange of India - Bangalore",
+    "url": "https://ix.nixi.in/",
+    "stat": "Active",
+    "date": "20070800",
+    "prfs": "0",
+    "lat": "12.95000",
+    "lon": "77.65000",
+    "prts": "4",
+    "traf": "0",
+    "avg": "0",
+    "trgh": "0",
+    "ipv6_avg": "0.000000",
+    "pch": "No",
+    "updt": "2021-12-30",
+    "tc_rank": "20",
+    "tw_rank": "635",
+    "pc_rank": "29",
+    "pr_rank": "179",
+    "pw_rank": "812",
+    "tr_rank": "134",
+    "prts_url": "https://ix.nixi.in/noc-url",
+    "q9": "No",
+    "iata": "",
+    "regct": 192
+  },
+  {
+    "id": "1021",
+    "ctry": "India",
+    "cit": "Hyderabad",
+    "reg": "Asia-Pacific",
+    "name": "National Internet Exchange of India - Hyderabad",
+    "url": "https://ix.nixi.in/",
+    "stat": "Active",
+    "date": "20080000",
+    "prfs": "197",
+    "lat": "17.45000",
+    "lon": "78.47000",
+    "prts": "15",
+    "traf": "0",
+    "avg": "0",
+    "trgh": "0",
+    "ipv6_avg": "0.000000",
+    "pch": "Yes",
+    "updt": "2022-02-28",
+    "tc_rank": "20",
+    "tw_rank": "635",
+    "pc_rank": "20",
+    "pr_rank": "124",
+    "pw_rank": "546",
+    "tr_rank": "134",
+    "prts_url": "https://ix.nixi.in/noc-url",
+    "q9": "No",
+    "iata": "",
+    "regct": 192
+  },
+  {
+    "id": "1022",
+    "ctry": "India",
+    "cit": "Ahmedabad",
+    "reg": "Asia-Pacific",
+    "name": "National Internet Exchange of India - Ahmedabad",
+    "url": "https://ix.nixi.in/",
+    "stat": "Active",
+    "date": "20081100",
+    "prfs": "0",
+    "lat": "23.07000",
+    "lon": "72.63000",
+    "prts": "16",
+    "traf": "0",
+    "avg": "0",
+    "trgh": "0",
+    "ipv6_avg": "0.000000",
+    "pch": "No",
+    "updt": "2022-02-28",
+    "tc_rank": "20",
+    "tw_rank": "635",
+    "pc_rank": "18",
+    "pr_rank": "118",
+    "pw_rank": "520",
+    "tr_rank": "134",
+    "prts_url": "https://ix.nixi.in/noc-url",
+    "q9": "No",
+    "iata": "",
+    "regct": 192
+  },
+  {
+    "id": "1842",
+    "ctry": "India",
+    "cit": "Mumbai",
+    "reg": "Asia-Pacific",
+    "name": "DE-CIX Mumbai",
+    "url": "https://www.de-cix.in/locations/de-cix-mumbai",
+    "stat": "Active",
+    "date": "20140814",
+    "prfs": "127789",
+    "lat": "19.10935",
+    "lon": "72.90144",
+    "prts": "276",
+    "traf": "0",
+    "avg": "0",
+    "trgh": "0",
+    "ipv6_avg": "0.000000",
+    "pch": "Yes",
+    "updt": "2022-01-15",
+    "tc_rank": "20",
+    "tw_rank": "635",
+    "pc_rank": "1",
+    "pr_rank": "7",
+    "pw_rank": "45",
+    "tr_rank": "134",
+    "prts_url": "https://www.de-cix.in/connected-networks/",
+    "q9": "Yes",
+    "iata": "BOM2",
+    "regct": 192
+  },
+  {
+    "id": "1947",
+    "ctry": "India",
+    "cit": "Kolkata",
+    "reg": "Asia-Pacific",
+    "name": "Kolkata IX",
+    "url": "https://iifon.org/",
+    "stat": "Active",
+    "date": "20160000",
+    "prfs": "12683",
+    "lat": "22.57000",
+    "lon": "88.40000",
+    "prts": "34",
+    "traf": "4030000",
+    "avg": "2390000",
+    "trgh": "1860000",
+    "ipv6_avg": "0.000000",
+    "pch": "Yes",
+    "updt": "2019-05-03",
+    "tc_rank": "18",
+    "tw_rank": "503",
+    "pc_rank": "12",
+    "pr_rank": "92",
+    "pw_rank": "352",
+    "tr_rank": "124",
+    "prts_url": "https://www.peeringdb.com/ix/1577",
+    "q9": "No",
+    "iata": "CCU",
+    "regct": 192
+  },
+  {
+    "id": "1948",
+    "ctry": "India",
+    "cit": "Mumbai",
+    "reg": "Asia-Pacific",
+    "name": "AMS-IX Mumbai",
+    "url": "https://www.ams-ix.net/mum",
+    "stat": "Active",
+    "date": "20170202",
+    "prfs": "0",
+    "lat": "19.10935",
+    "lon": "72.90144",
+    "prts": "86",
+    "traf": "70474134",
+    "avg": "42892645",
+    "trgh": "11632468",
+    "ipv6_avg": "50.003270",
+    "pch": "No",
+    "updt": "2026-09-08",
+    "tc_rank": "12",
+    "tw_rank": "335",
+    "pc_rank": "7",
+    "pr_rank": "48",
+    "pw_rank": "185",
+    "tr_rank": "86",
+    "prts_url": "https://www.ams-ix.net/mum/connected-networks",
+    "q9": "No",
+    "iata": "",
+    "regct": 192
+  },
+  {
+    "id": "1975",
+    "ctry": "India",
+    "cit": "New Delhi",
+    "reg": "Asia-Pacific",
+    "name": "Extreme IX New Delhi",
+    "url": "https://extreme-ix.org/",
+    "stat": "Active",
+    "date": "20160623",
+    "prfs": "57843",
+    "lat": "28.58000",
+    "lon": "77.20000",
+    "prts": "170",
+    "traf": "3574251578",
+    "avg": "1825860979",
+    "trgh": "336695170",
+    "ipv6_avg": "50.023120",
+    "pch": "Yes",
+    "updt": "2026-09-08",
+    "tc_rank": "2",
+    "tw_rank": "57",
+    "pc_rank": "4",
+    "pr_rank": "24",
+    "pw_rank": "102",
+    "tr_rank": "13",
+    "prts_url": "https://extreme-ix.org/members/peers?location=delhi",
+    "q9": "No",
+    "iata": "DEL",
+    "regct": 192
+  },
+  {
+    "id": "2004",
+    "ctry": "India",
+    "cit": "Mumbai",
+    "reg": "Asia-Pacific",
+    "name": "Extreme IX Mumbai",
+    "url": "https://extreme-ix.org/",
+    "stat": "Active",
+    "date": "20160623",
+    "prfs": "147071",
+    "lat": "19.10935",
+    "lon": "72.90144",
+    "prts": "242",
+    "traf": "4265771074",
+    "avg": "2337121026",
+    "trgh": "492191308",
+    "ipv6_avg": "50.000000",
+    "pch": "Yes",
+    "updt": "2026-09-08",
+    "tc_rank": "1",
+    "tw_rank": "29",
+    "pc_rank": "2",
+    "pr_rank": "13",
+    "pw_rank": "55",
+    "tr_rank": "11",
+    "prts_url": "https://extreme-ix.org/members/peers?location=mumbai",
+    "q9": "No",
+    "iata": "BOM2",
+    "regct": 192
+  },
+  {
+    "id": "2010",
+    "ctry": "India",
+    "cit": "Chennai",
+    "reg": "Asia-Pacific",
+    "name": "Extreme IX Chennai",
+    "url": "https://extreme-ix.org/",
+    "stat": "Active",
+    "date": "20160623",
+    "prfs": "0",
+    "lat": "13.07000",
+    "lon": "80.20000",
+    "prts": "89",
+    "traf": "1384462056",
+    "avg": "752172822",
+    "trgh": "129771632",
+    "ipv6_avg": "50.000000",
+    "pch": "No",
+    "updt": "2026-09-08",
+    "tc_rank": "3",
+    "tw_rank": "113",
+    "pc_rank": "6",
+    "pr_rank": "46",
+    "pw_rank": "179",
+    "tr_rank": "26",
+    "prts_url": "https://extreme-ix.org/members/peers?location=chennai",
+    "q9": "No",
+    "iata": "",
+    "regct": 192
+  },
+  {
+    "id": "2011",
+    "ctry": "India",
+    "cit": "Hyderabad",
+    "reg": "Asia-Pacific",
+    "name": "Extreme IX Hyderabad",
+    "url": "https://extreme-ix.org/",
+    "stat": "Active",
+    "date": "20160623",
+    "prfs": "0",
+    "lat": "17.45000",
+    "lon": "78.47000",
+    "prts": "17",
+    "traf": "196031186",
+    "avg": "86018586",
+    "trgh": "10087770",
+    "ipv6_avg": "49.937730",
+    "pch": "No",
+    "updt": "2026-09-08",
+    "tc_rank": "8",
+    "tw_rank": "261",
+    "pc_rank": "17",
+    "pr_rank": "112",
+    "pw_rank": "506",
+    "tr_rank": "66",
+    "prts_url": "https://extreme-ix.org/members/peers?location=hyderabad",
+    "q9": "No",
+    "iata": "",
+    "regct": 192
+  },
+  {
+    "id": "2037",
+    "ctry": "India",
+    "cit": "Amaravati",
+    "reg": "Asia-Pacific",
+    "name": "Amaravati Internet Exchange",
+    "url": "https://www.amr-ix.net/",
+    "stat": "Active",
+    "date": "20180517",
+    "prfs": "0",
+    "lat": "16.57197",
+    "lon": "80.34896",
+    "prts": "16",
+    "traf": "8000000",
+    "avg": "6000000",
+    "trgh": "600000",
+    "ipv6_avg": "0.000000",
+    "pch": "No",
+    "updt": "0000-00-00",
+    "tc_rank": "16",
+    "tw_rank": "464",
+    "pc_rank": "18",
+    "pr_rank": "118",
+    "pw_rank": "520",
+    "tr_rank": "118",
+    "prts_url": "https://www.amr-ix.net/members/",
+    "q9": "No",
+    "iata": "",
+    "regct": 192
+  },
+  {
+    "id": "2045",
+    "ctry": "India",
+    "cit": "New Delhi",
+    "reg": "Asia-Pacific",
+    "name": "ANI Peering Exchange",
+    "url": "https://ano-ix.org/",
+    "stat": "Active",
+    "date": "20180500",
+    "prfs": "0",
+    "lat": "28.58000",
+    "lon": "77.20000",
+    "prts": "30",
+    "traf": "0",
+    "avg": "0",
+    "trgh": "0",
+    "ipv6_avg": "0.000000",
+    "pch": "No",
+    "updt": "0000-00-00",
+    "tc_rank": "20",
+    "tw_rank": "635",
+    "pc_rank": "13",
+    "pr_rank": "95",
+    "pw_rank": "374",
+    "tr_rank": "134",
+    "prts_url": "https://www.peeringdb.com/ix/2210",
+    "q9": "No",
+    "iata": "",
+    "regct": 192
+  },
+  {
+    "id": "2046",
+    "ctry": "India",
+    "cit": "Guwahati",
+    "reg": "Asia-Pacific",
+    "name": "National Internet Exchange of India - Guwahati",
+    "url": "https://ix.nixi.in/",
+    "stat": "Active",
+    "date": "20180200",
+    "prfs": "0",
+    "lat": "26.14329",
+    "lon": "91.56280",
+    "prts": "8",
+    "traf": "0",
+    "avg": "0",
+    "trgh": "0",
+    "ipv6_avg": "0.000000",
+    "pch": "No",
+    "updt": "2022-05-28",
+    "tc_rank": "20",
+    "tw_rank": "635",
+    "pc_rank": "23",
+    "pr_rank": "156",
+    "pw_rank": "695",
+    "tr_rank": "134",
+    "prts_url": "https://ix.nixi.in/noc-url",
+    "q9": "No",
+    "iata": "",
+    "regct": 192
+  },
+  {
+    "id": "2052",
+    "ctry": "India",
+    "cit": "Kolkata",
+    "reg": "Asia-Pacific",
+    "name": "Extreme IX Kolkata",
+    "url": "https://extreme-ix.org",
+    "stat": "Active",
+    "date": "20170000",
+    "prfs": "0",
+    "lat": "22.57000",
+    "lon": "88.40000",
+    "prts": "25",
+    "traf": "81122426",
+    "avg": "46254256",
+    "trgh": "8641036",
+    "ipv6_avg": "50.000000",
+    "pch": "No",
+    "updt": "2026-09-08",
+    "tc_rank": "11",
+    "tw_rank": "320",
+    "pc_rank": "15",
+    "pr_rank": "101",
+    "pw_rank": "409",
+    "tr_rank": "82",
+    "prts_url": "https://extreme-ix.org/members/peers?location=kolkata",
+    "q9": "No",
+    "iata": "",
+    "regct": 192
+  },
+  {
+    "id": "2064",
+    "ctry": "India",
+    "cit": "Chennai",
+    "reg": "Asia-Pacific",
+    "name": "REDIX Chennai",
+    "url": "https://redix.org/",
+    "stat": "Active",
+    "date": "20180000",
+    "prfs": "0",
+    "lat": "13.07000",
+    "lon": "80.20000",
+    "prts": "2",
+    "traf": "0",
+    "avg": "0",
+    "trgh": "0",
+    "ipv6_avg": "0.000000",
+    "pch": "No",
+    "updt": "0000-00-00",
+    "tc_rank": "20",
+    "tw_rank": "635",
+    "pc_rank": "31",
+    "pr_rank": "185",
+    "pw_rank": "872",
+    "tr_rank": "134",
+    "prts_url": null,
+    "q9": "No",
+    "iata": "",
+    "regct": 192
+  },
+  {
+    "id": "2128",
+    "ctry": "India",
+    "cit": "Chennai",
+    "reg": "Asia-Pacific",
+    "name": "DE-CIX Chennai",
+    "url": "https://www.de-cix.in/locations/de-cix-chennai",
+    "stat": "Active",
+    "date": "20190700",
+    "prfs": "0",
+    "lat": "13.07000",
+    "lon": "80.20000",
+    "prts": "56",
+    "traf": "0",
+    "avg": "0",
+    "trgh": "0",
+    "ipv6_avg": "0.000000",
+    "pch": "No",
+    "updt": "0000-00-00",
+    "tc_rank": "20",
+    "tw_rank": "635",
+    "pc_rank": "10",
+    "pr_rank": "72",
+    "pw_rank": "262",
+    "tr_rank": "134",
+    "prts_url": "https://www.de-cix.in/connected-networks/",
+    "q9": "No",
+    "iata": "",
+    "regct": 192
+  },
+  {
+    "id": "2129",
+    "ctry": "India",
+    "cit": "New Delhi",
+    "reg": "Asia-Pacific",
+    "name": "DE-CIX Delhi",
+    "url": "https://www.de-cix.in/locations/de-cix-delhi",
+    "stat": "Active",
+    "date": "20190100",
+    "prfs": "0",
+    "lat": "28.58000",
+    "lon": "77.20000",
+    "prts": "70",
+    "traf": "0",
+    "avg": "0",
+    "trgh": "0",
+    "ipv6_avg": "0.000000",
+    "pch": "No",
+    "updt": "0000-00-00",
+    "tc_rank": "20",
+    "tw_rank": "635",
+    "pc_rank": "8",
+    "pr_rank": "59",
+    "pw_rank": "220",
+    "tr_rank": "134",
+    "prts_url": "https://www.de-cix.in/connected-networks/",
+    "q9": "No",
+    "iata": "",
+    "regct": 192
+  },
+  {
+    "id": "2130",
+    "ctry": "India",
+    "cit": "Kolkata",
+    "reg": "Asia-Pacific",
+    "name": "DE-CIX Kolkata",
+    "url": "https://www.de-cix.in/locations/de-cix-kolkata",
+    "stat": "Active",
+    "date": "20190000",
+    "prfs": "0",
+    "lat": "22.57000",
+    "lon": "88.40000",
+    "prts": "14",
+    "traf": "0",
+    "avg": "0",
+    "trgh": "0",
+    "ipv6_avg": "0.000000",
+    "pch": "No",
+    "updt": "0000-00-00",
+    "tc_rank": "20",
+    "tw_rank": "635",
+    "pc_rank": "21",
+    "pr_rank": "126",
+    "pw_rank": "560",
+    "tr_rank": "134",
+    "prts_url": "https://www.de-cix.in/connected-networks/",
+    "q9": "No",
+    "iata": "",
+    "regct": 192
+  },
+  {
+    "id": "2347",
+    "ctry": "India",
+    "cit": "Mumbai",
+    "reg": "Asia-Pacific",
+    "name": "Equinix Internet Exchange Mumbai",
+    "url": "https://ix.equinix.com/home/",
+    "stat": "Active",
+    "date": "20230614",
+    "prfs": "3143",
+    "lat": "19.10935",
+    "lon": "72.90144",
+    "prts": "26",
+    "traf": "3127154",
+    "avg": "2972858",
+    "trgh": "2900072",
+    "ipv6_avg": "50.000000",
+    "pch": "Yes",
+    "updt": "2026-09-08",
+    "tc_rank": "19",
+    "tw_rank": "514",
+    "pc_rank": "14",
+    "pr_rank": "99",
+    "pw_rank": "401",
+    "tr_rank": "125",
+    "prts_url": "https://ix.equinix.com/home/locations-and-traffic/",
+    "q9": "No",
+    "iata": "BOM2",
+    "regct": 192
+  },
+  {
+    "id": "2355",
+    "ctry": "India",
+    "cit": "Bangalore",
+    "reg": "Asia-Pacific",
+    "name": "Extreme IX Bangalore",
+    "url": "https://extreme-ix.org/",
+    "stat": "Active",
+    "date": "20170000",
+    "prfs": "8025",
+    "lat": "12.95000",
+    "lon": "77.65000",
+    "prts": "38",
+    "traf": "497055296",
+    "avg": "291635698",
+    "trgh": "50932772",
+    "ipv6_avg": "50.000000",
+    "pch": "Yes",
+    "updt": "2026-09-08",
+    "tc_rank": "7",
+    "tw_rank": "189",
+    "pc_rank": "11",
+    "pr_rank": "86",
+    "pw_rank": "335",
+    "tr_rank": "45",
+    "prts_url": "https://extreme-ix.org/members/peers?location=bangalore",
+    "q9": "No",
+    "iata": "BLR",
+    "regct": 192
+  },
+  {
+    "id": "2434",
+    "ctry": "India",
+    "cit": "Pune",
+    "reg": "Asia-Pacific",
+    "name": "Extreme IX Pune",
+    "url": "https://extreme-ix.org/eix/pune",
+    "stat": "Active",
+    "date": "20190700",
+    "prfs": null,
+    "lat": "18.53333",
+    "lon": "73.86667",
+    "prts": "7",
+    "traf": "119085692",
+    "avg": "67713233",
+    "trgh": "5854586",
+    "ipv6_avg": "50.000940",
+    "pch": "No",
+    "updt": "2026-09-08",
+    "tc_rank": "9",
+    "tw_rank": "295",
+    "pc_rank": "26",
+    "pr_rank": "164",
+    "pw_rank": "730",
+    "tr_rank": "76",
+    "prts_url": "https://extreme-ix.org/members/peers?location=pune",
+    "q9": "No",
+    "iata": "",
+    "regct": 192
+  },
+  {
+    "id": "2449",
+    "ctry": "India",
+    "cit": "Hyderabad",
+    "reg": "Asia-Pacific",
+    "name": "DE-CIX Hyderabad",
+    "url": "https://www.de-cix.in/de-cix-hyderabad/",
+    "stat": "Active",
+    "date": "20230800",
+    "prfs": "1041",
+    "lat": "17.45000",
+    "lon": "78.47000",
+    "prts": "8",
+    "traf": "0",
+    "avg": "0",
+    "trgh": "0",
+    "ipv6_avg": "0.000000",
+    "pch": "Yes",
+    "updt": "0000-00-00",
+    "tc_rank": "20",
+    "tw_rank": "635",
+    "pc_rank": "23",
+    "pr_rank": "156",
+    "pw_rank": "695",
+    "tr_rank": "134",
+    "prts_url": "https://www.de-cix.in/connected-networks/",
+    "q9": "No",
+    "iata": "",
+    "regct": 192
+  },
+  {
+    "id": "2503",
+    "ctry": "India",
+    "cit": "Hyderabad",
+    "reg": "Asia-Pacific",
+    "name": "AMS-IX Hyderabad",
+    "url": "https://www.ams-ix.net/hyd",
+    "stat": "Active",
+    "date": "20220609",
+    "prfs": null,
+    "lat": "17.45000",
+    "lon": "78.47000",
+    "prts": "8",
+    "traf": "5996244",
+    "avg": "3316416",
+    "trgh": "897962",
+    "ipv6_avg": "50.000000",
+    "pch": "No",
+    "updt": "2026-09-08",
+    "tc_rank": "17",
+    "tw_rank": "484",
+    "pc_rank": "23",
+    "pr_rank": "156",
+    "pw_rank": "695",
+    "tr_rank": "121",
+    "prts_url": "https://www.ams-ix.net/hyd/connected-networks",
+    "q9": "No",
+    "iata": "",
+    "regct": 192
+  },
+  {
+    "id": "2504",
+    "ctry": "India",
+    "cit": "Kolkata",
+    "reg": "Asia-Pacific",
+    "name": "AMS-IX Kolkata",
+    "url": "https://www.ams-ix.net/kol",
+    "stat": "Active",
+    "date": "20220609",
+    "prfs": null,
+    "lat": "22.57000",
+    "lon": "88.40000",
+    "prts": "6",
+    "traf": "95506774",
+    "avg": "41692262",
+    "trgh": "4213828",
+    "ipv6_avg": "50.000000",
+    "pch": "No",
+    "updt": "2026-09-08",
+    "tc_rank": "10",
+    "tw_rank": "309",
+    "pc_rank": "27",
+    "pr_rank": "170",
+    "pw_rank": "759",
+    "tr_rank": "79",
+    "prts_url": "https://www.ams-ix.net/kol/connected-networks",
+    "q9": "No",
+    "iata": "",
+    "regct": 192
+  },
+  {
+    "id": "2550",
+    "ctry": "India",
+    "cit": "Mumbai",
+    "reg": "Asia-Pacific",
+    "name": "MX-IX Mumbai",
+    "url": "https://www.mx-ix.com/about/",
+    "stat": "Active",
+    "date": "20260200",
+    "prfs": null,
+    "lat": "19.10935",
+    "lon": "72.90144",
+    "prts": "6",
+    "traf": "896000000",
+    "avg": "750000000",
+    "trgh": "667000000",
+    "ipv6_avg": "0.000000",
+    "pch": "No",
+    "updt": "0000-00-00",
+    "tc_rank": "5",
+    "tw_rank": "138",
+    "pc_rank": "27",
+    "pr_rank": "170",
+    "pw_rank": "759",
+    "tr_rank": "33",
+    "prts_url": "https://www.mx-ix.com/locations/mumbai",
+    "q9": "No",
+    "iata": "",
+    "regct": 192
+  },
+  {
+    "id": "2551",
+    "ctry": "India",
+    "cit": "New Delhi",
+    "reg": "Asia-Pacific",
+    "name": "MX-IX Delhi",
+    "url": "https://www.mx-ix.com/about/",
+    "stat": "Active",
+    "date": "20260300",
+    "prfs": null,
+    "lat": "28.58000",
+    "lon": "77.20000",
+    "prts": "9",
+    "traf": "863700000",
+    "avg": "783900000",
+    "trgh": "661400000",
+    "ipv6_avg": "0.000000",
+    "pch": "No",
+    "updt": "0000-00-00",
+    "tc_rank": "6",
+    "tw_rank": "140",
+    "pc_rank": "22",
+    "pr_rank": "151",
+    "pw_rank": "673",
+    "tr_rank": "34",
+    "prts_url": "https://www.mx-ix.com/locations/new-delhi",
+    "q9": "No",
+    "iata": "",
+    "regct": 192
+  },
+  {
+    "id": "2557",
+    "ctry": "India",
+    "cit": "Chennai",
+    "reg": "Asia-Pacific",
+    "name": "MX-IX Chennai",
+    "url": "https://www.mx-ix.com/about/",
+    "stat": "Active",
+    "date": "20260800",
+    "prfs": null,
+    "lat": "13.07000",
+    "lon": "80.20000",
+    "prts": "4",
+    "traf": "899600000",
+    "avg": "739300000",
+    "trgh": "661700000",
+    "ipv6_avg": "0.000000",
+    "pch": "No",
+    "updt": "0000-00-00",
+    "tc_rank": "4",
+    "tw_rank": "137",
+    "pc_rank": "29",
+    "pr_rank": "179",
+    "pw_rank": "812",
+    "tr_rank": "32",
+    "prts_url": "https://www.mx-ix.com/locations/chennai",
+    "q9": "No",
+    "iata": "",
+    "regct": 192
+  }
+]
+
+======================================================================
+PROCESSED TRAFFIC SUMMARY
+======================================================================
+{
+  "metric": "aggregated_ixp_traffic",
+  "country": "India",
+  "peak_traffic_gbps": 13.022,
+  "average_traffic_gbps": 7.783,
+  "ixp_count": 31,
+  "ixps_with_peak_data": 18,
+  "ixps_with_average_data": 18,
+  "source": "PCH",
+  "method": "Sum of PCH-reported peak and average IPv4 traffic across domestic IXPs",
+  "status": "measured",
+  "ixps": [
+    {
+      "id": "103",
+      "name": "National Internet Exchange of India - Mumbai",
+      "city": "Mumbai",
+      "status": "Active",
+      "peak_raw": "8400000",
+      "average_raw": "2710000",
+      "peak_traffic_gbps": 0.008,
+      "average_traffic_gbps": 0.003,
+      "updated": "2022-02-28"
+    },
+    {
+      "id": "104",
+      "name": "National Internet Exchange of India - New Delhi",
+      "city": "New Delhi",
+      "status": "Active",
+      "peak_raw": "49400000",
+      "average_raw": "781000",
+      "peak_traffic_gbps": 0.049,
+      "average_traffic_gbps": 0.001,
+      "updated": "2022-02-28"
+    },
+    {
+      "id": "105",
+      "name": "National Internet Exchange of India - Chennai",
+      "city": "Chennai",
+      "status": "Active",
+      "peak_raw": "0",
+      "average_raw": "0",
+      "peak_traffic_gbps": 0.0,
+      "average_traffic_gbps": 0.0,
+      "updated": "2022-02-28"
+    },
+    {
+      "id": "106",
+      "name": "National Internet Exchange of India - Kolkata",
+      "city": "Kolkata",
+      "status": "Active",
+      "peak_raw": "0",
+      "average_raw": "0",
+      "peak_traffic_gbps": 0.0,
+      "average_traffic_gbps": 0.0,
+      "updated": "2022-02-28"
+    },
+    {
+      "id": "1020",
+      "name": "National Internet Exchange of India - Bangalore",
+      "city": "Bangalore",
+      "status": "Active",
+      "peak_raw": "0",
+      "average_raw": "0",
+      "peak_traffic_gbps": 0.0,
+      "average_traffic_gbps": 0.0,
+      "updated": "2021-12-30"
+    },
+    {
+      "id": "1021",
+      "name": "National Internet Exchange of India - Hyderabad",
+      "city": "Hyderabad",
+      "status": "Active",
+      "peak_raw": "0",
+      "average_raw": "0",
+      "peak_traffic_gbps": 0.0,
+      "average_traffic_gbps": 0.0,
+      "updated": "2022-02-28"
+    },
+    {
+      "id": "1022",
+      "name": "National Internet Exchange of India - Ahmedabad",
+      "city": "Ahmedabad",
+      "status": "Active",
+      "peak_raw": "0",
+      "average_raw": "0",
+      "peak_traffic_gbps": 0.0,
+      "average_traffic_gbps": 0.0,
+      "updated": "2022-02-28"
+    },
+    {
+      "id": "1842",
+      "name": "DE-CIX Mumbai",
+      "city": "Mumbai",
+      "status": "Active",
+      "peak_raw": "0",
+      "average_raw": "0",
+      "peak_traffic_gbps": 0.0,
+      "average_traffic_gbps": 0.0,
+      "updated": "2022-01-15"
+    },
+    {
+      "id": "1947",
+      "name": "Kolkata IX",
+      "city": "Kolkata",
+      "status": "Active",
+      "peak_raw": "4030000",
+      "average_raw": "2390000",
+      "peak_traffic_gbps": 0.004,
+      "average_traffic_gbps": 0.002,
+      "updated": "2019-05-03"
+    },
+    {
+      "id": "1948",
+      "name": "AMS-IX Mumbai",
+      "city": "Mumbai",
+      "status": "Active",
+      "peak_raw": "70474134",
+      "average_raw": "42892645",
+      "peak_traffic_gbps": 0.07,
+      "average_traffic_gbps": 0.043,
+      "updated": "2026-09-08"
+    },
+    {
+      "id": "1975",
+      "name": "Extreme IX New Delhi",
+      "city": "New Delhi",
+      "status": "Active",
+      "peak_raw": "3574251578",
+      "average_raw": "1825860979",
+      "peak_traffic_gbps": 3.574,
+      "average_traffic_gbps": 1.826,
+      "updated": "2026-09-08"
+    },
+    {
+      "id": "2004",
+      "name": "Extreme IX Mumbai",
+      "city": "Mumbai",
+      "status": "Active",
+      "peak_raw": "4265771074",
+      "average_raw": "2337121026",
+      "peak_traffic_gbps": 4.266,
+      "average_traffic_gbps": 2.337,
+      "updated": "2026-09-08"
+    },
+    {
+      "id": "2010",
+      "name": "Extreme IX Chennai",
+      "city": "Chennai",
+      "status": "Active",
+      "peak_raw": "1384462056",
+      "average_raw": "752172822",
+      "peak_traffic_gbps": 1.384,
+      "average_traffic_gbps": 0.752,
+      "updated": "2026-09-08"
+    },
+    {
+      "id": "2011",
+      "name": "Extreme IX Hyderabad",
+      "city": "Hyderabad",
+      "status": "Active",
+      "peak_raw": "196031186",
+      "average_raw": "86018586",
+      "peak_traffic_gbps": 0.196,
+      "average_traffic_gbps": 0.086,
+      "updated": "2026-09-08"
+    },
+    {
+      "id": "2037",
+      "name": "Amaravati Internet Exchange",
+      "city": "Amaravati",
+      "status": "Active",
+      "peak_raw": "8000000",
+      "average_raw": "6000000",
+      "peak_traffic_gbps": 0.008,
+      "average_traffic_gbps": 0.006,
+      "updated": "0000-00-00"
+    },
+    {
+      "id": "2045",
+      "name": "ANI Peering Exchange",
+      "city": "New Delhi",
+      "status": "Active",
+      "peak_raw": "0",
+      "average_raw": "0",
+      "peak_traffic_gbps": 0.0,
+      "average_traffic_gbps": 0.0,
+      "updated": "0000-00-00"
+    },
+    {
+      "id": "2046",
+      "name": "National Internet Exchange of India - Guwahati",
+      "city": "Guwahati",
+      "status": "Active",
+      "peak_raw": "0",
+      "average_raw": "0",
+      "peak_traffic_gbps": 0.0,
+      "average_traffic_gbps": 0.0,
+      "updated": "2022-05-28"
+    },
+    {
+      "id": "2052",
+      "name": "Extreme IX Kolkata",
+      "city": "Kolkata",
+      "status": "Active",
+      "peak_raw": "81122426",
+      "average_raw": "46254256",
+      "peak_traffic_gbps": 0.081,
+      "average_traffic_gbps": 0.046,
+      "updated": "2026-09-08"
+    },
+    {
+      "id": "2064",
+      "name": "REDIX Chennai",
+      "city": "Chennai",
+      "status": "Active",
+      "peak_raw": "0",
+      "average_raw": "0",
+      "peak_traffic_gbps": 0.0,
+      "average_traffic_gbps": 0.0,
+      "updated": "0000-00-00"
+    },
+    {
+      "id": "2128",
+      "name": "DE-CIX Chennai",
+      "city": "Chennai",
+      "status": "Active",
+      "peak_raw": "0",
+      "average_raw": "0",
+      "peak_traffic_gbps": 0.0,
+      "average_traffic_gbps": 0.0,
+      "updated": "0000-00-00"
+    },
+    {
+      "id": "2129",
+      "name": "DE-CIX Delhi",
+      "city": "New Delhi",
+      "status": "Active",
+      "peak_raw": "0",
+      "average_raw": "0",
+      "peak_traffic_gbps": 0.0,
+      "average_traffic_gbps": 0.0,
+      "updated": "0000-00-00"
+    },
+    {
+      "id": "2130",
+      "name": "DE-CIX Kolkata",
+      "city": "Kolkata",
+      "status": "Active",
+      "peak_raw": "0",
+      "average_raw": "0",
+      "peak_traffic_gbps": 0.0,
+      "average_traffic_gbps": 0.0,
+      "updated": "0000-00-00"
+    },
+    {
+      "id": "2347",
+      "name": "Equinix Internet Exchange Mumbai",
+      "city": "Mumbai",
+      "status": "Active",
+      "peak_raw": "3127154",
+      "average_raw": "2972858",
+      "peak_traffic_gbps": 0.003,
+      "average_traffic_gbps": 0.003,
+      "updated": "2026-09-08"
+    },
+    {
+      "id": "2355",
+      "name": "Extreme IX Bangalore",
+      "city": "Bangalore",
+      "status": "Active",
+      "peak_raw": "497055296",
+      "average_raw": "291635698",
+      "peak_traffic_gbps": 0.497,
+      "average_traffic_gbps": 0.292,
+      "updated": "2026-09-08"
+    },
+    {
+      "id": "2434",
+      "name": "Extreme IX Pune",
+      "city": "Pune",
+      "status": "Active",
+      "peak_raw": "119085692",
+      "average_raw": "67713233",
+      "peak_traffic_gbps": 0.119,
+      "average_traffic_gbps": 0.068,
+      "updated": "2026-09-08"
+    },
+    {
+      "id": "2449",
+      "name": "DE-CIX Hyderabad",
+      "city": "Hyderabad",
+      "status": "Active",
+      "peak_raw": "0",
+      "average_raw": "0",
+      "peak_traffic_gbps": 0.0,
+      "average_traffic_gbps": 0.0,
+      "updated": "0000-00-00"
+    },
+    {
+      "id": "2503",
+      "name": "AMS-IX Hyderabad",
+      "city": "Hyderabad",
+      "status": "Active",
+      "peak_raw": "5996244",
+      "average_raw": "3316416",
+      "peak_traffic_gbps": 0.006,
+      "average_traffic_gbps": 0.003,
+      "updated": "2026-09-08"
+    },
+    {
+      "id": "2504",
+      "name": "AMS-IX Kolkata",
+      "city": "Kolkata",
+      "status": "Active",
+      "peak_raw": "95506774",
+      "average_raw": "41692262",
+      "peak_traffic_gbps": 0.096,
+      "average_traffic_gbps": 0.042,
+      "updated": "2026-09-08"
+    },
+    {
+      "id": "2550",
+      "name": "MX-IX Mumbai",
+      "city": "Mumbai",
+      "status": "Active",
+      "peak_raw": "896000000",
+      "average_raw": "750000000",
+      "peak_traffic_gbps": 0.896,
+      "average_traffic_gbps": 0.75,
+      "updated": "0000-00-00"
+    },
+    {
+      "id": "2551",
+      "name": "MX-IX Delhi",
+      "city": "New Delhi",
+      "status": "Active",
+      "peak_raw": "863700000",
+      "average_raw": "783900000",
+      "peak_traffic_gbps": 0.864,
+      "average_traffic_gbps": 0.784,
+      "updated": "0000-00-00"
+    },
+    {
+      "id": "2557",
+      "name": "MX-IX Chennai",
+      "city": "Chennai",
+      "status": "Active",
+      "peak_raw": "899600000",
+      "average_raw": "739300000",
+      "peak_traffic_gbps": 0.9,
+      "average_traffic_gbps": 0.739,
+      "updated": "0000-00-00"
+    }
+  ]
+}

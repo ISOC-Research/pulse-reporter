@@ -1,7 +1,7 @@
-import sys
-import os
 import argparse
 import io
+import os
+import sys
 
 # Force UTF-8 output so emoji/unicode characters don't crash on Windows
 # when redirecting output to a file (e.g. > output.txt)
@@ -19,6 +19,7 @@ request_for_ypi_dir = os.path.join(root_dir, 'request_for_YPI')
 sys.path.append(request_for_ypi_dir)
 
 from request_for_YPI.src.utils.formatting import format_neo4j_results
+
 # ==========================================================
 #  NEO4J CONNECTION CONFIGURATION
 # ==========================================================

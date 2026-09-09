@@ -1,6 +1,6 @@
 from dotenv import load_dotenv
-from src.request_IYP.interface import generate_response_with_IYP
 from langfuse import get_client
+from src.request_IYP.interface import generate_response_with_IYP
 
 if __name__ == "__main__":
     load_dotenv()
