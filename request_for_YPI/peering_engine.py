@@ -1,3 +1,4 @@
+import os
 import pathlib
 import pprint
 import sys
@@ -5,6 +6,7 @@ from collections import Counter
 from contextlib import redirect_stdout
 
 import requests
+from dotenv import load_dotenv
 
 # ============================================================
 # PROJECT PATH
@@ -15,6 +17,7 @@ _ROOT = pathlib.Path(__file__).resolve().parents[1]
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
+load_dotenv(_ROOT / ".env")
 
 # ============================================================
 # API CONFIGURATION
@@ -23,6 +26,30 @@ if str(_ROOT) not in sys.path:
 RIPESTAT_BASE_URL = "https://stat.ripe.net/data"
 PEERINGDB_BASE_URL = "https://www.peeringdb.com/api"
 PCH_IXP_URL = "https://www.pch.net/api/ixp/directory/Active"
+
+# PeeringDB API key — authenticated requests get higher rate limits.
+# Set PEERINGDB_API_KEY in your .env file.
+_PEERINGDB_API_KEY = os.getenv("PEERINGDB_API_KEY", "").strip() or None
+
+RIPE_ATLAS_BASE_URL = "https://atlas.ripe.net/api/v2"
+_RIPE_ATLAS_API_KEY = os.getenv("RIPE_ATLAS_API_KEY", "").strip() or None
+
+
+def _query_ripe_atlas(endpoint: str, params: dict | None = None) -> dict | list:
+    """
+    Generic RIPE Atlas API v2 request.
+    """
+    url = f"{RIPE_ATLAS_BASE_URL}/{endpoint}"
+    headers = {}
+    if _RIPE_ATLAS_API_KEY:
+        headers["Authorization"] = f"Key {_RIPE_ATLAS_API_KEY}"
+
+    try:
+        response = requests.get(url, params=params or {}, headers=headers, timeout=20)
+        response.raise_for_status()
+        return response.json()
+    except requests.RequestException as e:
+        raise RuntimeError(f"RIPE Atlas request failed: {str(e)}")
 
 
 # ============================================================
@@ -69,34 +96,63 @@ def _query_ripestat(endpoint: str, params: dict) -> dict:
 
 def _query_peeringdb(
     endpoint: str,
-    params: dict | None = None
+    params: dict | None = None,
+    max_retries: int = 4,
+    base_backoff: float = 5.0
 ) -> list:
     """
-    Generic PeeringDB API request.
+    Generic PeeringDB API request with exponential backoff on 429 rate limits.
+
+    Retries up to max_retries times, doubling the wait each time:
+      Attempt 1: wait 5s
+      Attempt 2: wait 10s
+      Attempt 3: wait 20s
+      Attempt 4: wait 40s
 
     Returns:
         List of records from the PeeringDB 'data' field.
     """
+    import time
 
     url = f"{PEERINGDB_BASE_URL}/{endpoint}"
 
-    try:
-        response = requests.get(
-            url,
-            params=params or {},
-            timeout=30
-        )
+    headers = {}
+    if _PEERINGDB_API_KEY:
+        headers["Authorization"] = f"Api-Key {_PEERINGDB_API_KEY}"
 
-        response.raise_for_status()
+    for attempt in range(max_retries + 1):
+        try:
+            response = requests.get(
+                url,
+                params=params or {},
+                headers=headers,
+                timeout=30
+            )
 
-        result = response.json()
+            if response.status_code == 429:
+                if attempt < max_retries:
+                    wait = base_backoff * (2 ** attempt)
+                    time.sleep(wait)
+                    continue
+                else:
+                    response.raise_for_status()
 
-        return result.get("data", [])
+            response.raise_for_status()
+            result = response.json()
+            return result.get("data", [])
 
-    except requests.RequestException as e:
-        raise RuntimeError(
-            f"PeeringDB request failed: {str(e)}"
-        )
+        except requests.RequestException as e:
+            if attempt < max_retries and "429" in str(e):
+                wait = base_backoff * (2 ** attempt)
+                time.sleep(wait)
+                continue
+            raise RuntimeError(
+                f"PeeringDB request failed: {str(e)}"
+            )
+
+    raise RuntimeError(
+        f"PeeringDB request failed after {max_retries} retries: rate limited"
+    )
 
 
 # ============================================================
@@ -1038,6 +1094,532 @@ def get_ixp_traffic(country_code: str) -> dict:
 
 
 # ============================================================
+# SHARED: Fetch domestic IXP netixlan records (one API call)
+# ============================================================
+
+def _fetch_ixp_netixlans(country_code: str) -> tuple[list, list]:
+    """
+    Fetch all domestic IXP IDs and their netixlan membership records
+    from PeeringDB using paginated requests.
+
+    Uses limit=250 per page instead of limit=0 (unbounded) to avoid
+    triggering PeeringDB's heavy-query rate limiter on the netixlan endpoint.
+
+    Returns (ix_ids, netixlans) — both are lists.
+    Raises on any PeeringDB failure so callers can catch and gracefully error.
+    """
+    ixps = _query_peeringdb("ix", {"country": country_code, "limit": 200})
+    ix_ids = [ixp.get("id") for ixp in ixps if ixp.get("id")]
+
+    if not ix_ids:
+        raise ValueError(f"No IXPs found in PeeringDB for {country_code}")
+
+    netixlans = []
+    page_size = 250
+    ix_chunk_size = 20
+
+    for i in range(0, len(ix_ids), ix_chunk_size):
+        chunk = ix_ids[i:i + ix_chunk_size]
+        ix_ids_str = ",".join(map(str, chunk))
+
+        # Paginate through results for this chunk of IXP IDs
+        skip = 0
+        while True:
+            page = _query_peeringdb(
+                "netixlan",
+                {
+                    "ix_id__in": ix_ids_str,
+                    "limit": page_size,
+                    "skip": skip
+                }
+            )
+            netixlans.extend(page)
+            if len(page) < page_size:
+                # Fewer results than page size → we've reached the last page
+                break
+            skip += page_size
+
+    return ix_ids, netixlans
+
+
+
+# ============================================================
+# 3. PEERING PARTICIPATION & REACHABILITY
+# ============================================================
+
+def get_peering_participation(
+    country_code: str,
+    active_asns: list,
+    total_active_asns: int,
+    netixlans: list | None = None
+) -> dict:
+    country_code = country_code.upper()
+    try:
+        if not total_active_asns or not active_asns:
+            raise ValueError("No active ASNs provided.")
+
+        # Use pre-fetched data if supplied, otherwise fetch now
+        if netixlans is None:
+            _, netixlans = _fetch_ixp_netixlans(country_code)
+
+        active_asns_set = set(int(a) for a in active_asns)
+        unique_peering_asns = set()
+        rs_peering_asns = set()
+
+        for record in netixlans:
+            asn = record.get("asn")
+            if asn in active_asns_set:
+                unique_peering_asns.add(asn)
+                if record.get("is_rs_peer"):
+                    rs_peering_asns.add(asn)
+
+        penetration_rate = round(
+            (len(unique_peering_asns) / total_active_asns) * 100, 2
+        )
+
+        rs_utilization = 0.0
+        if unique_peering_asns:
+            rs_utilization = round(
+                (len(rs_peering_asns) / len(unique_peering_asns)) * 100, 2
+            )
+
+        return {
+            "metric": "peering_participation",
+            "country": country_code,
+            "ixp_penetration_rate": penetration_rate,
+            "peering_asn_count": len(unique_peering_asns),
+            "total_active_asns": total_active_asns,
+            "route_server_utilization": rs_utilization,
+            "rs_peering_asn_count": len(rs_peering_asns),
+            "source": "PeeringDB",
+            "method": "Intersection of routed ASNs and domestic IXP members",
+            "status": "measured",
+            "error": None
+        }
+
+    except Exception as e:
+        return {
+            "metric": "peering_participation",
+            "country": country_code,
+            "ixp_penetration_rate": None,
+            "peering_asn_count": None,
+            "total_active_asns": total_active_asns,
+            "route_server_utilization": None,
+            "rs_peering_asn_count": None,
+            "source": "PeeringDB",
+            "method": "Intersection of routed ASNs and domestic IXP members",
+            "status": "error",
+            "error": str(e)
+        }
+
+
+# ============================================================
+# 4. CONTENT LOCALIZATION & CDNs
+# ============================================================
+
+TIER_1_CDNS = {
+    15169: "Google",
+    32934: "Meta",
+    2906:  "Netflix",
+    13335: "Cloudflare",
+    20940: "Akamai",
+    16509: "Amazon",
+    8075:  "Microsoft",
+    22822: "Limelight / Edgio",
+    54113: "Fastly"
+}
+
+
+def get_cdn_presence(
+    country_code: str,
+    netixlans: list | None = None
+) -> dict:
+    country_code = country_code.upper()
+    try:
+        # Use pre-fetched data if supplied, otherwise fetch now
+        if netixlans is None:
+            _, netixlans = _fetch_ixp_netixlans(country_code)
+
+        present_cdns = {}
+        for record in netixlans:
+            asn = record.get("asn")
+            if asn in TIER_1_CDNS:
+                present_cdns[TIER_1_CDNS[asn]] = asn
+
+        cdn_list = [{"name": name, "asn": asn} for name, asn in present_cdns.items()]
+        cdn_list.sort(key=lambda x: x["name"])
+
+        return {
+            "metric": "global_cdn_presence",
+            "country": country_code,
+            "cdns_present": cdn_list,
+            "cdn_count": len(cdn_list),
+            "source": "PeeringDB",
+            "method": "Tier-1 CDN ASNs found at domestic IXPs",
+            "status": "measured",
+            "error": None
+        }
+
+    except Exception as e:
+        return {
+            "metric": "global_cdn_presence",
+            "country": country_code,
+            "cdns_present": [],
+            "cdn_count": 0,
+            "source": "PeeringDB",
+            "method": "Tier-1 CDN ASNs found at domestic IXPs",
+            "status": "error",
+            "error": str(e)
+        }
+
+
+def get_on_net_caching_nodes(country_code: str) -> dict:
+    """
+    Proxy for detecting deep on-net/embedded caches (like Google GGC, Netflix OCA).
+    Checks PeeringDB for local facilities (datacenters) in the country where
+    Tier-1 CDN ASNs are physically present, which strongly implies private
+    interconnection or edge nodes deep inside local ISP infrastructure.
+    """
+    country_code = country_code.upper()
+    try:
+        # Get all facilities in the target country
+        facs = []
+        skip_fac = 0
+        while True:
+            page = _query_peeringdb("fac", {"country": country_code, "limit": 250, "skip": skip_fac})
+            facs.extend(page)
+            if len(page) < 250:
+                break
+            skip_fac += 250
+            
+        fac_ids = [str(f.get("id")) for f in facs if f.get("id")]
+
+        if not fac_ids:
+            raise ValueError(f"No facilities found for {country_code}")
+
+        # Fetch netfac (networks in facilities) for these facilities
+        # Paginated to avoid 429
+        netfacs = []
+        page_size = 250
+        fac_chunk_size = 50
+
+        for i in range(0, len(fac_ids), fac_chunk_size):
+            chunk = fac_ids[i:i + fac_chunk_size]
+            fac_ids_str = ",".join(chunk)
+
+            skip = 0
+            while True:
+                page = _query_peeringdb(
+                    "netfac",
+                    {"fac_id__in": fac_ids_str, "limit": page_size, "skip": skip}
+                )
+                netfacs.extend(page)
+                if len(page) < page_size:
+                    break
+                skip += page_size
+
+        # Find which major CDNs are present in these local facilities
+        present_cdns = {}
+        for nf in netfacs:
+            asn = nf.get("local_asn")
+            if asn in TIER_1_CDNS:
+                present_cdns[TIER_1_CDNS[asn]] = asn
+
+        cdn_list = [{"name": name, "asn": asn} for name, asn in present_cdns.items()]
+        cdn_list.sort(key=lambda x: x["name"])
+
+        return {
+            "metric": "on_net_caching_nodes",
+            "country": country_code,
+            "cdns_in_local_facilities": cdn_list,
+            "cdn_count": len(cdn_list),
+            "source": "PeeringDB",
+            "method": "Tier-1 CDN ASNs found inside local physical facilities (proxy for PNI/Embedded Caches)",
+            "status": "measured",
+            "error": None
+        }
+
+    except Exception as e:
+        return {
+            "metric": "on_net_caching_nodes",
+            "country": country_code,
+            "cdns_in_local_facilities": [],
+            "cdn_count": 0,
+            "source": "PeeringDB",
+            "method": "Tier-1 CDN ASNs found inside local physical facilities (proxy for PNI/Embedded Caches)",
+            "status": "error",
+            "error": str(e)
+        }
+
+
+def get_localization_ratio(country_code: str) -> dict:
+    """
+    Fetches the 'peering_efficiency' metric from the ISOC Pulse API.
+    This serves as the proxy for Localization Ratio, estimating the degree to which
+    traffic is kept domestic rather than exiting to international transit.
+    """
+    import os
+    country_code = country_code.upper()
+    try:
+        api_key = os.getenv("INTERNET_SOCIETY_API_KEY")
+        if not api_key:
+            raise ValueError("INTERNET_SOCIETY_API_KEY not found in environment")
+
+        headers = {"Authorization": f"Bearer {api_key}"}
+        url = "https://pulse-api.internetsociety.org/resilience?year=2024"
+
+        # Note: We use the requests module directly here to hit the Pulse API,
+        # which is different from our _query_peeringdb/_query_ripestat helpers.
+        import requests
+        response = requests.get(url, headers=headers, timeout=15)
+        response.raise_for_status()
+        data = response.json().get("data", [])
+
+        # Find the country record
+        country_data = next((d for d in data if d.get("country") == country_code), None)
+        if not country_data:
+            raise ValueError(f"No Pulse API data found for {country_code}")
+
+        # Drill down to market_readiness -> traffic_localization -> peering_efficiency
+        val = None
+        try:
+            indicators = country_data["pillars"]["market_readiness"]["dimensions"]["traffic_localization"]["indicators"]
+            if "peering_efficiency" in indicators:
+                val = indicators["peering_efficiency"]["value"]
+        except KeyError:
+            pass
+
+        if val is None:
+            raise ValueError("peering_efficiency indicator missing in Pulse data")
+
+        return {
+            "metric": "localization_ratio",
+            "country": country_code,
+            "peering_efficiency_score": val,
+            "localization_percentage": round(val * 100, 2),
+            "source": "ISOC Pulse API",
+            "method": "ISOC Pulse Peering Efficiency indicator",
+            "status": "measured",
+            "error": None
+        }
+
+    except Exception as e:
+        return {
+            "metric": "localization_ratio",
+            "country": country_code,
+            "peering_efficiency_score": None,
+            "localization_percentage": None,
+            "source": "ISOC Pulse API",
+            "method": "ISOC Pulse Peering Efficiency indicator",
+            "status": "error",
+            "error": str(e)
+        }
+
+
+# ============================================================
+# 5. ROUTING & PERFORMANCE (RIPE Atlas)
+# ============================================================
+
+def get_domestic_tromboning(country_code: str) -> dict:
+    """
+    Measures domestic tromboning (boomerang routing) by analyzing traceroute paths
+    between active RIPE Atlas anchors within the country.
+    Detects if any intermediate hop leaves the national borders.
+    """
+    import time
+    country_code = country_code.upper()
+    try:
+        # 1. Query active anchors in the country
+        anchors_res = _query_ripe_atlas("anchors", {"country": country_code})
+        anchors = [a for a in anchors_res.get("results", []) if not a.get("is_disabled")]
+
+        if len(anchors) < 2:
+            return {
+                "metric": "domestic_tromboning",
+                "country": country_code,
+                "tromboning_percentage": None,
+                "domestic_paths_analyzed": 0,
+                "tromboned_paths_count": 0,
+                "source": "RIPE Atlas",
+                "method": "Anchoring Mesh Traceroute Path Analysis",
+                "status": "not_applicable",
+                "error": f"Fewer than 2 active anchors found in {country_code}"
+            }
+
+        # 2. Pick target anchor (e.g. Bangalore or Mumbai) and find its mesh traceroute measurement
+        target_anchor = anchors[0]
+        fqdn = target_anchor.get("fqdn")
+
+        m_search = _query_ripe_atlas(
+            "measurements",
+            {"type": "traceroute", "target": fqdn, "status": 2}
+        )
+        m_results = m_search.get("results", [])
+
+        if not m_results:
+            raise ValueError(f"No active mesh traceroute found for anchor {fqdn}")
+
+        mid = m_results[0]["id"]
+
+        # 3. Source probes: other active anchor probes in the country
+        src_probe_ids = [str(a["probe"]) for a in anchors[1:6] if a.get("probe")]
+        if not src_probe_ids:
+            # Fallback to general country probes
+            probes_res = _query_ripe_atlas("probes", {"country_code": country_code, "status": 1, "page_size": 5})
+            src_probe_ids = [str(p["id"]) for p in probes_res.get("results", [])[:5]]
+
+        src_str = ",".join(src_probe_ids)
+        start_time = int(time.time()) - 3600 * 6  # last 6 hours
+
+        res_data = _query_ripe_atlas(f"measurements/{mid}/results", {"probe_ids": src_str, "start": start_time})
+        if not isinstance(res_data, list):
+            res_data = []
+
+        total_paths = 0
+        tromboned_count = 0
+        ip_geo_cache = {}
+
+        for p_trace in res_data[:15]:
+            hops = p_trace.get("result", [])
+            path_ips = []
+            for h in hops:
+                for r_entry in h.get("result", []):
+                    ip = r_entry.get("from")
+                    if ip and not ip.startswith(("10.", "192.168.", "172.16.", "172.17.", "172.18.", "172.19.", "172.2", "172.3")):
+                        path_ips.append(ip)
+                        break
+
+            if len(path_ips) >= 3:
+                total_paths += 1
+                is_tromboned = False
+
+                for hop_ip in path_ips[1:-1]:
+                    if hop_ip not in ip_geo_cache:
+                        try:
+                            geo_r = _query_ripestat("geoloc", {"resource": hop_ip})
+                            locs = geo_r.get("located_resources", [])
+                            if locs and locs[0].get("locations"):
+                                ip_geo_cache[hop_ip] = locs[0]["locations"][0].get("country")
+                            else:
+                                ip_geo_cache[hop_ip] = country_code
+                        except Exception:
+                            ip_geo_cache[hop_ip] = country_code
+
+                    hop_country = ip_geo_cache.get(hop_ip)
+                    if hop_country and hop_country != country_code:
+                        is_tromboned = True
+                        break
+
+                if is_tromboned:
+                    tromboned_count += 1
+
+        tromboning_pct = round((tromboned_count / total_paths * 100), 2) if total_paths > 0 else 0.0
+
+        return {
+            "metric": "domestic_tromboning",
+            "country": country_code,
+            "tromboning_percentage": tromboning_pct,
+            "domestic_paths_analyzed": total_paths,
+            "tromboned_paths_count": tromboned_count,
+            "target_anchor": fqdn,
+            "source": "RIPE Atlas",
+            "method": "Anchoring Mesh Traceroute Path Geolocation Analysis",
+            "status": "measured",
+            "error": None
+        }
+
+    except Exception as e:
+        return {
+            "metric": "domestic_tromboning",
+            "country": country_code,
+            "tromboning_percentage": None,
+            "domestic_paths_analyzed": 0,
+            "tromboned_paths_count": 0,
+            "target_anchor": None,
+            "source": "RIPE Atlas",
+            "method": "Anchoring Mesh Traceroute Path Geolocation Analysis",
+            "status": "error",
+            "error": str(e)
+        }
+
+
+def get_eyeball_latency(country_code: str) -> dict:
+    """
+    Measures median eyeball latency to edge content / anycast DNS infrastructure
+    using live RIPE Atlas eyeball probe measurements.
+    """
+    import statistics
+    import time
+    country_code = country_code.upper()
+    try:
+        probes_res = _query_ripe_atlas("probes", {"country_code": country_code, "status": 1, "page_size": 20})
+        probe_ids = [str(p["id"]) for p in probes_res.get("results", [])]
+
+        if not probe_ids:
+            raise ValueError(f"No active RIPE Atlas probes found in {country_code}")
+
+        probe_sample = probe_ids[:15]
+        probe_str = ",".join(probe_sample)
+        start_time = int(time.time()) - 3600  # last 1 hour
+
+        # Measurement 1004 (f.root-servers.net - heavily anycasted across domestic IXPs)
+        res_data = _query_ripe_atlas(
+            "measurements/1004/results",
+            {"probe_ids": probe_str, "start": start_time}
+        )
+        if not isinstance(res_data, list):
+            res_data = []
+
+        rtts = [r["avg"] for r in res_data if isinstance(r, dict) and r.get("avg") is not None]
+
+        if not rtts:
+            # Fallback to measurement 1001 (k-root)
+            res_data = _query_ripe_atlas(
+                "measurements/1001/results",
+                {"probe_ids": probe_str, "start": start_time}
+            )
+            rtts = [r["avg"] for r in res_data if isinstance(r, dict) and r.get("avg") is not None]
+
+        if not rtts:
+            raise ValueError("No recent latency measurements available from probes")
+
+        median_lat = round(statistics.median(rtts), 2)
+        min_lat = round(min(rtts), 2)
+        max_lat = round(max(rtts), 2)
+
+        return {
+            "metric": "edge_content_latency",
+            "country": country_code,
+            "median_latency_ms": median_lat,
+            "min_latency_ms": min_lat,
+            "max_latency_ms": max_lat,
+            "probes_sampled": len(probe_sample),
+            "measurement_count": len(rtts),
+            "target": "Edge Anycast DNS / Content Infrastructure",
+            "source": "RIPE Atlas",
+            "method": "Median RTT from in-country eyeball probes to edge anycast nodes",
+            "status": "measured",
+            "error": None
+        }
+
+    except Exception as e:
+        return {
+            "metric": "edge_content_latency",
+            "country": country_code,
+            "median_latency_ms": None,
+            "min_latency_ms": None,
+            "max_latency_ms": None,
+            "probes_sampled": 0,
+            "measurement_count": 0,
+            "target": "Edge Anycast DNS / Content Infrastructure",
+            "source": "RIPE Atlas",
+            "method": "Median RTT from in-country eyeball probes to edge anycast nodes",
+            "status": "error",
+            "error": str(e)
+        }
+
+
+# ============================================================
 # RIPEstat PEERING DATA
 # ============================================================
 
@@ -1152,6 +1734,7 @@ def build_peering_report_data(
     # RIPEstat
     # --------------------------------------------------------
 
+    print("  [1/9] Fetching RIPEstat inventory and routing data...")
     ripestat = build_ripestat_peering_data(
         country_code,
         representative_asn
@@ -1161,6 +1744,7 @@ def build_peering_report_data(
     # PeeringDB — IXP Activity
     # --------------------------------------------------------
 
+    print("  [2/9] Fetching IXP activity from PCH...")
     ixp_activity = get_ixp_activity(
         country_code
     )
@@ -1169,6 +1753,7 @@ def build_peering_report_data(
     # PeeringDB — Geographic Distribution
     # --------------------------------------------------------
 
+    print("  [3/9] Analyzing IXP geographic distribution...")
     ixp_geography = get_ixp_geographic_distribution(
         country_code
     )
@@ -1177,9 +1762,96 @@ def build_peering_report_data(
     # PCH — Aggregated IXP Traffic
     # --------------------------------------------------------
 
+    print("  [4/9] Aggregating IXP traffic...")
     ixp_traffic = get_ixp_traffic(
         country_code
     )
+
+    # --------------------------------------------------------
+    # PeeringDB — Shared IXP fetch (sections 3 + 4)
+    # Single fetch used by peering participation AND CDN presence
+    # to avoid redundant API calls and reduce rate-limit risk.
+    # --------------------------------------------------------
+
+    active_asns = ripestat.get("country_asn_inventory", {}).get("asns", [])
+    total_active_asns = ripestat.get("asn_landscape", {}).get("routed_asns", 0)
+
+    try:
+        _, shared_netixlans = _fetch_ixp_netixlans(country_code)
+    except Exception as e:
+        shared_netixlans = None
+        _shared_fetch_error = str(e)
+    else:
+        _shared_fetch_error = None
+
+    # --------------------------------------------------------
+    # PeeringDB — Peering Participation (3.1, 3.2)
+    # --------------------------------------------------------
+
+    print("  [5/9] Calculating peering participation...")
+    peering_participation = get_peering_participation(
+        country_code,
+        active_asns=active_asns,
+        total_active_asns=total_active_asns,
+        netixlans=shared_netixlans
+    )
+
+    # Propagate shared fetch error if function received no data
+    if shared_netixlans is None and peering_participation.get("status") != "error":
+        peering_participation["status"] = "error"
+        peering_participation["error"] = _shared_fetch_error
+
+    # --------------------------------------------------------
+    # PeeringDB — Global CDN Presence (4.1)
+    # --------------------------------------------------------
+
+    print("  [6/9] Checking global CDN presence at IXPs...")
+    cdn_presence = get_cdn_presence(
+        country_code,
+        netixlans=shared_netixlans
+    )
+
+    # Propagate shared fetch error if function received no data
+    if shared_netixlans is None and cdn_presence.get("status") != "error":
+        cdn_presence["status"] = "error"
+        cdn_presence["error"] = _shared_fetch_error
+
+    # --------------------------------------------------------
+    # PeeringDB — On-Net Caching Nodes (4.2)
+    # --------------------------------------------------------
+
+    print("  [7/9] Discovering on-net caching nodes...")
+    on_net_caching = get_on_net_caching_nodes(
+        country_code
+    )
+
+    # --------------------------------------------------------
+    # ISOC Pulse — Localization Ratio (4.3)
+    # --------------------------------------------------------
+
+    print("  [8/9] Retrieving localization ratio from ISOC Pulse...")
+    localization_ratio = get_localization_ratio(
+        country_code
+    )
+
+    # --------------------------------------------------------
+    # RIPE Atlas — Domestic Tromboning (5.1)
+    # --------------------------------------------------------
+
+    print("  [9/9] Performing RIPE Atlas traceroutes for domestic tromboning & latency...")
+    domestic_tromboning = get_domestic_tromboning(
+        country_code
+    )
+
+    # --------------------------------------------------------
+    # RIPE Atlas — Eyeball Latency to Edge Content (5.2)
+    # --------------------------------------------------------
+
+    edge_latency = get_eyeball_latency(
+        country_code
+    )
+
+    print("  [OK] All peering metrics gathered successfully!")
 
     # --------------------------------------------------------
     # Aggregate errors
@@ -1195,7 +1867,13 @@ def build_peering_report_data(
     for metric_result in [
         ixp_activity,
         ixp_geography,
-        ixp_traffic
+        ixp_traffic,
+        peering_participation,
+        cdn_presence,
+        on_net_caching,
+        localization_ratio,
+        domestic_tromboning,
+        edge_latency
     ]:
 
         if metric_result.get("status") == "error":
@@ -1215,7 +1893,9 @@ def build_peering_report_data(
 
     sources = [
         "RIPEstat",
-        "PeeringDB"
+        "PeeringDB",
+        "ISOC Pulse API",
+        "RIPE Atlas"
     ]
 
     if ixp_traffic.get("source"):
@@ -1227,6 +1907,7 @@ def build_peering_report_data(
     sources = list(
         dict.fromkeys(sources)
     )
+
 
     # --------------------------------------------------------
     # FINAL STRUCTURE
@@ -1276,32 +1957,7 @@ def build_peering_report_data(
         # 3. PEERING PARTICIPATION & REACHABILITY
         # ====================================================
 
-        "peering_participation": {
-
-            "ixp_penetration": {
-
-                "metric": "ixp_penetration_rate",
-
-                "status": "not_implemented",
-
-                "source": "IYP / PeeringDB",
-
-                "method": (
-                    "Active/routed country ASNs that are "
-                    "members of at least one domestic IXP "
-                    "divided by total active/routed ASNs."
-                )
-            },
-
-            "route_server_utilization": {
-
-                "metric": "route_server_utilization",
-
-                "status": "not_implemented",
-
-                "source": "PeeringDB"
-            }
-        },
+        "peering_participation": peering_participation,
 
         # ====================================================
         # 4. CONTENT LOCALIZATION & CDNs
@@ -1309,32 +1965,11 @@ def build_peering_report_data(
 
         "content_localization": {
 
-            "global_cdn_presence": {
+            "global_cdn_presence": cdn_presence,
 
-                "metric": "global_cdn_presence",
+            "onnet_caching_nodes": on_net_caching,
 
-                "status": "not_implemented",
-
-                "source": "PeeringDB"
-            },
-
-            "onnet_caching_nodes": {
-
-                "metric": "onnet_caching_nodes",
-
-                "status": "not_implemented",
-
-                "source": "PeeringDB / CDN sources"
-            },
-
-            "localization_ratio": {
-
-                "metric": "localization_ratio",
-
-                "status": "not_implemented",
-
-                "source": "Cloudflare Radar"
-            }
+            "localization_ratio": localization_ratio
         },
 
         # ====================================================
@@ -1343,23 +1978,9 @@ def build_peering_report_data(
 
         "routing_performance": {
 
-            "domestic_tromboning": {
+            "domestic_tromboning": domestic_tromboning,
 
-                "metric": "domestic_tromboning",
-
-                "status": "not_implemented",
-
-                "source": "RIPE Atlas"
-            },
-
-            "edge_content_latency": {
-
-                "metric": "edge_content_latency",
-
-                "status": "not_implemented",
-
-                "source": "RIPE Atlas"
-            },
+            "edge_content_latency": edge_latency,
 
             "ripestat_asn_analysis": {
 

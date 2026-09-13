@@ -4,7 +4,7 @@
 
 *Team: Rahul Rajesh, Ron Prajoth, Aditya Menon | Mentor: Amreesh Phokeer (ISOC)*
 
-**Generated:** 2026-06-26 08:21
+**Generated:** 2026-09-10 14:07
 **Data Sources:** Internet Yellow Pages (IYP) Neo4j + Cloudflare Radar
 **Framework:** ISOC Internet Resilience Index — Security Pillar (DNS Security)
 
@@ -12,15 +12,15 @@
 
 ## Executive Summary
 
-The .in ccTLD is currently served by 4 authoritative nameservers.
+The .in ccTLD is currently served by 0 authoritative nameservers.
 
-4 of 4 authoritative nameservers support IPv6 connectivity, resulting in an IPv6 enablement rate of 100.0%.
+0 of 0 authoritative nameservers support IPv6 connectivity, resulting in an IPv6 enablement rate of 0%.
 
-The authoritative DNS infrastructure is distributed across 3 distinct Autonomous Systems, improving resilience against network and routing failures.
+The authoritative DNS infrastructure is distributed across 0 distinct Autonomous Systems, improving resilience against network and routing failures.
 
-According to Cloudflare Radar, 8.21% of DNS queries were successfully validated using DNSSEC.
+According to Cloudflare Radar, 10.12% of DNS queries were successfully validated using DNSSEC.
 
-DNSSEC validation rates vary across major networks, ranging from 0.90% to 13.95%.
+DNSSEC validation rates vary across major networks, ranging from 5.03% to 17.21%.
 
 ---
 
@@ -30,43 +30,32 @@ DNSSEC validation rates vary across major networks, ranging from 0.90% to 13.95%
 
 **ccTLD:** .in
 
-**Authoritative Nameservers:** 4
+**Authoritative Nameservers:** 0
 
 | Nameserver |
 | ---------- |
-| | ns01.trs-dns.com |
-| ns01.trs-dns.net |
-| ns10.trs-dns.info |
-| ns10.trs-dns.org |
 
 ---
 
 ### 1.2.1 IPv6 Enablement
 
-**Nameservers Assessed:** 4
+**Nameservers Assessed:** 0
 
-**IPv6 Enabled:** 4
+**IPv6 Enabled:** 0
 
-**IPv6 Enablement Rate:** 100.0%
+**IPv6 Enablement Rate:** 0%
 
 | Nameserver | IPv6 Enabled |
 | ---------- | ------------ |
-| | ns01.trs-dns.com | Yes |
-| ns01.trs-dns.net | Yes |
-| ns10.trs-dns.info | Yes |
-| ns10.trs-dns.org | Yes |
 
 ---
 
 ### 1.2.2 ASN Diversity
 
-**Distinct Hosting ASNs:** 3
+**Distinct Hosting ASNs:** 0
 
 | ASN |
 | --- |
-| | AS42 |
-| AS63363 |
-| AS393818 |
 
 ---
 
@@ -76,30 +65,109 @@ DNSSEC validation rates vary across major networks, ranging from 0.90% to 13.95%
 
 ---
 
+## Section 2 — DNS Ecosystem Characteristics
+
+### 2.1 Top-Level Domain Distribution
+
+| TLD | Query Share |
+|------|------------:|
+| .com | 67.46% |
+| .net | 12.06% |
+| .arpa | 4.45% |
+| .org | 2.64% |
+| .in | 2.24% |
+
+> **Finding:** The majority of observed DNS traffic is directed toward
+> globally registered domains. The national .in ccTLD
+> accounts for 2.24% of
+> DNS queries, while .com accounts for
+> 67.46% of observed traffic.
+
+---
+
+### 2.2 DNS Query Type Distribution
+
+| Query Type | Query Share |
+|------------|------------:|
+| A | 64.18% |
+| AAAA | 19.86% |
+| TXT | 5.82% |
+| HTTPS | 5.18% |
+| PTR | 3.98% |
+
+---
+
+### 2.3 DNS Resolution Health
+
+| Response Code | Query Share |
+|---------------|------------:|
+| NOERROR | 85.63% |
+| NXDOMAIN | 12.19% |
+| SERVFAIL | 2.10% |
+| NOTIMP | 0.07% |
+| REFUSED | 0.02% |
+| FORMERR | 0.00% |
+
+> **Finding:** Approximately
+> 85.63% of DNS
+> queries completed successfully (NOERROR), while SERVFAIL responses
+> remained below 2%, indicating stable DNS resolution across the
+> observed ecosystem.
+
+---
+
+### 2.4 DNS Cache Behaviour
+
+| Cache Result | Percentage |
+|--------------|-----------:|
+| Positive | 77.43% |
+| Negative | 22.57% |
+
+> **Finding:** Nearly {cache_hit_data['positive']:.2f}% of DNS queries
+> were answered using positive cache entries. Negative cache responses
+> accounted for 22.57% of observed queries.
+
+---
+
+### 2.5 IP Version Distribution
+
+| IP Version | Query Share |
+|------------|-----------:|
+| IPv4 | 89.68% |
+| IPv6 | 10.32% |
+
+> **Finding:** Although all authoritative nameservers for the
+> .in ccTLD support IPv6 (Section 1), only
+> 10.32% of observed DNS traffic uses IPv6,
+> indicating that infrastructure readiness exceeds current end-user
+> adoption.
+
+---
+
 ## Section 3 — DNSSEC Validation Scorecard
 
 ### 3.1 DNSSEC Validation Status
 
 | Status | Percentage |
 | ------ | ---------: |
-| | Secure | 8.21% |
-| Insecure | 73.68% |
-| Invalid | 0.03% |
-| Other | 18.08% |
+| Secure | 10.12% |
+| Insecure | 77.99% |
+| Invalid | 0.07% |
+| Other | 11.83% |
 
 ### 3.2 DNSSEC Validation by ASN
 
 | ASN | Network | Query Share | Secure Validation |
 |------|---------|------------:|------------------:|
-| AS9829 | National Internet Backbone | 14.17% | 3.96% |
-| AS55836 | Jio Platforms Ltd | 12.92% | 7.97% |
-| AS63949 | Akamai Connected Cloud | 5.20% | 0.90% |
-| AS24560 | Bharti Airtel Ltd., Telemedia Services | 5.03% | 13.95% |
-| AS45609 | Bharti Airtel Ltd. AS for GPRS Service | 3.91% | 6.69% |
-| AS9498 | Bharti Airtel Limited | 3.53% | 10.38% |
-| AS134674 | 134674 | 3.12% | 6.36% |
-| AS14061 | Digital Ocean | 2.19% | 10.78% |
-| AS150008 | Pioneer Online www.pioneeronline.com | 2.13% | 5.09% |
+| AS55836 | Jio Platforms Ltd | 15.19% | 9.25% |
+| AS9829 | National Internet Backbone | 14.12% | 5.03% |
+| AS24560 | Bharti Airtel Ltd., Telemedia Services | 6.53% | 17.21% |
+| AS45609 | Bharti Airtel Ltd. AS for GPRS Service | 5.14% | 6.48% |
+| AS9498 | Bharti Airtel Limited | 3.31% | 9.80% |
+| AS14061 | Digital Ocean | 2.43% | 13.23% |
+| AS134674 | 134674 | 2.32% | 5.70% |
+| AS150008 | Pioneer Online www.pioneeronline.com | 2.00% | 5.50% |
+| AS16509 | Amazon Web Services | 1.82% | 10.55% |
 
 ---
 
@@ -109,15 +177,15 @@ DNSSEC validation rates vary across major networks, ranging from 0.90% to 13.95%
 
 * Network: Bharti Airtel Ltd., Telemedia Services
 * ASN: AS24560
-* Secure Validation: 13.95%
-* DNS Query Share: 5.03%
+* Secure Validation: 17.21%
+* DNS Query Share: 6.53%
 
 **Lowest DNSSEC Validation**
 
-* Network: Akamai Connected Cloud
-* ASN: AS63949
-* Secure Validation: 0.90%
-* DNS Query Share: 5.20%
+* Network: National Internet Backbone
+* ASN: AS9829
+* Secure Validation: 5.03%
+* DNS Query Share: 14.12%
 
 > Significant variation between networks suggests that DNSSEC adoption
 > and validation practices are not uniform across the country's DNS

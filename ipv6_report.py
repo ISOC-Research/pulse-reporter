@@ -17,6 +17,10 @@ import os
 import pathlib
 import argparse
 from datetime import datetime
+import logging
+
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8')
 
 # ── Ensure root is on sys.path ───────────────────────────────────────────────
 ROOT = pathlib.Path(__file__).resolve().parent
@@ -597,6 +601,11 @@ def main():
         dest="no_export",
         help="Skip saving the Markdown policy brief"
     )
+    parser.add_argument(
+        "--html",
+        action="store_true",
+        help="Automatically generate HTML via LLM"
+    )
     args = parser.parse_args()
 
     country = args.country.upper()
@@ -756,6 +765,12 @@ def main():
             print(_hr("─"))
             print(f"  [EXPORT] Policy brief saved →  {filepath}")
             print(_hr("─"))
+            
+            if args.html:
+                print("  [HTML] 🤖 Calling generate_llm_brief.py to create HTML...")
+                cmd = f'"{sys.executable}" generate_llm_brief.py ipv6 {country}'
+                os.system(cmd)
+                
         except Exception as e:
             print(f"\n  [EXPORT ERROR] Report generation failed: {e}")
             print(f"  Terminal output above is still valid.")

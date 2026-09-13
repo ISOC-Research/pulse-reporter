@@ -15,11 +15,11 @@ request_for_YPI/test_new.py
 request_for_YPI/test_radar.py
 
 report_*.md
-# Local IPv6 test reports
+# PDF Files & generated PDF reports
+*.pdf
+rapport/
+ISOC_Documents/
+
+# Local test reports
 reports/
 
-# Local DNSSEC test reports
-reports/
-
-# Local IPv6 test reports
-reports/

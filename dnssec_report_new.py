@@ -3,6 +3,9 @@ from pathlib import Path
 import sys
 import pathlib
 
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8')
+
 ROOT = pathlib.Path(__file__).resolve().parent
 
 if str(ROOT) not in sys.path:
@@ -44,6 +47,12 @@ def generate_markdown_report(
     worst_asn = min(asn_validation_data, key=lambda x: x["secure"])
 
     lines = []
+    ns_count = ns_data.get('total_nameservers', ns_data.get('nameserver_count', 0))
+    
+    # Safely get best/worst ASN
+    best_asn = max(asn_validation_data, key=lambda x: x.get("secure", 0)) if asn_validation_data else {"secure": 0}
+    worst_asn = min(asn_validation_data, key=lambda x: x.get("secure", 0)) if asn_validation_data else {"secure": 0}
+
     lines.extend(
         [
             f"# DNSSEC Policy Brief — {country}",
@@ -60,15 +69,15 @@ def generate_markdown_report(
             "",
             "## Executive Summary",
             "",
-            f"The .{country.lower()} ccTLD is currently served by {ns_data['nameserver_count']} authoritative nameservers.",
+            f"The .{country.lower()} ccTLD is currently served by {ns_count} authoritative nameservers.",
             "",
-            f"{ipv6_data['ipv6_enabled_nameservers']} of {ipv6_data['total_nameservers']} authoritative nameservers support IPv6 connectivity, resulting in an IPv6 enablement rate of {ipv6_data['ipv6_percentage']}%.",
+            f"{ipv6_data.get('ipv6_enabled_nameservers', 0)} of {ipv6_data.get('total_nameservers', 0)} authoritative nameservers support IPv6 connectivity, resulting in an IPv6 enablement rate of {ipv6_data.get('ipv6_percentage', 0)}%.",
             "",
-            f"The authoritative DNS infrastructure is distributed across {asn_data['distinct_asns']} distinct Autonomous Systems, improving resilience against network and routing failures.",
+            f"The authoritative DNS infrastructure is distributed across {asn_data.get('distinct_asns', 0)} distinct Autonomous Systems, improving resilience against network and routing failures.",
             "",
-            f"According to Cloudflare Radar, {validation_data['secure']:.2f}% of DNS queries were successfully validated using DNSSEC.",
+            f"According to Cloudflare Radar, {validation_data.get('secure', 0):.2f}% of DNS queries were successfully validated using DNSSEC.",
             "",
-            f"DNSSEC validation rates vary across major networks, ranging from {worst_asn['secure']:.2f}% to {best_asn['secure']:.2f}%.",
+            f"DNSSEC validation rates vary across major networks, ranging from {worst_asn.get('secure', 0):.2f}% to {best_asn.get('secure', 0):.2f}%.",
             "",
             "---",
             "",
@@ -78,15 +87,15 @@ def generate_markdown_report(
             "",
             f"**ccTLD:** .{country.lower()}",
             "",
-            f"**Authoritative Nameservers:** {ns_data['nameserver_count']}",
+            f"**Authoritative Nameservers:** {ns_count}",
             "",
             "| Nameserver |",
             "| ---------- |",
         ]
     )
 
-    for ns in ipv6_data["nameservers"]:
-        lines.append(f"| {ns['nameserver']} |")
+    for ns in ipv6_data.get("nameservers", []):
+        lines.append(f"| {ns.get('nameserver', 'N/A')} |")
 
     lines.extend(
         [
@@ -95,20 +104,20 @@ def generate_markdown_report(
             "",
             "### 1.2.1 IPv6 Enablement",
             "",
-            f"**Nameservers Assessed:** {ipv6_data['total_nameservers']}",
+            f"**Nameservers Assessed:** {ipv6_data.get('total_nameservers', 0)}",
             "",
-            f"**IPv6 Enabled:** {ipv6_data['ipv6_enabled_nameservers']}",
+            f"**IPv6 Enabled:** {ipv6_data.get('ipv6_enabled_nameservers', 0)}",
             "",
-            f"**IPv6 Enablement Rate:** {ipv6_data['ipv6_percentage']}%",
+            f"**IPv6 Enablement Rate:** {ipv6_data.get('ipv6_percentage', 0)}%",
             "",
             "| Nameserver | IPv6 Enabled |",
             "| ---------- | ------------ |",
         ]
     )
 
-    for ns in ipv6_data["nameservers"]:
-        status = "Yes" if ns["ipv6_enabled"] else "No"
-        lines.append(f"| {ns['nameserver']} | {status} |")
+    for ns in ipv6_data.get("nameservers", []):
+        status = "Yes" if ns.get("ipv6_enabled") else "No"
+        lines.append(f"| {ns.get('nameserver', 'N/A')} | {status} |")
 
     lines.extend(
         [
@@ -117,14 +126,14 @@ def generate_markdown_report(
             "",
             "### 1.2.2 ASN Diversity",
             "",
-            f"**Distinct Hosting ASNs:** {asn_data['distinct_asns']}",
+            f"**Distinct Hosting ASNs:** {asn_data.get('distinct_asns', 0)}",
             "",
             "| ASN |",
             "| --- |",
         ]
     )
 
-    for asn in asn_data["asns"]:
+    for asn in asn_data.get("asns", []):
         lines.append(f"| AS{asn} |")
 
     lines.extend(
@@ -294,31 +303,39 @@ def generate_markdown_report(
     return "\n".join(lines) + "\n"
 
 
-def main():
-    if len(sys.argv) < 2:
-        print("Usage: python dnssec_report.py IN")
-        sys.exit(1)
+import argparse
+import os
 
-    country = sys.argv[1].upper()
+def main():
+    parser = argparse.ArgumentParser(description="Generate a DNSSEC Report for a given country")
+    parser.add_argument("country", type=str, help="Country Code (e.g. FR, IN)")
+    parser.add_argument("--no-export", action="store_true", help="Do not save the markdown report")
+    parser.add_argument("--html", action="store_true", help="Automatically generate HTML via LLM")
+    
+    args = parser.parse_args()
+    country = args.country.upper()
 
     print(f"Generating DNSSEC report for .{country.lower()} ...")
 
+    print("  [1/10] Fetching ccTLD nameserver count...")
     ns_data = get_ccTLD_nameserver_count(country)
+    print("  [2/10] Fetching ccTLD IPv6 enablement...")
     ipv6_data = get_ccTLD_ipv6_enablement(country)
+    print("  [3/10] Fetching ccTLD ASN diversity...")
     asn_data = get_ccTLD_asn_diversity(country)
-
+    print("  [4/10] Fetching DNSSEC validation status from Cloudflare Radar...")
     validation_data = get_dnssec_validation_status(country)
-
+    print("  [5/10] Fetching Top ASN DNSSEC validation rates...")
     asn_validation_data = get_top_asn_dnssec_validation(country)
-
+    print("  [6/10] Fetching TLD distribution...")
     tld_data = get_tld_distribution(country)
-
+    print("  [7/10] Fetching DNS query type distribution...")
     query_type_data = get_query_type_distribution(country)
-
+    print("  [8/10] Fetching DNS response code distribution...")
     response_code_data = get_response_code_distribution(country)
-
+    print("  [9/10] Fetching DNS cache hit distribution...")
     cache_hit_data = get_cache_hit_distribution(country)
-
+    print("  [10/10] Fetching DNS IP version distribution...")
     ip_version_data = get_ip_version_distribution(country)
 
     report_text = generate_markdown_report(
@@ -334,20 +351,23 @@ def main():
         cache_hit_data,
         ip_version_data,
     )
-
-    reports_dir = Path("reports")
-    reports_dir.mkdir(exist_ok=True)
-
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M")
-
-    output_file = reports_dir / f"DNSSEC_{country}_{timestamp}.md"
-
-    with open(output_file, "w", encoding="utf-8") as f:
-        f.write(report_text)
-
-    print("\n✅ Report generated successfully")
-    print(f"📄 {output_file.resolve()}")
-
+    
+    if not args.no_export:
+        reports_dir = Path("reports")
+        reports_dir.mkdir(exist_ok=True)
+        
+        output_file = reports_dir / f"DNSSEC_Report_{country}.md"
+    
+        with open(output_file, "w", encoding="utf-8") as f:
+            f.write(report_text)
+    
+        print("\n✅ Report generated successfully")
+        print(f"📄 {output_file.resolve()}")
+        
+        if args.html:
+            print("🤖 Calling generate_llm_brief.py to create HTML...")
+            cmd = f'"{sys.executable}" generate_llm_brief.py dnssec {country}'
+            os.system(cmd)
 
 if __name__ == "__main__":
     main()

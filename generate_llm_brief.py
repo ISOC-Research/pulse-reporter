@@ -519,17 +519,28 @@ xychart-beta
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Generate an LLM Policy Brief from an IPv6 Report.")
+    parser = argparse.ArgumentParser(description="Generate an LLM Policy Brief from a Report.")
+    parser.add_argument("topic", type=str, choices=["ipv6", "dnssec", "peering"], help="The topic to generate (ipv6, dnssec, peering)")
     parser.add_argument("country", type=str, help="Country code (e.g., FR, IN)")
     args = parser.parse_args()
 
     country = args.country.upper()
-    report_path = os.path.join("reports", f"IPv6_Report_{country}.md")
-    output_path = os.path.join("reports", f"IPv6_Policy_Brief_{country}.html")
+    topic = args.topic.lower()
+    
+    # Capitalize properly for filenames
+    if topic == "ipv6":
+        topic_title = "IPv6"
+    elif topic == "dnssec":
+        topic_title = "DNSSEC"
+    elif topic == "peering":
+        topic_title = "Peering"
+        
+    report_path = os.path.join("reports", f"{topic_title}_Report_{country}.md")
+    output_path = os.path.join("reports", f"{topic_title}_Policy_Brief_{country}.html")
 
     if not os.path.exists(report_path):
         print(f"❌ ERROR: Could not find report file at {report_path}")
-        print(f"   Please run `python ipv6_report.py {country}` first to generate the data.")
+        print(f"   Please run `python {topic}_report.py {country}` first to generate the data.")
         sys.exit(1)
 
     print(f"📄 Reading raw data from {report_path}...")
@@ -547,7 +558,7 @@ def main():
         )
 
         prompt = (
-            f"Here is the complete raw IPv6 data report for country code {country}. "
+            f"Here is the complete raw {topic_title} data report for country code {country}. "
             f"Generate the Executive Policy Brief as raw HTML following your system instructions.\n\n"
             f"{report_data}"
         )
@@ -622,7 +633,11 @@ def main():
 
         # Build final HTML
         from datetime import datetime
-        final_html = HTML_TEMPLATE.format(
+        html_template = HTML_TEMPLATE.replace("IPv6 Policy Brief", f"{topic_title} Policy Brief")
+        html_template = html_template.replace("IPv6 Readiness", f"{topic_title} Readiness")
+        html_template = html_template.replace("IPv6 Policy Engine", f"{topic_title} Policy Engine")
+        
+        final_html = html_template.format(
             country=country,
             date=datetime.now().strftime("%Y-%m-%d"),
             llm_content=llm_html
