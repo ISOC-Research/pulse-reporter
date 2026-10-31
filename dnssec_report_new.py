@@ -43,15 +43,13 @@ def generate_markdown_report(
 ):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
 
-    best_asn = max(asn_validation_data, key=lambda x: x["secure"])
-    worst_asn = min(asn_validation_data, key=lambda x: x["secure"])
-
     lines = []
     ns_count = ns_data.get('total_nameservers', ns_data.get('nameserver_count', 0))
     
     # Safely get best/worst ASN
-    best_asn = max(asn_validation_data, key=lambda x: x.get("secure", 0)) if asn_validation_data else {"secure": 0}
-    worst_asn = min(asn_validation_data, key=lambda x: x.get("secure", 0)) if asn_validation_data else {"secure": 0}
+    default_asn = {"asn": "N/A", "name": "N/A", "secure": 0.0, "query_share": 0.0}
+    best_asn = max(asn_validation_data, key=lambda x: x.get("secure", 0)) if asn_validation_data else default_asn
+    worst_asn = min(asn_validation_data, key=lambda x: x.get("secure", 0)) if asn_validation_data else default_asn
 
     lines.extend(
         [
@@ -164,7 +162,7 @@ def generate_markdown_report(
             "",
             "> **Finding:** The majority of observed DNS traffic is directed toward",
             f"> globally registered domains. The national .{country.lower()} ccTLD",
-            f"> accounts for {next(x['query_share'] for x in tld_data['tlds'] if x['tld'] == 'in'):.2f}% of",
+            f"> accounts for {next((x['query_share'] for x in tld_data['tlds'] if x['tld'].lower() == country.lower()), 0.0):.2f}% of",
             "> DNS queries, while .com accounts for",
             f"> {tld_data['tlds'][0]['query_share']:.2f}% of observed traffic.",
             "",
@@ -213,7 +211,7 @@ def generate_markdown_report(
             f"| Positive | {cache_hit_data['positive']:.2f}% |",
             f"| Negative | {cache_hit_data['negative']:.2f}% |",
             "",
-            "> **Finding:** Nearly {cache_hit_data['positive']:.2f}% of DNS queries",
+            f"> **Finding:** Nearly {cache_hit_data['positive']:.2f}% of DNS queries",
             "> were answered using positive cache entries. Negative cache responses",
             f"> accounted for {cache_hit_data['negative']:.2f}% of observed queries.",
             "",

@@ -1331,6 +1331,7 @@ def get_on_net_caching_nodes(country_code: str) -> dict:
         return {
             "metric": "on_net_caching_nodes",
             "country": country_code,
+            "facility_count": len(fac_ids),
             "cdns_in_local_facilities": cdn_list,
             "cdn_count": len(cdn_list),
             "source": "PeeringDB",
@@ -1343,6 +1344,7 @@ def get_on_net_caching_nodes(country_code: str) -> dict:
         return {
             "metric": "on_net_caching_nodes",
             "country": country_code,
+            "facility_count": 0,
             "cdns_in_local_facilities": [],
             "cdn_count": 0,
             "source": "PeeringDB",

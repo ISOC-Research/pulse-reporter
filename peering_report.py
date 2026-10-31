@@ -49,19 +49,19 @@ def generate_markdown_report(country, peering_data):
 
 ## Executive Summary
 
-The peering ecosystem for **{country}** relies on **{asn_landscape.get('routed_asns', 0)}** active autonomous systems connecting its domestic infrastructure. 
+The peering ecosystem for **{country}** relies on **{asn_landscape.get('routed_asns') or 0}** active autonomous systems connecting its domestic infrastructure. 
 A mature peering ecosystem ensures that domestic traffic remains local, utilizing domestic Internet Exchange Points (IXPs) and local caching rather than relying on expensive international transit routes.
 
-- **Active ASNs:** {asn_landscape.get('routed_asns', 0)}
-- **Peering Efficiency Score:** {loc_ratio.get('peering_efficiency_score', 0):.4f}
+- **Active ASNs:** {asn_landscape.get('routed_asns') or 0}
+- **Peering Efficiency Score:** {loc_ratio.get('peering_efficiency_score') or 0:.4f}
 
 ---
 
 ## Section 1 & 2 — Market Readiness & IXP Infrastructure
 
 ### IXP Ecosystem
-**Total Internet Exchange Points (IXPs):** {ixp_activity.get('total_ixps', 0)}
-**Total Peering Facilities:** {ixp_geo.get('facility_count', 0)}
+**Total Internet Exchange Points (IXPs):** {ixp_activity.get('total_ixps') or 0}
+**Total Peering Facilities:** {on_net.get('facility_count') or ixp_geo.get('facility_count') or sum((ixp.get('fac_count') or 0) for ixp in ixp_activity.get('ixps', []))}
 
 These facilities form the physical foundation for networks to exchange traffic without relying on international transit.
 
@@ -70,7 +70,7 @@ These facilities form the physical foundation for networks to exchange traffic w
 ## Section 3 — On-Net Caching
 
 ### CDNs Present in Domestic Facilities
-**Tier-1 CDNs Present:** {on_net.get('cdn_count', 0)}
+**Tier-1 CDNs Present:** {on_net.get('cdn_count') or 0}
 **Major CDNs Discovered:** {', '.join([c['name'] for c in on_net.get('cdns_in_local_facilities', [])]) if on_net.get('cdns_in_local_facilities') else 'None'}
 
 Having Tier-1 CDNs (like Google, Netflix, Akamai, Cloudflare) physically present in local data centers significantly reduces the need to fetch content internationally, boosting user experience and reducing transit costs.
@@ -80,26 +80,26 @@ Having Tier-1 CDNs (like Google, Netflix, Akamai, Cloudflare) physically present
 ## Section 4 — Traffic Localization
 
 ### Peering Efficiency / Localization Ratio
-**Localization Ratio:** {loc_ratio.get('localization_percentage', 0):.2f}%
+**Localization Ratio:** {loc_ratio.get('localization_percentage') or 0:.2f}%
 *(Sourced from ISOC Pulse)*
 
-A localization ratio of {loc_ratio.get('localization_percentage', 0):.2f}% indicates the proportion of traffic that remains domestic. Higher ratios demonstrate mature local content ecosystems and well-utilized IXP infrastructure.
+A localization ratio of {loc_ratio.get('localization_percentage') or 0:.2f}% indicates the proportion of traffic that remains domestic. Higher ratios demonstrate mature local content ecosystems and well-utilized IXP infrastructure.
 
 ---
 
 ## Section 5 — Routing Efficiency
 
 ### 5.1 Domestic Tromboning
-**Tromboning / Boomerang Routing:** {tromb.get('tromboning_percentage', 0):.1f}%
-**Traceroutes Analyzed:** {tromb.get('domestic_paths_analyzed', 0)}
+**Tromboning / Boomerang Routing:** {tromb.get('tromboning_percentage') or 0:.1f}%
+**Traceroutes Analyzed:** {tromb.get('domestic_paths_analyzed') or 0}
 
-{tromb.get('tromboning_percentage', 0):.1f}% of analyzed domestic-to-domestic traffic left the country's borders before returning. This "boomerang" routing adds latency and security risks, typically indicating a lack of domestic peering agreements among ISPs.
+{tromb.get('tromboning_percentage') or 0:.1f}% of analyzed domestic-to-domestic traffic left the country's borders before returning. This "boomerang" routing adds latency and security risks, typically indicating a lack of domestic peering agreements among ISPs.
 
 ### 5.2 Eyeball Latency to Edge Content
-**Median Edge Latency:** {latency.get('median_latency_ms', 0):.2f} ms
-**Probes Sampled:** {latency.get('probes_sampled', 0)}
+**Median Edge Latency:** {latency.get('median_latency_ms') or 0:.2f} ms
+**Probes Sampled:** {latency.get('probes_sampled') or 0}
 
-Median latency from eyeball networks to root anycast servers provides a proxy for user experience. A latency of {latency.get('median_latency_ms', 0):.2f} ms shows the typical delay users face when accessing core infrastructure.
+Median latency from eyeball networks to root anycast servers provides a proxy for user experience. A latency of {latency.get('median_latency_ms') or 0:.2f} ms shows the typical delay users face when accessing core infrastructure.
 """
     return report
 
