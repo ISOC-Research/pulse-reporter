@@ -123,7 +123,7 @@ DNSSEC validation rates vary across major networks, ranging from 5.03% to 17.21%
 | Positive | 77.43% |
 | Negative | 22.57% |
 
-> **Finding:** Nearly {cache_hit_data['positive']:.2f}% of DNS queries
+> **Finding:** Nearly 77.43% of DNS queries
 > were answered using positive cache entries. Negative cache responses
 > accounted for 22.57% of observed queries.
 

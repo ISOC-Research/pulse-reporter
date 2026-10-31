@@ -130,7 +130,7 @@ def get_rpki_coverage(country_code: str) -> dict:
 
     query = f"""
     MATCH (c:Country {{country_code: '{country_code}'}})
-          <-[:POPULATION]-(a:AS)
+          <-[:POPULATION]-(a:AS)-[:COUNTRY]->(c)
 
     MATCH (a)-[:ORIGINATE]->(b:BGPPrefix)
     WHERE b.prefix CONTAINS ':'
@@ -139,7 +139,7 @@ def get_rpki_coverage(country_code: str) -> dict:
 
     RETURN
         COUNT(DISTINCT b) AS total_ipv6_prefixes,
-        COUNT(DISTINCT r) AS rpki_covered_prefixes
+        COUNT(DISTINCT CASE WHEN r IS NOT NULL THEN b END) AS rpki_covered_prefixes
     """
 
     result = execute_cypher_test(query)
@@ -192,7 +192,7 @@ def get_isp_rpki_coverage(country_code: str) -> dict:
 
     query = f"""
     MATCH (c:Country {{country_code: '{country_code}'}})
-          <-[:POPULATION]-(a:AS)
+          <-[:POPULATION]-(a:AS)-[:COUNTRY]->(c)
 
     OPTIONAL MATCH (a)-[:NAME]->(n:Name)
 
@@ -205,7 +205,7 @@ def get_isp_rpki_coverage(country_code: str) -> dict:
         a,
         collect(DISTINCT n.name)[0] AS isp_name,
         COUNT(DISTINCT b) AS total_ipv6_prefixes,
-        COUNT(DISTINCT r) AS rpki_covered_prefixes
+        COUNT(DISTINCT CASE WHEN r IS NOT NULL THEN b END) AS rpki_covered_prefixes
 
     RETURN
         a.asn AS asn,

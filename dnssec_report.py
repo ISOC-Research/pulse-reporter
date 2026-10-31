@@ -42,8 +42,10 @@ def generate_markdown_report(
 ):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")  # noqa: DTZ005
 
-    best_asn = max(asn_validation_data, key=lambda x: x["secure"])
-    worst_asn = min(asn_validation_data, key=lambda x: x["secure"])
+    default_asn = {"asn": "N/A", "name": "N/A", "secure": 0.0, "query_share": 0.0}
+    best_asn = max(asn_validation_data, key=lambda x: x.get("secure", 0)) if asn_validation_data else default_asn
+    worst_asn = min(asn_validation_data, key=lambda x: x.get("secure", 0)) if asn_validation_data else default_asn
+    ns_count = ns_data.get('total_nameservers', ns_data.get('nameserver_count', 0))
 
     report = f"""# DNSSEC Policy Brief — {country}
 
@@ -58,16 +60,14 @@ def generate_markdown_report(
 
 ## Executive Summary
 
-The .{country.lower()} ccTLD is currently served by {ns_data['nameserver_count']} authoritative
-nameservers. {ipv6_data['ipv6_enabled_nameservers']} of {ipv6_data['total_nameservers']}
+The .{country.lower()} ccTLD is currently served by {ns_count} authoritative
+nameservers. {ipv6_data.get('ipv6_enabled_nameservers', 0)} of {ipv6_data.get('total_nameservers', 0)}
 authoritative nameservers support IPv6 connectivity, resulting in an IPv6 enablement
-rate of {ipv6_data['ipv6_percentage']}%. The authoritative DNS infrastructure is
-distributed across {asn_data['distinct_asns']} distinct Autonomous Systems, improving
+rate of {ipv6_data.get('ipv6_percentage', 0)}%. The authoritative DNS infrastructure is
+distributed across {asn_data.get('distinct_asns', 0)} distinct Autonomous Systems, improving
 resilience against network and routing failures.
 
-According to Cloudflare Radar, {validation_data['secure']:.2f}% of DNS queries were
-successfully validated using DNSSEC. DNSSEC validation rates vary across major
-networks, ranging from {worst_asn['secure']:.2f}% to {best_asn['secure']:.2f}%.
+According to Cloudflare Radar (1.1.1.1 public resolver traffic), {validation_data.get('secure', 0):.2f}% of observed DNS queries resolved to DNSSEC-signed domains and were validated (SECURE), while {validation_data.get('insecure', 0):.2f}% queried unsigned domains (INSECURE). Across major networks, DNSSEC-secured query share ranges from {worst_asn.get('secure', 0):.2f}% to {best_asn.get('secure', 0):.2f}%.
 
 ---
 
@@ -76,41 +76,41 @@ networks, ranging from {worst_asn['secure']:.2f}% to {best_asn['secure']:.2f}%.
 ### 1.2 Number of Authoritative Nameservers
 
 **ccTLD:** .{country.lower()}
-**Authoritative Nameservers:** {ns_data['nameserver_count']}
+**Authoritative Nameservers:** {ns_count}
 
 | Nameserver |
 | ---------- |
 """
-    for ns in ipv6_data["nameservers"]:
-        report += f"| {ns['nameserver']} |\n"
+    for ns in ipv6_data.get("nameservers", []):
+        report += f"| {ns.get('nameserver', 'N/A')} |\n"
 
     report += f"""
 ---
 
 ### 1.2.1 IPv6 Enablement
 
-**Nameservers Assessed:** {ipv6_data['total_nameservers']}
-**IPv6 Enabled:** {ipv6_data['ipv6_enabled_nameservers']}
-**IPv6 Enablement Rate:** {ipv6_data['ipv6_percentage']}%
+**Nameservers Assessed:** {ipv6_data.get('total_nameservers', 0)}
+**IPv6 Enabled:** {ipv6_data.get('ipv6_enabled_nameservers', 0)}
+**IPv6 Enablement Rate:** {ipv6_data.get('ipv6_percentage', 0)}%
 
 | Nameserver | IPv6 Enabled |
 | ---------- | ------------ |
 """
-    for ns in ipv6_data["nameservers"]:
-        status = "Yes" if ns["ipv6_enabled"] else "No"
-        report += f"| {ns['nameserver']} | {status} |\n"
+    for ns in ipv6_data.get("nameservers", []):
+        status = "Yes" if ns.get("ipv6_enabled") else "No"
+        report += f"| {ns.get('nameserver', 'N/A')} | {status} |\n"
 
     report += f"""
 ---
 
 ### 1.2.2 ASN Diversity
 
-**Distinct Hosting ASNs:** {asn_data['distinct_asns']}
+**Distinct Hosting ASNs:** {asn_data.get('distinct_asns', 0)}
 
 | ASN |
 | --- |
 """
-    for asn in asn_data["asns"]:
+    for asn in asn_data.get("asns", []):
         report += f"| AS{asn} |\n"
 
     report += """
