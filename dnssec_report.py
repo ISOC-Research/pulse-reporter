@@ -303,7 +303,7 @@ def main():
     )
 
     if not args.no_export:
-        reports_dir = Path("reports") / "dnssec" / "raw"
+        reports_dir = ROOT / "reports" / "dnssec" / "raw"
         reports_dir.mkdir(parents=True, exist_ok=True)
 
         output_file = reports_dir / f"DNSSEC_Report_{country}.md"

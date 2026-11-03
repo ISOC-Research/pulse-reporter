@@ -363,8 +363,9 @@ def prepare_html_content(llm_html):
         fig_no += 1
         cap = _html.escape(spec.get("caption") or spec.get("title") or "Chart")
         alt = _html.escape(spec.get("title") or "Chart")
+        spec_attr = _html.escape(div.get_text().strip(), quote=True)
         fig = BeautifulSoup(
-            f'<figure class="chart-container"><img alt="{alt}" src="data:image/png;base64,{b64}">'
+            f'<figure class="chart-container" data-chart-spec="{spec_attr}"><img alt="{alt}" src="data:image/png;base64,{b64}">'
             f'<figcaption><strong>Figure {fig_no}.</strong> {cap}</figcaption></figure>', "html.parser")
         div.replace_with(fig)
 
@@ -378,7 +379,7 @@ def prepare_html_content(llm_html):
         for tag, txt, hid in toc_items)
     intro = BeautifulSoup(
         '<div class="toc"><h2>Table of contents</h2><ol>' + toc_html + "</ol></div>"
-        '<div class="callout"><strong>How to interpret the numbers in this report?</strong><br>'
+        '<div class="callout"><strong>How to interpret the numbers in this report?</strong> <br>'
         + _html.escape(INTRO_NOTE) + "</div>", "html.parser")
     body = str(soup)
     return str(intro) + body

@@ -1,13 +1,14 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DNSSEC Policy Brief — SO</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-    <script>mermaid.initialize({startOnLoad: true, theme: 'default', themeVariables: { 'pie1': '#43a047', 'pie2': '#e53935', 'pie3': '#fb8c00', 'pie4': '#b71c1c', 'pie5': '#1e88e5', 'pie6': '#8e24aa', 'pie7': '#00acc1', 'pie8': '#f4511e', 'pie9': '#3949ab', 'pie10': '#7cb342', 'pie11': '#039be5', 'pie12': '#d81b60', 'xyChart': { 'backgroundColor': '#ffffff', 'titleColor': '#0d47a1', 'xAxisLabelColor': '#333333', 'yAxisLabelColor': '#333333', 'plotColorPalette': '#43a047, #e53935, #fb8c00, #1e88e5, #8e24aa' } } });</script>
-    <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DNSSEC Policy Brief — SO</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({startOnLoad: true, theme: 'default', themeVariables: { 'pie1': '#43a047', 'pie2': '#e53935', 'pie3': '#fb8c00', 'pie4': '#b71c1c', 'pie5': '#1e88e5', 'pie6': '#8e24aa', 'pie7': '#00acc1', 'pie8': '#f4511e', 'pie9': '#3949ab', 'pie10': '#7cb342', 'pie11': '#039be5', 'pie12': '#d81b60', 'xyChart': { 'backgroundColor': '#ffffff', 'titleColor': '#0d47a1', 'xAxisLabelColor': '#333333', 'yAxisLabelColor': '#333333', 'plotColorPalette': '#43a047, #e53935, #fb8c00, #1e88e5, #8e24aa' } } });</script>
+<style>
         :root {
             --primary: #0d47a1;
             --primary-light: #1565c0;
@@ -352,20 +353,18 @@
     </style>
 </head>
 <body>
-
 <!-- ═══ COVER PAGE ═══ -->
 <div class="cover">
-    <div class="cover-badge">Internet Society · Pulse Platform</div>
-    <div class="cover-country">SO</div>
-    <div class="cover-title">DNSSEC Readiness & Policy Brief</div>
-    <div class="cover-line"></div>
-    <div class="cover-meta">
-        Generated: 2026-09-18<br>
-        Data Sources: Internet Yellow Pages (IYP) Neo4j · Cloudflare Radar<br>
+<div class="cover-badge">Internet Society · Pulse Platform</div>
+<div class="cover-country">SO</div>
+<div class="cover-title">DNSSEC Readiness &amp; Policy Brief</div>
+<div class="cover-line"></div>
+<div class="cover-meta">
+        Generated: 2026-09-18<br/>
+        Data Sources: Internet Yellow Pages (IYP) Neo4j · Cloudflare Radar<br/>
         Framework: ISOC Internet Resilience Index — Security Pillar (DNS Security)
     </div>
 </div>
-
 <!-- ═══ REPORT BODY (LLM-generated) ═══ -->
 <div class="content">
 <h1>Executive Summary: The "Big Picture" Diagnosis</h1>
@@ -374,58 +373,50 @@
 <p>The national <strong>.so ccTLD exhibits robust infrastructure characteristics</strong>: its 2 authoritative nameservers are <strong>100% IPv6 enabled</strong> and distributed across <strong>2 distinct Autonomous Systems (ASNs)</strong>, ensuring a baseline level of resilience. DNS resolution is generally stable, with a <strong>98.06% success rate for queries</strong>.</p>
 <p>However, this stability is undermined by a significant security gap. Only a minuscule <strong>1.77% of DNS queries are successfully validated using DNSSEC</strong>, leaving the vast majority of internet traffic vulnerable to spoofing and tampering. This critical flaw is compounded by a stark disparity among major network operators, where DNSSEC validation rates range from a mere 1.13% to 9.83%, indicating a fragmented and insecure ecosystem. Furthermore, despite infrastructure readiness, <strong>IPv6 adoption at the user level remains at 0.00%</strong>, and the national .so ccTLD sees negligible usage (0.00% of queries), with an overwhelming reliance on foreign top-level domains like .com (78.23%).</p>
 <p><strong>The Paradox:</strong> Your nation possesses a modern and resilient core DNS infrastructure for its .so ccTLD, capable of supporting the highest standards of internet security and next-generation protocols. Yet, at the user and ISP level, security adoption (DNSSEC) is critically low, and forward-looking technologies (IPv6) are virtually unused. This creates a dangerous chasm between the potential for a secure, sovereign digital future and the current reality of widespread vulnerability and dependency.</p>
-
 <div class="stat-grid">
-  <div class="stat-card"><span class="number">2</span><span class="label">Authoritative Nameservers</span></div>
-  <div class="stat-card"><span class="number">100.0%</span><span class="label">IPv6 Enabled (ccTLD)</span></div>
-  <div class="stat-card"><span class="number">1.77%</span><span class="label">DNSSEC Secure Queries</span></div>
+<div class="stat-card"><span class="number">2</span><span class="label">Authoritative Nameservers</span></div>
+<div class="stat-card"><span class="number">100.0%</span><span class="label">IPv6 Enabled (ccTLD)</span></div>
+<div class="stat-card"><span class="number">1.77%</span><span class="label">DNSSEC Secure Queries</span></div>
 </div>
-
 <h1>SWOT Analysis: The Strategic Cheat Sheet</h1>
 <div class="swot-grid">
-  <div class="swot-card swot-strengths"><h3>💪 Strengths</h3><ul><li><strong>Modern .so ccTLD Infrastructure:</strong> 100% IPv6-enabled authoritative nameservers for the national domain.</li><li><strong>ASN Diversity:</strong> Core .so ccTLD infrastructure distributed across 2 distinct ASNs, enhancing resilience against single points of failure.</li><li><strong>Stable DNS Resolution:</strong> High query success rate (98.06% NOERROR) indicates a functional foundational DNS service.</li><li><strong>Caching Efficiency:</strong> High positive cache hit rate (81.00%) contributes to faster content access.</li></ul></div>
-  <div class="swot-card swot-weaknesses"><h3>⚠️ Weaknesses</h3><ul><li><strong>Critically Low DNSSEC Validation:</strong> Only 1.77% of DNS queries are cryptographically validated, leaving users highly vulnerable to DNS spoofing and other attacks.</li><li><strong>IPv6 Adoption Gap:</strong> Despite 100% IPv6 readiness at the ccTLD level, 0.00% of end-user DNS traffic uses IPv6, hindering future-proofing.</li><li><strong>ISP Security Disparity:</strong> Significant variation in DNSSEC validation rates among major ISPs, with the largest provider (Golis Telecom Somalia, 74.25% query share) having one of the lowest validation rates (1.13%).</li><li><strong>Low National Domain Usage:</strong> The .so ccTLD accounts for 0.00% of observed DNS queries, indicating a lack of national digital identity and potential over-reliance on foreign domains.</li><li><strong>Over-reliance on Global TLDs:</strong> 78.23% of traffic is directed to .com, increasing external dependency.</li></ul></div>
-  <div class="swot-card swot-opportunities"><h3>🚀 Opportunities</h3><ul><li><strong>Mandate DNSSEC Validation:</strong> Leverage regulatory authority to require all ISPs to enable DNSSEC validation, significantly enhancing national cybersecurity.</li><li><strong>Drive IPv6 Adoption:</strong> Incentivize or mandate ISPs to expand IPv6 deployment to end-users, future-proofing the internet ecosystem.</li><li><strong>Promote National Digital Identity:</strong> Encourage the use of .so domains for government, businesses, and citizens to foster local content and digital sovereignty.</li><li><strong>Build Local Expertise:</strong> Invest in training programs for DNS and cybersecurity professionals to manage and secure critical infrastructure.</li><li><strong>Leverage Regional Leadership:</strong> Position the nation as a leader in secure internet infrastructure by rapidly deploying DNSSEC and IPv6.</li></ul></div>
-  <div class="swot-card swot-threats"><h3>🛡️ Threats</h3><ul><li><strong>Massive Cyber Vulnerability:</strong> The extremely low DNSSEC validation rate makes the nation highly susceptible to large-scale DNS cache poisoning, spoofing, and man-in-the-middle attacks, with potentially severe economic and security consequences.</li><li><strong>Foreign Influence & Data Sovereignty Risks:</strong> High reliance on foreign TLDs and potentially insecure foreign DNS resolvers diminishes national control over its digital space.</li><li><strong>Economic Disruption:</strong> A successful DNS attack could cripple online services, financial transactions, and government operations.</li><li><strong>Erosion of Trust:</strong> Persistent security vulnerabilities can erode public and business trust in the national internet infrastructure.</li><li><strong>Lagging Digital Development:</strong> Failure to adopt IPv6 will make the nation's internet infrastructure increasingly obsolete and unable to support future innovations.</li></ul></div>
+<div class="swot-card swot-strengths"><h3>💪 Strengths</h3><ul><li><strong>Modern .so ccTLD Infrastructure:</strong> 100% IPv6-enabled authoritative nameservers for the national domain.</li><li><strong>ASN Diversity:</strong> Core .so ccTLD infrastructure distributed across 2 distinct ASNs, enhancing resilience against single points of failure.</li><li><strong>Stable DNS Resolution:</strong> High query success rate (98.06% NOERROR) indicates a functional foundational DNS service.</li><li><strong>Caching Efficiency:</strong> High positive cache hit rate (81.00%) contributes to faster content access.</li></ul></div>
+<div class="swot-card swot-weaknesses"><h3>⚠️ Weaknesses</h3><ul><li><strong>Critically Low DNSSEC Validation:</strong> Only 1.77% of DNS queries are cryptographically validated, leaving users highly vulnerable to DNS spoofing and other attacks.</li><li><strong>IPv6 Adoption Gap:</strong> Despite 100% IPv6 readiness at the ccTLD level, 0.00% of end-user DNS traffic uses IPv6, hindering future-proofing.</li><li><strong>ISP Security Disparity:</strong> Significant variation in DNSSEC validation rates among major ISPs, with the largest provider (Golis Telecom Somalia, 74.25% query share) having one of the lowest validation rates (1.13%).</li><li><strong>Low National Domain Usage:</strong> The .so ccTLD accounts for 0.00% of observed DNS queries, indicating a lack of national digital identity and potential over-reliance on foreign domains.</li><li><strong>Over-reliance on Global TLDs:</strong> 78.23% of traffic is directed to .com, increasing external dependency.</li></ul></div>
+<div class="swot-card swot-opportunities"><h3>🚀 Opportunities</h3><ul><li><strong>Mandate DNSSEC Validation:</strong> Leverage regulatory authority to require all ISPs to enable DNSSEC validation, significantly enhancing national cybersecurity.</li><li><strong>Drive IPv6 Adoption:</strong> Incentivize or mandate ISPs to expand IPv6 deployment to end-users, future-proofing the internet ecosystem.</li><li><strong>Promote National Digital Identity:</strong> Encourage the use of .so domains for government, businesses, and citizens to foster local content and digital sovereignty.</li><li><strong>Build Local Expertise:</strong> Invest in training programs for DNS and cybersecurity professionals to manage and secure critical infrastructure.</li><li><strong>Leverage Regional Leadership:</strong> Position the nation as a leader in secure internet infrastructure by rapidly deploying DNSSEC and IPv6.</li></ul></div>
+<div class="swot-card swot-threats"><h3>🛡️ Threats</h3><ul><li><strong>Massive Cyber Vulnerability:</strong> The extremely low DNSSEC validation rate makes the nation highly susceptible to large-scale DNS cache poisoning, spoofing, and man-in-the-middle attacks, with potentially severe economic and security consequences.</li><li><strong>Foreign Influence &amp; Data Sovereignty Risks:</strong> High reliance on foreign TLDs and potentially insecure foreign DNS resolvers diminishes national control over its digital space.</li><li><strong>Economic Disruption:</strong> A successful DNS attack could cripple online services, financial transactions, and government operations.</li><li><strong>Erosion of Trust:</strong> Persistent security vulnerabilities can erode public and business trust in the national internet infrastructure.</li><li><strong>Lagging Digital Development:</strong> Failure to adopt IPv6 will make the nation's internet infrastructure increasingly obsolete and unable to support future innovations.</li></ul></div>
 </div>
-
 <div class="callout callout-warning">
-  <strong>Urgent Warning:</strong> The current 1.77% DNSSEC validation rate represents a critical national security vulnerability. This makes your nation's internet users and services highly susceptible to DNS-based cyberattacks, which can lead to data theft, service outages, and widespread disinformation. Immediate action is required.
+<strong>Urgent Warning:</strong> The current 1.77% DNSSEC validation rate represents a critical national security vulnerability. This makes your nation's internet users and services highly susceptible to DNS-based cyberattacks, which can lead to data theft, service outages, and widespread disinformation. Immediate action is required.
 </div>
-
 <h1>Strategic Roadmap: The Policy Agenda</h1>
-
-<div class="phase"><span class="phase-badge">Phase 1 — Quick Wins</span><ol><li><strong>Immediate DNSSEC Validation Mandate:</strong> Issue a regulatory decree requiring all Internet Service Providers (ISPs) and network operators to enable DNSSEC validation on their recursive resolvers within 6-12 months. This is a crucial, low-cost security measure.</li><li><strong>Public Awareness Campaign:</strong> Launch a targeted campaign to educate government agencies, critical infrastructure providers, and the public on the importance of DNSSEC and online security best practices.</li><li><strong>Baseline Audit & Reporting:</strong> Mandate quarterly reporting from all major ISPs on their DNSSEC validation rates and progress towards compliance.</li></ol></div>
-<div class="phase"><span class="phase-badge medium">Phase 2 — Structural</span><ol><li><strong>IPv6 Acceleration Program:</strong> Develop and implement an incentive program for ISPs to aggressively deploy IPv6 to end-users, leveraging the nation's IPv6-ready core ccTLD infrastructure. Set clear deployment targets.</li><li><strong>National DNSSEC Deployment Plan:</strong> Develop a comprehensive plan for government ministries, state-owned enterprises, and critical national infrastructure to sign their domains with DNSSEC and enable validation internally.</li><li><strong>Local Content & .so Promotion:</strong> Initiate programs to encourage the hosting of local content within the country and promote the use of .so domains for businesses, government services, and individuals through simplified registration processes and competitive pricing.</li><li><strong>Capacity Building:</strong> Establish partnerships with academic institutions and industry to develop training programs for DNS operators, network engineers, and cybersecurity specialists focused on DNSSEC and IPv6.</li></ol></div>
-<div class="phase"><span class="phase-badge long">Phase 3 — Vision</span><ol><li><strong>National Cybersecurity Center for DNS:</strong> Establish a dedicated center focused on monitoring DNS threats, coordinating incident response for DNS-related attacks, and serving as a knowledge hub for DNSSEC and IPv6 expertise.</li><li><strong>Regional Collaboration:</strong> Seek and foster regional partnerships for DNSSEC deployment, threat intelligence sharing, and best practice exchange with neighboring countries and international organizations.</li><li><strong>Digital Sovereignty & Identity:</strong> Position the .so ccTLD as a secure, reliable, and integral part of the nation's digital identity, fostering trust and economic growth.</li><li><strong>Innovation Hub:</strong> Leverage a secure and advanced internet infrastructure (with widespread DNSSEC and IPv6) to attract technology investments and foster local digital innovation.</li></ol></div>
-
+<div class="phase"><span class="phase-badge">Phase 1 — Quick Wins</span><ol><li><strong>Immediate DNSSEC Validation Mandate:</strong> Issue a regulatory decree requiring all Internet Service Providers (ISPs) and network operators to enable DNSSEC validation on their recursive resolvers within 6-12 months. This is a crucial, low-cost security measure.</li><li><strong>Public Awareness Campaign:</strong> Launch a targeted campaign to educate government agencies, critical infrastructure providers, and the public on the importance of DNSSEC and online security best practices.</li><li><strong>Baseline Audit &amp; Reporting:</strong> Mandate quarterly reporting from all major ISPs on their DNSSEC validation rates and progress towards compliance.</li></ol></div>
+<div class="phase"><span class="phase-badge medium">Phase 2 — Structural</span><ol><li><strong>IPv6 Acceleration Program:</strong> Develop and implement an incentive program for ISPs to aggressively deploy IPv6 to end-users, leveraging the nation's IPv6-ready core ccTLD infrastructure. Set clear deployment targets.</li><li><strong>National DNSSEC Deployment Plan:</strong> Develop a comprehensive plan for government ministries, state-owned enterprises, and critical national infrastructure to sign their domains with DNSSEC and enable validation internally.</li><li><strong>Local Content &amp; .so Promotion:</strong> Initiate programs to encourage the hosting of local content within the country and promote the use of .so domains for businesses, government services, and individuals through simplified registration processes and competitive pricing.</li><li><strong>Capacity Building:</strong> Establish partnerships with academic institutions and industry to develop training programs for DNS operators, network engineers, and cybersecurity specialists focused on DNSSEC and IPv6.</li></ol></div>
+<div class="phase"><span class="phase-badge long">Phase 3 — Vision</span><ol><li><strong>National Cybersecurity Center for DNS:</strong> Establish a dedicated center focused on monitoring DNS threats, coordinating incident response for DNS-related attacks, and serving as a knowledge hub for DNSSEC and IPv6 expertise.</li><li><strong>Regional Collaboration:</strong> Seek and foster regional partnerships for DNSSEC deployment, threat intelligence sharing, and best practice exchange with neighboring countries and international organizations.</li><li><strong>Digital Sovereignty &amp; Identity:</strong> Position the .so ccTLD as a secure, reliable, and integral part of the nation's digital identity, fostering trust and economic growth.</li><li><strong>Innovation Hub:</strong> Leverage a secure and advanced internet infrastructure (with widespread DNSSEC and IPv6) to attract technology investments and foster local digital innovation.</li></ol></div>
 <h2>DNSSEC Validation Status</h2>
 <div class="chart-container">
-  <h3>DNSSEC Validation Status Across All Queries</h3>
-  <div class="mermaid">
+<h3>DNSSEC Validation Status Across All Queries</h3>
+<div class="mermaid">
 pie title DNSSEC Validation Status
     "Secure (1.77%)" : 1.77
     "Insecure (92.94%)" : 92.94
     "Other (5.29%)" : 5.29
   </div>
 </div>
-
 <h2>DNSSEC Validation by Top Networks</h2>
 <div class="chart-container">
-  <h3>DNSSEC Secure Validation (%) by Major Network Operators</h3>
-  <div class="mermaid">
+<h3>DNSSEC Secure Validation (%) by Major Network Operators</h3>
+<div class="mermaid">
 xychart-beta
     title "DNSSEC Secure Validation (%) by Major Network Operators"
     x-axis ["Golis Telecom", "Hormuud Telecom", "Somtel Somalia", "AS37425", "SpaceX"]
-    y-axis "Secure Validation (%)" 0 --> 100
+    y-axis "Secure Validation (%)" 0 --&gt; 100
     bar [1.13, 2.45, 1.88, 8.43, 9.83]
   </div>
 </div>
-
 <h2>DNS Query Share by Top Networks</h2>
 <div class="chart-container">
-  <h3>DNS Query Share Distribution by Top ASNs</h3>
-  <div class="mermaid">
+<h3>DNS Query Share Distribution by Top ASNs</h3>
+<div class="mermaid">
 pie title DNS Query Share by Top ASNs
     "Golis Telecom Somalia (AS328250) (74.25%)" : 74.25
     "Hormuud Telecom Somalia INC (AS37371) (8.16%)" : 8.16
@@ -435,21 +426,18 @@ pie title DNS Query Share by Top ASNs
     "Other ASNs (4.74%)" : 4.74
   </div>
 </div>
-
 <div class="verdict">
-  <h2>Final Verdict</h2>
-  <p>The nation stands at a critical juncture. While the fundamental infrastructure for the .so ccTLD is robust and forward-looking, the lack of widespread DNSSEC validation and IPv6 adoption at the consumer level creates a severe security and modernization deficit. Immediate, decisive policy action is essential to bridge this gap, transforming foundational strength into tangible national cybersecurity and digital resilience.</p>
-  <div class="verdict-scores">
-    <div class="verdict-item"><div class="score">Low</div><div class="score-label">DNSSEC Maturity</div></div>
-    <div class="verdict-item"><div class="score">Developing</div><div class="score-label">Infrastructure Resilience</div></div>
-  </div>
+<h2>Final Verdict</h2>
+<p>The nation stands at a critical juncture. While the fundamental infrastructure for the .so ccTLD is robust and forward-looking, the lack of widespread DNSSEC validation and IPv6 adoption at the consumer level creates a severe security and modernization deficit. Immediate, decisive policy action is essential to bridge this gap, transforming foundational strength into tangible national cybersecurity and digital resilience.</p>
+<div class="verdict-scores">
+<div class="verdict-item"><div class="score">Low</div><div class="score-label">DNSSEC Maturity</div></div>
+<div class="verdict-item"><div class="score">Developing</div><div class="score-label">Infrastructure Resilience</div></div>
 </div>
-
-    <div class="footer">
-        <p>Report generated by ISOC Pulse × IYP DNSSEC Policy Engine</p>
-        <p>Team: Rahul Rajesh, Ron Prajoth, Aditya Menon | Mentor: Amreesh Phokeer (ISOC)</p>
-    </div>
 </div>
-
+<div class="footer">
+<p>Report generated by ISOC Pulse × IYP DNSSEC Policy Engine</p>
+<p>Team: Rahul Rajesh, Ron Prajoth, Aditya Menon | Mentor: Amreesh Phokeer (ISOC)</p>
+</div>
+</div>
 </body>
 </html>

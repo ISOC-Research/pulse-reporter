@@ -1,13 +1,14 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Peering Policy Brief — SO</title>
-    <link href="https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-    <script>mermaid.initialize({startOnLoad: true, theme: 'default', themeVariables: { 'fontFamily': 'Hind, Arial, sans-serif', 'pie1': '#3A82E4', 'pie2': '#24366E', 'pie3': '#40B2A4', 'pie4': '#D25238', 'pie5': '#EECA4A', 'pie6': '#7E245C', 'pie7': '#7FA9E8', 'pie8': '#8C9BC4', 'pie9': '#5C6F8F', 'pie10': '#B3C7E6', 'pie11': '#26867A', 'pie12': '#A9402B', 'xyChart': { 'backgroundColor': '#ffffff', 'titleColor': '#24366E', 'xAxisLabelColor': '#0C1C2C', 'yAxisLabelColor': '#0C1C2C', 'plotColorPalette': '#3A82E4, #24366E, #40B2A4, #D25238' } } });</script>
-    <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Peering Policy Brief — SO</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({startOnLoad: true, theme: 'default', themeVariables: { 'fontFamily': 'Hind, Arial, sans-serif', 'pie1': '#3A82E4', 'pie2': '#24366E', 'pie3': '#40B2A4', 'pie4': '#D25238', 'pie5': '#EECA4A', 'pie6': '#7E245C', 'pie7': '#7FA9E8', 'pie8': '#8C9BC4', 'pie9': '#5C6F8F', 'pie10': '#B3C7E6', 'pie11': '#26867A', 'pie12': '#A9402B', 'xyChart': { 'backgroundColor': '#ffffff', 'titleColor': '#24366E', 'xAxisLabelColor': '#0C1C2C', 'yAxisLabelColor': '#0C1C2C', 'plotColorPalette': '#3A82E4, #24366E, #40B2A4, #D25238' } } });</script>
+<style>
 
 :root {
     --navy: #0C1C2C;
@@ -224,35 +225,33 @@ figure.chart-container figcaption {
     </style>
 </head>
 <body>
-
 <!-- ═══ COVER PAGE ═══ -->
 <div class="download-bar">
-    <a class="download-btn" href="../word/Peering_Report_SO.docx" download title="Download this report as a Word document">
-        <svg viewBox="0 0 24 24"><path d="M5 20h14v-2H5v2zM19 9h-4V3H9v6H5l7 7 7-7z"/></svg>
+<a class="download-btn" download="" href="../word/Peering_Report_SO.docx" title="Download this report as a Word document">
+<svg viewbox="0 0 24 24"><path d="M5 20h14v-2H5v2zM19 9h-4V3H9v6H5l7 7 7-7z"></path></svg>
         Download Word report
     </a>
 </div>
 <div class="cover">
-    <div class="cover-draft">DO NOT PUBLISH – INTERNAL DOCUMENT</div>
-    <div class="cover-date">November 2026</div>
-    <div class="cover-country">Internet Resilience in Somalia</div>
-    <div class="cover-title">Peering diagnostics report and action plan</div>
-    <div class="cover-meta">
-        Data Sources: PeeringDB · PCH · RIPEstat · ISOC Pulse<br>
-        Framework: ISOC Internet Resilience Index<br>
+<div class="cover-draft">DO NOT PUBLISH – INTERNAL DOCUMENT</div>
+<div class="cover-date">November 2026</div>
+<div class="cover-country">Internet Resilience in Somalia</div>
+<div class="cover-title">Peering diagnostics report and action plan</div>
+<div class="cover-meta">
+        Data Sources: PeeringDB · PCH · RIPEstat · ISOC Pulse<br/>
+        Framework: ISOC Internet Resilience Index<br/>
         ISOC Pulse
-        <br>
-        <a class="download-btn large" href="../word/Peering_Report_SO.docx" download>
-            <svg viewBox="0 0 24 24"><path d="M5 20h14v-2H5v2zM19 9h-4V3H9v6H5l7 7 7-7z"/></svg>
+        <br/>
+<a class="download-btn large" download="" href="../word/Peering_Report_SO.docx">
+<svg viewbox="0 0 24 24"><path d="M5 20h14v-2H5v2zM19 9h-4V3H9v6H5l7 7 7-7z"></path></svg>
             Download Word report (.docx)
         </a>
-    </div>
-    <div class="cover-brand">Internet<br>Society</div>
 </div>
-
+<div class="cover-brand">Internet<br/>Society</div>
+</div>
 <!-- ═══ REPORT BODY (LLM-generated) ═══ -->
 <div class="content">
-<div class="toc"><h2>Table of contents</h2><ol><li class=""><a href="#sec-0">Executive summary</a></li><li class="sub"><a href="#sec-1">Key numbers at a glance</a></li><li class=""><a href="#sec-2">1. Where Somalia stands</a></li><li class=""><a href="#sec-3">2. Where Somalia is improving</a></li><li class=""><a href="#sec-4">3. Where Somalia could improve</a></li><li class="sub"><a href="#sec-5">3.1 Interconnection and Localization</a></li><li class="sub"><a href="#sec-6">3.2 Latency and Content Delivery</a></li><li class=""><a href="#sec-7">4. A staged plan to improve resilience</a></li><li class="sub"><a href="#sec-8">4.1 Short term (0-12 months)</a></li><li class="sub"><a href="#sec-9">4.2 Medium term (1-3 years)</a></li><li class="sub"><a href="#sec-10">4.3 Long term (3-7 years)</a></li><li class=""><a href="#sec-11">5. Quick wins</a></li><li class=""><a href="#sec-12">6. Policy gaps and loopholes</a></li><li class="sub"><a href="#sec-13">6.1 Where policy is absent or unenforced</a></li><li class="sub"><a href="#sec-14">6.2 Loopholes to avoid creating</a></li><li class=""><a href="#sec-15">7. Measuring progress</a></li><li class="sub"><a href="#sec-16">Conclusion</a></li><li class=""><a href="#sec-17">Data sources and notes</a></li></ol></div><div class="callout"><strong>How to interpret the numbers in this report?</strong><br/>The values presented in this document are the Internet Resilience Index, normalized to 1-100. These values should be interpreted as a score rather than an absolute value. In some cases, the raw absolute values are presented to provide additional context.</div><h1 id="sec-0">Executive summary</h1><p>
+<div class="toc"><h2>Table of contents</h2><ol><li class=""><a href="#sec-0">Executive summary</a></li><li class="sub"><a href="#sec-1">Key numbers at a glance</a></li><li class=""><a href="#sec-2">1. Where Somalia stands</a></li><li class=""><a href="#sec-3">2. Where Somalia is improving</a></li><li class=""><a href="#sec-4">3. Where Somalia could improve</a></li><li class="sub"><a href="#sec-5">3.1 Interconnection and Localization</a></li><li class="sub"><a href="#sec-6">3.2 Latency and Content Delivery</a></li><li class=""><a href="#sec-7">4. A staged plan to improve resilience</a></li><li class="sub"><a href="#sec-8">4.1 Short term (0-12 months)</a></li><li class="sub"><a href="#sec-9">4.2 Medium term (1-3 years)</a></li><li class="sub"><a href="#sec-10">4.3 Long term (3-7 years)</a></li><li class=""><a href="#sec-11">5. Quick wins</a></li><li class=""><a href="#sec-12">6. Policy gaps and loopholes</a></li><li class="sub"><a href="#sec-13">6.1 Where policy is absent or unenforced</a></li><li class="sub"><a href="#sec-14">6.2 Loopholes to avoid creating</a></li><li class=""><a href="#sec-15">7. Measuring progress</a></li><li class="sub"><a href="#sec-16">Conclusion</a></li><li class=""><a href="#sec-17">Data sources and notes</a></li></ol></div><div class="callout"><strong>How to interpret the numbers in this report?</strong><br>The values presented in this document are the Internet Resilience Index, normalized to 1-100. These values should be interpreted as a score rather than an absolute value. In some cases, the raw absolute values are presented to provide additional context.</br></div><h1 id="sec-0">Executive summary</h1><p>
 Somalia's peering ecosystem is in an nascent state, marked by a low level of domestic traffic exchange and a significant reliance on international transit for content delivery. The country's infrastructure relies on 19 active autonomous systems, which contribute to a Peering Efficiency Score of 0.0100. This score indicates that domestic networks predominantly exchange traffic internationally rather than locally, a factor that increases operational costs for Internet Service Providers (ISPs) and elevates latency for end-users. Despite the presence of a single Internet Exchange Point (IXP) and two peering facilities, their current utilization and overall impact on traffic localization remain limited.</p><p>Key metrics highlight the challenges and opportunities within Somalia's Internet infrastructure. The Localization Ratio stands at a critically low 1.00%, meaning only a minimal portion of traffic destined for domestic users originates from or is exchanged within Somalia. This condition is exacerbated by the complete absence of Tier-1 Content Delivery Networks (CDNs) within domestic facilities, forcing user requests for popular content to traverse international links, leading to a median edge latency of 101.50 ms. While Somalia exhibits excellent performance in preventing domestic-to-domestic traffic tromboning (0.0%), this positive indicator is overshadowed by the broader lack of local traffic exchange. Addressing these challenges requires a concerted effort to enhance local peering arrangements, attract content caches, and bolster the strategic utilization of existing and future IXP infrastructure.</p><h2 id="sec-1">Key numbers at a glance</h2><table>
 <thead>
 <tr>
@@ -290,7 +289,7 @@ Somalia's peering ecosystem is in an nascent state, marked by a low level of dom
 <tr>
 <td>Tier-1 CDNs Present</td>
 <td>0</td>
-<td>—</td>
+<td>9 of 9 global</td>
 <td>No major content caches locally</td>
 </tr>
 <tr>
@@ -302,19 +301,19 @@ Somalia's peering ecosystem is in an nascent state, marked by a low level of dom
 <tr>
 <td>Localization Ratio</td>
 <td>1.00%</td>
-<td>—</td>
+<td>&gt;50% target</td>
 <td>Critically low domestic traffic</td>
 </tr>
 <tr>
 <td>Tromboning / Boomerang Routing</td>
 <td>0.0%</td>
-<td>—</td>
+<td>0% ideal</td>
 <td>Excellent domestic routing integrity</td>
 </tr>
 <tr>
 <td>Median Edge Latency</td>
 <td>101.50 ms</td>
-<td>—</td>
+<td>&lt;20 ms target</td>
 <td>High user content access delay</td>
 </tr>
 </tbody>
@@ -353,12 +352,17 @@ Improving Somalia's Internet resilience requires a strategic, multi-phased appro
 <td>Localization Ratio: 1.00% → &gt;5.00%</td>
 </tr>
 <tr>
-<td>6. Monitor peering efficiency</td>
+<td>4. Monitor peering efficiency</td>
 <td>Regularly track and publish metrics related to local traffic exchange and IXP utilization.</td>
 <td>Regulator, IXP Operator</td>
 <td>Peering Efficiency Score: 0.0100 → &gt;0.0200</td>
 </tr>
-</tbody>
+<tr>
+<td>5. Incentivise CDN deployment</td>
+<td>Offer fiscal or regulatory incentives to attract Tier-1 and major CDNs to establish local caches.</td>
+<td>Government, Regulator</td>
+<td>Tier-1 CDNs Present: 0 → &gt;2</td>
+</tr></tbody>
 </table><h2 id="sec-9">4.2 Medium term (1-3 years)</h2><table>
 <thead>
 <tr>
@@ -369,20 +373,15 @@ Improving Somalia's Internet resilience requires a strategic, multi-phased appro
 </tr>
 </thead>
 <tbody>
+
 <tr>
-<td>4. Incentivise CDN deployment</td>
-<td>Offer fiscal or regulatory incentives to attract Tier-1 and major CDNs to establish local caches.</td>
-<td>Government, Regulator</td>
-<td>Tier-1 CDNs Present: 0 → &gt;2</td>
-</tr>
-<tr>
-<td>5. Expand peering facilities</td>
+<td>6. Expand peering facilities</td>
 <td>Assess the need for additional peering facilities or expansion of existing ones to accommodate growth.</td>
 <td>IXP Operator, Private Sector</td>
 <td>Total Peering Facilities: 2 → &gt;3</td>
 </tr>
 <tr>
-<td>—</td>
+<td>7. —</td>
 <td>Support capacity building for local network engineers on IXP operations and peering best practices.</td>
 <td>Academia, Industry Associations</td>
 <td>Peering Efficiency Score: &gt;0.100 → &gt;0.200</td>
@@ -398,17 +397,17 @@ Improving Somalia's Internet resilience requires a strategic, multi-phased appro
 </thead>
 <tbody>
 <tr>
-<td>—</td>
+<td>8. —</td>
 <td>Foster a competitive and open domestic Internet market to encourage new ASNs.</td>
 <td>Increased network diversity and resilience with &gt;25 active ASNs.</td>
 </tr>
 <tr>
-<td>—</td>
+<td>9. —</td>
 <td>Promote the development of a vibrant local content ecosystem and data centers.</td>
 <td>Significantly higher Localization Ratio (&gt;25%) and lower Median Edge Latency (&lt;50 ms).</td>
 </tr>
 <tr>
-<td>—</td>
+<td>10. —</td>
 <td>Explore regional peering initiatives to reduce reliance on distant international transit.</td>
 <td>Enhanced regional connectivity and reduced overall transit costs for ISPs.</td>
 </tr>
@@ -426,42 +425,12 @@ These five interventions require primarily configuration or administrative flags
 </tr>
 </thead>
 <tbody>
-<tr>
-<td>1</td>
-<td>Encourage IXP participation</td>
-<td>Primarily administrative outreach and awareness.</td>
-<td>Low</td>
-<td>Increased local traffic exchange and peering agreements.</td>
-</tr>
-<tr>
-<td>6</td>
-<td>Monitor peering efficiency</td>
-<td>Utilizes existing measurement tools and public data sources.</td>
-<td>Low</td>
-<td>Provides actionable insights for policy and operational adjustments.</td>
-</tr>
-<tr>
-<td>—</td>
-<td>Publish peering policies</td>
-<td>Simple documentation of existing or desired network peering rules.</td>
-<td>Low</td>
-<td>Increases transparency and predictability for new entrants.</td>
-</tr>
-<tr>
-<td>—</td>
-<td>Host local community content</td>
-<td>Leverages local servers for frequently accessed community resources.</td>
-<td>Low</td>
-<td>Reduces international transit for specific popular local content.</td>
-</tr>
-<tr>
-<td>—</td>
-<td>Join industry peering forums</td>
-<td>Administrative task to participate in regional/global peering groups.</td>
-<td>Low</td>
-<td>Facilitates knowledge sharing and potential peering partnerships.</td>
-</tr>
-</tbody>
+
+
+
+
+
+<tr><td>1</td><td>Facilitate IXP participation</td><td>Primarily administrative outreach and awareness.</td><td>2–4 weeks of IXP outreach</td><td>Shift Active ASNs at IXP: 0 → &gt;50% of 19</td></tr><tr><td>2</td><td>Develop IXP policy framework</td><td>Utilizes existing measurement tools and public data sources.</td><td>Days of operator work</td><td>Shift Peering Efficiency Score: 0.0100 → &gt;0.100</td></tr><tr><td>3</td><td>Promote local content hosting</td><td>Simple documentation of existing or desired network peering rules.</td><td>Hours per network</td><td>Shift Localization Ratio: 1.00% → &gt;5.00%</td></tr><tr><td>4</td><td>Monitor peering efficiency</td><td>Leverages local servers for frequently accessed community resources.</td><td>One maintenance window per member</td><td>Shift Peering Efficiency Score: 0.0100 → &gt;0.0200</td></tr><tr><td>5</td><td>Incentivise CDN deployment</td><td>Administrative task to participate in regional/global peering groups.</td><td>1–2 weeks of administrative review</td><td>Shift Tier-1 CDNs Present: 0 → &gt;2</td></tr></tbody>
 </table><h1 id="sec-12">6. Policy gaps and loopholes</h1><h2 id="sec-13">6.1 Where policy is absent or unenforced</h2><table>
 <thead>
 <tr>
@@ -551,13 +520,11 @@ Somalia's Internet infrastructure presents a paradoxical situation where fundame
 This report leverages data collected from various Internet measurement and infrastructure platforms to provide a comprehensive analysis of Somalia's peering landscape. Key platforms include ISOC Pulse, the IYP Neo4j Peering Policy Engine, PeeringDB for IXP and facility information, RIPE Atlas for latency measurements, and general insights from platforms like Cloudflare Radar.</p><p>*   Peering Policy Brief — SO (Generated by ISOC Pulse × IYP Peering Policy Engine)
 *   ISOC Internet Resilience Index — Peering (Framework reference)</p><p><b>Measurement caveats</b>
 The data presented in this report is based on measurements taken on 2026-09-17 14:33. Internet infrastructure is dynamic, and these metrics represent a snapshot in time. Sample sizes for certain measurements, such as "Probes Sampled: 1" for Median Edge Latency, indicate that some readings are derived from limited telemetry and should be interpreted as indicative rather than exhaustively comprehensive. Continuous monitoring is essential to track progress and adapt to evolving network conditions.</p>
-
-    <div class="footer">
-        <p>Report generated by ISOC Pulse × IYP Peering Policy Engine</p>
-        <p>Team: Rahul Rajesh, Ron Prajoth, Aditya Menon | Mentor: Amreesh Phokeer (ISOC)</p>
-        <p class="license">internetsociety.org · @internetsociety · CC BY-NC-SA 4.0</p>
-    </div>
+<div class="footer">
+<p>Report generated by ISOC Pulse × IYP Peering Policy Engine</p>
+<p>Team: Rahul Rajesh, Ron Prajoth, Aditya Menon | Mentor: Amreesh Phokeer (ISOC)</p>
+<p class="license">internetsociety.org · @internetsociety · CC BY-NC-SA 4.0</p>
 </div>
-
+</div>
 </body>
 </html>

@@ -19,3 +19,7 @@ report_*.md
 *.pdf
 rapport/
 ISOC_Documents/
+
+# Word temporary lock files
+~$*.docx
+~$*.doc

@@ -96,6 +96,26 @@ def _toc_paragraphs():
     return head, p
 
 
+def _clean_callout(callout):
+    """Remove duplicate <mc:Fallback> VML copy inside the callout textbox and ensure a space after '?'."""
+    mc_ns = "{http://schemas.openxmlformats.org/markup-compatibility/2006}"
+    for alt in list(callout.iter(f"{mc_ns}AlternateContent")):
+        choice = alt.find(f"{mc_ns}Choice")
+        if choice is not None:
+            parent = alt.getparent()
+            idx = list(parent).index(alt)
+            for child in list(choice):
+                parent.insert(idx, child)
+                idx += 1
+            parent.remove(alt)
+    for t in callout.iter(qn("w:t")):
+        if t.text == "?":
+            t.text = "? "
+            t.set(qn("xml:space"), "preserve")
+        elif t.text and "normalized to 1-100" in t.text:
+            t.text = t.text.replace("normalized to 1-100", "normalized to 1\u2013100")
+
+
 def main():
     sample = os.path.abspath(sys.argv[1] if len(sys.argv) > 1 else DEFAULT_SAMPLE)
     d = docx.Document(sample)
@@ -106,6 +126,7 @@ def main():
     # 0-5 cover (+ section break), 6-33 TOC, 34 "How to interpret" callout, 35+ body, last = sectPr
     keep_front = kids[:6]
     callout = kids[34]
+    _clean_callout(callout)
     final_sectpr = kids[-1]
     for k in kids[6:]:
         if k is callout or k is final_sectpr:

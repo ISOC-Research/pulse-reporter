@@ -422,6 +422,38 @@ class Builder:
             self._navy_table([cell("Indicator"), cell("Assessment")],
                              [[cell(a), cell(b)] for a, b in scores], 2, widths=[4.0, 2.66])
 
+    def figure_tag(self, tag):
+        """Render a <figure class='chart-container'><img src='data:image/png;base64,...'><figcaption>..."""
+        import base64
+        import tempfile
+        img_tag = tag.find("img")
+        if not img_tag or not img_tag.get("src", "").startswith("data:image/png;base64,"):
+            return
+        b64 = img_tag["src"].split(",", 1)[1]
+        fd, path = tempfile.mkstemp(suffix=".png")
+        os.close(fd)
+        try:
+            with open(path, "wb") as f:
+                f.write(base64.b64decode(b64))
+            self.fig_no += 1
+            cap_tag = tag.find("figcaption")
+            cap_text = clean(cap_tag.get_text(" ")) if cap_tag else clean(img_tag.get("alt", "Chart"))
+            cap_text = re.sub(r"^Figure\s+\d+\.\s*", "", cap_text)
+            is_matrix = "prioritisation" in cap_text.lower() or "impact versus effort" in cap_text.lower()
+            p = self.doc.add_paragraph(style="Normal")
+            p.alignment = 1
+            p.paragraph_format.keep_with_next = True
+            p.add_run().add_picture(path, width=Inches(5.4 if is_matrix else 5.7))
+            cap = self.doc.add_paragraph(style="Caption body copy")
+            r = cap.add_run(f"Figure {self.fig_no}. ")
+            r.bold = True
+            cap.add_run(cap_text or "Chart")
+        finally:
+            try:
+                os.remove(path)
+            except OSError:
+                pass
+
     # dispatcher -------------------------------------------------------------
     def walk(self, node):
         for child in node.children:
@@ -441,14 +473,20 @@ class Builder:
                 self.list_block(child, ordered=(name == "ol"))
             elif name == "table":
                 self.table(child)
+            elif name == "figure":
+                self.figure_tag(child)
             elif name == "pre":
                 p = self.doc.add_paragraph(child.get_text(), style="Normal")
             elif name == "div":
-                if "stat-grid" in classes:
+                if "toc" in classes or "download-bar" in classes or "cover" in classes:
+                    continue
+                elif "stat-grid" in classes:
                     self.stat_grid(child)
                 elif "swot-grid" in classes:
                     self.swot(child)
                 elif "callout" in classes:
+                    if "how to interpret the numbers" in child.get_text(" ").lower():
+                        continue
                     kind = next((c for c in classes if c.startswith("callout-")), "")
                     self.callout(child, kind)
                 elif "phase" in classes:
@@ -481,6 +519,18 @@ def _fill_placeholders(root, mapping):
                 t.text = t.text.replace(k, v)
 
 
+def _kill_headless_word():
+    """Terminate any orphaned headless WINWORD.EXE processes (MainWindowTitle == '') that may lock .docx files."""
+    if os.name == "nt":
+        import subprocess
+        ps = "Get-Process WINWORD -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowTitle -eq '' } | Stop-Process -Force -ErrorAction SilentlyContinue"
+        try:
+            subprocess.run(["powershell", "-NoProfile", "-Command", ps],
+                           stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=10)
+        except Exception:
+            pass
+
+
 def _refresh_toc_silent(docx_path):
     """Pre-populate the Table of Contents via headless Word (if available) and clear dirty flags
     so Microsoft Word never shows the 'update fields that may refer to other files' dialog on open."""
@@ -490,17 +540,27 @@ def _refresh_toc_silent(docx_path):
         ps = (
             "$ErrorActionPreference='Stop';"
             "$w=New-Object -ComObject Word.Application;$w.Visible=$false;$w.DisplayAlerts=0;"
-            f"$d=$w.Documents.Open('{abs_path}');"
+            f"try{{$d=$w.Documents.Open('{abs_path}');"
             "foreach($t in $d.TablesOfContents){$t.Update()};"
-            "$d.Save();$d.Close(0);$w.Quit()"
+            "$d.Save();$d.Close(0)}finally{$w.Quit()}"
         )
         try:
             subprocess.run(["powershell", "-NoProfile", "-Command", ps],
                            check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=30)
         except Exception:
-            pass
+            _kill_headless_word()
     try:
         d = docx.Document(abs_path)
+        mc_ns = "{http://schemas.openxmlformats.org/markup-compatibility/2006}"
+        for alt in list(d.element.iter(f"{mc_ns}AlternateContent")):
+            choice = alt.find(f"{mc_ns}Choice")
+            if choice is not None and any("How to interpret" in (t.text or "") for t in alt.iter(qn("w:t"))):
+                parent = alt.getparent()
+                idx = list(parent).index(alt)
+                for child in list(choice):
+                    parent.insert(idx, child)
+                    idx += 1
+                parent.remove(alt)
         for fc in d.element.iter(qn("w:fldChar")):
             if qn("w:dirty") in fc.attrib:
                 del fc.attrib[qn("w:dirty")]
@@ -516,6 +576,7 @@ def build_docx(llm_html, topic_title, country_code, out_path):
     if not os.path.exists(TEMPLATE):
         raise FileNotFoundError(
             f"{TEMPLATE} not found - run `python build_template.py` first.")
+    _kill_headless_word()
     document = docx.Document(TEMPLATE)
     mapping = {
         "{COUNTRY}": country_name(country_code),

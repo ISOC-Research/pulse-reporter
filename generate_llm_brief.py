@@ -469,7 +469,7 @@ def main():
     from isoc_report import build_isoc_system_prompt, build_isoc_user_prompt, generate_isoc_content, postprocess_isoc_html
 
     cname = country_name(country)
-    system_instruction = build_isoc_system_prompt(topic_title, cname)
+    system_instruction = build_isoc_system_prompt(topic_title, cname, country)
 
     try:
         prompt = build_isoc_user_prompt(topic_title, cname, country, report_data)

@@ -158,31 +158,54 @@ def _fmt(v, suffix=""):
     return f"{v:g}{suffix}"
 
 
+def _split_donut_center(spec):
+    """Rule 1: Always split donut center callouts into (Primary Metric, Subtitle Label)."""
+    raw = str(spec.get("center") or spec.get("center_text") or "").replace("\\n", "\n").strip()
+    sub = str(spec.get("center_subtitle") or spec.get("subtitle") or "").strip()
+    if "\n" in raw:
+        head, _, rest = raw.partition("\n")
+        return head.strip(), (sub or rest.strip())
+    m = re.match(
+        r"^\s*([<>~]?\d+(?:\.\d+)?(?:\s*(?:%|ms|Gbps|Mbps)|\s+of\s+\d+|\s*/\s*\d+)?)\s+(.+?)\s*$",
+        raw, re.I
+    )
+    if m:
+        return m.group(1).strip(), (sub or m.group(2).strip())
+    return raw, sub
+
+
+def _format_benchmark_label(bench, suffix=""):
+    """Rule 3: Eliminate duplicate parentheses in benchmark line labels."""
+    blabel = str(bench.get("label", "Benchmark")).strip()
+    if "(" in blabel and ")" in blabel:
+        return blabel
+    return f'{blabel} ({_fmt(float(bench["value"]), suffix)})'
+
+
 def _donut(spec, path):
     labels = [str(l) for l in spec["labels"]]
     values = [float(v) for v in spec["values"]]
     suffix = spec.get("suffix", "%")
-    n = len(values)
     fig, ax = plt.subplots(figsize=(6.6, 3.5))
     cols = _pie_colors(labels)
     wedges, _ = ax.pie(values, colors=cols, startangle=90, counterclock=False,
-                       wedgeprops=dict(width=0.42, edgecolor="white", linewidth=1.5))
+                       wedgeprops=dict(width=0.38, edgecolor="white", linewidth=1.5))
     total = sum(values) or 1
     # direct percentage labels on large segments
     import math
     for w, v in zip(wedges, values):
         if v / total >= 0.06:
             ang = math.radians((w.theta1 + w.theta2) / 2)
-            ax.text(0.79 * math.cos(ang), 0.79 * math.sin(ang), _fmt(v, suffix),
+            ax.text(0.81 * math.cos(ang), 0.81 * math.sin(ang), _fmt(v, suffix),
                     ha="center", va="center", fontsize=8, fontweight="bold", color="white")
-    center = str(spec.get("center", "")).replace("\\n", "\n")
-    if center:
-        head, _, rest = center.partition("\n")
-        ax.text(0, 0.07 if rest else 0, head, ha="center", va="center",
-                fontsize=17, fontweight="bold", color="#0F2A47")
-        if rest:
-            ax.text(0, -0.17, textwrap.fill(rest, 14), ha="center", va="top",
-                    fontsize=8, color="#44566a")
+    head, sub = _split_donut_center(spec)
+    if head:
+        fs_head = 17.5 if len(head) >= 8 else 20
+        ax.text(0, 0.06 if sub else 0, head, ha="center", va="center",
+                fontsize=fs_head, fontweight="bold", color="#1a2b4c")
+    if sub:
+        ax.text(0, -0.14, sub, ha="center", va="center",
+                fontsize=11, fontweight="normal", color="#4a5568")
     ax.legend(wedges, [f"{textwrap.fill(l, 34)}  ({_fmt(v, suffix)})" for l, v in zip(labels, values)],
               loc="center left", bbox_to_anchor=(1.02, 0.5), frameon=False, fontsize=8,
               labelspacing=0.8)
@@ -203,9 +226,8 @@ def _bar(spec, path):
     if horizontal is None:
         horizontal = n > 6 or max(len(l) for l in labels) > 14
     colors = ["#" + CHART_PALETTE[0]] * n
-    top = max(values + ([float(bench["value"])] if bench else []))
-    pct = suffix == "%" and top <= 100
-    lim = 100 if pct else top * 1.18
+    max_val = max(values + ([float(bench["value"])] if bench else [1]))
+    lim = max_val * 1.15
     if horizontal:
         fig, ax = plt.subplots(figsize=(6.6, max(2.4, 0.42 * n + 1.5)))
         ys = list(range(n))[::-1]
@@ -213,23 +235,23 @@ def _bar(spec, path):
         ax.set_yticks(ys)
         ax.set_yticklabels([textwrap.fill(l, 30) for l in labels], fontsize=8)
         for b, v in zip(bars, values):
-            ax.text(b.get_width() + lim * 0.01, b.get_y() + b.get_height() / 2, _fmt(v, suffix),
-                    va="center", fontsize=7.5, color=INDIGO)
-        ax.set_xlim(0, lim * (1.08 if pct else 1))
+            ax.text(b.get_width() + max_val * 0.015, b.get_y() + b.get_height() / 2, _fmt(v, suffix),
+                    va="center", fontsize=8, color=INDIGO)
+        ax.set_xlim(0, lim)
         if spec.get("ylabel"):
             ax.set_xlabel(spec["ylabel"], fontsize=8.5)
         ax.grid(axis="x", color="#E3E8EF", linewidth=0.8)
         if bench:
             ax.axvline(float(bench["value"]), color=BENCH_COLOR, linestyle="--", linewidth=1.4,
-                       label=f'{bench.get("label", "Benchmark")} ({_fmt(float(bench["value"]), suffix)})')
+                       label=_format_benchmark_label(bench, suffix))
     else:
-        fig, ax = plt.subplots(figsize=(6.6, 3.5))
+        fig, ax = plt.subplots(figsize=(6.6, 3.6))
         xs = list(range(n))
         bars = ax.bar(xs, values, color=colors, width=0.58)
         ax.set_xticks(xs)
         ax.set_xticklabels([textwrap.fill(l, 14) for l in labels], fontsize=8)
         for b, v in zip(bars, values):
-            ax.text(b.get_x() + b.get_width() / 2, b.get_height() + lim * 0.012, _fmt(v, suffix),
+            ax.text(b.get_x() + b.get_width() / 2, b.get_height() + max_val * 0.015, _fmt(v, suffix),
                     ha="center", va="bottom", fontsize=8, color=INDIGO)
         ax.set_ylim(0, lim)
         if spec.get("ylabel"):
@@ -237,12 +259,12 @@ def _bar(spec, path):
         ax.grid(axis="y", color="#E3E8EF", linewidth=0.8)
         if bench:
             ax.axhline(float(bench["value"]), color=BENCH_COLOR, linestyle="--", linewidth=1.4,
-                       label=f'{bench.get("label", "Benchmark")} ({_fmt(float(bench["value"]), suffix)})')
+                       label=_format_benchmark_label(bench, suffix))
     ax.set_axisbelow(True)
     if bench:
-        ax.legend(loc="lower right" if horizontal else "upper right", frameon=False, fontsize=8)
+        ax.legend(loc="lower right", bbox_to_anchor=(1.0, 1.02), frameon=False, fontsize=9.5)
     _title(fig, spec.get("title", ""))
-    fig.tight_layout(rect=(0, 0, 1, 0.93))
+    fig.tight_layout(rect=(0, 0, 1, 0.92))
     fig.savefig(path, dpi=200, facecolor="white", bbox_inches="tight", pad_inches=0.15)
     plt.close(fig)
 
@@ -252,7 +274,7 @@ def _line(spec, path):
     values = [float(v) for v in spec["values"]]
     suffix = spec.get("suffix", "%")
     bench = spec.get("benchmark")
-    fig, ax = plt.subplots(figsize=(6.6, 3.3))
+    fig, ax = plt.subplots(figsize=(6.6, 3.4))
     xs = list(range(len(values)))
     ax.plot(xs, values, marker="o", color=BLUE, linewidth=2.2, label=spec.get("series", "Country"))
     for x, v in zip(xs, values):
@@ -260,9 +282,9 @@ def _line(spec, path):
                     ha="center", fontsize=8, color=INDIGO)
     if bench:
         ax.axhline(float(bench["value"]), color=BENCH_COLOR, linestyle="--", linewidth=1.4,
-                   label=f'{bench.get("label", "Benchmark")} ({_fmt(float(bench["value"]), suffix)})')
-    top = max(values + ([float(bench["value"])] if bench else []))
-    ax.set_ylim(0, 100 if suffix == "%" and top <= 100 else top * 1.2)
+                   label=_format_benchmark_label(bench, suffix))
+    top = max(values + ([float(bench["value"])] if bench else [1]))
+    ax.set_ylim(0, top * 1.18)
     ax.set_xticks(xs)
     ax.set_xticklabels([textwrap.fill(l, 12) for l in labels], fontsize=8)
     if spec.get("ylabel"):
@@ -270,9 +292,9 @@ def _line(spec, path):
     ax.grid(axis="y", color="#E3E8EF", linewidth=0.8)
     ax.set_axisbelow(True)
     if bench or spec.get("series"):
-        ax.legend(loc="best", frameon=False, fontsize=8)
+        ax.legend(loc="lower right", bbox_to_anchor=(1.0, 1.02), frameon=False, fontsize=9.5)
     _title(fig, spec.get("title", ""))
-    fig.tight_layout(rect=(0, 0, 1, 0.93))
+    fig.tight_layout(rect=(0, 0, 1, 0.88 if (bench or spec.get("series")) else 0.93))
     fig.savefig(path, dpi=200, facecolor="white", bbox_inches="tight", pad_inches=0.15)
     plt.close(fig)
 
@@ -289,13 +311,22 @@ def _matrix(spec, path):
     ax.text(7.25, 10.18, "STRUCTURAL INVESTMENT", ha="center", va="center", fontsize=9,
             fontweight="bold", color="#A9402B")
     seen = {}
-    for it in items:
-        x = min(max(float(it.get("effort", 5)), 0.4), 9.6)
+    for idx, it in enumerate(items):
+        m_num = re.search(r"\d+", str(it.get("n", idx + 1)))
+        n_val = int(m_num.group(0)) if m_num else (idx + 1)
+        raw_x = float(it.get("effort", 2.5 if n_val <= 5 else 6.8))
+        if n_val <= 5:
+            x = min(max(raw_x, 0.8), 3.9)
+        else:
+            x = min(max(raw_x, 5.1), 9.1)
         y = min(max(float(it.get("impact", 7)), 5.3), 9.7)
         k = (round(x, 1), round(y, 1))
         seen[k] = seen.get(k, 0) + 1
         off = (seen[k] - 1) * 0.42  # nudge overlapping circles apart
-        x += off
+        if n_val <= 5:
+            x = min(x + off, 4.15)
+        else:
+            x = min(max(x + off, 4.85), 9.6)
         quick = x < 4.5
         high = y >= 8
         col = (TEAL if high else BLUE) if quick else (CORAL if high else GOLD)
