@@ -19,7 +19,3 @@ report_*.md
 *.pdf
 rapport/
 ISOC_Documents/
-
-# Local test reports
-reports/
-

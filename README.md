@@ -1,281 +1,158 @@
-# Automated Recommendation Engine for Enhancing Internet Resilience
+# ISOC Pulse Diagnostics Report & Action Plan Generator
 
-## Overview
+An automated Internet measurement analytics engine that transforms deterministic network telemetry from **ISOC Pulse**, **Internet Yellow Pages (IYP)**, **PeeringDB**, **Packet Clearing House (PCH)**, **RIPEstat / RIPE Atlas**, and **Cloudflare Radar** into institutional-grade country diagnostics reports and action plans.
 
-An agentic system that combines technical infrastructure data from the Internet Yellow Pages (IYP) Neo4j database with real-time web research to generate comprehensive policy recommendations for improving national internet resilience. The engine uses a two-phase AI approach: investigative research followed by strategic synthesis.
+The engine generates both interactive web dashboards (`.html`) and official publication-ready Word documents (`.docx`) strictly styled after the master ISOC Pulse Country Report template.
 
-## Purpose
+---
 
-The Internet Resilience Index (IRI) measures a country's internet resilience across four pillars, but understanding why scores are low and what to do requires both technical analysis and contextual understanding. This project automates that process by:
+## Supported Pillars & Metrics
 
-1. Querying infrastructure and network topology data from Neo4j
-2. Conducting web research for policy context, recent events, and regulations
-3. Synthesizing both data streams into actionable strategic reports
-4. Providing prioritized recommendations with implementation roadmaps
+1. **Interconnection & Peering** (`peering`):
+   - Macro ASN landscape (registered vs. actively routed in BGP)
+   - IXP infrastructure, operational status, and member networks
+   - IXP geographic distribution and market concentration (HHI)
+   - Aggregated IXP traffic telemetry from PCH
+   - Domestic ASN peering participation & route server adoption
+   - Global Tier-1 CDN presence at domestic IXPs vs. local data center facilities
+   - Domestic traffic localization ratio (ISOC Pulse IRI)
+   - RIPE Atlas traceroute path analysis for domestic tromboning (boomerang routing) and edge content latency
 
-## Architecture
+2. **IPv6 Deployment** (`ipv6`):
+   - National user adoption trends and regional/global benchmarks
+   - ISP market share vs. per-operator IPv6 deployment & RPKI/ROV coverage
+   - Public and private web services IPv6 readiness (Government, Banking, News, Education, Ecommerce)
+   - CDN-backed vs. self-hosted IPv6 correlation
+   - ccTLD nameserver IPv6 reachability and glue record health
+
+3. **DNSSEC Deployment** (`dnssec`):
+   - ccTLD authoritative nameserver count, IPv6 enablement, and ASN diversity
+   - National DNS query resolution health (NOERROR, NXDOMAIN, SERVFAIL)
+   - Resolver DNSSEC validation rates (Secure vs. Insecure)
+   - Per-operator / per-ASN validation performance across major eyeball networks
+
+---
+
+## Project Structure
+
 ```
 pulse-reporter/
-├── dnssec_report.py              # DNSSEC analysis report generator
-├── ipv6_report.py                # IPv6 deployment analysis
-├── generate_llm_brief.py         # LLM-based brief generation
+├── run.py                       # Unified CLI launcher for all metrics and pipelines
+├── peering_report.py            # Peering engine: PeeringDB, PCH, RIPEstat, Atlas, Pulse
+├── ipv6_report.py               # IPv6 engine: IYP Neo4j, Pulse, APNIC Labs, CrUX
+├── dnssec_report.py             # DNSSEC engine: IYP Neo4j, Cloudflare Radar
+├── generate_llm_brief.py        # Strategic synthesis engine: HTML dashboard & Word builder
+│
+├── isoc_report.py               # 10-section ISOC report prompt, quota fallback, HTML cleaner
+├── isoc_theme.py                # Official ISOC color palette (#0F2A47 navy) and font constants
+├── docx_builder.py              # Word document builder with automated TOC page refresh
+├── docx_charts.py               # 200 DPI matplotlib chart generator (donut, bar, line, matrix)
+├── html_theme.py                # Interactive web dashboard styling & inline chart renderer
+├── build_template.py            # Clones ISOC_Sample.docx into master Word template
+│
+├── templates/
+│   └── ISOC_Template.docx       # Official Word report template
 ├── data/
 │   └── tld_trend_history.json   # Historical TLD trend data
-├── reports/                      # Generated analysis reports
-│   ├── DNSSEC_*.md
-│   └── IPv6_*.md
-├── request_for_YPI/              # Main agentic engine
-│   ├── generate_report.py        # Main orchestrator (two-phase workflow)
-│   ├── gene_report_v2.py         # Report generation v2
-│   ├── pulse_service.py          # Pulse data service
-│   ├── dnssec_engine.py          # DNSSEC-specific engine
-│   ├── dnssec_radar_engine.py    # DNSSEC radar integration
-│   ├── ipv6_engine.py            # IPv6-specific engine
-│   ├── apnic_service.py          # APNIC data service
-│   ├── crux_service.py           # Chrome UX Report service
-│   ├── src/
-│   │   ├── agents/               # LangGraph agent definitions
-│   │   ├── tools/                # Tool implementations (Neo4j, Google Search, etc.)
-│   │   ├── RAG/                  # RAG pipeline components
-│   │   └── utils/                # Utilities (LLM config, formatters, loaders)
-│   ├── prompt/                   # LLM prompt templates
-│   │   ├── IYP/                  # IYP-specific prompts
-│   │   ├── report_generation/    # Report generation prompts
-│   │   └── *.txt                 # Prompt strategies
-│   ├── infrastructure/           # Pillar 1: IXPs, data centers, fiber
-│   ├── market_readiness/         # Pillar 2: Market structure, peering
-│   ├── performance/              # Pillar 3: Speed & consistency metrics
-│   ├── security/                 # Pillar 4: DNS, routing, threat analysis
-│   └── schema_rapport/           # Report schema definitions
-├── schema_rapport/
-│   └── schema_global.py          # Global report schema
-├── testfiles/                    # Testing utilities
-│   ├── request_testing.py        # Query testing framework
-│   ├── run_query.py              # Query execution tool
-│   ├── run_radar.py              # Radar query testing
-│   └── unit_test_request.py      # Validation suite
-├── web/
-│   └── back.py                   # Web backend API
-└── requirements.txt              # Project dependencies
+├── reports/                     # Organized report repository
+│   ├── peering/                 # {raw/*.md, html/*.html, word/*.docx}
+│   ├── ipv6/                    # {raw/*.md, html/*.html, word/*.docx}
+│   └── dnssec/                  # {raw/*.md, html/*.html, word/*.docx}
+└── request_for_YPI/             # API services and Cypher indicator library
+    ├── peering_engine.py        # Core peering aggregation pipeline
+    ├── ipv6_engine.py           # Core IPv6 data aggregation pipeline
+    ├── dnssec_engine.py         # DNSSEC nameserver & IPv6 engine
+    ├── dnssec_radar_engine.py   # Cloudflare Radar query service
+    ├── pulse_service.py         # ISOC Pulse REST API integration
+    ├── apnic_service.py         # APNIC Labs IPv6 adoption integration
+    ├── crux_service.py          # Google Chrome UX Report integration
+    └── src/
+        ├── request_IYP/         # Neo4j Cypher query execution
+        └── tools/               # Cloudflare Radar client
 ```
 
-Each indicator directory (under infrastructure/, market_readiness/, performance/, security/) contains:
-- `*.cypher` - Progressive Cypher queries building complete analysis
-- `*.md` - Technical documentation and analysis plans
-- `query_templates.yaml` - Jinja2 templates for formatting Neo4j results
-
-## Report Generators
-
-- **dnssec_report.py** - Generates DNSSEC deployment and security analysis reports
-- **ipv6_report.py** - Analyzes IPv6 infrastructure adoption and readiness
-- **generate_llm_brief.py** - Creates AI-powered executive briefs from analysis data
-
-## Two-Phase Agentic Architecture
-
-### Phase 1: Investigation (Agentic Research)
-
-Uses LangGraph to orchestrate an autonomous agent that:
-- Executes Neo4j queries via the `run_infrastructure_query` tool
-- Searches the web for policy documents, news, and regulations via `search_google`
-- Reads and extracts content from web pages and PDFs via `read_web_page`
-- Decides autonomously which tools to use and when to stop researching
-
-Model: Google Gemini Flash (2.0)
-
-### Phase 2: Strategic Synthesis (Reasoning Mode)
-
-Uses a reasoning model to:
-- Analyze the complete investigation history
-- Correlate quantitative metrics with qualitative context
-- Perform root cause analysis linking technical issues to policy gaps
-- Generate comprehensive reports following expert prompt structure
-- Provide prioritized, actionable recommendations
-
-Model: Google Gemini Pro 2.0 (with extended thinking)
-
-## IRI Coverage
-
-Fully Supported Indicators:
-- IXP Coverage, Peering Efficiency, Domain Analysis
-- Market Competition (HHI), Transit Dependency
-- MANRS Adoption, IPv6 Deployment, DNSSEC Analysis
-- DDoS Protection (CDN presence)
-
-Not Supported:
-- Performance metrics (requires Ookla data)
-- HTTPS adoption (requires certificate data)
-- Economic indicators (requires external pricing data)
+---
 
 ## Quick Start
 
-### Installation
+### 1. Setup Environment
 ```bash
-pip install -r requirements.txt
+conda activate pulse_env
+# Or with venv:
+# pip install -r requirements.txt
 ```
 
-### Database Setup
-
- - Use Internet Society's Public Instance:
-```python
-URI = 'neo4j://iyp-bolt.ihr.live:7687'
-AUTH = None
+### 2. Configure Credentials (`.env`)
+Create a `.env` file in `pulse-reporter/` with:
+```env
+REPORT_GEN_KEY=your_gemini_api_key
+INTERNET_SOCIETY_API_KEY=your_isoc_pulse_key
+CLOUDFLARE_RADAR_API_TOKEN=your_radar_token
+PEERINGDB_API_KEY=your_peeringdb_key
+RIPE_ATLAS_API_KEY=your_ripe_atlas_key
+GOOGLE_APPLICATION_CREDENTIALS=your_crux_key.json
+NEO4J_URI=neo4j://iyp-bolt.ihr.live:7687
 ```
 
+---
 
-### API Keys Configuration
+## Running Reports
 
-Create a `.env` file:
+Use the unified launcher `run.py`. Argument order and capitalization do not matter (`python run.py peering IN` and `python run.py IN peering` both work).
+
+### Full Pipeline (Fetches live data + Generates HTML & Word docx)
 ```bash
-GOOGLE_API_KEY=your_key
-GOOGLE_CX_ID=your_key
-LANGCHAIN_API_KEY=your_key
-LANGCHAIN_PROJECT=your_key
-LANGCHAIN_ENDPOINT=your_key
-LANGCHAIN_TRACING_V2="True"
+python run.py peering IN          # Full Peering report for India
+python run.py ipv6 IN             # Full IPv6 report for India
+python run.py dnssec IN           # Full DNSSEC report for India
+python run.py all IN              # Run ALL 3 metrics for India
 ```
-### Obtaining API Keys
+*(Replace `IN` with any 2-letter ISO country code: `FR`, `BR`, `MA`, `SO`, `US`, `DE`, etc.)*
 
-**Google Gemini API**: Visit https://console.cloud.google.com to create a project, enable the Gemini API, and generate an API key from the Credentials page.
+### Step-by-Step Modes (Optional Flags)
+* **Step 1 Only (`--raw`):** Fetch/update the raw `.md` data file without invoking the LLM:
+  ```bash
+  python run.py peering IN --raw
+  ```
+* **Step 2 Only (`--brief`):** Generate/rebuild `.html` and `.docx` reports from an existing `.md` file (skips live API queries):
+  ```bash
+  python run.py peering IN --brief
+  python run.py ipv6 IN --brief
+  python run.py dnssec IN --brief
+  ```
 
-**Google Custom Search**: Visit https://console.cloud.google.com to create a project, enable the Custom Search API, and generate credentials. Then create a Custom Search Engine at https://programmablesearchengine.google.com to obtain your CX ID.
+### Student Wi-Fi / Restricted Networks Note
+When on restricted campus or corporate Wi-Fi where Neo4j Bolt port `7687` is blocked:
+* **Peering (`run.py peering <CC>`):** Works 100% live for ANY country because it uses HTTPS REST APIs (PeeringDB, PCH, RIPEstat, Pulse, RIPE Atlas).
+* **IPv6 & DNSSEC:** Running `run.py <metric> <CC>` automatically falls back to pre-fetched raw `.md` data (e.g., `IN`, `FR`, `MA`, `SO`) to generate the HTML and Word documents.
 
-**LangSmith** (Optional): Sign up at https://smith.langchain.com for conversation tracing and debugging. Free tier available for development.
+---
 
+## Report Structure (10-Section Master Template)
 
-### Usage
+Every generated report adheres to the official ISOC Pulse 10-section hierarchy:
 
-#### Generate Full Analysis Reports
+1. **Executive summary** (2–3 dense analytical paragraphs summarizing standing and paradox)
+2. **Key numbers at a glance** (4-column table: Indicator | Country | Benchmark | Reading)
+3. **1. Where [Country] stands** (Benchmark comparison analysis + inline bar chart)
+4. **2. Where [Country] is improving** (Numbered subsections 2.1–2.4 with inline tables/charts)
+5. **3. Where [Country] could improve** (Bottlenecks: concentration, peering gaps, security)
+6. **4. A staged plan to improve resilience** (Effort vs. Impact matrix + Short/Medium/Long-term action tables)
+7. **5. Quick wins** (Configuration/policy flags requiring zero capital)
+8. **6. Policy gaps and loopholes** (Unenforced gaps + loopholes to avoid creating)
+9. **7. Measuring progress** (Verifiable 12-month indicator targets and public sources)
+10. **Conclusion & Data sources** (Methodology notes, caveats, and citations)
 
-DNSSEC analysis:
-```bash
-python dnssec_report.py --country=FR
-```
+---
 
-IPv6 analysis:
-```bash
-python ipv6_report.py --country=IN
-```
+## Output Organization
 
-Generate comprehensive IRI indicator report:
-```bash
-python request_for_YPI/generate_report.py infrastructure/ixp_coverage --country=FR --mode=smart
-```
+Outputs are organized under `reports/` by metric and format:
 
-Report parameters:
-- `indicator_input`: Partial or full path to indicator folder
-- `--country`: ISO country code (default: FR)
-- `--domain`: Domain name for analysis (default: gouv.fr)
-- `--asn`: AS number (default: 16276)
-- `--mode`: Research phase model - 'fast' or 'smart' (default: smart)
+| Metric | Word Document (`.docx`) | Interactive Dashboard (`.html`) | Raw Data (`.md`) |
+| :--- | :--- | :--- | :--- |
+| **Peering** | `reports/peering/word/Peering_Report_<CC>.docx` | `reports/peering/html/Peering_Policy_Brief_<CC>.html` | `reports/peering/raw/Peering_Report_<CC>.md` |
+| **IPv6** | `reports/ipv6/word/IPv6_Report_<CC>.docx` | `reports/ipv6/html/IPv6_Policy_Brief_<CC>.html` | `reports/ipv6/raw/IPv6_Report_<CC>.md` |
+| **DNSSEC** | `reports/dnssec/word/DNSSEC_Report_<CC>.docx` | `reports/dnssec/html/DNSSEC_Policy_Brief_<CC>.html` | `reports/dnssec/raw/DNSSEC_Report_<CC>.md` |
 
-Generate AI brief:
-```bash
-python generate_llm_brief.py --report=reports/DNSSEC_FR_20260620_1623.md
-```
-
-### Testing & Validation
-
-Test a single Neo4j query:
-```bash
-python testfiles/request_testing.py request_for_YPI/security/dns_security/dnssec/1.cypher --country=FR
-```
-
-Test query with LLM formatting preview:
-```bash
-python testfiles/run_query.py request_for_YPI/performance/fixed_networks/vitesses_download/1.cypher --country=FR
-```
-
-Test radar data queries:
-```bash
-python testfiles/run_radar.py --country=IN
-```
-
-Run full validation suite:
-```bash
-python testfiles/unit_test_request.py
-```
-
-## Report Structure
-
-Generated reports include:
-
-1. Executive Summary - Current state, key findings, resilience assessment
-2. Detailed Technical Analysis - Quantitative metrics with qualitative context
-3. Risk Assessment Matrix - Technical, operational, and strategic risks
-4. Strategic Recommendations Framework
-   - Short-term (0-12 months)
-   - Medium-term (1-3 years)
-   - Long-term (3-5 years)
-   - Each with: complexity, cost, impact, stakeholders, KPIs
-5. Prioritization Framework - Quick wins vs strategic investments
-6. Implementation Roadmap - Quarterly breakdown with dependencies
-7. Measurement & Monitoring Framework - KPIs and review schedule
-8. Risk Mitigation & Contingency Planning
-9. Funding Strategy
-10. International Best Practices & Case Studies
-
-## Key Concepts
-
-- **IRI**: Internet Resilience Index - Composite score measuring resilience across Infrastructure, Market Preparation, Performance, and Security pillars
-- **IYP**: Internet Yellow Pages - Graph database mapping global internet topology, peering relationships, and routing security
-- **Agentic Workflow**: AI agent autonomously decides which data sources to query and when sufficient information has been gathered
-- **Two-Phase Architecture**: Separate research phase (breadth) from synthesis phase (depth)
-- **Query Pattern**: Overview → Metrics → Gaps → Recommendations
-
-## LLM Modes
-
-The system supports two operational modes:
-
-- **fast**: Google Gemini Flash 2.0 - Quick processing for web scraping and summarization
-- **reasoning**: Google Gemini Pro 2.0 - Advanced reasoning for strategic synthesis (Phase 2 only)
-
-## Development
-
-Adding new indicators:
-
-1. Create directory under appropriate pillar
-2. Write progressive `.cypher` queries (1.cypher, 2.cypher, etc.)
-3. Document analysis approach in `.md` file
-4. Add formatting templates in `query_templates.yaml`
-5. Test with validation suite: `python testfiles/unit_test_request.py`
-
-## Output
-
-Reports are generated in multiple formats:
-
-1. **Analysis Reports** - Saved in `reports/` directory:
-   - DNSSEC analysis: `DNSSEC_{CC}_{timestamp}.md`
-   - IPv6 analysis: `IPv6_{CC}_{timestamp}.md`
-
-2. **IRI Indicator Reports** - Saved in indicator directories:
-   - Format: `report_{indicator_name}_countryCode-{CC}_domainName-{domain}_hostingASN-{asn}.md`
-
-3. **Web Interface** - Viewable via web backend:
-   - HTML report preview: `web/result.html`
-   - Markdown rendering: `web/result_markdown.html`
-
-## Dependencies
-
-Core libraries:
-- neo4j - Database connectivity
-- langchain / langgraph - Agentic framework
-- langchain-google-genai - LLM integration
-- trafilatura - Web content extraction
-- PyMuPDF - PDF text extraction
-- Jinja2 / PyYAML - Template rendering
-- requests / beautifulsoup4 - HTTP and parsing
-
-## Key Features
-
-- **Multi-pillar Analysis**: Covers Infrastructure, Market Readiness, Performance, and Security
-- **Neo4j Integration**: Direct connectivity to Internet Yellow Pages database
-- **Web Research**: Autonomous agent conducts Google searches for policy context
-- **PDF Processing**: Extracts and analyzes policy documents and technical papers
-- **LLM-powered Synthesis**: Reasoning models generate strategic recommendations
-- **DNSSEC & IPv6 Focus**: Specialized engines for DNS security and IPv6 deployment analysis
-- **Radar Integration**: Cloudflare Radar for DNS and threat analysis data
-- **Web Interface**: Visual browsing of generated reports
-
-## Status
-
-Active Development | Version 0.4 | Last Updated: June 2026
+Each HTML dashboard includes a fixed **"Download Word report (.docx)"** button linking directly to the corresponding Word document.

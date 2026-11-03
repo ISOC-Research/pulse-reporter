@@ -1,3 +1,5 @@
+import argparse
+import os
 import pathlib
 import sys
 from datetime import datetime
@@ -266,11 +268,13 @@ According to Cloudflare Radar (1.1.1.1 public resolver traffic), {validation_dat
 
 
 def main():
-    if len(sys.argv) < 2:
-        print("Usage: python dnssec_report.py IN")
-        sys.exit(1)
+    parser = argparse.ArgumentParser(description="Generate a DNSSEC Report for a given country")
+    parser.add_argument("country", type=str, help="Country Code (e.g. FR, IN)")
+    parser.add_argument("--no-export", action="store_true", help="Do not save the markdown report")
+    parser.add_argument("--html", action="store_true", help="Automatically generate HTML and Word via LLM")
+    args = parser.parse_args()
 
-    country = sys.argv[1].upper()
+    country = args.country.upper()
     print(f"Generating DNSSEC report for .{country.lower()} ...")
 
     ns_data = get_ccTLD_nameserver_count(country)
@@ -298,17 +302,21 @@ def main():
         ip_version_data
     )
 
-    reports_dir = Path("reports")
-    reports_dir.mkdir(exist_ok=True)
+    if not args.no_export:
+        reports_dir = Path("reports") / "dnssec" / "raw"
+        reports_dir.mkdir(parents=True, exist_ok=True)
 
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M") # noqa: DTZ005
-    output_file = reports_dir / f"DNSSEC_{country}_{timestamp}.md"
+        output_file = reports_dir / f"DNSSEC_Report_{country}.md"
 
-    with open(output_file, "w", encoding="utf-8") as f:
-        f.write(report_text)
+        with open(output_file, "w", encoding="utf-8") as f:
+            f.write(report_text)
 
-    print("\n✅ Report generated successfully")
-    print(f"📄 {output_file.resolve()}")
+        print("\n✅ Report generated successfully")
+        print(f"📄 {output_file.resolve()}")
+
+        if args.html:
+            print("🤖 Calling generate_llm_brief.py to create HTML & Word...")
+            os.system(f'"{sys.executable}" generate_llm_brief.py dnssec {country}')
 
 
 if __name__ == "__main__":

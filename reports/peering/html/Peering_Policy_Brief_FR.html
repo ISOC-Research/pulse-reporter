@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peering Policy Brief — FR</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad: true, theme: 'default', themeVariables: { 'pie1': '#1e88e5', 'pie2': '#43a047', 'pie3': '#fb8c00', 'pie4': '#e53935', 'pie5': '#8e24aa', 'pie6': '#00acc1', 'pie7': '#f4511e', 'pie8': '#3949ab', 'pie9': '#7cb342', 'pie10': '#c0ca33', 'pie11': '#039be5', 'pie12': '#d81b60', 'xyChart': { 'backgroundColor': '#ffffff', 'titleColor': '#1a237e', 'xAxisLabelColor': '#333333', 'yAxisLabelColor': '#333333', 'plotColorPalette': '#1e88e5, #43a047, #fb8c00, #e53935, #8e24aa' } } });</script>
+    <style>
+        :root {
+            --primary: #1a237e;
+            --primary-light: #3949ab;
+            --accent: #00bcd4;
+            --accent-warm: #ff6f00;
+            --bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --text: #212529;
+            --text-muted: #6c757d;
+            --border: #e9ecef;
+            --green: #2e7d32;
+            --red: #c62828;
+            --yellow: #f57f17;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            font-size: 15px;
+        }
+
+        /* ── COVER PAGE ── */
+        .cover {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0d1b3e 0%, #1a237e 40%, #283593 70%, #3949ab 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 60px 40px;
+            position: relative;
+            overflow: hidden;
+            page-break-after: always;
+        }
+        .cover::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -30%;
+            width: 80%;
+            height: 200%;
+            background: radial-gradient(ellipse, rgba(0, 188, 212, 0.12) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .cover-badge {
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 50px;
+            padding: 8px 24px;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            backdrop-filter: blur(10px);
+        }
+        .cover-country {
+            font-size: 96px;
+            font-weight: 800;
+            letter-spacing: 8px;
+            margin-bottom: 16px;
+            text-shadow: 0 4px 30px rgba(0,0,0,0.3);
+        }
+        .cover-title {
+            font-size: 28px;
+            font-weight: 300;
+            opacity: 0.9;
+            margin-bottom: 60px;
+            max-width: 600px;
+        }
+        .cover-meta {
+            font-size: 13px;
+            opacity: 0.6;
+            line-height: 2;
+        }
+        .cover-line {
+            width: 80px;
+            height: 3px;
+            background: var(--accent);
+            margin: 30px auto;
+            border-radius: 2px;
+        }
+
+        /* ── MAIN CONTENT ── */
+        .content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        /* ── SECTION HEADERS ── */
+        h1 {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 50px 0 24px 0;
+            padding-bottom: 12px;
+            border-bottom: 3px solid var(--accent);
+            page-break-before: always;
+        }
+        h1:first-child { page-break-before: avoid; }
+
+        h2 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary-light);
+            margin: 40px 0 16px 0;
+            padding-left: 16px;
+            border-left: 4px solid var(--accent);
+        }
+
+        h3 {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--text);
+            margin: 28px 0 12px 0;
+        }
+
+        p {
+            margin-bottom: 16px;
+            color: #333;
+        }
+
+        /* ── STAT CARDS ── */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+        }
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border: 1px solid var(--border);
+        }
+        .stat-card .number {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--primary);
+            display: block;
+        }
+        .stat-card .label {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+
+        /* ── TABLES ── */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 14px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        thead th {
+            background: var(--primary);
+            color: white;
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        tbody td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+        tbody tr:nth-child(even) { background: #f8f9ff; }
+        tbody tr:hover { background: #eef0ff; }
+
+        /* ── SWOT GRID ── */
+        .swot-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 24px 0;
+        }
+        .swot-card {
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid var(--border);
+        }
+        .swot-card h3 {
+            margin: 0 0 12px 0;
+            font-size: 16px;
+            border: none;
+            padding: 0;
+        }
+        .swot-card ul { padding-left: 20px; }
+        .swot-card li { margin-bottom: 8px; font-size: 14px; }
+        .swot-strengths { background: #e8f5e9; border-color: #a5d6a7; }
+        .swot-strengths h3 { color: var(--green); }
+        .swot-weaknesses { background: #fce4ec; border-color: #ef9a9a; }
+        .swot-weaknesses h3 { color: var(--red); }
+        .swot-opportunities { background: #e3f2fd; border-color: #90caf9; }
+        .swot-opportunities h3 { color: #1565c0; }
+        .swot-threats { background: #fff3e0; border-color: #ffcc80; }
+        .swot-threats h3 { color: var(--accent-warm); }
+
+        /* ── CALLOUT BOXES ── */
+        .callout {
+            background: #e8eaf6;
+            border-left: 4px solid var(--primary);
+            border-radius: 0 10px 10px 0;
+            padding: 20px 24px;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+        .callout-warning {
+            background: #fff3e0;
+            border-left-color: var(--accent-warm);
+        }
+        .callout-success {
+            background: #e8f5e9;
+            border-left-color: var(--green);
+        }
+
+        /* ── VERDICT BOX ── */
+        .verdict {
+            background: linear-gradient(135deg, #1a237e, #283593);
+            color: white;
+            border-radius: 16px;
+            padding: 40px;
+            margin: 40px 0;
+            text-align: center;
+        }
+        .verdict h2 {
+            color: white;
+            border: none;
+            padding: 0;
+            margin: 0 0 24px 0;
+            font-size: 24px;
+        }
+        .verdict-scores {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-top: 24px;
+        }
+        .verdict-item .score {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--accent);
+        }
+        .verdict-item .score-label {
+            font-size: 13px;
+            opacity: 0.7;
+            margin-top: 4px;
+        }
+        .verdict p, .verdict li {
+            color: rgba(255, 255, 255, 0.92);
+        }
+        .verdict strong {
+            color: #ffffff;
+        }
+
+        /* ── MERMAID CHARTS ── */
+        .chart-container {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 30px;
+            margin: 24px 0;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+        .chart-container h3 {
+            margin: 0 0 20px 0;
+            text-align: center;
+        }
+        .mermaid { margin: 0 auto; }
+
+        /* ── PHASE CARDS ── */
+        .phase {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 28px;
+            margin: 16px 0;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .phase-badge {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .phase-badge.medium { background: var(--primary-light); }
+        .phase-badge.long { background: #455a64; }
+        .phase ol { padding-left: 20px; }
+        .phase li { margin-bottom: 10px; font-size: 14px; }
+
+        /* ── LISTS ── */
+        ul, ol { padding-left: 24px; margin-bottom: 16px; }
+        li { margin-bottom: 8px; }
+
+        /* ── FOOTER ── */
+        .footer {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+            font-size: 12px;
+            border-top: 1px solid var(--border);
+            margin-top: 60px;
+        }
+
+        /* ── PRINT ── */
+        @media print {
+            body { background: white; font-size: 13px; }
+            .cover { min-height: 100vh; }
+            .content { padding: 40px 30px; }
+            h1 { page-break-before: always; font-size: 26px; }
+            h1:first-child { page-break-before: avoid; }
+            .stat-card, .phase, .chart-container { break-inside: avoid; }
+            table { break-inside: avoid; }
+            .swot-grid { break-inside: avoid; }
+        }
+
+        strong { color: #1a237e; }
+    </style>
+</head>
+<body>
+
+<!-- ═══ COVER PAGE ═══ -->
+<div class="cover">
+    <div class="cover-badge">Internet Society · Pulse Platform</div>
+    <div class="cover-country">FR</div>
+    <div class="cover-title">Peering Readiness & Policy Brief</div>
+    <div class="cover-line"></div>
+    <div class="cover-meta">
+        Generated: 2026-09-10<br>
+        Data Sources: ISOC Pulse API · Internet Yellow Pages (IYP) Neo4j<br>
+        Framework: ISOC Internet Resilience Index — Security Pillar
+    </div>
+</div>
+
+<!-- ═══ REPORT BODY (LLM-generated) ═══ -->
+<div class="content">
+<h1>Strategic Synthesis & Roadmap: Strengthening FR's Digital Foundation</h1>
+<p>Sir/Ma'am,</p>
+<p>This strategic brief synthesizes our findings on FR's telecommunications and internet policy landscape, offering a forward-looking roadmap to enhance digital sovereignty, resilience, and economic competitiveness.</p>
+
+<h1>Executive Summary: The "Big Picture" Diagnosis</h1>
+<p>FR's digital infrastructure exhibits a strong foundation with <strong>1485 active ASNs</strong> and <strong>27 Internet Exchange Points (IXPs)</strong>. The presence of <strong>9 Tier-1 CDNs</strong>, including global giants like Google and Netflix, significantly contributes to network efficiency. Furthermore, an impressive <strong>0.0% tromboning rate</strong> for domestic traffic underscores robust internal routing paths. This indicates that when traffic does stay local, it routes efficiently.</p>
+<p>The core paradox, however, lies in the <strong>localization ratio of only 34.73%</strong>. Despite these foundational strengths, a significant portion of domestic traffic still traverses international routes. This presents a critical opportunity: to leverage existing infrastructure more effectively, reduce reliance on costly international transit, and enhance national digital sovereignty. By addressing this gap, FR can unlock substantial economic and strategic benefits.</p>
+<div class="stat-grid">
+  <div class="stat-card"><span class="number">1485</span><span class="label">Active ASNs</span></div>
+  <div class="stat-card"><span class="number">27</span><span class="label">Total IXPs</span></div>
+  <div class="stat-card"><span class="number">9</span><span class="label">Tier-1 CDNs</span></div>
+  <div class="stat-card"><span class="number">34.73%</span><span class="label">Localization Ratio</span></div>
+  <div class="stat-card"><span class="number">0.0%</span><span class="label">Tromboning</span></div>
+  <div class="stat-card"><span class="number">9.56 ms</span><span class="label">Median Edge Latency</span></div>
+</div>
+
+<h1>SWOT Analysis: The Strategic Cheat Sheet</h1>
+<div class="swot-grid">
+  <div class="swot-card swot-strengths"><h3>💪 Strengths</h3><ul><li><strong>Extensive ASNs & IXP Network:</strong> 1485 active ASNs and 27 IXPs provide a robust physical and logical foundation for interconnection.</li><li><strong>Tier-1 CDN Presence:</strong> 9 major CDNs caching content domestically enhances user experience and reduces international dependency for popular content.</li><li><strong>Exceptional Routing Efficiency:</strong> 0.0% domestic tromboning indicates efficient internal peering paths where traffic is localized.</li><li><strong>Low Median Edge Latency:</strong> Users experience quick access to core infrastructure (9.56 ms).</li></ul></div>
+  <div class="swot-card swot-weaknesses"><h3>⚠️ Weaknesses</h3><ul><li><strong>Low Traffic Localization:</strong> Only 34.73% of traffic remains domestic, indicating significant reliance on international transit and under-utilization of local peering potential.</li><li><strong>Absence of Peering Facilities:</strong> Zero reported dedicated peering facilities suggests a gap in neutral, colocation-rich environments for diverse network interconnection beyond core IXP fabrics.</li><li><strong>Potential for Market Imbalances:</strong> Low localization, despite strong infrastructure, may point to insufficient incentives for local peering or dominant market players preferring private peering or transit.</li></ul></div>
+  <div class="swot-card swot-opportunities"><h3>🚀 Opportunities</h3><ul><li><strong>Boost Digital Economy:</strong> Increased localization fosters domestic content creation, hosting, and cloud services, stimulating local digital industries.</li><li><strong>Enhance National Resilience:</strong> Reducing reliance on international transit improves network robustness against global disruptions or geopolitical pressures.</li><li><strong>Attract Further Investment:</strong> By demonstrating a commitment to local digital infrastructure, FR can become a more attractive hub for data centers and tech companies.</li><li><strong>Leverage Existing CDN Footprint:</strong> Expand deeper caching and content delivery to improve user experience and reduce costs further.</li></ul></div>
+  <div class="swot-card swot-threats"><h3>🛡️ Threats</h3><ul><li><strong>Increased Transit Costs:</strong> Over-reliance on international transit can lead to higher operational costs for ISPs and end-users.</li><li><strong>Reduced Digital Sovereignty:</strong> Less control over data flows and content delivery if a majority of traffic routes internationally.</li><li><strong>Vulnerability to External Factors:</strong> Higher exposure to international cable cuts, geopolitical tensions, or cyber-attacks targeting upstream providers.</li><li><strong>Stifled Local Innovation:</strong> Lack of strong local peering and content ecosystem can hinder the growth of domestic digital services and start-ups.</li></ul></div>
+</div>
+
+<h1>Strategic Roadmap: The Policy Agenda</h1>
+<p>To address the identified challenges and fully capitalize on FR's digital strengths, we propose a three-phased strategic roadmap:</p>
+<div class="phase"><span class="phase-badge">Phase 1 — Quick Wins</span><ol><li><strong>Mandate Peering Review & Incentives:</strong> Issue regulatory guidance or mandates for major domestic ISPs and content providers to review and publish their peering policies, incentivizing open peering at local IXPs.</li><li><strong>Promote Local Content Hosting:</strong> Launch awareness campaigns and provide minor tax incentives for government entities, educational institutions, and businesses to host their digital assets within FR's borders.</li><li><strong>Cybersecurity Best Practices:</strong> Develop and disseminate enhanced cybersecurity hygiene guidelines for network operators and content hosts, emphasizing local data protection and incident response.</li></ol></div>
+<div class="phase"><span class="phase-badge medium">Phase 2 — Structural</span><ol><li><strong>Develop Carrier-Neutral Peering Facilities:</strong> Initiate a program to encourage or co-invest in the development of carrier-neutral data centers that also function as peering facilities, addressing the current gap.</li><li><strong>Reform Regulatory Frameworks:</strong> Review existing telecommunications regulations to actively promote competition, discourage anti-competitive peering practices, and foster a healthy, interconnected market.</li><li><strong>Digital Skill Development:</strong> Invest in training programs for network engineers and data center specialists to support the expanding domestic infrastructure and digital economy.</li></ol></div>
+<div class="phase"><span class="phase-badge long">Phase 3 — Vision</span><ol><li><strong>Establish Digital Sovereignty Strategy:</strong> Develop a comprehensive national strategy for digital sovereignty, focusing on data localization, secure national cloud infrastructure, and independent internet governance participation.</li><li><strong>Foster Regional Digital Leadership:</strong> Position FR as a regional hub for internet traffic exchange and content hosting, attracting international peering partners and data center investments.</li><li><strong>Research & Development Fund:</strong> Create a dedicated fund for R&D in next-generation internet infrastructure, including quantum networking and advanced cybersecurity, to ensure long-term competitiveness.</li></ol></div>
+
+<h1>Data Visualization</h1>
+<div class="callout callout-warning">
+  The provided "Peering Policy Brief — FR" report primarily focuses on peering infrastructure, localization, and routing efficiency.
+  <strong>Crucially, it does not contain data required for the specific charts requested, such as ISP Market Share, IPv6 Adoption Trends, or Sector-Specific IPv6 Readiness.</strong>
+  Therefore, to avoid inventing or hallucinating data, these charts cannot be generated based on the current report.
+  For future reports, including this critical market and adoption data will enable a more comprehensive visual analysis.
+</div>
+
+<div class="verdict">
+  <h2>Final Verdict</h2>
+  <p>FR possesses a robust foundational internet infrastructure, marked by a high number of active ASNs, extensive IXP coverage, and excellent internal routing efficiency. The significant presence of Tier-1 CDNs further underpins its potential. However, the current low traffic localization ratio of <strong>34.73%</strong> indicates an underleveraged potential and a persistent reliance on international transit. This presents both a vulnerability and a substantial opportunity for strategic intervention.</p>
+  <p>By implementing the proposed roadmap, FR can significantly enhance its digital sovereignty, improve network resilience, and stimulate its domestic digital economy. The immediate focus should be on incentivizing local peering and content hosting, followed by structural reforms to bolster infrastructure and market competition. Long-term vision involves solidifying its position as a regional digital leader.</p>
+  <div class="verdict-scores">
+    <div class="verdict-item"><div class="score">High</div><div class="score-label">Investability</div></div>
+    <div class="verdict-item"><div class="score">Developing</div><div class="score-label">Maturity</div></div>
+  </div>
+</div>
+
+    <div class="footer">
+        <p>Report generated by ISOC Pulse × IYP Peering Policy Engine</p>
+        <p>Team: Rahul Rajesh, Ron Prajoth, Aditya Menon | Mentor: Amreesh Phokeer (ISOC)</p>
+    </div>
+</div>
+
+</body>
+</html>

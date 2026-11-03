@@ -1668,7 +1668,7 @@ def export_policy_brief(
     year     = scorecard.get("year", 2024)
 
     if output_dir is None:
-        output_dir = str(_ROOT / "reports")
+        output_dir = str(_ROOT / "reports" / "ipv6" / "raw")
 
     os.makedirs(output_dir, exist_ok=True)
 

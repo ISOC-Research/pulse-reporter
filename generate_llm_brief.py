@@ -1,6 +1,9 @@
 import argparse
 import os
 import sys
+import warnings
+
+warnings.filterwarnings("ignore", category=FutureWarning)
 
 import google.generativeai as genai
 from dotenv import load_dotenv
@@ -406,127 +409,31 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 """
 
 
-# ═══════════════════════════════════════════════════════════════
-# SYSTEM PROMPT — Instructions for the LLM
-# ═══════════════════════════════════════════════════════════════
-
-def build_system_prompt():
-    """
-    Load the French team's synthesis prompt if available,
-    then add our strict HTML-output rules.
-    """
-    prompt_dir = os.path.join("request_for_YPI", "prompt", "report_generation")
-    synthesis_path = os.path.join(prompt_dir, "part_7_synthesis.md")
-
-    if os.path.exists(synthesis_path):
-        with open(synthesis_path, "r", encoding="utf-8") as f:
-            base_prompt = f.read()
-    else:
-        base_prompt = "You are a Chief Strategy Officer advising a senior government official on Telecommunications and Internet Policy."
-
-    html_rules = """
-
-## OUTPUT FORMAT (CRITICAL — READ CAREFULLY)
-
-You MUST output raw HTML content (NOT markdown). Your output will be injected directly into an HTML page.
-Follow these rules strictly:
-
-### ADDRESSING RULES (CRITICAL)
-- Do NOT address the reader as "Mr. President", "Prime Minister", "Your Excellency", or any specific title.
-- If you need to address the reader, use "Sir/Ma'am" or simply say "Decision-Makers".
-- Write in a professional but neutral tone suitable for any senior government or regulatory official.
-- NOTE: Audience-specific formatting tiers (Head of State, Minister, Regulator, Technical) will be added in a future version.
-
-### Text & Structure
-- Use <h1> for major section titles (e.g., "Executive Summary", "SWOT Analysis", "Strategic Roadmap").
-- Use <h2> for subsections.
-- Use <h3> for minor headings.
-- Use <p> for paragraphs. Wrap key facts in <strong> tags.
-- Use <ul>/<ol> and <li> for lists.
-
-### Stat Cards
-For key metrics, output this exact HTML structure:
-<div class="stat-grid">
-  <div class="stat-card"><span class="number">86.9%</span><span class="label">National IPv6 Adoption</span></div>
-  <div class="stat-card"><span class="number">#3</span><span class="label">Global Ranking</span></div>
-</div>
-
-### Tables
-Use standard <table>, <thead>, <tbody>, <tr>, <th>, <td> tags.
-
-### SWOT Analysis
-You MUST output the SWOT in this exact structure:
-<div class="swot-grid">
-  <div class="swot-card swot-strengths"><h3>💪 Strengths</h3><ul><li>...</li></ul></div>
-  <div class="swot-card swot-weaknesses"><h3>⚠️ Weaknesses</h3><ul><li>...</li></ul></div>
-  <div class="swot-card swot-opportunities"><h3>🚀 Opportunities</h3><ul><li>...</li></ul></div>
-  <div class="swot-card swot-threats"><h3>🛡️ Threats</h3><ul><li>...</li></ul></div>
-</div>
-
-### Callout Boxes
-For important warnings or highlights:
-<div class="callout">Key insight here.</div>
-<div class="callout callout-warning">Warning text here.</div>
-<div class="callout callout-success">Positive highlight here.</div>
-
-### Policy Roadmap Phases
-<div class="phase"><span class="phase-badge">Phase 1 — Quick Wins</span><ol><li>...</li></ol></div>
-<div class="phase"><span class="phase-badge medium">Phase 2 — Structural</span><ol><li>...</li></ol></div>
-<div class="phase"><span class="phase-badge long">Phase 3 — Vision</span><ol><li>...</li></ol></div>
-
-### Charts (Mermaid) — MUST BE COLORFUL
-Wrap mermaid charts inside a container. The page uses a vibrant Mermaid color palette — charts will render with rich blues, greens, oranges, and reds automatically.
-<div class="chart-container">
-  <h3>Chart Title</h3>
-  <div class="mermaid">
-pie title ISP Market Share
-    "Orange" : 35.4
-    "Free SAS" : 18.6
-  </div>
-</div>
-
-Include at LEAST:
-1. A Pie Chart for ISP Market Share (use the top 5-8 ISPs for readability — do NOT include every single ISP).
-2. A Bar Chart (xychart-beta) for the 5-Year Adoption Trend. You MUST use xychart-beta syntax, NEVER use "lineChart". Example:
-<div class="mermaid">
-xychart-beta
-    title "National IPv6 Adoption Trend"
-    x-axis [2020, 2021, 2022, 2023, 2024]
-    y-axis "Adoption (%)" 0 --> 100
-    bar [67.7, 71.9, 89.1, 87.0, 86.9]
-</div>
-3. A Pie Chart or Bar Chart for Sector IPv6 Readiness (Banking, News, Education, Ecommerce).
-4. A Bar Chart comparing Web IPv6 Readiness across categories (Government, CDN-backed, Self-hosted, etc.) if the data is available.
-
-### Final Verdict
-<div class="verdict">
-  <h2>Final Verdict</h2>
-  <p>Summary paragraph.</p>
-  <div class="verdict-scores">
-    <div class="verdict-item"><div class="score">High</div><div class="score-label">Investability</div></div>
-    <div class="verdict-item"><div class="score">Developing</div><div class="score-label">Maturity</div></div>
-  </div>
-</div>
-
-### ABSOLUTE RULES
-- Do NOT wrap your output in ```html or ``` code fences.
-- Do NOT output any markdown. Only raw HTML.
-- Do NOT invent or hallucinate any data. Use ONLY the numbers from the attached report.
-- Do NOT address the reader as "Mr. President" or "Prime Minister" or any specific title. Use "Sir/Ma'am" if needed.
-- The report must be readable by a non-technical policymaker in under 5 minutes.
-"""
-    return base_prompt + html_rules
-
-
 def main():
     parser = argparse.ArgumentParser(description="Generate an LLM Policy Brief from a Report.")
-    parser.add_argument("topic", type=str, choices=["ipv6", "dnssec", "peering"], help="The topic to generate (ipv6, dnssec, peering)")
-    parser.add_argument("country", type=str, help="Country code (e.g., FR, IN)")
+    parser.add_argument("arg1", type=str, help="Topic (ipv6, dnssec, peering) or Country code (e.g., FR, IN)")
+    parser.add_argument("arg2", type=str, nargs="?", default=None, help="Country code or Topic")
+    parser.add_argument("--topic", "-t", type=str, default=None, help="Optional topic flag (ipv6, dnssec, peering)")
     args = parser.parse_args()
 
-    country = args.country.upper()
-    topic = args.topic.lower()
-    
+    topics = {"ipv6", "dnssec", "peering"}
+    a1 = args.arg1.lower()
+    a2 = args.arg2.lower() if args.arg2 else None
+    t_flag = args.topic.lower() if args.topic else None
+
+    if t_flag in topics:
+        topic = t_flag
+        country = args.arg1.upper()
+    elif a1 in topics and a2:
+        topic = a1
+        country = args.arg2.upper()
+    elif a2 in topics:
+        topic = a2
+        country = args.arg1.upper()
+    else:
+        print("❌ Usage: python generate_llm_brief.py <peering|ipv6|dnssec> <COUNTRY_CODE>")
+        sys.exit(1)
+
     # Capitalize properly for filenames
     if topic == "ipv6":
         topic_title = "IPv6"
@@ -534,113 +441,61 @@ def main():
         topic_title = "DNSSEC"
     elif topic == "peering":
         topic_title = "Peering"
-        
-    report_path = os.path.join("reports", f"{topic_title}_Report_{country}.md")
-    output_path = os.path.join("reports", f"{topic_title}_Policy_Brief_{country}.html")
+
+    raw_dir = os.path.join("reports", topic, "raw")
+    html_dir = os.path.join("reports", topic, "html")
+    word_dir = os.path.join("reports", topic, "word")
+    os.makedirs(html_dir, exist_ok=True)
+    os.makedirs(word_dir, exist_ok=True)
+    report_path = os.path.join(raw_dir, f"{topic_title}_Report_{country}.md")
+    if not os.path.exists(report_path):
+        legacy = os.path.join("reports", f"{topic_title}_Report_{country}.md")
+        if os.path.exists(legacy):
+            report_path = legacy
+    output_path = os.path.join(html_dir, f"{topic_title}_Policy_Brief_{country}.html")
 
     if not os.path.exists(report_path):
         print(f"❌ ERROR: Could not find report file at {report_path}")
-        print(f"   Please run `python {topic}_report.py {country}` first to generate the data.")
+        print(f"   Please run `python run.py {topic} {country}` first to generate the data.")
         sys.exit(1)
 
     print(f"📄 Reading raw data from {report_path}...")
     with open(report_path, "r", encoding="utf-8") as f:
         report_data = f.read()
 
-    system_instruction = build_system_prompt()
+    from datetime import datetime
+    from docx_builder import country_name, export_word_safe
+    from html_theme import apply_isoc_theme, prepare_html_content
+    from isoc_report import build_isoc_system_prompt, build_isoc_user_prompt, generate_isoc_content, postprocess_isoc_html
 
-    print("🤖 Sending data to Gemini 2.5 Flash...")
+    cname = country_name(country)
+    system_instruction = build_isoc_system_prompt(topic_title, cname)
 
     try:
-        model = genai.GenerativeModel(
-            model_name="gemini-2.5-flash",
-            system_instruction=system_instruction
-        )
+        prompt = build_isoc_user_prompt(topic_title, cname, country, report_data)
+        llm_html = generate_isoc_content(genai, system_instruction, prompt)
 
-        prompt = (
-            f"Here is the complete raw {topic_title} data report for country code {country}. "
-            f"Generate the Executive Policy Brief as raw HTML following your system instructions.\n\n"
-            f"{report_data}"
-        )
-
-        response = model.generate_content(prompt)
-        llm_html = response.text
-
-        # Clean up in case the LLM wraps it in code fences anyway
-        llm_html = llm_html.removeprefix("```html")
-        llm_html = llm_html.removeprefix("```")
-        llm_html = llm_html.removesuffix("```")
-        llm_html = llm_html.strip()
-
-        # Convert any leftover markdown **bold** to <strong> tags
-        import re
-        llm_html = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', llm_html)
-
-        # Fix xychart-beta x-axis labels with unquoted spaces/parentheses
-        def fix_xychart(match):
-            block = match.group(0)
-            def quote_xaxis(m):
-                prefix = m.group(1)
-                items = [x.strip() for x in m.group(2).split(',')]
-                quoted = []
-                for x in items:
-                    clean_x = x.strip('"\'')
-                    # Remove parentheses content to save space (e.g. ASNs, "(Overall)")
-                    clean_x = re.sub(r'\s*\(.*?\)', '', clean_x)
-                    # Truncate if still too long
-                    if len(clean_x) > 15:
-                        clean_x = clean_x[:13] + '..'
-                    quoted.append(f'"{clean_x}"')
-                return prefix + '[' + ', '.join(quoted) + ']'
-            return re.sub(r'(x-axis.*?)(?:\[(.*?)\])', quote_xaxis, block)
-        llm_html = re.sub(r'xychart-beta.*?(?:</div>|</pre>)', fix_xychart, llm_html, flags=re.DOTALL)
-
-        # Fix pie charts rendering a leftover 0% slice when sum != 100
-        def fix_pie_sum(match):
-            block = match.group(0)
-            lines = block.split('\n')
-            parsed = []
-            total = 0.0
-            lines_to_keep = []
-            
-            for i, line in enumerate(lines):
-                m = re.search(r'(".*?")\s*:\s*([\d\.]+)', line)
-                if m:
-                    val = float(m.group(2))
-                    if val < 0.5:
-                        continue
-                    parsed.append((len(lines_to_keep), val, line, m.group(1)))
-                    total += val
-                    lines_to_keep.append(line)
-                else:
-                    lines_to_keep.append(line)
-                    
-            if parsed and abs(total - 100.0) > 0.001 and total > 0:
-                largest_idx = max(range(len(parsed)), key=lambda x: parsed[x][1])
-                idx_in_lines, val, orig_line, orig_label = parsed[largest_idx]
-                diff = 100.0 - total
-                new_val = round(val + diff, 2)
-                parsed[largest_idx] = (idx_in_lines, new_val, orig_line, orig_label)
-                lines_to_keep[idx_in_lines] = re.sub(r'[\d\.]+\s*$', str(new_val), orig_line)
-                
-            for idx_in_lines, val, orig_line, orig_label in parsed:
-                clean_label = re.sub(r'\s*\([\d\.]+\s*%?\)', '', orig_label.strip('"'))
-                new_label = f'"{clean_label} ({val:g}%)"'
-                lines_to_keep[idx_in_lines] = re.sub(r'".*?"', new_label, lines_to_keep[idx_in_lines], count=1)
-                
-            return '\n'.join(lines_to_keep)
-        llm_html = re.sub(r'pie title.*?(?:</div>|</pre>)', fix_pie_sum, llm_html, flags=re.DOTALL)
-
-        # Build final HTML
-        from datetime import datetime
         html_template = HTML_TEMPLATE.replace("IPv6 Policy Brief", f"{topic_title} Policy Brief")
         html_template = html_template.replace("IPv6 Readiness", f"{topic_title} Readiness")
         html_template = html_template.replace("IPv6 Policy Engine", f"{topic_title} Policy Engine")
-        
+
+        docx_name = f"{topic_title}_Report_{country}.docx"
+        html_template = apply_isoc_theme(
+            html_template, topic_title, f"../word/{docx_name}", country,
+            sources={
+                "ipv6": "Data Sources: ISOC Pulse API · Internet Yellow Pages (IYP)",
+                "dnssec": "Data Sources: Internet Yellow Pages (IYP) · Cloudflare Radar",
+                "peering": "Data Sources: PeeringDB · PCH · RIPEstat · ISOC Pulse",
+            }[topic],
+        )
+
+        llm_html = postprocess_isoc_html(llm_html, cname, country)
+        web_content = prepare_html_content(llm_html)
+
         final_html = html_template.format(
             country=country,
-            date=datetime.now().strftime("%Y-%m-%d"),
-            llm_content=llm_html
+            date=datetime.now().strftime("%B %Y"),
+            llm_content=web_content
         )
 
         with open(output_path, "w", encoding="utf-8") as f:
@@ -648,6 +503,9 @@ def main():
 
         print(f"✅ Success! Policy Brief saved to: {output_path}")
         print(f"   Open it in Chrome and press Ctrl+P to save as PDF.")
+
+        export_word_safe(llm_html, topic_title, country,
+                         os.path.join(word_dir, docx_name))
 
     except Exception as e:
         print(f"❌ Gemini API Error: {e}")
