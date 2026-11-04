@@ -1,5 +1,5 @@
 # IPv6 Policy Brief — SO
-**Generated:** 2026-09-17 23:58  
+**Generated:** 2026-11-04 11:30  
 **Data Sources:** ISOC Pulse API 2024 · Internet Yellow Pages (IYP) Neo4j  
 **Framework:** ISOC Internet Resilience Index — Security Pillar (Enabling Technologies)
 
@@ -7,17 +7,17 @@
 
 ## Executive Summary
 
-SO currently has a national IPv6 adoption rate of 0.5%, with 100.0% of the subscriber market served by ISPs classified as non-compliant. PRIORITY ACTION — 2 high-impact bottleneck provider(s) identified: AS37371 (Hormuud Telecom Somalia INC - Hormuud Telecom Somalia INC, 42.9% market share): targeting this provider alone would increase national adoption from 0.5% to 43.4% (+42.9 percentage points); AS37473 (Telesom - Telesom, 18.4% market share): targeting this provider alone would increase national adoption from 0.5% to 18.7% (+18.3 percentage points). 11 ISP(s) (covering 36.2% of the market) have zero IPv6 prefixes in the global routing table and require immediate regulatory intervention for RIR membership. 2 ISP(s) (covering 2.4% of the market) have active BGP announcements but near-zero user-side adoption, indicating a last-mile CPE or hardware configuration problem requiring targeted equipment standards enforcement.
+SO currently has a national IPv6 adoption rate of 0.5%, with 100.0% of the subscriber market served by ISPs classified as non-compliant. PRIORITY ACTION — 2 high-impact bottleneck provider(s) identified: AS37371 (Hormuud Telecom Somalia INC - Hormuud Telecom Somalia INC, 42.9% market share): targeting this provider alone would increase national adoption from 0.5% to 43.4% (+42.9 percentage points); AS37473 (Telesom - Telesom, 18.4% market share): targeting this provider alone would increase national adoption from 0.5% to 18.8% (+18.3 percentage points). 11 ISP(s) (covering 36.2% of the market) have zero IPv6 prefixes in the global routing table and require immediate regulatory intervention for RIR membership. 2 ISP(s) (covering 2.4% of the market) have active BGP announcements but near-zero user-side adoption, indicating a last-mile CPE or hardware configuration problem requiring targeted equipment standards enforcement.
 
 ---
 
 ## Section 1 — Core Infrastructure / RPKI Security
 
-**Total IPv6 Prefixes (Domestic):** 19  
-**RPKI-Covered Prefixes:** 5  
-**RPKI Coverage:** 26.32% (~28%)  
+**Total IPv6 Prefixes:** 19  
+**RPKI-Covered Prefixes:** 19  
+**RPKI Coverage:** 100.00%  
 
-> RPKI coverage measures the percentage of domestic IPv6 routing prefixes
+> RPKI coverage measures the percentage of IPv6 routing prefixes
 > protected using Route Origin Authorization (ROA) records for routing security.
 
 ---
@@ -26,10 +26,11 @@ SO currently has a national IPv6 adoption rate of 0.5%, with 100.0% of the subsc
 
 | ISP | IPv6 Prefixes | RPKI Coverage |
 |-----|---------------|---------------|
-| Telesom - Telesom | 18 | 22.22% |
+| Telesom - Telesom | 18 | 100.00% |
 | SomCable - SomCable | 1 | 100.00% |
 
-> *(Note: Foreign global satellite operator AS14593 / SpaceX Starlink announces 954 global IPv6 prefixes and is excluded from the domestic prefix baseline.)*
+> Several major networks continue to exhibit weak RPKI
+> adoption despite significant IPv6 routing presence.
 
 ---
 
@@ -100,12 +101,12 @@ SO currently has a national IPv6 adoption rate of 0.5%, with 100.0% of the subsc
 | ASN | ISP | Market Share | Adoption | First IPv6 Seen | Age (yrs) | Reason |
 |-----|-----|:-----------:|:--------:|:---------------:|:---------:|--------|
 | AS37371 | Hormuud Telecom Somalia INC - Hormuud Telecom Somalia INC | 42.9% | 0.0% | N/A | N/A | Top |
-| AS37473 | Telesom - Telesom | 18.4% | 0.4% | 2022-12-18 | 3.7 | Top |
+| AS37473 | Telesom - Telesom | 18.4% | 0.4% | 2022-12-18 | 3.9 | Top |
 | AS37563 | SOMTEL INTERNATIONAL Ltd - SOMTEL INTERNATIONAL Ltd | 11.5% | 0.0% | N/A | N/A | Top |
 | AS328250 | Golis Telecom Somalia - Golis Telecom Somalia | 11.3% | 0.0% | N/A | N/A | Top |
 | AS328469 | Somtel Somalia LTD - Somtel Somalia LTD | 7.7% | 0.0% | N/A | N/A | Top |
 | AS328319 | AMTEL LTD - AMTEL LTD | 2.2% | 0.0% | N/A | N/A | Laggard |
-| AS37425 | SomCable - SomCable | 2.0% | 0.4% | 2022-12-30 | 3.7 | Laggard |
+| AS37425 | SomCable - SomCable | 2.0% | 0.4% | 2022-12-30 | 3.8 | Laggard |
 | AS328959 | SO! Limited - SO! Limited | 1.9% | 0.0% | N/A | N/A | Laggard |
 
 > Source: [RIPEstat](https://stat.ripe.net) — Announced Prefixes endpoint (historical data from 2000–present).  
@@ -128,28 +129,28 @@ SO currently has a national IPv6 adoption rate of 0.5%, with 100.0% of the subsc
 ### Regional Position
 
 - **SO adoption:** 0.5%
-- **Global average:** 23.5%
-- **Global rank:** #214 of 241 countries
-- **vs Global Average:** -23.0 pp (below average)
+- **Global average:** 24.4%
+- **Global rank:** #216 of 243 countries
+- **vs Global Average:** -23.9 pp (below average)
 
 **Closest peer countries by adoption score:**
 
 | Country | Adoption | Gap |
 |---------|:--------:|:---:|
-| TZ | 0.48% | -0.0 pp |
-| GQ | 0.44% | -0.1 pp |
-| GG | 0.61% | +0.1 pp |
-| SY | 0.6% | +0.1 pp |
-| PS | 0.59% | +0.1 pp |
+| KH | 0.48% | -0.0 pp |
+| LB | 0.48% | -0.0 pp |
+| PS | 0.58% | +0.1 pp |
+| TZ | 0.55% | +0.1 pp |
+| AZ | 0.42% | -0.1 pp |
 
 ---
 
 ## Section 4 — Web Services IPv6 Readiness
 
 **Popular Domains Analyzed:** 172  
-**IPv6-Reachable Domains:** 55  
-**IPv4-Only Domains:** 117  
-**IPv6 Web Readiness:** 32.00%  
+**IPv6-Reachable Domains:** 0  
+**IPv4-Only Domains:** 172  
+**IPv6 Web Readiness:** 0.00%  
 
 > This analysis measures IPv6 reachability among
 > ranked/popular domains within the national
@@ -244,8 +245,9 @@ SO currently has a national IPv6 adoption rate of 0.5%, with 100.0% of the subsc
 | Date | Domains Sampled | IPv6-Enabled | Readiness |
 |------|:---------------:|:------------:|:---------:|
 | 2026-09-17 | 732 | 374 | 51.1% |
+| 2026-11-04 | 732 | 374 | 51.1% |
 
-> This is the first recorded snapshot. Run the report again in the future to build a trend.
+> TLD IPv6 readiness has remained stable by 0.0 pp since 2026-09-17 (2 snapshots recorded).
 
 ### Authoritative Nameserver IPv6 Reachability
 

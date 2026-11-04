@@ -1,5 +1,5 @@
 # IPv6 Policy Brief — IN
-**Generated:** 2026-07-10 02:40  
+**Generated:** 2026-11-04 10:31  
 **Data Sources:** ISOC Pulse API 2024 · Internet Yellow Pages (IYP) Neo4j  
 **Framework:** ISOC Internet Resilience Index — Security Pillar (Enabling Technologies)
 
@@ -7,15 +7,15 @@
 
 ## Executive Summary
 
-IN currently has a national IPv6 adoption rate of 78.9%, with 0.2% of the subscriber market served by ISPs classified as non-compliant. 1 ISP(s) (covering 0.2% of the market) have zero IPv6 prefixes in the global routing table and require immediate regulatory intervention for RIR membership.
+IN currently has a national IPv6 adoption rate of 76.4%, with 0.0% of the subscriber market served by ISPs classified as non-compliant. All major ISPs are currently classified as compliant. Focus should shift to sustaining adoption growth and improving RPKI security hygiene.
 
 ---
 
 ## Section 1 — Core Infrastructure / RPKI Security
 
-**Total IPv6 Prefixes:** 25,831  
-**RPKI-Covered Prefixes:** 7,403  
-**RPKI Coverage:** 28.66%  
+**Total IPv6 Prefixes:** 17,468  
+**RPKI-Covered Prefixes:** 16,206  
+**RPKI Coverage:** 92.78%  
 
 > RPKI coverage measures the percentage of IPv6 routing prefixes
 > protected using Route Origin Authorization (ROA) records for routing security.
@@ -26,11 +26,11 @@ IN currently has a national IPv6 adoption rate of 78.9%, with 0.2% of the subscr
 
 | ISP | IPv6 Prefixes | RPKI Coverage |
 |-----|---------------|---------------|
-| VIL-AS-AP Vodafone Idea Ltd | 1135 | 0.00% |
-| TATAPLAYBROADBAND-AS-AP TATA PLAY BROADB | 635 | 0.00% |
-| DNA-AS-AP DIGITAL NETWORK ASSOCIATES PRI | 102 | 0.00% |
-| GTPL-AS-AP Gujarat Telelink Pvt Ltd | 285 | 0.35% |
-| INPL-IN-AP Ishans Network | 156 | 0.64% |
+| TATAPLAYBROADBAND-AS-AP - TATA PLAY BROA | 627 | 0.00% |
+| DNA-AS-AP - DIGITAL NETWORK ASSOCIATES P | 102 | 0.00% |
+| FIVENET-IN - Microscan Internet Limited | 97 | 32.99% |
+| BBIL-AP - BHARTI Airtel Ltd. | 160 | 52.50% |
+| EXCITEL-AS-IN - Excitel Broadband Privat | 138 | 93.48% |
 
 > Several major networks continue to exhibit weak RPKI
 > adoption despite significant IPv6 routing presence.
@@ -39,8 +39,8 @@ IN currently has a national IPv6 adoption rate of 78.9%, with 0.2% of the subscr
 
 ### Preliminary IPv6 Upstream Connectivity
 
-**ISPs Assessed:** 227  
-**IPv6-Capable Upstream Reachability:** 99.56%  
+**ISPs Assessed:** 224  
+**IPv6-Capable Upstream Reachability:** 100.00%  
 
 > Preliminary graph-based analysis suggests that most assessed
 > ISPs maintain upstream dependencies connected to IPv6-capable
@@ -55,25 +55,25 @@ IN currently has a national IPv6 adoption rate of 78.9%, with 0.2% of the subscr
 
 **Domestic IXPs:** 40  
 **IXPs with IPv6 LAN:** 34 (85.0%)  
-**Members with IPv6 Peering:** 1465 / 1895 (77.3%)  
+**Members with IPv6 Peering:** 1508 / 1934 (78.0%)  
 
 | IXP | IPv6 LAN | Members | IPv6 Members | IPv6 % |
 |-----|:--------:|:-------:|:------------:|:------:|
-| DE-CIX Mumbai | Yes | 453 | 318 | 70.2% |
-| Extreme IX Mumbai | Yes | 249 | 201 | 80.7% |
-| NIXI Mumbai | Yes | 177 | 146 | 82.5% |
-| Extreme IX Delhi | Yes | 175 | 137 | 78.3% |
-| NIXI Delhi | Yes | 117 | 89 | 76.1% |
-| Extreme IX Chennai | Yes | 91 | 73 | 80.2% |
-| DE-CIX Delhi | Yes | 88 | 66 | 75.0% |
-| AMS-IX Mumbai | Yes | 80 | 57 | 71.2% |
-| DE-CIX Chennai | Yes | 73 | 53 | 72.6% |
-| NIXI Chennai | Yes | 59 | 52 | 88.1% |
-| Extreme IX Bangalore | Yes | 39 | 35 | 89.7% |
-| Kolkata IX | Yes | 31 | 29 | 93.5% |
-| NIXI Kolkata | Yes | 30 | 27 | 90.0% |
+| DE-CIX Mumbai | Yes | 450 | 323 | 71.8% |
+| Extreme IX Mumbai | Yes | 254 | 202 | 79.5% |
+| Extreme IX Delhi | Yes | 182 | 142 | 78.0% |
+| NIXI Mumbai | Yes | 180 | 149 | 82.8% |
+| NIXI Delhi | Yes | 115 | 87 | 75.7% |
+| DE-CIX Delhi | Yes | 103 | 78 | 75.7% |
+| Extreme IX Chennai | Yes | 94 | 78 | 83.0% |
+| DE-CIX Chennai | Yes | 76 | 56 | 73.7% |
+| AMS-IX Mumbai | Yes | 75 | 58 | 77.3% |
+| NIXI Chennai | Yes | 57 | 50 | 87.7% |
+| Extreme IX Bangalore | Yes | 42 | 36 | 85.7% |
 | ANI-IX Delhi | Yes | 30 | 15 | 50.0% |
-| Extreme IX Kolkata | Yes | 24 | 22 | 91.7% |
+| Kolkata IX | Yes | 29 | 27 | 93.1% |
+| NIXI Kolkata | Yes | 29 | 26 | 89.7% |
+| Extreme IX Kolkata | Yes | 26 | 24 | 92.3% |
 
 > IXP IPv6 readiness was measured using PeeringDB data within the IYP graph.
 
@@ -81,37 +81,37 @@ IN currently has a national IPv6 adoption rate of 78.9%, with 0.2% of the subscr
 
 ## Section 2 — ISP Compliance Scorecard
 
-**National IPv6 Adoption:** 78.9%  
-**Underserved Market Share:** 0.2%  
+**National IPv6 Adoption:** 76.4%  
+**Underserved Market Share:** 0.0%  
 **ISPs Assessed:** 25
 
 | ASN | ISP | Market Share | IPv6 Prefixes | Cone Size | Adoption Est. | Archetype | Severity | Proj. Impact |
 |-----|-----|:------------:|:-------------:|:---------:|:-------------:|:---------:|:--------:|:------------:|
-| AS55836 | RELIANCEJIO-IN Reliance Jio Infocom | 46.3% | 5052 | 18 | 77.8% | **OK** — Compliant | Low | +10.3 pp |
-| AS45609 | BHARTI-MOBILITY-AS-AP Bharti Airtel | 22.0% | 7177 | 1 | 70.1% | **OK** — Compliant | Low | +6.6 pp |
-| AS24560 | AIRTELBROADBAND-AS-AP Bharti Airtel | 8.3% | 1026 | 1 | 65.8% | **OK** — Compliant | Low | +2.9 pp |
-| AS9829 | BSNL-NIB National Internet Backbone | 3.0% | 2137 | 67 | 64.1% | **OK** — Compliant | Medium | +1.1 pp |
-| AS38266 | VIL-AS-AP Vodafone Idea Ltd | 1.4% | 2683 | 1 | 63.6% | **OK** — Compliant | Low | +0.5 pp |
-| AS133982 | EXCITEL-AS-IN Excitel Broadband Pri | 0.9% | 98 | 5 | 63.4% | **OK** — Compliant | Low | +0.3 pp |
-| AS24309 | CABLELITE-AS-AP Atria Convergence T | 0.9% | 220 | 8 | 63.4% | **OK** — Compliant | Low | +0.3 pp |
-| AS138754 | KVBPL-AS-IN Kerala Vision Broad Ban | 0.8% | 38 | 2 | 63.4% | **OK** — Compliant | Low | +0.3 pp |
-| AS133661 | NETPLUS-AS Netplus Broadband Servic | 0.8% | 58 | 6 | 63.4% | **OK** — Compliant | Low | +0.3 pp |
-| AS45916 | GTPL-AS-AP Gujarat Telelink Pvt Ltd | 0.7% | 570 | 10 | 63.4% | **OK** — Compliant | Low | +0.3 pp |
-| AS45271 | VIL-AS-AP Vodafone Idea Ltd | 0.7% | 2271 | 1 | 63.4% | **OK** — Compliant | Low | +0.3 pp |
-| AS17488 | HATHWAY-NET-AP Hathway IP Over Cabl | 0.6% | 100 | 4 | 63.3% | **OK** — Compliant | Low | +0.2 pp |
-| AS24186 | RAILTEL-AS-IN RailTel Corporation o | 0.5% | 273 | 27 | 63.3% | **OK** — Compliant | Low | +0.2 pp |
-| AS23860 | ALLIANCE-GATEWAY-AS-AP Alliance Bro | 0.5% | 605 | 6 | 63.3% | **OK** — Compliant | Low | +0.2 pp |
-| AS17665 | ONEBROADBAND ONEOTT INTERTAINMENT L | 0.5% | 207 | 71 | 63.3% | **OK** — Compliant | Medium | +0.2 pp |
-| AS55577 | CABLELITE-AS-AP Atria Convergence T | 0.4% | 118 | 1 | 63.3% | **OK** — Compliant | Low | +0.2 pp |
-| AS134674 | TATAPLAYBROADBAND-AS-AP TATA PLAY B | 0.3% | 1239 | 7 | 63.3% | **OK** — Compliant | Low | +0.1 pp |
-| AS18209 | CABLELITE-AS-AP Atria Convergence T | 0.3% | 66 | 5 | 63.2% | **OK** — Compliant | Low | +0.1 pp |
-| AS17465 | ASIANET Cable ISP in India | 0.3% | 54 | 5 | 63.2% | **OK** — Compliant | Low | +0.1 pp |
-| AS132116 | ANINETWORK-IN Ani Network Pvt Ltd | 0.2% | 56 | 80 | 63.2% | **OK** — Compliant | Medium | +0.1 pp |
-| AS17917 | QTLTELECOM-AS-AP Quadrant Televentu | 0.2% | 46 | 7 | 63.2% | **OK** — Compliant | Low | +0.1 pp |
-| AS55352 | FIVENET-IN Microscan Internet Limit | 0.2% | 170 | 40 | 63.2% | **OK** — Compliant | Low | +0.1 pp |
-| AS131269 | CABLELITE-AS-AP Atria Convergence T | 0.2% | 30 | 1 | 63.2% | **OK** — Compliant | Low | +0.1 pp |
-| AS150008 | PEL-AS-IN Pioneer Elabs Ltd. | 0.2% | 24 | 20 | 63.2% | **OK** — Compliant | Low | +0.1 pp |
-| AS133287 | APSFL-AS Andhra Pradesh State Fiber | 0.2% | 0 | 1 | 0.0% | **A** — Ghost (No Allocation) | Low | +0.2 pp |
+| AS55836 | RELIANCEJIO-IN - Reliance Jio Infoc | 47.2% | 5163 | 445 | 75.5% | **OK** — Compliant | High | +11.6 pp |
+| AS45609 | BHARTI-MOBILITY-AS-AP - Bharti Airt | 22.8% | 10842 | 1 | 68.1% | **OK** — Compliant | Low | +7.3 pp |
+| AS24560 | AIRTELBROADBAND-AS-AP - Bharti Airt | 9.0% | 1533 | 1 | 63.8% | **OK** — Compliant | Low | +3.2 pp |
+| AS9829 | BSNL-NIB - National Internet Backbo | 2.8% | 3350 | 74 | 62.0% | **OK** — Compliant | Medium | +1.1 pp |
+| AS133982 | EXCITEL-AS-IN - Excitel Broadband P | 0.9% | 357 | 8 | 61.4% | **OK** — Compliant | Low | +0.3 pp |
+| AS24309 | CABLELITE-AS-AP - Atria Convergence | 0.9% | 342 | 14 | 61.4% | **OK** — Compliant | Low | +0.3 pp |
+| AS133661 | NETPLUS-AS - Netplus Broadband Serv | 0.8% | 98 | 5 | 61.4% | **OK** — Compliant | Low | +0.3 pp |
+| AS45916 | GTPL-AS-AP - Gujarat Telelink Pvt L | 0.8% | 854 | 10 | 61.3% | **OK** — Compliant | Low | +0.3 pp |
+| AS138754 | KVBPL-AS-IN - Kerala Vision Broad B | 0.7% | 63 | 3 | 61.3% | **OK** — Compliant | Low | +0.3 pp |
+| AS17488 | HATHWAY-NET-AP - Hathway IP Over Ca | 0.7% | 150 | 3 | 61.3% | **OK** — Compliant | Low | +0.3 pp |
+| AS17665 | ONEBROADBAND - ONEOTT INTERTAINMENT | 0.5% | 308 | 91 | 61.3% | **OK** — Compliant | Medium | +0.2 pp |
+| AS23860 | ALLIANCE-GATEWAY-AS-AP - Alliance B | 0.5% | 1011 | 6 | 61.2% | **OK** — Compliant | Low | +0.2 pp |
+| AS55577 | CABLELITE-AS-AP - Atria Convergence | 0.5% | 150 | 1 | 61.2% | **OK** — Compliant | Low | +0.2 pp |
+| AS24186 | RAILTEL-AS-IN - RailTel Corporation | 0.4% | 392 | 22 | 61.2% | **OK** — Compliant | Low | +0.2 pp |
+| AS134674 | TATAPLAYBROADBAND-AS-AP - TATA PLAY | 0.4% | 1817 | 8 | 61.2% | **OK** — Compliant | Low | +0.1 pp |
+| AS18209 | CABLELITE-AS-AP - Atria Convergence | 0.3% | 99 | 5 | 61.2% | **OK** — Compliant | Low | +0.1 pp |
+| AS38266 | VIL-AS-AP - Vodafone Idea Ltd | 0.3% | 3833 | 1 | 61.2% | **OK** — Compliant | Low | +0.1 pp |
+| AS55352 | FIVENET-IN - Microscan Internet Lim | 0.2% | 271 | 32 | 61.2% | **OK** — Compliant | Low | +0.1 pp |
+| AS132116 | ANINETWORK-IN - Anonet Network Priv | 0.2% | 84 | 19 | 61.2% | **OK** — Compliant | Low | +0.1 pp |
+| AS17917 | QTLTELECOM-AS-AP - Quadrant Televen | 0.2% | 69 | 9 | 61.2% | **OK** — Compliant | Low | +0.1 pp |
+| AS17465 | ASIANET - Cable ISP in India | 0.2% | 72 | 6 | 61.2% | **OK** — Compliant | Low | +0.1 pp |
+| AS150008 | PEL-AS-IN - Pioneer Elabs Ltd. | 0.2% | 36 | 19 | 61.2% | **OK** — Compliant | Low | +0.1 pp |
+| AS131269 | CABLELITE-AS-AP - Atria Convergence | 0.2% | 48 | 1 | 61.2% | **OK** — Compliant | Low | +0.1 pp |
+| AS138296 | STARNET7-AS - Juweriyah Networks Pr | 0.2% | 8 | 14 | 61.2% | **OK** — Compliant | Low | +0.1 pp |
+| AS45769 | DVOIS-IN - D-Vois Broadband Pvt Ltd | 0.1% | 75 | 9 | 61.2% | **OK** — Compliant | Low | +0.1 pp |
 
 ### Archetype Key
 | Code | Name | Policy Intervention |
@@ -127,11 +127,11 @@ IN currently has a national IPv6 adoption rate of 78.9%, with 0.2% of the subscr
 
 | ASN | ISP | Market Share | Adoption | First IPv6 Seen | Age (yrs) | Reason |
 |-----|-----|:-----------:|:--------:|:---------------:|:---------:|--------|
-| AS55836 | RELIANCEJIO-IN Reliance Jio Infocomm Limited | 46.3% | 77.8% | 2012-12-10 | 13.6 | Top |
-| AS45609 | BHARTI-MOBILITY-AS-AP Bharti Airtel Ltd. AS for GPRS Service | 22.0% | 70.1% | 2013-12-05 | 12.6 | Top |
-| AS24560 | AIRTELBROADBAND-AS-AP Bharti Airtel Ltd., Telemedia Services | 8.3% | 65.8% | 2018-12-03 | 7.6 | Top |
-| AS9829 | BSNL-NIB National Internet Backbone | 3.0% | 64.1% | 2009-06-29 | 17.0 | Top |
-| AS38266 | VIL-AS-AP Vodafone Idea Ltd | 1.4% | 63.6% | 2016-01-24 | 10.5 | Top |
+| AS55836 | RELIANCEJIO-IN - Reliance Jio Infocomm Limited | 47.2% | 75.5% | 2012-12-10 | 13.9 | Top |
+| AS45609 | BHARTI-MOBILITY-AS-AP - Bharti Airtel Ltd. AS for GPRS Service | 22.8% | 68.1% | 2013-12-05 | 12.9 | Top |
+| AS24560 | AIRTELBROADBAND-AS-AP - Bharti Airtel Ltd., Telemedia Services | 9.0% | 63.8% | 2018-12-03 | 7.9 | Top |
+| AS9829 | BSNL-NIB - National Internet Backbone | 2.8% | 62.0% | 2009-06-29 | 17.3 | Top |
+| AS133982 | EXCITEL-AS-IN - Excitel Broadband Private Limited | 0.9% | 61.4% | 2018-08-17 | 8.2 | Top |
 
 > Source: [RIPEstat](https://stat.ripe.net) — Announced Prefixes endpoint (historical data from 2000–present).  
 > ⭐ Top = queried due to high market share | ⚠ Laggard = queried due to low adoption despite significant market share
@@ -152,28 +152,28 @@ IN currently has a national IPv6 adoption rate of 78.9%, with 0.2% of the subscr
 
 ### Regional Position
 
-- **IN adoption:** 78.9%
-- **Global average:** 23.6%
+- **IN adoption:** 76.4%
+- **Global average:** 24.4%
 - **Global rank:** #5 of 243 countries
-- **vs Global Average:** +55.3 pp (above average)
+- **vs Global Average:** +52.0 pp (above average)
 
 **Closest peer countries by adoption score:**
 
 | Country | Adoption | Gap |
 |---------|:--------:|:---:|
-| FK | 79.85% | +0.9 pp |
-| PN | 77.78% | -1.1 pp |
-| AX | 74.89% | -4.0 pp |
-| FR | 83.09% | +4.2 pp |
-| SH | 83.3% | +4.4 pp |
+| SA | 74.83% | -1.6 pp |
+| DE | 72.95% | -3.5 pp |
+| MY | 72.47% | -3.9 pp |
+| BE | 72.02% | -4.4 pp |
+| AX | 70.21% | -6.2 pp |
 
 ---
 
 ## Section 4 — Web Services IPv6 Readiness
 
-**Popular Domains Analyzed:** 0  
+**Popular Domains Analyzed:** 836  
 **IPv6-Reachable Domains:** 0  
-**IPv4-Only Domains:** 0  
+**IPv4-Only Domains:** 836  
 **IPv6 Web Readiness:** 0.00%  
 
 > This analysis measures IPv6 reachability among
@@ -189,10 +189,10 @@ IN currently has a national IPv6 adoption rate of 78.9%, with 0.2% of the subscr
 
 ### Government Website IPv6 Readiness
 
-**Government Domains Assessed:** 947  
-**IPv6-Capable Government Domains:** 125  
-**IPv4-Only Government Domains:** 812  
-**Government IPv6 Readiness:** 13.20%  
+**Government Domains Assessed:** 1000  
+**IPv6-Capable Government Domains:** 165  
+**IPv4-Only Government Domains:** 821  
+**Government IPv6 Readiness:** 16.50%  
 
 > Government domains were identified using
 > the .gov.in namespace and evaluated for
@@ -210,10 +210,10 @@ IN currently has a national IPv6 adoption rate of 78.9%, with 0.2% of the subscr
 
 | Sector | Domains | IPv6 Readiness |
 |--------|---------|----------------|
-| Banking | 104 | 53.85% |
-| News | 126 | 53.97% |
-| Education | 474 | 39.45% |
-| Ecommerce | 139 | 43.17% |
+| Banking | 113 | 52.21% |
+| News | 116 | 50.00% |
+| Education | 587 | 40.03% |
+| Ecommerce | 136 | 44.85% |
 
 > Comparative sectoral analysis highlights
 > differences in IPv6 deployment maturity
@@ -224,10 +224,10 @@ IN currently has a national IPv6 adoption rate of 78.9%, with 0.2% of the subscr
 
 ### CDN Correlation and Hosting Analysis
 
-**CDN-Backed Domains:** 68  
-**Self-Hosted Domains:** 932  
-**IPv6-Capable CDN Domains:** 57  
-**IPv4-Only Self-Hosted Domains:** 512  
+**CDN-Backed Domains:** 65  
+**Self-Hosted Domains:** 935  
+**IPv6-Capable CDN Domains:** 52  
+**IPv4-Only Self-Hosted Domains:** 481  
 
 > CDN infrastructure was inferred through
 > hostname alias relationships associated
@@ -243,8 +243,8 @@ IN currently has a national IPv6 adoption rate of 78.9%, with 0.2% of the subscr
 
 **Analyzed ccTLD:** .in  
 **Domains Sampled:** 5000  
-**IPv6-Enabled Domains:** 2045  
-**IPv6 / AAAA Readiness:** 40.90%  
+**IPv6-Enabled Domains:** 2109  
+**IPv6 / AAAA Readiness:** 42.18%  
 
 > Sample-based analysis of the national ccTLD ecosystem
 > indicates the proportion of domains resolving to
@@ -258,10 +258,10 @@ IN currently has a national IPv6 adoption rate of 78.9%, with 0.2% of the subscr
 
 | TLD | IPv6 Readiness |
 |------|----------------|
-| .in | 40.90% |
-| .com | 44.14% |
-| .fr | 37.64% |
-| .de | 39.34% |
+| .in | 42.18% |
+| .com | 50.28% |
+| .fr | 39.50% |
+| .de | 40.10% |
 
 > Comparative sampled analysis across major TLD ecosystems
 > provides relative benchmarking of IPv6 DNS readiness.
@@ -274,14 +274,15 @@ IN currently has a national IPv6 adoption rate of 78.9%, with 0.2% of the subscr
 | 2026-06-12 | 5000 | 2045 | 40.9% |
 | 2026-06-26 | 5000 | 2045 | 40.9% |
 | 2026-07-10 | 5000 | 2045 | 40.9% |
+| 2026-11-04 | 5000 | 2109 | 42.2% |
 
-> TLD IPv6 readiness has remained stable by 0.0 pp since 2026-06-05 (4 snapshots recorded).
+> TLD IPv6 readiness has increased by 1.3 pp since 2026-06-05 (5 snapshots recorded).
 
 ### Authoritative Nameserver IPv6 Reachability
 
 **Nameservers Assessed:** 2062  
-**IPv6-Reachable Nameservers:** 1135  
-**IPv6 NS Reachability:** 55.04%  
+**IPv6-Reachable Nameservers:** 1149  
+**IPv6 NS Reachability:** 55.72%  
 
 > This metric measures whether authoritative DNS
 > infrastructure supporting the ccTLD ecosystem
@@ -295,9 +296,9 @@ IN currently has a national IPv6 adoption rate of 78.9%, with 0.2% of the subscr
 
 ### Glue Record IPv6 Readiness
 
-**Glue-style Nameservers Assessed:** 136  
-**IPv6-Capable Glue Nameservers:** 1  
-**Glue IPv6 Readiness:** 0.74%  
+**Glue-style Nameservers Assessed:** 117  
+**IPv6-Capable Glue Nameservers:** 0  
+**Glue IPv6 Readiness:** 0.00%  
 
 > This approximation identifies in-zone authoritative
 > nameservers whose hostnames fall within the same

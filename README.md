@@ -145,9 +145,32 @@ Every generated report adheres to the official ISOC Pulse 10-section hierarchy:
 
 ---
 
+## Quality Control & Visual Consistency Rules
+
+All reports are processed through an automated quality-control pipeline (`isoc_report.py`, `docx_charts.py`, `docx_builder.py`) enforcing:
+
+1. **Strict 5-Action Quick Wins Alignment**:
+   - Section 4.1 (Short term: 0–12 months) and Section 5 (Quick wins) contain the exact same 5 actions numbered `1` to `5`.
+   - The *Prioritisation: impact versus effort* scatter plot strictly maps items `1`–`5` inside the green `QUICK WINS` zone (`effort < 4.5`), and items `6`–`10` inside the `STRUCTURAL INVESTMENT` zone (`effort > 4.5`).
+2. **Concrete Operational Timeframes**:
+   - Replaces generic `"Low"` / `"Medium"` labels with concrete engineering timeframes (e.g., `"2–4 weeks of IXP outreach"`, `"Days of operator work"`, `"Hours per network"`).
+   - Expects baseline-to-target shifts in the `Expected effect` column.
+3. **Zero Duplicate Tables**:
+   - Eliminates redundant 2-column summary tables across Sections 2 and 3, replacing them with granular multi-column breakdowns (City-by-City IXP distribution, PCH telemetry reporting, and Tier-1 CDN presence matrices).
+4. **Populated Reference Benchmarks**:
+   - `Benchmark` column in "Key numbers at a glance" populates target thresholds (`>50% target`, `100% target`, `9 of 9 global`, `0% ideal`, `<20 ms target`) rather than empty em-dashes.
+5. **Matplotlib Chart UI Refinements**:
+   - **Donut Charts**: Enforces a 2-line center callout layout (bold metric on top, descriptive unit below) to prevent text overflow.
+   - **Bar Charts**: Benchmark legends anchored to the top-right outside the plotting canvas (`bbox_to_anchor=(1.0, 1.02)`) with 15% upper x-axis padding (`max_val * 1.15`) to eliminate bar and label collision.
+   - **Target Lines**: Eliminates duplicate parenthetical labels (e.g., `Target (>50%)` instead of `Target (>50%) (50%)`).
+6. **Country-Specific Deep Links**:
+   - Generates direct, verifiable links in "Data sources and notes" pointing directly to country reports on ISOC Pulse, RIPEstat, and PeeringDB.
+
+---
+
 ## Output Organization
 
-Outputs are organized under `reports/` by metric and format:
+Outputs are organized under `reports/` by metric and format for all supported countries (**India `IN`**, **France `FR`**, **Somalia `SO`**, and **Morocco `MA`**):
 
 | Metric | Word Document (`.docx`) | Interactive Dashboard (`.html`) | Raw Data (`.md`) |
 | :--- | :--- | :--- | :--- |

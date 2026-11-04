@@ -1,5 +1,5 @@
 # IPv6 Policy Brief — FR
-**Generated:** 2026-07-10 02:27  
+**Generated:** 2026-11-04 11:22  
 **Data Sources:** ISOC Pulse API 2024 · Internet Yellow Pages (IYP) Neo4j  
 **Framework:** ISOC Internet Resilience Index — Security Pillar (Enabling Technologies)
 
@@ -7,15 +7,15 @@
 
 ## Executive Summary
 
-FR currently has a national IPv6 adoption rate of 83.1%, with 0.0% of the subscriber market served by ISPs classified as non-compliant. All major ISPs are currently classified as compliant. Focus should shift to sustaining adoption growth and improving RPKI security hygiene.
+FR currently has a national IPv6 adoption rate of 86.0%, with 0.0% of the subscriber market served by ISPs classified as non-compliant. All major ISPs are currently classified as compliant. Focus should shift to sustaining adoption growth and improving RPKI security hygiene.
 
 ---
 
 ## Section 1 — Core Infrastructure / RPKI Security
 
-**Total IPv6 Prefixes:** 14,189  
-**RPKI-Covered Prefixes:** 5,049  
-**RPKI Coverage:** 35.58%  
+**Total IPv6 Prefixes:** 985  
+**RPKI-Covered Prefixes:** 964  
+**RPKI Coverage:** 97.87%  
 
 > RPKI coverage measures the percentage of IPv6 routing prefixes
 > protected using Route Origin Authorization (ROA) records for routing security.
@@ -26,11 +26,11 @@ FR currently has a national IPv6 adoption rate of 83.1%, with 0.0% of the subscr
 
 | ISP | IPv6 Prefixes | RPKI Coverage |
 |-----|---------------|---------------|
-| PROXAD Free SAS | 527 | 0.57% |
-| SPACEX-STARLINK - Space Exploration Tech | 776 | 0.77% |
-| COGENT-174 - Cogent Communications, LLC | 567 | 6.00% |
-| LEVEL3 - Level 3 Parent, LLC | 165 | 7.27% |
-| ZEN-ECN | 149 | 11.41% |
+| ALPHALINK-AS Alphalink SASU | 7 | 71.43% |
+| FLEXNETWORK-AS FLEX NETWORK SARL | 5 | 80.00% |
+| BANDWIDTH-AS Hydra Communications Ltd | 19 | 89.47% |
+| VELIANET-AS velia.net Internetdienste Gm | 10 | 90.00% |
+| ZEN-DPS - Zenlayer Inc | 89 | 91.01% |
 
 > Several major networks continue to exhibit weak RPKI
 > adoption despite significant IPv6 routing presence.
@@ -39,7 +39,7 @@ FR currently has a national IPv6 adoption rate of 83.1%, with 0.0% of the subscr
 
 ### Preliminary IPv6 Upstream Connectivity
 
-**ISPs Assessed:** 65  
+**ISPs Assessed:** 67  
 **IPv6-Capable Upstream Reachability:** 100.00%  
 
 > Preliminary graph-based analysis suggests that most assessed
@@ -53,27 +53,27 @@ FR currently has a national IPv6 adoption rate of 83.1%, with 0.0% of the subscr
 
 ### IXP IPv6 Peering
 
-**Domestic IXPs:** 25  
-**IXPs with IPv6 LAN:** 24 (96.0%)  
-**Members with IPv6 Peering:** 1217 / 1345 (90.5%)  
+**Domestic IXPs:** 27  
+**IXPs with IPv6 LAN:** 26 (96.3%)  
+**Members with IPv6 Peering:** 1334 / 1471 (90.7%)  
 
 | IXP | IPv6 LAN | Members | IPv6 Members | IPv6 % |
 |-----|:--------:|:-------:|:------------:|:------:|
-| France-IX Paris | Yes | 447 | 397 | 88.8% |
-| Equinix Paris | Yes | 243 | 214 | 88.1% |
-| DE-CIX Marseille | Yes | 122 | 105 | 86.1% |
-| France-IX Marseille | Yes | 112 | 108 | 96.4% |
-| nine | Yes | 79 | 76 | 96.2% |
+| France-IX Paris | Yes | 452 | 400 | 88.5% |
+| Equinix Paris | Yes | 241 | 214 | 88.8% |
+| nine | Yes | 140 | 133 | 95.0% |
+| DE-CIX Marseille | Yes | 120 | 103 | 85.8% |
+| France-IX Marseille | Yes | 110 | 106 | 96.4% |
 | France-IX AURA | Yes | 74 | 62 | 83.8% |
-| BGP.Exchange - Paris | Yes | 44 | 41 | 93.2% |
-| Lillix | Yes | 40 | 39 | 97.5% |
-| Hopus | Yes | 33 | 30 | 90.9% |
+| BGP.Exchange - Paris | Yes | 61 | 57 | 93.4% |
+| Lillix | Yes | 46 | 45 | 97.8% |
+| Hopus | Yes | 33 | 31 | 93.9% |
+| BGP.Exchange - Lyon | Yes | 28 | 28 | 100.0% |
 | SFINX | Yes | 24 | 21 | 87.5% |
-| BGP.Exchange - Lyon | Yes | 24 | 24 | 100.0% |
 | BreizhIX | Yes | 20 | 20 | 100.0% |
-| France-IX Lille | Yes | 16 | 15 | 93.8% |
+| France-IX Lille | Yes | 20 | 18 | 90.0% |
+| ERA-IX Paris | Yes | 14 | 13 | 92.9% |
 | AuvernIX | Yes | 13 | 13 | 100.0% |
-| France-IX Toulouse | Yes | 13 | 13 | 100.0% |
 
 > IXP IPv6 readiness was measured using PeeringDB data within the IYP graph.
 
@@ -81,37 +81,37 @@ FR currently has a national IPv6 adoption rate of 83.1%, with 0.0% of the subscr
 
 ## Section 2 — ISP Compliance Scorecard
 
-**National IPv6 Adoption:** 83.1%  
+**National IPv6 Adoption:** 86.0%  
 **Underserved Market Share:** 0.0%  
 **ISPs Assessed:** 25
 
 | ASN | ISP | Market Share | IPv6 Prefixes | Cone Size | Adoption Est. | Archetype | Severity | Proj. Impact |
 |-----|-----|:------------:|:-------------:|:---------:|:-------------:|:---------:|:--------:|:------------:|
-| AS3215 | AS3215 Orange S.A. | 35.4% | 86 | 203 | 78.2% | **OK** — Compliant | High | +7.7 pp |
-| AS12322 | PROXAD Free SAS | 18.6% | 1054 | 4 | 72.7% | **OK** — Compliant | Low | +5.1 pp |
-| AS5410 | BOUYGTEL-ISP Bouygues Telecom SA | 17.8% | 4 | 16 | 72.4% | **OK** — Compliant | Low | +4.9 pp |
-| AS15557 | LDCOMNET Societe Francaise Du Radio | 17.5% | 24 | 91 | 72.3% | **OK** — Compliant | Medium | +4.8 pp |
-| AS51207 | FREEM Free Mobile SAS | 4.5% | 2 | 1 | 68.0% | **OK** — Compliant | Low | +1.5 pp |
-| AS16276 | OVH OVH SAS | 0.8% | 82 | 119 | 66.8% | **OK** — Compliant | Medium | +0.3 pp |
-| AS63023 | AS-GLOBALTELEHOST - GTHost | 0.8% | 50 | 23 | 66.7% | **OK** — Compliant | Low | +0.3 pp |
-| AS12876 | AS12876 Scaleway SAS | 0.7% | 14 | 1 | 66.7% | **OK** — Compliant | Low | +0.2 pp |
-| AS51167 | CONTABO Contabo GmbH | 0.3% | 10 | 1 | 66.6% | **OK** — Compliant | Low | +0.1 pp |
-| AS31404 | Lycatel-AS LYCATEL DISTRIBUTION UK  | 0.3% | 6 | 1 | 66.6% | **OK** — Compliant | Low | +0.1 pp |
-| AS13335 | CLOUDFLARENET - Cloudflare, Inc. | 0.2% | 6208 | 922 | 66.5% | **OK** — Compliant | High | +0.1 pp |
-| AS30058 | FDCSERVERS - FDCservers.net | 0.2% | 295 | 43 | 66.5% | **OK** — Compliant | Low | +0.1 pp |
-| AS14593 | SPACEX-STARLINK - Space Exploration | 0.2% | 1511 | 14 | 66.5% | **OK** — Compliant | Low | +0.1 pp |
-| AS21859 | ZEN-ECN | 0.2% | 291 | 398 | 66.5% | **OK** — Compliant | High | +0.1 pp |
-| AS29066 | VELIANET-AS velia.net Internetdiens | 0.1% | 20 | 7 | 66.5% | **OK** — Compliant | Low | +0.1 pp |
-| AS16509 | AMAZON-02 - Amazon.com, Inc. | 0.1% | 11016 | 75 | 66.5% | **OK** — Compliant | Medium | +0.1 pp |
-| AS52075 | WIFIRST Wifirst S.A.S. | 0.1% | 16 | 1 | 66.5% | **OK** — Compliant | Low | +0.0 pp |
-| AS62610 | ZEN-DPS - Zenlayer Inc | 0.1% | 158 | 11 | 66.5% | **OK** — Compliant | Low | +0.0 pp |
-| AS212238 | CDNEXT Datacamp Limited | 0.1% | 975 | 1 | 66.5% | **OK** — Compliant | Low | +0.0 pp |
-| AS136787 | PACKETHUBSA-AS-AP PacketHub S.A. | 0.1% | 6 | 1 | 66.5% | **OK** — Compliant | Low | +0.0 pp |
-| AS2200 | FR-RENATER Reseau National de telec | 0.1% | 4 | 49 | 66.5% | **OK** — Compliant | Low | +0.0 pp |
-| AS199636 | FREEBOXPRO Free Pro SAS | 0.1% | 2 | 1 | 66.5% | **OK** — Compliant | Low | +0.0 pp |
-| AS42487 | Vialis-Moselle Vialis SEM | 0.1% | 14 | 2 | 66.5% | **OK** — Compliant | Low | +0.0 pp |
-| AS63949 | AKAMAI-LINODE-AP Akamai Connected C | 0.1% | 191 | 1 | 66.5% | **OK** — Compliant | Low | +0.0 pp |
-| AS16347 | INHERENT ADISTA SAS | 0.1% | 36 | 23 | 66.5% | **OK** — Compliant | Low | +0.0 pp |
+| AS3215 | AS3215 Orange S.A. | 36.2% | 135 | 179 | 81.3% | **OK** — Compliant | Medium | +6.8 pp |
+| AS12322 | PROXAD Free SAS | 18.3% | 1581 | 4 | 75.1% | **OK** — Compliant | Low | +4.6 pp |
+| AS5410 | BOUYGTEL-ISP Bouygues Telecom SA | 17.2% | 6 | 16 | 74.7% | **OK** — Compliant | Low | +4.3 pp |
+| AS15557 | LDCOMNET Societe Francaise Du Radio | 16.7% | 36 | 88 | 74.6% | **OK** — Compliant | Medium | +4.2 pp |
+| AS51207 | FREEM Free Mobile SAS | 5.0% | 3 | 1 | 70.5% | **OK** — Compliant | Low | +1.5 pp |
+| AS12876 | AS12876 Scaleway SAS | 0.8% | 24 | 1 | 69.1% | **OK** — Compliant | Low | +0.3 pp |
+| AS16276 | OVH OVH SAS | 0.8% | 126 | 172 | 69.1% | **OK** — Compliant | Medium | +0.2 pp |
+| AS63023 | AS-GLOBALTELEHOST - GTHost | 0.7% | 106 | 52 | 69.0% | **OK** — Compliant | Medium | +0.2 pp |
+| AS51167 | CONTABO Contabo GmbH | 0.6% | 15 | 1 | 69.0% | **OK** — Compliant | Low | +0.2 pp |
+| AS13335 | CLOUDFLARENET - Cloudflare, Inc. | 0.5% | 8848 | 963 | 69.0% | **OK** — Compliant | High | +0.1 pp |
+| AS14593 | SPACEX-STARLINK - Space Exploration | 0.3% | 2730 | 18 | 68.9% | **OK** — Compliant | Low | +0.1 pp |
+| AS16509 | AMAZON-02 - Amazon.com, Inc. | 0.2% | 17385 | 88 | 68.9% | **OK** — Compliant | Medium | +0.1 pp |
+| AS31404 | Lycatel-AS LYCATEL DISTRIBUTION UK  | 0.2% | 9 | 1 | 68.9% | **OK** — Compliant | Low | +0.1 pp |
+| AS212238 | CDNEXT Datacamp Limited | 0.2% | 2021 | 1 | 68.9% | **OK** — Compliant | Low | +0.1 pp |
+| AS52075 | WIFIRST Wifirst S.A.S. | 0.1% | 30 | 1 | 68.9% | **OK** — Compliant | Low | +0.0 pp |
+| AS29066 | VELIANET-AS velia.net Internetdiens | 0.1% | 30 | 8 | 68.9% | **OK** — Compliant | Low | +0.0 pp |
+| AS16347 | INHERENT ADISTA SAS | 0.1% | 54 | 23 | 68.8% | **OK** — Compliant | Low | +0.0 pp |
+| AS199636 | FREEBOXPRO Free Pro SAS | 0.1% | 3 | 1 | 68.8% | **OK** — Compliant | Low | +0.0 pp |
+| AS62610 | ZEN-DPS - Zenlayer Inc | 0.1% | 256 | 44 | 68.8% | **OK** — Compliant | Low | +0.0 pp |
+| AS63949 | AKAMAI-LINODE-AP - Akamai Connected | 0.1% | 291 | 1 | 68.8% | **OK** — Compliant | Low | +0.0 pp |
+| AS42487 | Vialis-Moselle Vialis SEM | 0.1% | 21 | 2 | 68.8% | **OK** — Compliant | Low | +0.0 pp |
+| AS8362 | NordNet SA | 0.1% | 3 | 1 | 68.8% | **OK** — Compliant | Low | +0.0 pp |
+| AS8399 | SEWAN-FR SEWAN SAS | 0.1% | 12 | 1 | 68.8% | **OK** — Compliant | Low | +0.0 pp |
+| AS174 | COGENT-174 - Cogent Communications, | 0.1% | 1417 | 41127 | 68.8% | **OK** — Compliant | Critical | +0.0 pp |
+| AS136787 | PACKETHUBSA-AS-AP - PacketHub S.A. | 0.1% | 9 | 2 | 68.8% | **OK** — Compliant | Low | +0.0 pp |
 
 ### Archetype Key
 | Code | Name | Policy Intervention |
@@ -127,11 +127,11 @@ FR currently has a national IPv6 adoption rate of 83.1%, with 0.0% of the subscr
 
 | ASN | ISP | Market Share | Adoption | First IPv6 Seen | Age (yrs) | Reason |
 |-----|-----|:-----------:|:--------:|:---------------:|:---------:|--------|
-| AS3215 | AS3215 Orange S.A. | 35.4% | 78.2% | 2009-04-18 | 17.2 | Top |
-| AS12322 | PROXAD Free SAS | 18.6% | 72.7% | 2007-11-19 | 18.6 | Top |
-| AS5410 | BOUYGTEL-ISP Bouygues Telecom SA | 17.8% | 72.4% | 2007-04-05 | 19.3 | Top |
-| AS15557 | LDCOMNET Societe Francaise Du Radiotelephone - SFR SA | 17.5% | 72.3% | 2008-05-05 | 18.2 | Top |
-| AS51207 | FREEM Free Mobile SAS | 4.5% | 68.0% | 2020-04-08 | 6.3 | Top |
+| AS3215 | AS3215 Orange S.A. | 36.2% | 81.3% | 2009-04-18 | 17.5 | Top |
+| AS12322 | PROXAD Free SAS | 18.3% | 75.1% | 2007-11-19 | 19.0 | Top |
+| AS5410 | BOUYGTEL-ISP Bouygues Telecom SA | 17.2% | 74.7% | 2007-04-05 | 19.6 | Top |
+| AS15557 | LDCOMNET Societe Francaise Du Radiotelephone - SFR SA | 16.7% | 74.6% | 2008-05-05 | 18.5 | Top |
+| AS51207 | FREEM Free Mobile SAS | 5.0% | 70.5% | 2020-04-08 | 6.6 | Top |
 
 > Source: [RIPEstat](https://stat.ripe.net) — Announced Prefixes endpoint (historical data from 2000–present).  
 > ⭐ Top = queried due to high market share | ⚠ Laggard = queried due to low adoption despite significant market share
@@ -144,36 +144,33 @@ FR currently has a national IPv6 adoption rate of 83.1%, with 0.0% of the subscr
 
 | Year | IPv6 Adoption | Change |
 |------|:-------------:|:------:|
-| 2020 | 67.7% | — |
-| 2021 | 71.9% | +4.2 pp |
-| 2022 | 89.1% | +17.3 pp |
-| 2023 | 87.0% | -2.2 pp |
-| 2024 | 86.9% | -0.1 pp |
+| 2020 | 70.4% | — |
+| 2021 | 71.9% | +1.5 pp |
+| 2022 | 92.1% | +20.2 pp |
+| 2023 | 87.4% | -4.7 pp |
+| 2024 | 88.5% | +1.1 pp |
 
 ### Regional Position
 
-- **FR adoption:** 83.1%
-- **Global average:** 23.6%
-- **Global rank:** #3 of 243 countries
-- **vs Global Average:** +59.5 pp (above average)
+- **FR adoption:** 86.0%
+- **Global average:** 24.4%
+- **Global rank:** #4 of 243 countries
+- **vs Global Average:** +61.6 pp (above average)
 
 **Closest peer countries by adoption score:**
 
 | Country | Adoption | Gap |
 |---------|:--------:|:---:|
-| SH | 83.3% | +0.2 pp |
-| FK | 79.85% | -3.2 pp |
-| IN | 78.94% | -4.2 pp |
-| PN | 77.78% | -5.3 pp |
-| AX | 74.89% | -8.2 pp |
+| UM | 88.31% | +2.3 pp |
+| IN | 76.38% | -9.6 pp |
 
 ---
 
 ## Section 4 — Web Services IPv6 Readiness
 
-**Popular Domains Analyzed:** 0  
+**Popular Domains Analyzed:** 761  
 **IPv6-Reachable Domains:** 0  
-**IPv4-Only Domains:** 0  
+**IPv4-Only Domains:** 761  
 **IPv6 Web Readiness:** 0.00%  
 
 > This analysis measures IPv6 reachability among
@@ -189,10 +186,10 @@ FR currently has a national IPv6 adoption rate of 83.1%, with 0.0% of the subscr
 
 ### Government Website IPv6 Readiness
 
-**Government Domains Assessed:** 152  
+**Government Domains Assessed:** 144  
 **IPv6-Capable Government Domains:** 33  
-**IPv4-Only Government Domains:** 118  
-**Government IPv6 Readiness:** 21.71%  
+**IPv4-Only Government Domains:** 109  
+**Government IPv6 Readiness:** 22.92%  
 
 > Government domains were identified using
 > the .gouv.fr namespace and evaluated for
@@ -210,10 +207,10 @@ FR currently has a national IPv6 adoption rate of 83.1%, with 0.0% of the subscr
 
 | Sector | Domains | IPv6 Readiness |
 |--------|---------|----------------|
-| Banking | 25 | 48.00% |
-| News | 117 | 29.91% |
-| Education | 84 | 36.90% |
-| Ecommerce | 93 | 58.06% |
+| Banking | 31 | 38.71% |
+| News | 78 | 43.59% |
+| Education | 70 | 47.14% |
+| Ecommerce | 109 | 56.88% |
 
 > Comparative sectoral analysis highlights
 > differences in IPv6 deployment maturity
@@ -224,10 +221,10 @@ FR currently has a national IPv6 adoption rate of 83.1%, with 0.0% of the subscr
 
 ### CDN Correlation and Hosting Analysis
 
-**CDN-Backed Domains:** 128  
-**Self-Hosted Domains:** 872  
-**IPv6-Capable CDN Domains:** 109  
-**IPv4-Only Self-Hosted Domains:** 455  
+**CDN-Backed Domains:** 129  
+**Self-Hosted Domains:** 871  
+**IPv6-Capable CDN Domains:** 111  
+**IPv4-Only Self-Hosted Domains:** 453  
 
 > CDN infrastructure was inferred through
 > hostname alias relationships associated
@@ -243,8 +240,8 @@ FR currently has a national IPv6 adoption rate of 83.1%, with 0.0% of the subscr
 
 **Analyzed ccTLD:** .fr  
 **Domains Sampled:** 5000  
-**IPv6-Enabled Domains:** 1882  
-**IPv6 / AAAA Readiness:** 37.64%  
+**IPv6-Enabled Domains:** 1975  
+**IPv6 / AAAA Readiness:** 39.50%  
 
 > Sample-based analysis of the national ccTLD ecosystem
 > indicates the proportion of domains resolving to
@@ -258,10 +255,10 @@ FR currently has a national IPv6 adoption rate of 83.1%, with 0.0% of the subscr
 
 | TLD | IPv6 Readiness |
 |------|----------------|
-| .fr | 37.64% |
-| .com | 44.14% |
-| .de | 39.34% |
-| .in | 40.90% |
+| .fr | 39.50% |
+| .com | 50.28% |
+| .de | 40.10% |
+| .in | 42.18% |
 
 > Comparative sampled analysis across major TLD ecosystems
 > provides relative benchmarking of IPv6 DNS readiness.
@@ -275,14 +272,16 @@ FR currently has a national IPv6 adoption rate of 83.1%, with 0.0% of the subscr
 | 2026-06-08 | 5000 | 1882 | 37.6% |
 | 2026-06-12 | 5000 | 1882 | 37.6% |
 | 2026-07-10 | 5000 | 1882 | 37.6% |
+| 2026-09-13 | 5000 | 1975 | 39.5% |
+| 2026-11-04 | 5000 | 1975 | 39.5% |
 
-> TLD IPv6 readiness has remained stable by 0.0 pp since 2026-06-03 (5 snapshots recorded).
+> TLD IPv6 readiness has increased by 1.9 pp since 2026-06-03 (7 snapshots recorded).
 
 ### Authoritative Nameserver IPv6 Reachability
 
-**Nameservers Assessed:** 1807  
-**IPv6-Reachable Nameservers:** 1446  
-**IPv6 NS Reachability:** 80.02%  
+**Nameservers Assessed:** 1787  
+**IPv6-Reachable Nameservers:** 1450  
+**IPv6 NS Reachability:** 81.14%  
 
 > This metric measures whether authoritative DNS
 > infrastructure supporting the ccTLD ecosystem
@@ -296,9 +295,9 @@ FR currently has a national IPv6 adoption rate of 83.1%, with 0.0% of the subscr
 
 ### Glue Record IPv6 Readiness
 
-**Glue-style Nameservers Assessed:** 27  
-**IPv6-Capable Glue Nameservers:** 5  
-**Glue IPv6 Readiness:** 18.52%  
+**Glue-style Nameservers Assessed:** 30  
+**IPv6-Capable Glue Nameservers:** 11  
+**Glue IPv6 Readiness:** 36.67%  
 
 > This approximation identifies in-zone authoritative
 > nameservers whose hostnames fall within the same
